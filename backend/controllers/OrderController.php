@@ -35,6 +35,7 @@ class OrderController extends GeneralController
     {
         return array_merge(parent::indexOperation(), [
             [
+                'br' => true,
                 'text' => '查询订单',
                 'value' => 'select-order',
                 'level' => 'primary',
@@ -45,6 +46,7 @@ class OrderController extends GeneralController
                 ]
             ],
             [
+                'br' => true,
                 'text' => '子订单',
                 'value' => 'order-sub/index',
                 'level' => 'info',
@@ -169,6 +171,7 @@ class OrderController extends GeneralController
             'payment_method' => [
                 'code',
                 'info',
+                'tip',
                 'color' => [
                     0 => 'success',
                     1 => 'info'

@@ -218,9 +218,9 @@ class HotelRegionController extends GeneralController
     {
         $this->sourceJs = [
             'jquery.ajaxupload',
-            'jquery.cropper'
+            '/node_modules/cropper/dist/cropper.min'
         ];
-        $this->sourceCss = ['cropper'];
+        $this->sourceCss = ['/node_modules/cropper/dist/cropper.min'];
 
         return parent::beforeAction($action);
     }
