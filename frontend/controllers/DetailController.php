@@ -99,9 +99,7 @@ class DetailController extends GeneralController
         $this->mustLogin();
 
         $this->sourceCss = null;
-        $this->sourceJs = [
-            'detail/index'
-        ];
+        $this->sourceJs = ['detail/index'];
 
         $productId = Yii::$app->request->get('id');
         $packageList = $this->listProductPackage($productId);

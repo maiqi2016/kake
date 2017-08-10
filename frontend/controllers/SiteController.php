@@ -23,7 +23,7 @@ class SiteController extends GeneralController
         // 焦点图
         $focusList = $this->listProductFocus($params['site_focus_limit']);
         $focusList = array_merge($focusList, $this->listAd(0, $params['site_ad_focus_limit']));
-        $focusList = Helper::arraySort($focusList, 'update_time', 'DESC');
+        $focusList = Helper::arraySort($focusList, 'sort', 'ASC');
 
         // 板块
         $plateList = $this->listPlate();
