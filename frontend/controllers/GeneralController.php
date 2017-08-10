@@ -329,6 +329,7 @@ class GeneralController extends MainController
                     'cover.deep_path AS cover_deep_path',
                     'cover.filename AS cover_filename',
                     'product.id',
+                    'product.sort',
                     'product.attachment_cover',
                     'product.update_time'
                 ],

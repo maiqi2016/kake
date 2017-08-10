@@ -28,12 +28,13 @@ class AppAsset extends AssetBundle
         $suffix = (YII_ENV == 'dev' ? time() : VERSION);
 
         $this->css = [
-            "css{$minDirectory}/bootstrap.css?version=" . $suffix,
+            "node_modules/bootstrap/dist/css/bootstrap.css?version=" . $suffix,
+            "node_modules/bootstrap/dist/css/bootstrap-theme.css?version=" . $suffix,
             "css{$minDirectory}/main.css?version=" . $suffix,
         ];
         $this->js = [
-            "js{$minDirectory}/jquery.js?version=" . $suffix,
-            "js{$minDirectory}/bootstrap.js?version=" . $suffix,
+            "node_modules/jquery/dist/jquery.min.js?version=" . $suffix,
+            "node_modules/bootstrap/dist/js/bootstrap.js?version=" . $suffix,
             "js{$minDirectory}/main.js?version=" . $suffix,
         ];
     }

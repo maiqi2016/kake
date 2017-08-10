@@ -109,7 +109,11 @@ foreach ($items as $item) {
         $this->{$register}($params['frontend_source'] . $source . "?version=" . $suffix);
     } elseif (is_array($this->context->{$variable})) {
         foreach ($this->context->{$variable} as $value) {
-            $source = "/{$item}{$minDirectory}/{$value}.{$item}";
+            if (strpos($value, '/') === 0) {
+                $source = "{$value}.{$item}";
+            } else {
+                $source = "/{$item}{$minDirectory}/{$value}.{$item}";
+            }
             $this->{$register}($params['frontend_source'] . $source . "?version=" . $suffix);
         }
     }
