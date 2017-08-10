@@ -55,14 +55,14 @@ class OrderSubController extends GeneralController
                 'icon' => 'paperclip'
             ],
             [
+                'br' => true,
                 'text' => '同意预约',
                 'value' => 'agree-order',
                 'level' => 'success confirm-button',
                 'icon' => 'thumbs-up',
                 'show_condition' => function ($record) {
                     return $record['state'] == 1;
-                },
-                'br' => true
+                }
             ],
             [
                 'text' => '拒绝预约',
@@ -84,14 +84,14 @@ class OrderSubController extends GeneralController
                 }
             ],
             [
+                'br' => true,
                 'text' => '同意退款',
                 'value' => 'agree-refund',
                 'level' => 'success confirm-button',
                 'icon' => 'thumbs-up',
                 'show_condition' => function ($record) {
                     return $record['state'] == 3;
-                },
-                'br' => true
+                }
             ],
             [
                 'text' => '拒绝退款',

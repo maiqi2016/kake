@@ -31,15 +31,17 @@ class AppAsset extends AssetBundle
         $suffix = (YII_ENV == 'dev' ? time() : VERSION);
 
         $this->css = [
-            "css{$minDirectory}/bootstrap.css?version=" . $suffix,
+            "node_modules/bootstrap/dist/css/bootstrap.css?version=" . $suffix,
             "css{$minDirectory}/main.css?version=" . $suffix,
         ];
         $this->js = [
-            "js{$minDirectory}/jquery.js?version=" . $suffix,
-            "js{$minDirectory}/angular.js?version=" . $suffix,
-            "js{$minDirectory}/alloy-bundle.js?version=" . $suffix,
+            "node_modules/jquery/dist/jquery.min.js?version=" . $suffix,
+            "node_modules/angular/angular.min.js?version=" . $suffix,
+            "node_modules/alloytouch/alloy_touch.js?version=" . $suffix,
+            "node_modules/alloyfinger/alloy_finger.js?version=" . $suffix,
+            "node_modules/alloyfinger/transformjs/transform.js?version=" . $suffix,
+            "node_modules/imagesloaded/imagesloaded.pkgd.min.js?version=" . $suffix,
             "js{$minDirectory}/jssdk.js?version=" . $suffix,
-            "js{$minDirectory}/imagesloaded.js?version=" . $suffix,
             "js{$minDirectory}/main.js?version=" . $suffix,
         ];
     }
