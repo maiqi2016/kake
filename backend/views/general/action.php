@@ -88,7 +88,7 @@ if ($modal) {
         }
         ?>
 
-    <?php if ($element == 'input' && $av_type == 'file'): ?> <!-- input.file description -->
+        <?php if ($element == 'input' && $av_type == 'file'): ?> <!-- input.file description -->
         <div class="form-group">
             <label class="col-sm-2 control-label"></label>
             <div class="col-sm-<?= $empty('label_tips', 4) ?>" <?= $as_tip ?>>
@@ -127,30 +127,30 @@ if ($modal) {
                 <?= $as_value ?>>
         </div>
 
-        <?php
-        if ($av_type == 'file') :
-            $previewRule = Helper::emptyDefault($list, $empty('preview_name'), []);
-            $json = [
-                'triggerTarget' => "#{$av_name}",
-                'action' => Url::to(['general/ajax-upload']),
-                'data' => [
-                    'tag' => $empty('tag'),
-                    'controller' => Yii::$app->controller->id,
-                    'action' => Yii::$app->controller->action->id,
-                    Yii::$app->request->csrfParam => Yii::$app->request->csrfToken
-                ],
-                'attachmentName' => $empty('field_name'),
-                'previewName' => $empty('preview_name'),
-                'multiple' => $empty('multiple') ? 1 : 0,
-                'previewLabel' => Helper::emptyDefault($previewRule, 'img_label', 4)
-            ];
-        ?>
+    <?php
+    if ($av_type == 'file') :
+    $previewRule = Helper::emptyDefault($list, $empty('preview_name'), []);
+    $json = [
+        'triggerTarget' => "#{$av_name}",
+        'action' => Url::to(['general/ajax-upload']),
+        'data' => [
+            'tag' => $empty('tag'),
+            'controller' => Yii::$app->controller->id,
+            'action' => Yii::$app->controller->action->id,
+            Yii::$app->request->csrfParam => Yii::$app->request->csrfToken
+        ],
+        'attachmentName' => $empty('field_name'),
+        'previewName' => $empty('preview_name'),
+        'multiple' => $empty('multiple') ? 1 : 0,
+        'previewLabel' => Helper::emptyDefault($previewRule, 'img_label', 4)
+    ];
+    ?>
         <script type="text/javascript">
             $(function () {
                 $.uploadAttachment(<?= json_encode($json, JSON_UNESCAPED_UNICODE) ?>);
             });
         </script>
-        <?php endif; ?>
+    <?php endif; ?>
     <?php elseif ($element == 'text'): ?> <!-- text -->
         <div class="col-sm-<?= $empty('label', 3) ?> <?= $av_class ?>" <?= $as_tip ?>>
             <p class="bg-info" <?= $as_name ?> <?= $as_script ?>><?= $av_value ?></p>
@@ -178,23 +178,29 @@ if ($modal) {
                     'action' => !$empty('readonly')
                 ];
                 ?>
-                <?php if (!empty($attachment)): ?>
-                    <script type="text/javascript">
-                        $(function () {
-                            <?php
-                            foreach ($attachment as $id => $url):
-                            $json['data'] = compact('id', 'url');
-                            $_json = json_encode($json, JSON_UNESCAPED_UNICODE);
-                            ?>
-                            $.createThumb(<?= $_json ?>);
-                            <?php endforeach; ?>
+                <div class="for-script">
+                    <?php if (!empty($attachment)): ?>
+                        <script type="text/javascript">
+                            $(function () {
+                                <?php
+                                foreach ($attachment as $id => $url):
+                                $json['data'] = compact('id', 'url');
+                                $_json = json_encode($json, JSON_UNESCAPED_UNICODE);
+                                ?>
+                                $.createThumb(<?= $_json ?>);
+                                <?php endforeach; ?>
+                            });
+                        </script>
+                    <?php endif; ?>
 
-                            <?php if ($multiple): ?>
-                            $.sortable('div[name="<?= $previewName ?>"]', 'input[name="<?= $attachmentName ?>"]');
-                            <?php endif; ?>
-                        });
-                    </script>
-                <?php endif; ?>
+                    <?php if ($multiple): ?>
+                        <script type="text/javascript">
+                            $(function () {
+                                $.sortable('div[name="<?= $previewName ?>"]', 'input[name="<?= $attachmentName ?>"]');
+                            });
+                        </script>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     <?php elseif ($element == 'select'): ?> <!-- select -->
@@ -252,7 +258,7 @@ if ($modal) {
             <?= $as_tip ?>
             <?= $as_name ?>
             <?= $as_script ?>
-            format="<?= $empty('format') ?>"></div>
+             format="<?= $empty('format') ?>"></div>
     <?php
     if (!empty($av_value)):
     $json = [
@@ -274,15 +280,15 @@ if ($modal) {
     <?php endif; ?>
     <?php elseif ($item['elem'] == 'button'): ?>  <!-- button -->
         <div class="col-sm-<?= $empty('label', 6) ?> <?= $av_class ?>"
-            format="<?= $empty('format') ?>"
+             format="<?= $empty('format') ?>"
             <?= $as_tip ?>
             <?= $as_name ?>>
-                <button class="btn btn-<?= $empty('level', 'primary') ?>"
+            <button class="btn btn-<?= $empty('level', 'primary') ?>"
                     type="button"
-                    <?= $as_script ?>><?= $av_value ?></button>
+                <?= $as_script ?>><?= $av_value ?></button>
         </div>
     <?php endif; ?>
-    <?= $html_end_div ?>
+        <?= $html_end_div ?>
     <?php endforeach; ?>
 
     <br>
