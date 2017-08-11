@@ -1,13 +1,11 @@
 {
-  "name": "KAKE",
+  "name": "kk",
   "description": "The most authoritative travel guide",
   "keywords": [
-    "maiqi",
-    "KAKE",
     "trip",
     "travel"
   ],
-  "homepage": "http://m.kakehotels.com/",
+  "homepage": "http://www.kakehotels.com/",
   "type": "project",
   "license": "BSD-3-Clause",
   "minimum-stability": "stable",
