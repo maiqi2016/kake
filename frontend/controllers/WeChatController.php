@@ -65,7 +65,7 @@ class WeChatController extends GeneralController
 
         // 名字/手机号码验证
         if (empty($name) || empty($phone)) {
-            return "名字和手机号码用于中奖联络方式，请规范填写哦~";
+            return '名字和手机号码用于中奖联络方式，请规范填写哦~';
         }
 
         $model = parent::model('ActivityLotteryCode');
@@ -73,7 +73,11 @@ class WeChatController extends GeneralController
         // 公司代码验证
         $company = strtolower($company);
         if (false === ($code = array_search($company, $model->_company))) {
-            return "该品牌还不是喀客旅行的合作伙伴~";
+            return '该品牌还不是喀客旅行的合作伙伴~';
+        }
+
+        if ($code <= 24) {
+            return '哎呀，你来晚了！抽奖活动已经结束了！';
         }
 
         // 时间判断
@@ -85,7 +89,7 @@ class WeChatController extends GeneralController
                 return "抽奖活动还未开始，不要太心急哦~开始时间：${date['begin']}~ 爱你么么哒";
             }
             if (isset($date['end']) && TIME > strtotime($date['end'])) {
-                return "哎呀，你来晚了！抽奖活动已经结束了！";
+                return '哎呀，你来晚了！抽奖活动已经结束了！';
             }
         }
 
