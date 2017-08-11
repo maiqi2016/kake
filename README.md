@@ -1,4 +1,4 @@
-# kake
+# KAKE
 Trip app
 
 ## Install step
