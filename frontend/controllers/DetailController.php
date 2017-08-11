@@ -22,7 +22,8 @@ class DetailController extends GeneralController
                         'min(price) AS price'
                     ],
                     'where' => [
-                        ['product_package.bidding' => 1]
+                        ['product_package.bidding' => 1],
+                        ['product_package.state' => 1]
                     ],
                     'group' => 'product_id'
                 ],
