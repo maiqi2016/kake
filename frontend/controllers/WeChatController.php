@@ -54,6 +54,22 @@ class WeChatController extends GeneralController
         $br = PHP_EOL;
         $text = trim($message->Content);
 
+        $user = $wx->user->get($message->FromUserName);
+
+        // 回复格式 { ([\d\w]{8}) }
+        if (preg_match('/^[\d\w]{8}$/i', $text)) {
+            $result = $this->service('activity.log-winning-code', [
+                'code' => $text,
+                'openid' => $user->openid,
+                'nickname' => $user->nickname
+            ]);
+
+            if (is_string($result)) {
+                return "Oops! An error has occurred.{$br}{$br}${result}";
+            }
+        }
+
+        // 回复格式 { 品牌名+姓名+手机号码 }
         // 格式判断
         $text = str_replace('＋', '+', $text);
         $char = substr_count($text, '+');
@@ -93,8 +109,7 @@ class WeChatController extends GeneralController
             }
         }
 
-        $user = $wx->user->get($message->FromUserName);
-        $result = $this->service('general.log-lottery-code', [
+        $result = $this->service('activity.log-lottery-code', [
             'openid' => $user->openid,
             'nickname' => $user->nickname,
             'company' => $code,
