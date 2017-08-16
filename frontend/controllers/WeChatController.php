@@ -67,6 +67,29 @@ class WeChatController extends GeneralController
             if (is_string($result)) {
                 return "Oops! An error has occurred.{$br}{$br}${result}";
             }
+
+            if (!empty($result['error'])) {
+                switch ($result['error']) {
+                    case 'user_already_receive':
+                        $info = $result['winning'] ? '中奖了' : '中个鸡儿哟';
+                        return "你已经核领过抽奖码了，结果就是 [ {$info} ]，🙄🙄🙄";
+                        break;
+
+                    case 'code_error':
+                        return '这个抽奖码不正确，请核对哟~';
+                        break;
+
+                    case 'code_already_received':
+                        return '这个抽奖码已经被小姐姐核领了，如果你确认输入无误，请联系KAKE解决~';
+                        break;
+                }
+            } else {
+                if ($result['winning']) {
+                    return '哇哦😯~恭喜你👻👏🍾🎉，中奖啦~';
+                } else {
+                    return '不要灰心，下(lai)次(sheng)🙄🙄🙄肯定中奖~';
+                }
+            }
         }
 
         // 回复格式 { 品牌名+姓名+手机号码 }
