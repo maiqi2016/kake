@@ -379,7 +379,9 @@ class Helper extends Object
         $items = self::getUrlItems($url);
         $params = array_merge($items['params'], $params);
 
-        return trim($items['base_url'] . '?' . http_build_query($params), '?');
+        $url = trim($items['base_url'] . '?' . http_build_query($params), '?');
+
+        return urldecode($url);
     }
 
     /**
@@ -403,7 +405,7 @@ class Helper extends Object
 
         $url = trim($items['base_url'] . '?' . http_build_query($items['params']), '?');
 
-        return $url;
+        return urldecode($url);
     }
 
     /**
@@ -423,7 +425,7 @@ class Helper extends Object
         $query = http_build_query($params);
         $url .= (strpos($url, '?') !== false) ? '&' . $query : '?' . $query;
 
-        return rtrim($url, '&?');
+        return urldecode(rtrim($url, '&?'));
     }
 
     /**
@@ -1440,6 +1442,23 @@ class Helper extends Object
         }
 
         return isset($backTrance[$index]) ? $backTrance[$index] : null;
+    }
+
+    /**
+     * Generate rand num
+     *
+     * @param integer $begin
+     * @param integer $end
+     * @param integer $limit
+     *
+     * @return array
+     */
+    public static function generalRandMultipleNum($begin, $end, $limit)
+    {
+        $randArr = range($begin, $end);
+        shuffle($randArr);
+
+        return array_slice($randArr, 0, $limit);
     }
 
     // --- File ---
@@ -2560,5 +2579,31 @@ class Helper extends Object
         }
 
         return implode($split, $_items);
+    }
+
+    /**
+     * Generate lottery code
+     *
+     * @param integer $digit
+     * @param integer $total
+     *
+     * @return array
+     */
+    public static function generateCode($digit, $total)
+    {
+        $count = 0;
+        $box = [];
+
+        while ($count < $total) {
+            $code = base_convert(md5(uniqid(rand(), true)), 18, 36);
+            $code = strtoupper(substr($code, 0, $digit));
+
+            if (strlen($code) == $digit && !isset($box[$code])) {
+                $box[$code] = true;
+                $count++;
+            }
+        }
+
+        return array_keys($box);
     }
 }
