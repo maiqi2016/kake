@@ -61,7 +61,7 @@ class WeChatController extends GeneralController
             $result = $this->service('activity.log-winning-code', [
                 'code' => $text,
                 'openid' => $user->openid,
-                'nickname' => $user->nickname
+                'nickname' => Helper::filterEmjoy($user->nickname)
             ]);
 
             if (is_string($result)) {

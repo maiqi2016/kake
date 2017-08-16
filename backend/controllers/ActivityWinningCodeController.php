@@ -1,0 +1,153 @@
+<?php
+
+namespace backend\controllers;
+
+/**
+ * 核对抽奖码管理
+ *
+ * @auth-inherit-except add edit front sort
+ */
+class ActivityWinningCodeController extends GeneralController
+{
+    // 模型
+    public static $modelName = 'ActivityWinningCode';
+
+    // 模型描述
+    public static $modelInfo = '活动核对抽奖码';
+
+    /**
+     * @var array Hook
+     */
+    public static $hookLogic = ['check'];
+
+    /**
+     * @var array Field
+     */
+    public static $_check = [
+        0 => '未核对',
+        1 => '已核对'
+    ];
+
+    /**
+     * 是否核对
+     *
+     * @param array $record
+     *
+     * @return boolean
+     */
+    public static function checkLogic($record)
+    {
+        return !empty($record['openid']);
+    }
+
+    /**
+     * 是否核对反向逻辑
+     *
+     * @param integer $index
+     *
+     * @return array
+     */
+    public static function checkReverseWhereLogic($index)
+    {
+        $indexes = [
+            0 => [
+                ['activity_winning_code.openid' => null],
+            ],
+            1 => [
+                [
+                    'is not',
+                    'activity_winning_code.openid',
+                    null
+                ],
+            ]
+        ];
+
+        return isset($indexes[$index]) ? $indexes[$index] : [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function indexOperation()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function indexFilter()
+    {
+        return [
+            'nickname' => 'input',
+            'add_time' => [
+                'elem' => 'input',
+                'type' => 'date',
+                'between' => true
+            ],
+            'check' => [
+                'title' => '领取状态',
+                'value' => self::SELECT_KEY_ALL
+            ],
+            'winning' => [
+                'value' => self::SELECT_KEY_ALL
+            ],
+            'state' => [
+                'value' => 1
+            ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function indexAssist()
+    {
+        return [
+            'id' => 'code',
+            'nickname',
+            'code' => [
+                'empty',
+                'code'
+            ],
+            'winning' => [
+                'title' => '中奖状况',
+                'info',
+                'code',
+                'color' => [
+                    0 => 'default',
+                    1 => 'success'
+                ]
+            ],
+            'add_time',
+            'state' => [
+                'code',
+                'color' => 'auto',
+                'info'
+            ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function indexSorter()
+    {
+        return [
+            'winning',
+            'add_time'
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function indexCondition($as = null)
+    {
+        return array_merge(parent::indexCondition(), [
+            'order' => [
+                'id ASC'
+            ]
+        ]);
+    }
+}
