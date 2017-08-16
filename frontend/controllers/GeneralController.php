@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\components\SSO;
 use common\components\Helper;
 use common\controllers\MainController;
 use yii\helpers\ArrayHelper;
@@ -112,6 +113,17 @@ class GeneralController extends MainController
     }
 
     /**
+     * 微信浏览器判断
+     *
+     * @access public
+     * @return bool
+     */
+    public function weChatBrowser()
+    {
+        return strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false;
+    }
+
+    /**
      * 需要登录
      *
      * @access public
@@ -119,6 +131,12 @@ class GeneralController extends MainController
      */
     public function mustLogin()
     {
+        if (Yii::$app->request->isAjax) {
+            $this->fail('login first');
+
+            return false;
+        }
+
         if (!$this->user) {
             Yii::$app->wx->config('oauth.callback', $this->currentUrl());
 

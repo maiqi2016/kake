@@ -599,7 +599,7 @@ class OrderController extends GeneralController
         $params = $this->validateSafeLink(false);
 
         // 微信浏览器
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+        if ($this->weChatBrowser()) {
 
             $this->mustLogin();
 

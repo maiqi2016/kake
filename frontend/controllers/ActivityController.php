@@ -109,7 +109,7 @@ class ActivityController extends GeneralController
     {
         $post = Yii::$app->request->post();
 
-        $result = $this->service('general.add-activity-story', [
+        $result = $this->service('activity.add-activity-story', [
             'user_id' => $this->user->id,
             'attachment' => $post['attachment'],
             'story' => $post['story']

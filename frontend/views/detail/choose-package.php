@@ -82,8 +82,7 @@ $params = \Yii::$app->params;
             联系人信息
         </div>
         <input type="text" class="input-border" name="name" ng-model="buy.user_info.name" placeholder="姓名"/>
-        <input type="number" class="input-border" name="phone" ng-model="buy.user_info.phone" ng-model="message"
-               placeholder="手机号码"/>
+        <input type="number" class="input-border" name="phone" ng-model="buy.user_info.phone" placeholder="手机号码"/>
 
         <div class="auth-code">
             <input name="captcha" class="input-border" ng-model="buy.user_info.captcha" placeholder="验证码"/>
