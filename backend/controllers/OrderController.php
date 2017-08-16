@@ -275,7 +275,7 @@ class OrderController extends GeneralController
     public function sufHandleField($record, $action = null, $callback = null)
     {
         if ($action == 'index') {
-            $package = $this->service('general.list-package-by-order-id', ['order_id' => $record['id']]);
+            $package = $this->service('order.list-package-by-order-id', ['order_id' => $record['id']]);
 
             $record['package_record'] = $package;
             $record['package_info'] = null;
