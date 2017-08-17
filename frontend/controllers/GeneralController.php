@@ -141,16 +141,9 @@ class GeneralController extends MainController
             $this->fail('login first');
         } else { // normal method
             $url = $this->currentUrl();
-            if ($this->weChatBrowser()) {
-                Yii::$app->wx->config('oauth.callback', $url);
-                Yii::$app->wx->auth();
-            } else {
-                $result = SSO::auth($url);
-                if (is_string($result)) {
-                    throw new \Exception($result);
-                }
-                $this->loginUser($result, 'sso-login');
-            }
+
+            Yii::$app->wx->config('oauth.callback', $url);
+            Yii::$app->wx->auth();
         }
     }
 
