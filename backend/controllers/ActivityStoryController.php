@@ -37,6 +37,9 @@ class ActivityStoryController extends GeneralController
                 'elem' => 'input',
                 'type' => 'date',
                 'between' => true
+            ],
+            'state' => [
+                'value' => self::SELECT_KEY_ALL
             ]
         ];
     }

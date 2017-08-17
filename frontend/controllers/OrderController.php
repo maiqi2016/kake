@@ -454,6 +454,10 @@ class OrderController extends GeneralController
      */
     public function actionWx()
     {
+        if (!$this->weChatBrowser()) {
+            $this->error(Yii::t('common', 'payment with wechat must on the client'));
+        }
+
         list($outTradeNo, $body, $price) = $this->localOrder(self::PAY_CODE_WX);
 
         return $this->wxPay($outTradeNo, $body, $price);
@@ -720,7 +724,7 @@ class OrderController extends GeneralController
         }
 
         $this->message([
-            '订单支付 %s 或者遇到错误需 %s',
+            'payment with problems',
             [
                 'text' => '已经完成',
                 'router' => ['order/index']

@@ -24,8 +24,8 @@ class ActivityWinningCodeController extends GeneralController
      * @var array Field
      */
     public static $_check = [
-        0 => '未核对',
-        1 => '已核对'
+        0 => '未核领',
+        1 => '已核领'
     ];
 
     /**
@@ -80,11 +80,6 @@ class ActivityWinningCodeController extends GeneralController
     {
         return [
             'nickname' => 'input',
-            'add_time' => [
-                'elem' => 'input',
-                'type' => 'date',
-                'between' => true
-            ],
             'check' => [
                 'title' => '领取状态',
                 'value' => self::SELECT_KEY_ALL
