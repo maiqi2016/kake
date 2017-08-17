@@ -166,4 +166,51 @@ class SSO extends Object
 
         return true;
     }
+
+    // ---
+
+    /**
+     * 授权
+     *
+     * @param string $url
+     * @param string $tokenKey
+     *
+     * @return mixed
+     */
+    public static function auth($url = null, $tokenKey = 'sso_token')
+    {
+        $url = $url ?: Helper::currentUrl();
+
+        $token = Yii::$app->session->get($tokenKey);
+        if (!$token) {
+            if (!Yii::$app->request->get(SSO::$responseType)) {
+                SSO::code($url);
+            }
+
+            $token = SSO::token($url)['access_token'];
+            Yii::$app->session->set($tokenKey, $token);
+        }
+
+        try {
+            $result = SSO::api('user.info', $token);
+        } catch (\Exception $e) {
+
+            $msg = $e->getMessage();
+            if (strpos($msg, 'already expire') !== false) {
+                Yii::$app->session->remove($tokenKey);
+
+                $url = Helper::unsetParamsForUrl([
+                    self::$responseType,
+                    'state'
+                ], $url);
+
+                header('Location: ' . $url);
+                exit();
+            }
+
+            return $msg;
+        }
+
+        return $result;
+    }
 }

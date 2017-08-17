@@ -1097,7 +1097,7 @@ class GeneralController extends MainController
 
                 case 'select' :
                     $v = $item['value'];
-                    if ($v['selected'] != self::SELECT_KEY_ALL && isset($v['list'][$v['selected']])) {
+                    if (isset($v['list'][$v['selected']]) && $v['selected'] !== self::SELECT_KEY_ALL) {
                         $where[] = [
                             $field => $v['selected']
                         ];
@@ -1114,9 +1114,9 @@ class GeneralController extends MainController
                             $item['value_from'],
                             $item['value_to']
                         ];
-                    } elseif (!empty($item['equal']) && !empty($item['value'])) {
+                    } elseif (!empty($item['equal']) && isset($item['value'])) {
                         $where[] = [$field => $item['value']];
-                    } elseif (!empty($item['value'])) {
+                    } elseif (isset($item['value'])) {
                         $where[] = [
                             'like',
                             $field,

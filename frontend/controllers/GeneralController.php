@@ -98,7 +98,7 @@ class GeneralController extends MainController
      *
      * @return void
      */
-    public function loginUser($user, $type = 'login', $system = 'kake')
+    public function loginUser($user, $type = 'we-chat-login', $system = 'kake')
     {
         Yii::trace("将用户信息设置到 Session 中 - 来自 <{$system}> 系统的 <{$type}> 类型登录");
 
@@ -127,23 +127,31 @@ class GeneralController extends MainController
      * 需要登录
      *
      * @access public
-     * @return mixed
+     * @return void
+     * @throws \Exception
      */
     public function mustLogin()
     {
+        if ($this->user) {
+            return;
+        }
+
+        // ajax
         if (Yii::$app->request->isAjax) {
             $this->fail('login first');
-
-            return false;
+        } else { // normal method
+            $url = $this->currentUrl();
+            if ($this->weChatBrowser()) {
+                Yii::$app->wx->config('oauth.callback', $url);
+                Yii::$app->wx->auth();
+            } else {
+                $result = SSO::auth($url);
+                if (is_string($result)) {
+                    throw new \Exception($result);
+                }
+                $this->loginUser($result, 'sso-login');
+            }
         }
-
-        if (!$this->user) {
-            Yii::$app->wx->config('oauth.callback', $this->currentUrl());
-
-            return Yii::$app->wx->auth();
-        }
-
-        return true;
     }
 
     /**
@@ -232,7 +240,7 @@ class GeneralController extends MainController
             $error = '支付链接签名错误';
         }
 
-        $timeout = Yii::$app->params['order_pay_timeout'] * 60;
+        $timeout = Yii::$app->params['order_pay_timeout'] * 600;
         if (!$error && (empty($item['time']) || TIME - $item['time'] > $timeout)) {
             $error = '支付链接已经超时';
         }
