@@ -42,6 +42,8 @@ return [
     'we chat auth fail' => '微信授权失败, 请联系客服',
 
     // logic order
+    'payment with wechat must on the client' => '该支付方式必须在微信客户端',
+    'payment with problems' => '订单支付 {action1} 或者遇到错误需 {action2}',
     'payment link illegal' => '支付链接异常',
     'product id required' => '产品ID参数未指定',
     'product package id required' => '产品套餐ID参数未指定',

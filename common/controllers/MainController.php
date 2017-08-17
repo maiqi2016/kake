@@ -286,21 +286,22 @@ class MainController extends Controller
      *
      * @access public
      *
-     * @param array $message
+     * @param array  $message
+     * @param string $package
      *
      * @return string
      */
-    public function messageParseLink($message)
+    public function messageParseLink($message, $package = 'common')
     {
-        $msg = Helper::popOne($message, 0);
-        $items = [];
-
-        foreach ($message as $item) {
+        foreach ($message as &$item) {
+            if (!is_array($item)) {
+                continue;
+            }
             $options = isset($item['options']) ? $item['options'] : [];
-            $items[] = Html::a($item['text'], $item['router'], $options);
+            $item = Html::a($item['text'], $item['router'], $options);
         }
 
-        return sprintf($msg, ...$items);
+        return $this->lang($message, $package);
     }
 
     /**
@@ -1179,7 +1180,7 @@ class MainController extends Controller
      * @param string  $img
      * @param integer $width
      * @param integer $height
-     * @param string $bgColor
+     * @param string  $bgColor
      *
      * @return array
      */
