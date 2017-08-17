@@ -24,7 +24,8 @@ $params = \Yii::$app->params;
         <?php endif ?>
     </div>
     <?php if (!empty($focusList)): ?>
-        <div class="carousel index-banner-height" id="focus-hot" kk-focus=".focus-point" data-point-current="on" style="overflow:hidden">
+        <div class="carousel index-banner-height" id="focus-hot" kk-focus=".focus-point" data-point-current="on"
+             style="overflow:hidden">
             <div class="carousel-scroller product-focus">
                 <?php foreach ($focusList as $focus): ?>
                     <?php
@@ -43,7 +44,6 @@ $params = \Yii::$app->params;
                 <?php endforeach ?>
             </div>
         </div>
-
     <?php endif; ?>
 
     <!-- Hot-aim -->
@@ -53,7 +53,8 @@ $params = \Yii::$app->params;
                 <img src="<?= $params['frontend_source'] ?>/img/index-icon-aim.svg"/>
                 热门目的地
             </h3>
-            <a href="<?= Url::to(['items/region']) ?>">更多<img src="<?= $params['frontend_source'] ?>/img/index-icon-more.svg"/></a>
+            <a href="<?= Url::to(['items/region']) ?>">更多<img
+                        src="<?= $params['frontend_source'] ?>/img/index-icon-more.svg"/></a>
         </div>
         <div class="carousel kake-theme" id="carousel-scroller-aim" kk-scroll>
             <div class="carousel-scroller scroll">
@@ -79,7 +80,8 @@ $params = \Yii::$app->params;
                 <img src="<?= $params['frontend_source'] ?>/img/index-icon-sales.svg"/>
                 闪购专区
             </h3>
-            <a href="<?= Url::to(['items/index']) ?>">更多<img src="<?= $params['frontend_source'] ?>/img/index-icon-more.svg"/></a>
+            <a href="<?= Url::to(['items/index']) ?>">更多<img
+                        src="<?= $params['frontend_source'] ?>/img/index-icon-more.svg"/></a>
         </div>
         <div class="carousel kake-theme" id="carousel-scroller-flash" kk-camel>
             <div class="carousel-scroller scroll">
@@ -103,11 +105,11 @@ $params = \Yii::$app->params;
     <!-- Activity -->
     <div class="kake-box activity">
         <?php if (!empty($bannerList)): ?>
-            <div class="carousel-scroll" id="carousel-scroller-activity" kk-scroll>
+            <div class="carousel" id="carousel-scroller-activity" kk-focus style="overflow:hidden;">
                 <div class="carousel-scroller activity">
                     <?php foreach ($bannerList as $item): ?>
                         <a href="<?= $item['url'] ?>" target="<?= $item['target_info'] ?>">
-                            <img class="img-responsive" src="<?= current($item['preview_url']) ?>"/>
+                            <img src="<?= current($item['preview_url']) ?>"/>
                         </a>
                     <?php endforeach; ?>
                 </div>
