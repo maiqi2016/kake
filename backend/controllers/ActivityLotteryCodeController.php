@@ -18,6 +18,14 @@ class ActivityLotteryCodeController extends GeneralController
     /**
      * @inheritDoc
      */
+    public static function indexOperation()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function indexFilter()
     {
         return [
@@ -77,21 +85,6 @@ class ActivityLotteryCodeController extends GeneralController
     {
         return [
             'add_time'
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function editAssist($action = null)
-    {
-        return [
-            'real_name',
-            'phone',
-            'state' => [
-                'elem' => 'select',
-                'value' => parent::SELECT_KEY_ALL
-            ]
         ];
     }
 

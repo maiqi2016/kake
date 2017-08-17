@@ -566,7 +566,7 @@ class Helper extends Object
         }
 
         // address
-        $options[CURLOPT_URL] = $url;
+        $options[CURLOPT_URL] = str_replace(' ', '+', $url);
 
         $curl = curl_init();
 
@@ -1024,8 +1024,8 @@ class Helper extends Object
         $tpl = "<select ${class} ${name} ${disabled}>";
 
         foreach ($array as $value => $info) {
-            $operationObj = ($selectedModel == 'key') ? $value : $info;
-            $checkedState = ($operationObj == $selected) ? 'selected="selected"' : null;
+            $operationObj = ($selectedModel === 'key') ? $value : $info;
+            $checkedState = ($operationObj === $selected) ? 'selected="selected"' : null;
             $tpl .= '<option value="' . $value . '" ' . $checkedState . '>' . $info . '</option>';
         }
         $tpl .= '</select>';
