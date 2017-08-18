@@ -17,10 +17,10 @@ $params = \Yii::$app->params;
             <input type="email" class="form-control" placeholder="32个字符内">
         </div>
         <div class="form-group">
-            <label>头像文件</label>
+            <label>头像图片文件</label>
             <input type="file" class="form-control">
             <p class="help-block">文件大小 ≤3MB</p>
         </div>
-        <button type="submit" class="btn btn-default">申请加入</button>
+        <button type="submit" class="btn btn-default" kk-tap="submitApply()">申请加入</button>
     </form>
 </div>

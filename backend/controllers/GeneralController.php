@@ -1097,7 +1097,7 @@ class GeneralController extends MainController
 
                 case 'select' :
                     $v = $item['value'];
-                    if ($v['selected'] != self::SELECT_KEY_ALL && isset($v['list'][$v['selected']])) {
+                    if ($v['selected'] !== self::SELECT_KEY_ALL && isset($v['list'][$v['selected']])) {
                         $where[] = [
                             $field => $v['selected']
                         ];
