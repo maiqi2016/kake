@@ -2,7 +2,6 @@
 
 namespace frontend\controllers;
 
-use frontend\components\SSO;
 use Yii;
 
 /**

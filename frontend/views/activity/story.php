@@ -1,8 +1,6 @@
 <?php
 /* @var $this yii\web\View */
 
-use yii\helpers\Url;
-
 $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'activity';
 ?>
@@ -23,11 +21,10 @@ $params = \Yii::$app->params;
 		<div class="lcloud"></div>
 		<div class="plane"></div>
 		<!--故事内容-->
-        <textarea placeholder="我有酒，说出你的故事..." id="feedbackcontent"></textarea>
+        <textarea placeholder="我有酒，你有故事吗..." id="feedbackcontent" ng-model="story.story"></textarea>
 
         <a href="javascript:void(0)" class="btn" kk-tap="submitStory()">
             <img src="<?= $params['frontend_source'] ?>/img/activity/btn.png"/>
         </a>
-		
 	</div>
 </body>
