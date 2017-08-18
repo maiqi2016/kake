@@ -1025,6 +1025,9 @@ class Helper extends Object
 
         foreach ($array as $value => $info) {
             $operationObj = ($selectedModel == 'key') ? $value : $info;
+            if ($selected === 0) {
+                $selected = '0';
+            }
             $checkedState = ($operationObj == $selected) ? 'selected="selected"' : null;
             $tpl .= '<option value="' . $value . '" ' . $checkedState . '>' . $info . '</option>';
         }
