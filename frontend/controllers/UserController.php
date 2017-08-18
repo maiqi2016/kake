@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\components\Helper;
 use Yii;
 
 /**
@@ -20,8 +21,60 @@ class UserController extends GeneralController
         $this->mustLogin();
 
         $this->sourceCss = ['user/user'];
-        $this->sourceJs = ['user/user'];
+        $this->sourceJs = [
+            'user/user',
+            'jquery.ajaxupload'
+        ];
 
         return $this->render('apply-distributor');
+    }
+
+    /**
+     * ajax 上传头像
+     */
+    public function actionUploadAvatar()
+    {
+        $this->uploader([
+            'suffix' => [
+                'png',
+                'jpg',
+                'jpeg'
+            ],
+            'pic_sizes' => '128-MAX*128-MAX',
+            'max_size' => 1024 * 5
+        ]);
+    }
+
+    /**
+     * Ajax 申请成为分销商
+     */
+    public function actionAjaxApplyDistributor()
+    {
+        try {
+            $data = Helper::pullSome(Yii::$app->request->post(), [
+                'phone',
+                'name',
+                'attachment' => 'attachment_id'
+            ]);
+        } catch (\Exception $e) {
+            $this->fail('abnormal params');
+        }
+
+        /**
+         * @var $data array
+         */
+        $result = $this->service('general.newly-or-edit', array_merge([
+            'table' => 'producer_apply',
+            'where' => [
+                'user_id' => $this->user->id,
+            ],
+            'state' => 1
+        ], $data));
+
+        if (is_string($result)) {
+            $this->fail($result);
+        }
+
+        $this->success($result);
     }
 }
