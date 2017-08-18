@@ -234,7 +234,7 @@ class ProducerSettingController extends GeneralController
                 'script' => '$.showPage("user.list", {role: 10, state: 1})'
             ],
             'name' => [
-                'placeholder' => '32个字符以内'
+                'placeholder' => '32个字以内'
             ],
             'theme' => [
                 'elem' => 'select',

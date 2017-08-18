@@ -24,6 +24,8 @@ return [
     'link_url' => '链接',
     'upload' => '上传',
     'abnormal operation' => '操作异常',
+    'abnormal params' => '参数异常',
+    'abnormal data' => '数据异常',
     'burst error, please contact the administrator' => '突发性错误, 请及时联系管理员',
     'support ajax method only' => '仅支持AJAX方式访问',
     'page not found' => '你要访问的页面我们没找到',
@@ -32,6 +34,7 @@ return [
     'lack of necessary parameters' => '缺少必要的参数',
     'forbidden access' => '禁止访问',
     'phone number illegal' => '手机号码格式不正确',
+    'apply does not exist' => '申请记录不存在',
 
     // logic login
     'login first' => '请先登录系统, 再次尝试该操作',
@@ -75,4 +78,5 @@ return [
     'withdraw must less than quota' => '提现额度不能大于佣金余额',
     'distributor params illegal' => '分销商参数异常',
     'the distributor need select product first' => '该分销商还未选择分销产品',
+    'user already has the ability to distribute' => '该用户已经拥有分销的能力，自动关闭申请',
 ];

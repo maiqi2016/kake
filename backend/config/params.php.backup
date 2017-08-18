@@ -71,6 +71,7 @@ return [
         'i' => [
             'name' => '分销管理',
             'sub' => [
+                'producer-apply.index' => '分销商申请',
                 'producer-setting.index' => '分销商',
                 'product-producer.index' => '产品分销设置',
                 'producer-product.index' => '分销产品选择',
