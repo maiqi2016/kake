@@ -508,6 +508,7 @@ class MainController extends Controller
 
         $url = Yii::$app->params['upload_url'];
         $result = [
+            'name' => $file['name'],
             'id' => $result['id'],
             'width' => $file['width'],
             'height' => $file['height'],
@@ -1175,26 +1176,64 @@ class MainController extends Controller
     }
 
     /**
-     * 生成缩略图
+     * 生成缩略图 (保留原图，可能出现留白)
      *
-     * @param string  $img
+     * @param string  $imgFile
      * @param integer $width
      * @param integer $height
      * @param string  $bgColor
+     * @param boolean $cover
      *
-     * @return array
+     * @return mixed
      */
-    public function thumb($img, $width, $height, $bgColor = null)
+    public function thumbOriginal($imgFile, $width, $height, $bgColor = null, $cover = false)
     {
-        $img = Image::make($img);
+        $img = Image::make($imgFile);
         $result = Helper::calThumb($width, $height, $img->width(), $img->height());
         $img->resize($result['width'], $result['height']);
 
         $bg = Image::canvas($width, $height, $bgColor);
         $bg->insert($img, 'top-left', intval($result['left']), intval($result['top']));
 
-        $path = Helper::createFilePath(Yii::$app->params['upload_path'], $bgColor ? 'jpg' : 'png', 'thumb_');
+        if ($cover) {
+            $bg->save($imgFile);
+
+            return true;
+        }
+
+        $suffix = Helper::getSuffix($imgFile);
+        $path = Helper::createFilePath(Yii::$app->params['upload_path'], $bgColor ? $suffix : 'png', 'thumb_original_');
         $bg->save($path['file']);
+
+        return $path;
+    }
+
+    /**
+     * 生成缩略图 (裁切原图，可能缩略后不人性化)
+     *
+     * @param string  $imgFile
+     * @param integer $width
+     * @param integer $height
+     * @param boolean $cover
+     *
+     * @return mixed
+     */
+    public function thumbCrop($imgFile, $width, $height, $cover = false)
+    {
+        $img = Image::make($imgFile);
+        $img->fit($width, $height, function ($constraint) {
+            $constraint->upsize();
+        });
+
+        if ($cover) {
+            $img->save($imgFile);
+
+            return true;
+        }
+
+        $suffix = Helper::getSuffix($imgFile);
+        $path = Helper::createFilePath(Yii::$app->params['upload_path'], $suffix, 'thumb_crop_');
+        $img->save($path['file']);
 
         return $path;
     }

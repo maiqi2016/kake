@@ -72,6 +72,7 @@ class WeChatController extends GeneralController
                 switch ($result['error']) {
                     case 'user_already_receive':
                         $info = $result['winning'] ? '中奖了' : '中个鸡儿哟';
+
                         return "你已经核领过抽奖码了，结果就是 [ {$info} ]，🙄🙄🙄";
                         break;
 
@@ -94,17 +95,23 @@ class WeChatController extends GeneralController
 
         // 回复格式 { 品牌名+姓名+手机号码 }
         // 格式判断
-        $text = str_replace('＋', '+', $text);
-        $char = substr_count($text, '+');
-        if ($char < 2) {
-            return null;
-        }
+        if (in_array(strtolower($text), ['uyuan', '阿里巴巴'])) {
+            $company = $text;
+            $name = null;
+            $phone = null;
+        } else {
+            $text = str_replace('＋', '+', $text);
+            $char = substr_count($text, '+');
+            if ($char < 2) {
+                return null;
+            }
 
-        list($company, $name, $phone) = explode('+', $text);
+            list($company, $name, $phone) = explode('+', $text);
 
-        // 名字/手机号码验证
-        if (empty($name) || empty($phone)) {
-            return '名字和手机号码用于中奖联络方式，请规范填写哦~';
+            // 名字/手机号码验证
+            if (empty($name) || empty($phone)) {
+                return '名字和手机号码用于中奖联络方式，请规范填写哦~';
+            }
         }
 
         $model = parent::model('ActivityLotteryCode');
