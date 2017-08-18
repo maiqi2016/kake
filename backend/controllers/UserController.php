@@ -61,11 +61,12 @@ class UserController extends GeneralController
      */
     public static function ajaxModalListOperations()
     {
+        $field = Yii::$app->request->get('field_name', 'producer_id');
         return [
             [
                 'text' => '选定',
                 'script' => true,
-                'value' => '$.modalRadioValueToInput("radio", "producer_id")',
+                'value' => '$.modalRadioValueToInput("radio", "' . $field . '")',
                 'icon' => 'flag'
             ]
         ];
