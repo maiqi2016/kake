@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\components\Helper;
+use common\components\SsoClient;
 use Yii;
 
 /**
@@ -76,5 +77,27 @@ class UserController extends GeneralController
         }
 
         $this->success($result);
+    }
+
+    /**
+     * 单点登录 - demo
+     */
+    public function actionSso()
+    {
+        $user = SsoClient::auth();
+
+        $this->dump($user);
+    }
+
+    /**
+     * 退出登录
+     *
+     * @access public
+     * @return void
+     */
+    public function actionLogout()
+    {
+        $p = Yii::$app->session->cookieParams;
+        SsoClient::logout('KK_SESS', $p['path'], $p['domain']);
     }
 }
