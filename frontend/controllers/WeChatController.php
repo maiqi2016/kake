@@ -55,13 +55,14 @@ class WeChatController extends GeneralController
         $text = trim($message->Content);
 
         $user = $wx->user->get($message->FromUserName);
+        $user->nickname = Helper::filterEmjoy($user->nickname);
 
         // 回复格式 { ([\d\w]{8}) }
         if (preg_match('/^[\d\w]{8}$/i', $text)) {
             $result = $this->service('activity.log-winning-code', [
                 'code' => $text,
                 'openid' => $user->openid,
-                'nickname' => Helper::filterEmjoy($user->nickname)
+                'nickname' => $user->nickname
             ]);
 
             if (is_string($result)) {
