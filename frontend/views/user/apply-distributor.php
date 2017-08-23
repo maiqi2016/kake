@@ -22,6 +22,6 @@ $params = \Yii::$app->params;
         <div id="file" class="form-control">{{apply.tip}}</div>
         <p class="help-block">文件大小 ≤3MB</p>
     </div>
-    <center><button class="btn btn-default" kk-tap="alert()">申请加入</button></center>
+    <center><button class="btn btn-default" kk-tap="submitApply()">申请加入</button></center>
 </div>
 
