@@ -48,7 +48,7 @@ $params = \Yii::$app->params;
 
     <!-- Hot-aim -->
     <div class="kake-box hot-aim">
-        <div class="kake-title">
+        <div class="kake-title" kk-link="<?= Url::to(['items/region']) ?>">
             <h3>
                 <img src="<?= $params['frontend_source'] ?>/img/index-icon-aim.svg"/>
                 热门目的地
@@ -75,7 +75,7 @@ $params = \Yii::$app->params;
 
     <!-- Flash-shopping-zone -->
     <div class="kake-box flash-shopping-zone">
-        <div class="kake-title">
+        <div class="kake-title" kk-link="<?= Url::to(['items/index']) ?>">
             <h3>
                 <img src="<?= $params['frontend_source'] ?>/img/index-icon-sales.svg"/>
                 闪购专区
