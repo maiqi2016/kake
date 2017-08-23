@@ -21,6 +21,10 @@ $ngCtl = empty($params['ng_ctrl']) ? null : (' ng-controller="' . $params['ng_ct
 $title = empty($params['title']) ? $params['app_title'] : $params['title'];
 $keywords = empty($params['keywords']) ? $params['app_keywords'] : $params['keywords'];
 $description = empty($params['description']) ? $params['app_description'] : $params['description'];
+
+$keywords = str_replace('"', '“', $keywords);
+$description = str_replace('"', '“', $description);
+
 $cover = empty($params['cover']) ? $params['frontend_source'] . '/img/logo.png' : $params['cover'];
 ?>
 <?php $this->beginPage() ?>
