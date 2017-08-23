@@ -105,7 +105,7 @@ $params = \Yii::$app->params;
     <!-- Activity -->
     <div class="kake-box activity">
         <?php if (!empty($bannerList)): ?>
-            <div class="carousel" id="carousel-scroller-activity" kk-focus="body" style="overflow:hidden;">
+            <div class="carousel" id="carousel-scroller-activity" kk-focus style="overflow:hidden;">
                 <div class="carousel-scroller activity">
                     <?php foreach ($bannerList as $item): ?>
                         <a href="<?= $item['url'] ?>" target="<?= $item['target_info'] ?>">
