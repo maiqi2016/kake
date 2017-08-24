@@ -54,6 +54,21 @@ class SsoClient extends Object
     }
 
     /**
+     * Handle url
+     *
+     * @param string $url
+     *
+     * @return mixed
+     */
+    public static function handleUrl($url)
+    {
+        $url = str_replace('/?', '?', $url);
+        $url = str_replace('index.php', '', $url);
+
+        return $url;
+    }
+
+    /**
      * Redirect for get code
      *
      * @param string $redirect_uri
@@ -67,7 +82,7 @@ class SsoClient extends Object
         $url = self::getUrl('auth.code', [
             'response_type' => self::$responseType,
             'client_id' => self::getClientId(),
-            'redirect_uri' => $redirect_uri,
+            'redirect_uri' => self::handleUrl($redirect_uri),
             'scope' => $scope,
             'state' => $state
         ]);
@@ -120,7 +135,7 @@ class SsoClient extends Object
         $response = Helper::cURL($url, 'post', [
             'grant_type' => 'authorization_code',
             'code' => $code,
-            'redirect_uri' => $redirect_uri,
+            'redirect_uri' => self::handleUrl($redirect_uri),
             'client_id' => self::getClientId()
         ], 'http_build_query');
 
