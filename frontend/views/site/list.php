@@ -23,8 +23,8 @@ use yii\helpers\Url;
                 </div>
             </a>
         </li>
-        <?php if ($i + 1 != $last): ?>
-            <li class="thinner-border"></li>
-        <?php endif; ?>
+        
+        <li class="thinner-border"></li>
+        
     <?php endforeach ?>
 <?php endif; ?>
