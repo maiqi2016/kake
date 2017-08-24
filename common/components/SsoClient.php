@@ -62,8 +62,8 @@ class SsoClient extends Object
      */
     public static function handleUrl($url)
     {
-        $url = str_replace('/?', '?', $url);
         $url = str_replace('index.php', '', $url);
+        $url = str_replace('/?', '?', $url);
 
         return $url;
     }
