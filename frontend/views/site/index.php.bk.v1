@@ -37,7 +37,7 @@ $params = \Yii::$app->params;
                     $img = $ad ? current($focus['preview_url']) : current($focus['cover_preview_url']);
                     ?>
 
-                    <a href="<?= $url ?>" target="<?= $target ?>">
+                    <a href="<?= $url ?>" _target="<?= $target ?>">
                         <img src="<?= $img ?>"/>
                     </a>
                 <?php endforeach ?>
@@ -81,7 +81,7 @@ $params = \Yii::$app->params;
     <div class="carousel-scroll" id="carousel-scroller-activity" kk-scroll>
         <div class="carousel-scroller activity">
             <?php foreach ($banner as $item): ?>
-                <a href="<?= $item['url'] ?>" target="<?= $item['target_info'] ?>">
+                <a href="<?= $item['url'] ?>" _target="<?= $item['target_info'] ?>">
                     <img class="img-responsive" src="<?= current($item['preview_url']) ?>"/>
                 </a>
             <?php endforeach; ?>
