@@ -128,6 +128,7 @@ $params = \Yii::$app->params;
                     <?= $standardHtml ?>
                 <?php endif; ?>
             </ul>
+            <a href="<?= Url::to(['items/index']) ?>" class="more" kk-pull-up="100">查看更多</a>
         </div>
     </div>
 </div>
