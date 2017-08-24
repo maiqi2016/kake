@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\components\SsoClient;
 use frontend\components\SSO;
 use common\components\Helper;
 use common\controllers\MainController;
@@ -142,8 +143,17 @@ class GeneralController extends MainController
         } else { // normal method
             $url = $this->currentUrl();
 
-            Yii::$app->wx->config('oauth.callback', $url);
-            Yii::$app->wx->auth();
+            if ($this->weChatBrowser()) {
+                Yii::$app->wx->config('oauth.callback', $url);
+                Yii::$app->wx->auth();
+            } else {
+                $result = SsoClient::auth($url);
+
+                if (is_string($result)) {
+                    throw new \Exception($result);
+                }
+                $this->loginUser($result, 'sso-login');
+            }
         }
     }
 
