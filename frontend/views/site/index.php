@@ -4,7 +4,7 @@
 use yii\helpers\Url;
 
 $params = \Yii::$app->params;
-\Yii::$app->params['ng_ctrl'] = 'generic';
+\Yii::$app->params['ng_ctrl'] = 'site';
 ?>
 
 <div class="body">
@@ -48,15 +48,15 @@ $params = \Yii::$app->params;
 
     <!-- Hot-aim -->
     <div class="kake-box hot-aim">
-        <div class="kake-title" kk-link="<?= Url::to(['items/region']) ?>">
-            <h3>
+        <div class="kake-title">
+            <h3 kk-link="<?= Url::to(['items/region']) ?>">
                 <img src="<?= $params['frontend_source'] ?>/img/index-icon-aim.svg"/>
                 热门目的地
             </h3>
             <a href="<?= Url::to(['items/region']) ?>">更多<img
                         src="<?= $params['frontend_source'] ?>/img/index-icon-more.svg"/></a>
         </div>
-        <div class="carousel kake-theme" id="carousel-scroller-aim" kk-scroll>
+        <div class="carousel kake-theme" id="carousel-scroller-aim" kk-scroll data-callback-end="effect">
             <div class="carousel-scroller scroll">
                 <?php foreach ($plateList as $i => $item): ?>
                     <?php $cls = ($i % 2 == 0) ? null : 'class="top20"' ?>
@@ -75,8 +75,8 @@ $params = \Yii::$app->params;
 
     <!-- Flash-shopping-zone -->
     <div class="kake-box flash-shopping-zone">
-        <div class="kake-title" kk-link="<?= Url::to(['items/index']) ?>">
-            <h3>
+        <div class="kake-title">
+            <h3 kk-link="<?= Url::to(['items/index']) ?>">
                 <img src="<?= $params['frontend_source'] ?>/img/index-icon-sales.svg"/>
                 闪购专区
             </h3>
