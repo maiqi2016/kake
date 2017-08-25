@@ -99,7 +99,6 @@ class WeChatController extends GeneralController
         // 回复格式 { 品牌名+姓名+手机号码 }
         // 格式判断
         if (in_array(strtolower($text), [
-            'uyuan',
             '阿里巴巴'
         ])) {
             $company = $text;
@@ -128,7 +127,7 @@ class WeChatController extends GeneralController
             return '该品牌还不是喀客旅行的合作伙伴~';
         }
 
-        if ($code <= 24) {
+        if ($code < 26) {
             return '哎呀，你来晚了！抽奖活动已经结束了！';
         }
 
