@@ -6,12 +6,13 @@ use yii\helpers\Url;
 $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'generic';
 ?>
-<header kk-fixed>
+<header>
      全部目的地
     <div class="menu detail" kk-menu="#menu">
         <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/list.svg"/>
     </div>
 </header>
+
 <!-- All-hot-aim -->
 <div class="allaim">
 	<ul>
