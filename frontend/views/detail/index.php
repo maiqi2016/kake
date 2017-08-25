@@ -37,7 +37,7 @@ $params = \Yii::$app->params;
          <span class="hotel-detail-2-1 hidden">已售 <span><?= $detail['max_sales'] ?></span> 份</span>
         </div>
     </div>
-    <div class="classify">
+    <div class="classify" kk-fixed="16" data-top="16">
         <div class="classify-1" kk-tab-card="cur-1" data-element="div">
             <div class="classify-1-1 cur-1" data-card=".card_first">
                 <span>详情介绍</span>
