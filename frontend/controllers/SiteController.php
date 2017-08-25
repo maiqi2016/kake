@@ -16,7 +16,7 @@ class SiteController extends GeneralController
     public function actionIndex()
     {
         $this->sourceCss = null;
-        $this->sourceJs = false; // ['/node_modules/vconsole/dist/vconsole.min'];
+        $this->sourceJs = null; // ['/node_modules/vconsole/dist/vconsole.min'];
 
         $params = Yii::$app->params;
 
