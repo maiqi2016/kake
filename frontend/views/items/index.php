@@ -5,7 +5,7 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'generic';
 ?>
 
-<header kk-fixed>
+<header>
     列表
     <div class="menu detail" kk-menu="#menu">
         <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/list.svg"/>

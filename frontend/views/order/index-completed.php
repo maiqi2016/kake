@@ -7,7 +7,7 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'order';
 ?>
 
-<header kk-fixed>
+<header>
     订单中心
     <div class="menu detail" kk-menu="#menu">
         <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/list.svg"/>
