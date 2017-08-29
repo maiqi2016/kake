@@ -7,6 +7,8 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'site';
 ?>
 
+
+
 <div class="body">
     <!-- Banner -->
     <div class="banner" kk-fixed>
@@ -47,7 +49,7 @@ $params = \Yii::$app->params;
     <?php endif; ?>
 
     <!-- Hot-aim -->
-    <div class="kake-box hot-aim">
+    <div class="kake-box hot-aim" ng-init="initEffect()">
         <div class="kake-title">
             <h3 kk-link="<?= Url::to(['items/region']) ?>">
                 <img src="<?= $params['frontend_source'] ?>/img/index-icon-aim.svg"/>
@@ -56,11 +58,10 @@ $params = \Yii::$app->params;
             <a href="<?= Url::to(['items/region']) ?>">更多<img
                         src="<?= $params['frontend_source'] ?>/img/index-icon-more.svg"/></a>
         </div>
-        <div class="carousel kake-theme" id="carousel-scroller-aim" kk-scroll data-callback-end="effect">
+        <div class="carousel kake-theme" id="carousel-scroller-aim" kk-scroll data-callback-change="effect">
             <div class="carousel-scroller scroll">
                 <?php foreach ($plateList as $i => $item): ?>
-                    <?php $cls = ($i % 2 == 0) ? null : 'class="top20"' ?>
-                    <div <?= $cls ?>>
+                    <div>
                         <a href="<?= Url::to([
                             'items/index',
                             'plate' => $item['id']
