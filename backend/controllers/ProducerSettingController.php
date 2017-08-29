@@ -163,7 +163,7 @@ class ProducerSettingController extends GeneralController
             'logo_preview_url' => [
                 'title' => 'LOGO预览',
                 'img' => [
-                    'tip' => false
+                    'pos' => 'left'
                 ],
                 'width' => '128px'
             ],
@@ -254,13 +254,19 @@ class ProducerSettingController extends GeneralController
                 'elem' => 'img',
                 'upload_name' => 'upload_logo'
             ],
+            'upload_log_tip' => [
+                'title' => '',
+                'label' => 4,
+                'elem' => 'text',
+                'value' => '不上传头像默认使用微信头像'
+            ],
             'upload_logo' => [
                 'title' => '',
                 'type' => 'file',
                 'tag' => 1,
                 'rules' => [
                     'suffix' => 'jpg,jpeg,png',
-                    'pic_sizes' => '128*128',
+                    'pic_sizes' => '256*256',
                     'max_size' => 512
                 ],
                 'preview_name' => 'logo_preview_url',
@@ -277,7 +283,6 @@ class ProducerSettingController extends GeneralController
             'spread_url' => [
                 'title' => '推广链接',
                 'label' => 6,
-                'readonly' => true,
                 'elem' => 'text'
             ],
             'spread_img' => [
@@ -384,7 +389,8 @@ class ProducerSettingController extends GeneralController
                 'logo.deep_path AS logo_deep_path',
                 'logo.filename AS logo_filename',
                 'producer_setting.*',
-                'user.username'
+                'user.username',
+                'user.head_img_url'
             ]
         ]);
     }
@@ -456,7 +462,11 @@ class ProducerSettingController extends GeneralController
     public function sufHandleField($record, $action = null, $callback = null)
     {
         // 生成封面图附件地址
-        $record = $this->createAttachmentUrl($record, ['logo_attachment_id' => 'logo']);
+        if (!empty($record['logo_attachment_id'])) {
+            $record = $this->createAttachmentUrl($record, ['logo_attachment_id' => 'logo']);
+        } else {
+            $record['logo_preview_url'][1] = $record['head_img_url'];
+        }
 
         if ($action == 'edit') {
             $spread = $this->spreadInfo($record['producer_id']);
