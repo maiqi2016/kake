@@ -35,6 +35,10 @@ class ActivityController extends GeneralController
             case 'refresh-subscribe' :
                 $params = ['limit'];
                 break;
+
+            case 'refresh-subscribe-time' :
+                $params = ['limit'];
+                break;
         }
 
         return $params;
@@ -70,19 +74,11 @@ class ActivityController extends GeneralController
             $page = intval($page) > 0 ? $page : 1;
             $where = [];
 
-            $count = $model::find()
-                ->where($where)
-                ->count();
+            $count = $model::find()->where($where)->count();
             $length = strlen($count);
             $totalPage = ceil($count / $this->limit);
 
-            $result = $model::find()
-                ->select('openid')
-                ->where($where)
-                ->offset(($page - 1) * $this->limit)
-                ->limit($this->limit)
-                ->asArray()
-                ->all();
+            $result = $model::find()->select('openid')->where($where)->offset(($page - 1) * $this->limit)->limit($this->limit)->asArray()->all();
             $result = array_column($result, 'openid');
 
             try {

@@ -6,7 +6,6 @@ $params = \Yii::$app->params;
 \Yii::$app->params['title'] = '加入喀客KAKE';
 ?>
 
-
 <div class="apply-bg">
     <div class="form-group phone">
         <label>手机号码</label>
@@ -24,4 +23,3 @@ $params = \Yii::$app->params;
     </div>
     <center><button class="btn btn-default" kk-tap="submitApply()">申请加入</button></center>
 </div>
-

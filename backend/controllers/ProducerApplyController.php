@@ -226,10 +226,15 @@ class ProducerApplyController extends GeneralController
         if (is_string($result)) {
             Yii::$app->session->setFlash('danger', Yii::t('common', $result));
         } else {
-            $url = Yii::$app->params['upload_path'];
-            $img = Helper::joinString('/', $url, $result['avatar']['deep_path'], $result['avatar']['filename']);
 
-            $this->thumbCrop($img, 128, 128, true);
+            if (!empty($result['avatar'])) {
+                $url = Yii::$app->params['upload_path'];
+
+                $avatar = $result['avatar'];
+                $img = Helper::joinString('/', $url, $avatar['deep_path'], $avatar['filename']);
+                $this->thumbCrop($img, 128, 128, true);
+            }
+
             Yii::$app->session->setFlash('success', '通过申请操作完成');
         }
 
