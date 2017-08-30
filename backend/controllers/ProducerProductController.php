@@ -338,7 +338,6 @@ class ProducerProductController extends GeneralController
     /**
      * 新增分销产品
      *
-     * @auth-pass-all
      * @return object
      */
     public function actionAddMy()
@@ -363,7 +362,6 @@ class ProducerProductController extends GeneralController
     /**
      * 编辑分销产品
      *
-     * @auth-pass-all
      * @return object
      */
     public function actionEditMy()
