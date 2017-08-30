@@ -487,7 +487,7 @@ class GeneralController extends MainController
      *
      * @return array
      */
-    public function listProduct($page = 1, $pageSize = null, $time = DAY, $options = [])
+    public function listProduct($page = 1, $pageSize = null, $time = MINUTE, $options = [])
     {
         return $this->cache([
             'list.product',
