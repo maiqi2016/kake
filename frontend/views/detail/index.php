@@ -5,8 +5,6 @@ use yii\helpers\Url;
 
 $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'detail';
-\Yii::$app->params['description'] = $detail['hotel_name'] . ' - ' . $detail['title'];
-\Yii::$app->params['cover'] = $detail['slave_preview_url'][0];
 ?>
 
 <div class="body" ng-init="service.goToTop('.back-top')">

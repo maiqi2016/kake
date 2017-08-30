@@ -3,7 +3,6 @@
 namespace frontend\controllers;
 
 use common\components\SsoClient;
-use frontend\components\SSO;
 use common\components\Helper;
 use common\controllers\MainController;
 use yii\helpers\ArrayHelper;
@@ -766,6 +765,20 @@ class GeneralController extends MainController
 
             return $adList;
         }, HOUR, null, Yii::$app->params['use_cache']);
+    }
+
+    /**
+     * SEO
+     *
+     * @param array $params
+     *
+     * @return void
+     */
+    protected function seo($params)
+    {
+        foreach ($params as $key => $value) {
+            Yii::$app->params[$key] = $value;
+        }
     }
 
     /**

@@ -3,7 +3,6 @@
 
 $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'user';
-\Yii::$app->params['title'] = '加入喀客KAKE';
 ?>
 
 <div class="blank-div"></div>

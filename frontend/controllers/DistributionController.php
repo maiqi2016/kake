@@ -41,6 +41,11 @@ class DistributionController extends GeneralController
         }
         $product = $this->listProduct(1, null, DAY, ['ids' => $product]);
 
+        $this->seo([
+            'title' => $producer['name'],
+            'cover' => current($producer['logo_preview_url'])
+        ]);
+
         return $this->render('index', compact('producer', 'product'));
     }
 
