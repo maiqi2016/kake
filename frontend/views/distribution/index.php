@@ -5,8 +5,6 @@ use yii\helpers\Url;
 
 $params = \Yii::$app -> params;
 \Yii::$app->params['ng_ctrl'] = 'distribution';
-\Yii::$app->params['title'] = $producer['name'];
-\Yii::$app->params['cover'] = current($producer['logo_preview_url']);
 ?>
 
 <body>
