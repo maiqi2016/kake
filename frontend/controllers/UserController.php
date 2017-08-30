@@ -27,6 +27,8 @@ class UserController extends GeneralController
             'jquery.ajaxupload'
         ];
 
+        $this->seo(['title' => '加入喀客KAKE']);
+
         return $this->render('apply-distributor');
     }
 

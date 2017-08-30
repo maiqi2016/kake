@@ -2,7 +2,6 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Url;
-
 ?>
 
 <?php if (!empty($list)): ?>
