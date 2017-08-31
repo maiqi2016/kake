@@ -132,4 +132,26 @@ $params = \Yii::$app->params;
             <a href="<?= Url::to(['items/index']) ?>" class="more" kk-pull-up="100">查看更多</a>
         </div>
     </div>
+
+   
 </div>
+
+<div class="opening">
+    <div class="small_bj">
+        <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
+    </div>
+    <div class="hang">
+        <img src="<?= $params['frontend_source'] ?>/img/opening/hang.png"> 
+    </div>
+    <div class="photo"></div>
+    <div class="guangquan">
+        <img src="<?= $params['frontend_source'] ?>/img/opening/guangquan2.png">
+    </div>
+   
+    <div kk-print-text="喀客旅行KAKE" class="txt"></div> 
+
+    <img src="<?= $params['frontend_source'] ?>/img/opening/openingarrow.png" class="openingarrow">
+
+</div>
+
+
