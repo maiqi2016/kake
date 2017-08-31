@@ -44,9 +44,10 @@ class SiteController extends GeneralController
             if (!empty($producer)) {
                 $this->seo(['title' => $producer['name']]);
             }
+            $this->dump($producer);
         }
 
-        return $this->render('index', compact('focusList', 'plateList', 'flashSalesList', 'bannerList', 'standardHtml', 'over'));
+        return $this->render('index', compact('focusList', 'plateList', 'flashSalesList', 'bannerList', 'standardHtml', 'over', 'producer'));
     }
 
     /**
