@@ -134,7 +134,7 @@ $params = \Yii::$app->params;
 
 <?php if (!empty($producer)): ?>
 <div class="opening" kk-tap="hidden()">
-    <div class="small_bj">
+    <div class="small_bj" ng-init="showBody = false">
         <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
     </div>
     <div class="hang">
