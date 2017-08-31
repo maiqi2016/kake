@@ -5,7 +5,6 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'user';
 ?>
 
-<div class="blank-div"></div>
 <div class="apply-bg">
     <div class="form-group phone">
         <label>手机号码</label>
