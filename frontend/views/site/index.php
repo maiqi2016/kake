@@ -7,7 +7,7 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'site';
 ?>
 
-<?php if (!empty($producer)): ?>
+<?php if (!empty($producer) && 0): ?>
     <div class="opening" kk-tap="hidden()">
         <div class="small_bj" ng-init="showBody = false">
             <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
@@ -26,7 +26,7 @@ $params = \Yii::$app->params;
     </div>
 <?php endif; ?>
 
-<div class="body" ng-show="showBody">
+<div class="body">
     <!-- Banner -->
     <div class="banner" kk-fixed>
         <div class="menu-box" kk-menu="#menu" data-pos-x="-15" data-pos-y="-15">
