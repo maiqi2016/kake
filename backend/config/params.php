@@ -74,7 +74,7 @@ return [
                 'producer-apply.index' => '分销商申请',
                 'producer-setting.index' => '分销商',
                 'product-producer.index' => '产品分销设置',
-                'producer-product.index' => '分销产品选择',
+                'producer-product.index' => '分销产品列表',
                 'producer-log.index' => '分销记录',
                 'producer-quota.index' => '分销账目',
                 'producer-withdraw.index' => '提现记录'
@@ -92,7 +92,7 @@ return [
             'sub' => [
                 'producer-setting.center' => '个人设置',
                 'producer-setting.spread' => '获取推广资料',
-                'producer-product.my' => '分销产品选择',
+                'producer-product.my' => '分销产品列表',
                 'producer-log.my' => '分销记录',
                 'producer-quota.my' => '我要提现'
             ]
