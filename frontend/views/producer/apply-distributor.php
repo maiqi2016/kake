@@ -2,7 +2,7 @@
 /* @var $this yii\web\View */
 
 $params = \Yii::$app->params;
-\Yii::$app->params['ng_ctrl'] = 'user';
+\Yii::$app->params['ng_ctrl'] = 'producer';
 ?>
 
 <div class="apply-bg">
@@ -15,7 +15,7 @@ $params = \Yii::$app->params;
         <input class="form-control" ng-model="apply.name" placeholder="32个字符内">
     </div>
     <input type="hidden" ng-model="apply.attachment">
-    <div class="form-group file" kk-ajax-upload="div#file" data-action="user/upload-avatar" data-callback="handleUpload">
+    <div class="form-group file" kk-ajax-upload="div#file" data-action="producer/upload-avatar" data-callback="handleUpload">
         <label>头像文件</label>
         <div id="file" class="form-control">{{apply.tip}}</div>
         <p class="help-block">文件大小 ≤3MB</p>

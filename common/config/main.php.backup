@@ -25,6 +25,8 @@ return [
                         'info',
                         'error'
                     ] : [
+                        'trace',
+                        'warning',
                         'info',
                         'error'
                     ],
