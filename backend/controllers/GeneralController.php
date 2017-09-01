@@ -191,11 +191,12 @@ class GeneralController extends MainController
 
             // admin action log
             if (Yii::$app->request->isAjax || Yii::$app->request->isPost) {
-                $log[] = '   Url: ' . $this->currentUrl();
-                $log[] = '  User: ' . $this->user->phone . ' (ID: ' . $this->user->id . ')';
-
-                $params = array_merge(Yii::$app->request->get(), Yii::$app->request->post());
-                $log[] = 'Params: ' . json_encode($params);
+                $log = [
+                    PHP_EOL,
+                    '   Url: ' . $this->currentUrl(),
+                    '  User: ' . $this->user->username . ' (ID: ' . $this->user->id . ')',
+                    'Params: ' . json_encode(array_merge(Yii::$app->request->get(), Yii::$app->request->post()), JSON_UNESCAPED_UNICODE)
+                ];
                 Yii::trace(implode(PHP_EOL, $log), 'admin-action-log');
             }
         }
