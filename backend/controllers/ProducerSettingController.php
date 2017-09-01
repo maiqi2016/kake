@@ -425,13 +425,13 @@ class ProducerSettingController extends GeneralController
     /**
      * 获取推广信息
      *
-     * @access private
+     * @access public
      *
      * @param integer $userId
      *
      * @return array
      */
-    private function spreadInfo($userId)
+    public function spreadInfo($userId)
     {
         $producer = $this->getProducer($userId);
         if (empty($producer)) {

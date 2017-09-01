@@ -45,7 +45,7 @@ class ItemsController extends GeneralController
         $page = isset($params['page']) ? $params['page'] : 1;
         $pageSize = Yii::$app->params['product_page_size'];
 
-        $list = $this->listProduct($page, $pageSize, DAY, $params);
+        $list = $this->listProduct($page, $pageSize, MINUTE, $params);
         $content = $this->renderPartial('list', compact('list'));
 
         return [
