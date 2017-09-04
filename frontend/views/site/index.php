@@ -79,7 +79,7 @@ $params = \Yii::$app->params;
             <div class="carousel-scroller scroll">
                 <?php foreach ($plateList as $i => $item): ?>
                     <div kk-spread>
-                        <a _href="<?= Url::to([
+                        <a href="<?= Url::to([
                             'items/index',
                             'plate' => $item['id']
                         ]) ?>">
