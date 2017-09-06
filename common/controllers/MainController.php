@@ -50,6 +50,21 @@ class MainController extends Controller
     public static $apiDetail = 'general.detail';
 
     /**
+     * @var string 通用新增接口
+     */
+    public static $apiNewly = 'general.newly';
+
+    /**
+     * @var string 通用编辑接口
+     */
+    public static $apiEdit = 'general.edit';
+
+    /**
+     * @var string 通用存在则更新否则新增接口
+     */
+    public static $apiNewlyOrEdit = 'general.newly-or-edit';
+
+    /**
      * @cont string language
      */
     const LANGUAGE = 'language';
@@ -1049,7 +1064,7 @@ class MainController extends Controller
             ]
         ]);
 
-        $producer = $this->service('general.get-for-backend', $condition);
+        $producer = $this->service(self::$apiDetail, $condition);
         if (empty($producer)) {
             return [];
         }
@@ -1136,16 +1151,10 @@ class MainController extends Controller
      */
     public static function getUrlByPath($file, $ext = 'jpg', $prefix = null)
     {
-        $deep = Helper::createDeepPath();
-        $path = Yii::$app->params['upload_path'] . '/' . $deep;
+        $path = Helper::createFilePath(Yii::$app->params['upload_path'], $ext, $prefix);
+        $url = Yii::$app->params['upload_url'] . '/' . $path['deep'] . '/' . $path['filename'];
 
-        $filename = uniqid($prefix) . '.' . $ext;
-        $new = $path . '/' . $filename;
-
-        mkdir($path, 0777, true);
-        $url = Yii::$app->params['upload_url'] . '/' . $deep . '/' . $filename;
-
-        return rename($file, $new) ? $url : false;
+        return rename($file, $path['file']) ? $url : false;
     }
 
     /**

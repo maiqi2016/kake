@@ -280,12 +280,14 @@ class ProducerLogController extends GeneralController
      * 列表我的可结算订单记录
      *
      * @access public
+     *
      * @param boolean $settlement
+     *
      * @return mixed
      */
     public function listProducerLog($settlement = true)
     {
-        $list = $this->showList('my', true, false);
+        $list = $this->showList('my', true, false)[0];
         if (!$settlement) {
             return $list;
         }
@@ -577,28 +579,53 @@ class ProducerLogController extends GeneralController
             }
 
             $count = $value['counter'] = $counter[$product];
-            $type = ProductController::$type[$value['type']];
 
             $value['commission_quota'] = 0;
             foreach ($value['commission_data'] as $item) {
                 if ($count >= $item['from_sales'] && (empty($item['to_sales']) || $count <= $item['to_sales'])) {
-
                     $in = $value['amount_in'];
-                    $price = ($in + $value['amount_out']) * 100;
-                    $rate = ($in * 100) / $price;
+                    $total = $in + $value['amount_out'];
 
-                    if ($type == 'percent') {
-                        $value['commission_quota'] = $in * (($item['commission'] / 100) * $rate);
-                    } else if ($type == 'fixed') {
-                        $value['commission_quota'] = $item['commission'] * $rate;
-                    }
-
+                    $value['commission_quota'] = self::calCommission($value['type'], $in, $total, $item['commission']);
                     break;
                 }
             }
         }
 
         return $list;
+    }
+
+    /**
+     * 计算分佣金
+     *
+     * @access public
+     *
+     * @param string $type
+     * @param float  $inQuota
+     * @param float  $totalQuota
+     * @param float  $commission
+     *
+     * @return float
+     */
+    public static function calCommission($type, $inQuota, $totalQuota, $commission)
+    {
+        $cal = 0;
+        if (empty($inQuota) || empty($totalQuota) || empty($commission)) {
+            return $cal;
+        }
+
+        $type = ProductController::$type[$type];
+
+        $price = $totalQuota * 100;
+        $rate = ($inQuota * 100) / $price;
+
+        if ($type == 'percent') {
+            $cal = $inQuota * (($commission / 100) * $rate);
+        } else if ($type == 'fixed') {
+            $cal = $commission * $rate;
+        }
+
+        return $cal;
     }
 
     /**

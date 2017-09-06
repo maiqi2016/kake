@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\components\Helper;
 use Yii;
+use Intervention\Image\ImageManagerStatic as Image;
 
 /**
  * Producer controller
@@ -35,15 +36,38 @@ class ProducerController extends GeneralController
     }
 
     /**
+     * ajax 编辑个人资料
+     */
+    public function actionAjaxEditSetting()
+    {
+        $profile = Yii::$app->request->post();
+        $result = $this->service(parent::$apiEdit, array_merge($profile, [
+            'table' => 'producer_setting',
+            'where' => [
+                'id' => $profile['id'],
+                'state' => 1
+            ]
+        ]));
+
+        if (is_string($result)) {
+            $this->fail($result);
+        }
+
+        $this->success($result);
+    }
+
+    /**
      * 获取二维码
      */
     public function actionQrCode()
     {
         $this->sourceCss = null;
         $this->sourceJs = false;
-        $data = $this->controller('producer-setting')->spreadInfo($this->user->id);
 
-        return $this->render('qr-code', compact('data'));
+        $producer = $this->getProducer($this->user->id);
+        $data = $this->controller('producer-setting')->spreadInfo($this->user->id, true);
+
+        return $this->render('qr-code', compact('producer', 'data'));
     }
 
     /**
@@ -66,7 +90,11 @@ class ProducerController extends GeneralController
         $this->sourceCss = null;
         $this->sourceJs = null;
 
-        return $this->render('product-list');
+        $controller = $this->controller('producer-product');
+        $controller::$uid = $this->user->id;
+        $list = $controller->showList('my', true, false)[0];
+
+        return $this->render('product-list', compact('list'));
     }
 
     /**
@@ -88,7 +116,40 @@ class ProducerController extends GeneralController
         $this->sourceCss = null;
         $this->sourceJs = null;
 
-        return $this->render('withdraw');
+        $record = $this->controller('producer-quota')->showFormWithRecord([
+            'producer_id' => $this->user->id,
+            'state' => 1
+        ], null, true);
+
+        $quota = Helper::money(empty($record) ? 0 : $record['quota']);
+        $producer = $this->getProducer($this->user->id);
+
+        return $this->render('withdraw', compact('quota', 'producer'));
+    }
+
+    /**
+     * ajax 申请提现
+     */
+    public function actionAjaxApplyWithdraw()
+    {
+        $quota = Yii::$app->request->post('quota');
+        $result = $this->controller('producer-quota')->applyWithdraw($this->user->id, $quota);
+
+        if (is_string($result)) {
+            $this->fail($result);
+        }
+
+        $result = $this->service(parent::$apiNewly, [
+            'table' => 'producer-quota',
+            'producer_id' => $this->user->id,
+            'withdraw' => $quota
+        ]);
+
+        if (is_string($result)) {
+            $this->fail($result);
+        }
+
+        $this->success($result);
     }
 
     /**
@@ -144,13 +205,13 @@ class ProducerController extends GeneralController
         /**
          * @var $data array
          */
-        $result = $this->service('general.newly-or-edit', array_merge([
+        $result = $this->service(parent::$apiNewlyOrEdit, array_merge($data, [
             'table' => 'producer_apply',
             'where' => [
                 'user_id' => $this->user->id,
             ],
             'state' => 1
-        ], $data));
+        ]));
 
         if (is_string($result)) {
             $this->fail($result);
