@@ -1786,10 +1786,11 @@ class GeneralController extends MainController
      * @param string  $caller
      * @param boolean $returnList
      * @param boolean $logReference
+     * @param array   $defCondition
      *
      * @return mixed
      */
-    public function showList($caller = null, $returnList = false, $logReference = true)
+    public function showList($caller = null, $returnList = false, $logReference = true, $defCondition = [])
     {
         $caller = $caller ?: $this->getCaller(2);
         if ($logReference) {
@@ -1797,7 +1798,7 @@ class GeneralController extends MainController
         }
 
         $condition = $this->callMethod($caller . 'Condition', []);
-        if (empty($condition['size'])) {
+        if (!isset($condition['size'])) {
             $condition['size'] = Yii::$app->params['pagenum'];
         }
 
@@ -1824,18 +1825,24 @@ class GeneralController extends MainController
                 'table' => $model->tableName,
                 'db' => static::$modelDb
             ];
-            $params = array_merge($params, $condition, $get);
+
+            $params = array_merge($params, $condition, $get, (array) $defCondition);
             $result = $this->service(static::$apiGeneralList, $params);
         }
         if (is_string($result)) {
             $this->error(Yii::t('common', $result));
         }
-        list($list, $page) = $result;
 
         // 分页
-        $pagination = new yii\data\Pagination(['totalCount' => $page['totalCount']]);
-        $pagination->setPageSize($condition['size']);
-        $page = $pagination;
+        if (isset($result[1]['pageParam'])) {
+            list($list, $page) = $result;
+            $pagination = new yii\data\Pagination(['totalCount' => $page['totalCount']]);
+            $pagination->setPageSize($condition['size']);
+            $page = $pagination;
+        } else {
+            $list = $result;
+            $page = null;
+        }
 
         $assist = $this->getListAssist($this->callStatic($caller . 'Assist', []));
 
@@ -1859,7 +1866,10 @@ class GeneralController extends MainController
         }
 
         if ($returnList) {
-            return [$list, $page];
+            return [
+                $list,
+                $page
+            ];
         }
 
         // 是否为模态框
