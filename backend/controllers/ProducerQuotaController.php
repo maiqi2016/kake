@@ -145,33 +145,10 @@ class ProducerQuotaController extends GeneralController
     {
         $reference = $this->getControllerName('my');
         $quota = Yii::$app->request->post('quota');
-        if (empty($quota) || $quota <= 0) {
-            Yii::$app->session->setFlash('warning', '请输入申请提现金额');
-            $this->goReference($reference);
-        }
 
-        // 判断是否有申请中的提现记录
-        $controller = $this->controller('producer-withdraw');
-        $withdraw = $controller->showFormWithRecord([
-            'producer_id' => self::$uid,
-            'state' => 1
-        ], null, true, false);
-
-        if (!empty($withdraw)) {
-            Yii::$app->session->setFlash('danger', "上一次的提现申请还未被处理，请耐心等待");
-            $this->goReference($reference);
-        }
-
-        // 判断提现是否超额
-        $record = $this->showFormWithRecord([
-            'producer_id' => self::$uid,
-            'state' => 1
-        ], 'my', true, false);
-
-        $have = empty($record) ? 0 : $record['quota'];
-        if ($quota > $have) {
-            $have = Helper::money($have);
-            Yii::$app->session->setFlash('danger', "佣金余额不足，可提现余额为：${have}");
+        $result = $this->applyWithdraw(self::$uid, $quota);
+        if (is_string($result)) {
+            Yii::$app->session->setFlash('danger', $result);
             $this->goReference($reference);
         }
 
@@ -180,6 +157,46 @@ class ProducerQuotaController extends GeneralController
             'producer_id' => self::$uid,
             'withdraw' => $quota
         ]);
+    }
+
+    /**
+     * 申请提现
+     *
+     * @param integer $userId
+     * @param float $quota
+     *
+     * @return mixed
+     */
+    public function applyWithdraw($userId, $quota)
+    {
+        if (empty($quota) || $quota <= 0) {
+            return '请输入申请提现金额';
+        }
+
+        // 判断是否有申请中的提现记录
+        $controller = $this->controller('producer-withdraw');
+        $withdraw = $controller->showFormWithRecord([
+            'producer_id' => $userId,
+            'state' => 1
+        ], null, true, false);
+
+        if (!empty($withdraw)) {
+            return '上一次的提现申请还未被处理，请耐心等待';
+        }
+
+        // 判断提现是否超额
+        $record = $this->showFormWithRecord([
+            'producer_id' => $userId,
+            'state' => 1
+        ], 'my', true, false);
+
+        $have = empty($record) ? 0 : $record['quota'];
+        if ($quota > $have) {
+            $have = Helper::money($have);
+            return "佣金余额不足，可提现余额为：${have}";
+        }
+
+        return true;
     }
 
     /**

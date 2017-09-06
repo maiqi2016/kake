@@ -18,6 +18,14 @@ class ProducerProductController extends GeneralController
     // 模型描述
     public static $modelInfo = '分销产品';
 
+    /**
+     * @var array Hook
+     */
+    public static $hookPriceNumber = [
+        'price',
+        'min_commission'
+    ];
+
     public static $uid;
 
     /**
@@ -108,7 +116,6 @@ class ProducerProductController extends GeneralController
     {
         $operation = self::indexOperation();
         $operation[0]['value'] = 'edit-my';
-        $operation[1]['value'] = 'front-my';
 
         return $operation;
     }
@@ -188,11 +195,17 @@ class ProducerProductController extends GeneralController
                 'color' => [
                     0 => 'default',
                     1 => 'primary'
-                ]
+                ],
+                'tip'
             ],
             'commission' => [
                 'html',
                 'title' => '分佣档次'
+            ],
+            'min_commission' => [
+                'title' => '分佣起步',
+                'code',
+                'tpl' => '￥%s ↑'
             ],
             'add_time' => 'tip',
             'update_time' => 'tip',
@@ -296,13 +309,31 @@ class ProducerProductController extends GeneralController
                 [
                     'left_table' => 'product',
                     'table' => 'hotel'
-                ]
+                ],
+                [
+                    'table' => 'product_package',
+                    'sub' => [
+                        'select' => [
+                            'product_id',
+                            'min(price) AS price'
+                        ],
+                        'where' => [
+                            ['product_package.bidding' => 1],
+                            ['product_package.state' => 1],
+                            ['>', 'product_package.price', Yii::$app->params['commission_min_price']]
+                        ],
+                        'group' => 'product_id'
+                    ],
+                    'left_on_field' => 'id',
+                    'right_on_field' => 'product_id'
+                ],
             ],
             'select' => [
                 'product.title',
                 'hotel.name',
                 'producer_product.*',
-                'user.username'
+                'user.username',
+                'product_package.price'
             ],
             'where' => [['producer_id' => self::$uid]],
             'order' => [
@@ -493,7 +524,16 @@ class ProducerProductController extends GeneralController
 
             $key = $record['type'] ? 'commission_table_percent' : 'commission_table_fixed';
             $record['commission'] = isset($data[$key]) ? $data[$key] : null;
+
+            $key = $record['type'] ? 'commission_data_percent' : 'commission_data_fixed';
+            $record['commission_data'] = isset($data[$key]) ? $data[$key] : null;
+
             $record['channel'] = Helper::integerEncode($record['producer_id']);
+
+            // 计算最低分佣金
+            $data = current($record['commission_data']);
+            $controller = $this->controller('producer-log');
+            $record['min_commission'] = $controller::calCommission($data['type'], $record['price'], $record['price'], $data['commission']);
         }
 
         return parent::sufHandleField($record, $action, $callback);

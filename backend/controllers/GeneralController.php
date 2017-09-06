@@ -1859,7 +1859,7 @@ class GeneralController extends MainController
         }
 
         if ($returnList) {
-            return $list;
+            return [$list, $page];
         }
 
         // 是否为模态框
