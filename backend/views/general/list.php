@@ -240,14 +240,16 @@ $action = \Yii::$app->controller->action->id;
     <?php endif; ?>
 
     <!-- 分页 -->
-    <div class="page">
-        <?= ViewHelper::page($page) ?>
+    <?php if (!empty($page)): ?>
+        <div class="page">
+            <?= ViewHelper::page($page) ?>
 
-        <!-- ajax 分页 -->
-        <?php if (!empty($ajaxPage)): ?>
-            <script type="text/javascript">
-                $.ajaxPageList('<?= $action ?>');
-            </script>
-        <?php endif; ?>
-    </div>
+            <!-- ajax 分页 -->
+            <?php if (!empty($ajaxPage)): ?>
+                <script type="text/javascript">
+                    $.ajaxPageList('<?= $action ?>');
+                </script>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 </div>

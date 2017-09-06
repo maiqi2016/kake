@@ -92,7 +92,9 @@ class ProducerController extends GeneralController
 
         $controller = $this->controller('producer-product');
         $controller::$uid = $this->user->id;
-        $list = $controller->showList('my', true, false)[0];
+        $list = $controller->showList('my', true, false, [
+            'size' => 6
+        ])[0];
 
         return $this->render('product-list', compact('list'));
     }
@@ -105,7 +107,13 @@ class ProducerController extends GeneralController
         $this->sourceCss = null;
         $this->sourceJs = null;
 
-        return $this->render('order-list');
+        $controller = $this->controller('producer-log');
+        $controller::$uid = $this->user->id;
+        $list = $controller->showList('my', true, false, [
+            'size' => 0
+        ])[0];
+
+        return $this->render('order-list', compact('list'));
     }
 
     /**
