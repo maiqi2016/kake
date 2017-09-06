@@ -99,12 +99,12 @@ $params = \Yii::$app->params;
             选择支付方式
         </div>
         <ul>
-            <li cass="payment-wechat" kk-tap="buy.payment_method = 'wx'"
+            <li class="payment-wechat" kk-tap="buy.payment_method = 'wx'"
                 ng-class="{'current': buy.payment_method == 'wx'}">
                 <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/wechat.png"/>
                 <label class="pay">微信支付</label>
             </li>
-            <li cass="payment-allpay" kk-tap="buy.payment_method = 'ali'"
+            <li class="payment-allpay" kk-tap="buy.payment_method = 'ali'"
                 ng-class="{'current': buy.payment_method == 'ali'}">
                 <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/allpay.png"/>
                 <label class="pay">支付宝支付</label>

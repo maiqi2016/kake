@@ -390,7 +390,8 @@ class ProducerSettingController extends GeneralController
                 'logo.filename AS logo_filename',
                 'producer_setting.*',
                 'user.username',
-                'user.head_img_url'
+                'user.head_img_url',
+                'user.phone'
             ]
         ]);
     }
@@ -428,10 +429,11 @@ class ProducerSettingController extends GeneralController
      * @access public
      *
      * @param integer $userId
+     * @param boolean $saveTmp
      *
      * @return array
      */
-    public function spreadInfo($userId)
+    public function spreadInfo($userId, $saveTmp = false)
     {
         $producer = $this->getProducer($userId);
         if (empty($producer)) {
@@ -448,11 +450,18 @@ class ProducerSettingController extends GeneralController
                 null
             ];
         }
+
         $qr = $this->createQrCode($link, 200, $logoPath);
+        $file = $qr->writeDataUri();
+
+        if ($saveTmp) {
+            $file = Yii::$app->params['tmp_path'] . '/' . uniqid('qr_code_', true) . '.jpg';
+            $qr->writeFile($file);
+        }
 
         return [
             $link,
-            $qr->writeDataUri()
+            $file
         ];
     }
 
@@ -466,6 +475,11 @@ class ProducerSettingController extends GeneralController
             $record = $this->createAttachmentUrl($record, ['logo_attachment_id' => 'logo']);
         } else {
             $record['logo_preview_url'][1] = $record['head_img_url'];
+        }
+
+        if (isset($record['account_type']) && !isset($record['account_type_info'])) {
+            $type = parent::model(self::$modelName)->_account_type;
+            $record['account_type_info'] = $type[$record['account_type']];
         }
 
         if ($action == 'edit') {
