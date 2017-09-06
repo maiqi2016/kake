@@ -21,10 +21,7 @@ class ProducerProductController extends GeneralController
     /**
      * @var array Hook
      */
-    public static $hookPriceNumber = [
-        'price',
-        'min_commission'
-    ];
+    public static $hookPriceNumber = ['price'];
 
     public static $uid;
 
@@ -533,7 +530,8 @@ class ProducerProductController extends GeneralController
             // 计算最低分佣金
             $data = current($record['commission_data']);
             $controller = $this->controller('producer-log');
-            $record['min_commission'] = $controller::calCommission($data['type'], $record['price'], $record['price'], $data['commission']);
+            $price = $record['price'] / 100;
+            $record['min_commission'] = $controller::calCommission($data['type'], $price, $price, $data['commission']);
         }
 
         return parent::sufHandleField($record, $action, $callback);

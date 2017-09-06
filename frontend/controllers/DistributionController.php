@@ -50,28 +50,6 @@ class DistributionController extends GeneralController
     }
 
     /**
-     * Displays center.
-     */
-    public function actionCenter()
-    {
-        $this->sourceCss = null;
-        $this->sourceJs = false;
-
-        $list = $this->cache('list-self-producer-log', function () {
-            $controller = $this->controller('producer-log');
-            $controller::$uid = $this->user->id;
-            $list = $this->callMethod('listProducerLog', null, [false], $controller);
-
-            return $list;
-        }, DAY, null, Yii::$app->params['use_cache']);
-
-        // 分销记录
-        $producerLogCount = count($list);
-
-        return $this->render('center');
-    }
-
-    /**
      * @inheritdoc
      */
     public function beforeAction($action)

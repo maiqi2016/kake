@@ -111,6 +111,10 @@ class ProducerLogController extends GeneralController
                 'title' => '产品',
                 'tip'
             ],
+            'name' => [
+                'title' => '酒店',
+                'tip'
+            ],
             'producer_name' => [
                 'title' => '分销商',
                 'code'
@@ -154,6 +158,12 @@ class ProducerLogController extends GeneralController
             'counter_info' => [
                 'title' => '可否结算',
                 'html'
+            ],
+            'payment_state' => [
+                'table' => 'order',
+                'code',
+                'info',
+                'tip'
             ],
             'state' => [
                 'code',
@@ -218,21 +228,27 @@ class ProducerLogController extends GeneralController
                     'table' => 'user',
                     'left_on_field' => 'producer_id',
                     'as' => 'producer_user'
-                ]
+                ],
+                [
+                    'left_table' => 'product',
+                    'table' => 'hotel'
+                ],
             ],
             'select' => [
                 'order.id AS order_id',
                 'order.price',
+                'order.payment_state',
                 'producer_product.type',
                 'buyer_user.username AS buyer_name',
                 'producer_user.username AS producer_name',
                 'product.title',
+                'hotel.name',
                 'producer_log.id',
                 'producer_log.product_id',
                 'producer_log.state'
             ],
             'where' => [
-                ['order.payment_state' => 1],
+                // ['order.payment_state' => 1],
                 [
                     '<',
                     'order.state',
@@ -277,41 +293,37 @@ class ProducerLogController extends GeneralController
     }
 
     /**
-     * 列表我的可结算订单记录
-     *
-     * @access public
-     *
-     * @param boolean $settlement
-     *
-     * @return mixed
-     */
-    public function listProducerLog($settlement = true)
-    {
-        $list = $this->showList('my', true, false)[0];
-        if (!$settlement) {
-            return $list;
-        }
-
-        foreach ($list as $key => $item) {
-            if (empty($item['sub_counter'])) {
-                unset($list[$key]);
-            }
-        }
-
-        return $list;
-    }
-
-    /**
      * 分销订单结算
      *
      * @auth-pass-all
      */
     public function actionSettlement()
     {
-        $list = $this->listProducerLog();
+        $result = $this->settlement();
+
+        Yii::$app->session->setFlash('info', $result);
+        $this->goReference($this->getControllerName('my'));
+    }
+
+    /**
+     * 结算佣金
+     *
+     * @access public
+     * @return string
+     */
+    public function settlement()
+    {
+        $list = $this->showList('my', true, false, [
+            'size' => 0
+        ])[0];
+        foreach ($list as $key => $item) {
+            if (empty($item['sub_counter'])) {
+                unset($list[$key]);
+            }
+        }
+
         if (empty($list)) {
-            Yii::$app->session->setFlash('warning', '暂无可结算的分销订单');
-            $this->goReference($this->getControllerName('my'));
+            return '暂无可结算的分销订单';
         }
 
         $quota = 0;
@@ -336,15 +348,14 @@ class ProducerLogController extends GeneralController
         ]);
 
         if (is_string($result)) {
-            Yii::$app->session->setFlash('danger', $result);
+            return $result;
         } else {
             $number = count($list);
             $quota = Helper::money($quota);
             $after = Helper::money($result['afterQuota'] / 100);
-            Yii::$app->session->setFlash('success', "本次结算订单共计：${number}个，佣金共计：${quota} (保留到小数点后两位)，结算后总佣金余额：${after}");
-        }
 
-        $this->goReference($this->getControllerName('my'));
+            return "本次结算订单共计：${number}个，佣金共计：${quota} (保留到小数点后两位)，结算后总佣金余额：${after}";
+        }
     }
 
     /**
@@ -380,7 +391,7 @@ class ProducerLogController extends GeneralController
             ],
         ]);
 
-        $_list = [];
+        $_list = $package = [];
         $orderSub = $this->controller('order-sub');
         foreach ($list as $item) {
 
@@ -414,9 +425,14 @@ class ProducerLogController extends GeneralController
                 $_item[$state]['number'] += 1;
                 $_item[$state]['amount'] += $item['price'];
             }
+
+            $package[$item['order_id']][] = $item;
         }
 
-        return $_list;
+        return [
+            $_list,
+            $package
+        ];
     }
 
     /**
@@ -461,7 +477,7 @@ class ProducerLogController extends GeneralController
         $list = $this->service(parent::$apiList, $condition);
 
         list($list, $orderIds) = Helper::valueToKey($list, 'order_id');
-        $subList = $this->listOrderSubByOrderIds($orderIds);
+        list($subList) = $this->listOrderSubByOrderIds($orderIds);
 
         $counter = [];
         foreach ($list as $id => $item) {
@@ -489,7 +505,7 @@ class ProducerLogController extends GeneralController
     public function sufHandleListBeforeField($list)
     {
         list($list, $orderIds) = Helper::valueToKey($list, 'order_id');
-        $subList = $this->listOrderSubByOrderIds($orderIds);
+        list($subList, $package) = $this->listOrderSubByOrderIds($orderIds);
 
         foreach ($list as $key => &$item) {
             if (empty($subList[$item['order_id']])) {
@@ -503,6 +519,8 @@ class ProducerLogController extends GeneralController
                 'amount_out'
             ]);
             $item = array_merge($item, $survey);
+
+            $item['package'] = $package[$item['order_id']];
         }
 
         return $list;
@@ -554,7 +572,7 @@ class ProducerLogController extends GeneralController
     /**
      * 在前置字段处理后处理列表
      *
-     * @param array  $list
+     * @param array $list
      * @param string $action
      *
      * @return array
@@ -615,9 +633,7 @@ class ProducerLogController extends GeneralController
         }
 
         $type = ProductController::$type[$type];
-
-        $price = $totalQuota * 100;
-        $rate = ($inQuota * 100) / $price;
+        $rate = $inQuota / $totalQuota;
 
         if ($type == 'percent') {
             $cal = $inQuota * (($commission / 100) * $rate);

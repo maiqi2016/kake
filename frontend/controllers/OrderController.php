@@ -725,11 +725,11 @@ class OrderController extends GeneralController
 
         $this->message([
             'payment with problems',
-            [
+            'action1' => [
                 'text' => '已经完成',
                 'router' => ['order/index']
             ],
-            [
+            'action2' => [
                 'text' => '重新支付',
                 'router' => $this->createSafeLink([
                     'order_number' => $order_number
