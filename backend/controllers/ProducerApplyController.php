@@ -232,7 +232,7 @@ class ProducerApplyController extends GeneralController
 
                 $avatar = $result['avatar'];
                 $img = Helper::joinString('/', $url, $avatar['deep_path'], $avatar['filename']);
-                $this->thumbCrop($img, 128, 128, true);
+                $this->thumbCrop($img, 256, 256, true);
             }
 
             Yii::$app->session->setFlash('success', '通过申请操作完成');
