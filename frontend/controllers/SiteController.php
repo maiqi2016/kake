@@ -86,4 +86,25 @@ class SiteController extends GeneralController
             count($list) < $pageSize
         ];
     }
+
+    /**
+     * 微信测试代码
+     *
+     * @access public
+     * @return void
+     */
+    public function actionWx()
+    {
+        // 获取图文 ID
+        /*
+        $this->dump(Yii::$app->wx->material->lists('news'));
+        //*/
+
+        // 生成永久二维码
+        /*
+        $qr = Yii::$app->wx->qrcode;
+        $url = $qr->url($qr->forever('芝妈屋')->ticket);
+        $this->dump($url);
+        //*/
+    }
 }
