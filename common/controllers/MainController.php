@@ -537,6 +537,8 @@ class MainController extends Controller
         }
 
         if (!$ajaxMode) {
+            $result['deep_path'] = $file['save_path'];
+            $result['filename'] = $file['save_name'];
             return $result;
         }
 
