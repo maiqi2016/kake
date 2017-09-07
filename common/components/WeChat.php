@@ -106,8 +106,10 @@ class WeChat extends Object
         $reply = null;
         $event = strtolower($message->Event);
         $fn = 'event_' . $event;
+        Yii::error('A:' . $fn);
         switch ($event) {
             case 'subscribe' :
+                Yii::error('B: subscribe');
                 if (!empty($this->listenFn[$fn])) {
                     $reply = call_user_func($this->listenFn[$fn], $message);
                 } else {
@@ -116,6 +118,7 @@ class WeChat extends Object
                 break;
 
             case 'scan' :
+                Yii::error('B: scan');
                 if (!empty($this->listenFn[$fn])) {
                     $reply = call_user_func($this->listenFn[$fn], $message);
                 }
@@ -125,6 +128,10 @@ class WeChat extends Object
                 if (!empty($this->listenFn[$fn])) {
                     $reply = call_user_func($this->listenFn[$fn], $message);
                 }
+                break;
+            
+            default:
+                Yii::error('B: unknown');
                 break;
         }
 
