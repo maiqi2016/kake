@@ -5,4 +5,29 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'generic';
 ?>
 
-<h2>二维码页面</h2>
+<header>
+    我的二维码
+    <div class="menu detail" kk-menu="#menu">
+        <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/list.svg"/>
+    </div>
+</header>
+
+<div class="body">
+    <div class="card">
+        <div class="out">
+            <div class="info">
+                <img class="photo" src="<?= current($producer['logo_preview_url']) ?>">
+                <div class="txt">
+                    <p class="info"><?= $producer['name'] ?></p>
+                    <span class="phone-number"><?= $producer['phone'] ?></span>
+                </div>
+            </div>
+            <div class="qr-code">
+                <img class="photo" src="<?= $params['frontend_source'] ?>/img/producer/2.png"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="save">保存我的二维码</div>
+
+</div>

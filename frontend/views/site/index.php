@@ -7,6 +7,8 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'site';
 ?>
 
+<br>
+
 <?php if (!empty($producer)): ?>
     <div class="opening" ng-init="showBody = false" kk-tap="hidden()">
         <div class="small_bj">
