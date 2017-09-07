@@ -15,9 +15,6 @@ class SiteController extends GeneralController
      */
     public function actionIndex()
     {
-        $result = Yii::$app->wx->group('官方推广');
-        $this->dump($result);
-
         $this->sourceCss = null;
         $this->sourceJs = null; // ['/node_modules/vconsole/dist/vconsole.min'];
 
