@@ -14,6 +14,11 @@ use Intervention\Image\ImageManagerStatic as Image;
 class WeChatController extends GeneralController
 {
     /**
+     * @var string
+     */
+    public $staff = 'kf2002@KAKE_Hotel';
+
+    /**
      * @inheritdoc
      */
     public function beforeAction($action)
@@ -36,6 +41,18 @@ class WeChatController extends GeneralController
             $wx->listen([
                 'text' => function ($message) use ($wx) {
                     return $this->replyTextLottery($message, $wx);
+                },
+                'event_subscribe' => function ($message) use ($wx) {
+                    $text = new Text(['content' => json_encode($message)]);
+                    $wx->staff->message($text)->by($this->staff)->to($message->FromUserName)->send();
+
+                    return '🙄';
+                },
+                'event_scan' => function ($message) use ($wx) {
+                    $text = new Text(['content' => json_encode($message)]);
+                    $wx->staff->message($text)->by($this->staff)->to($message->FromUserName)->send();
+
+                    return '🙃';
                 }
             ]);
         }
@@ -161,7 +178,7 @@ class WeChatController extends GeneralController
         }
 
         $text = new Text(['content' => "WoW~ 这是喀客旅行为你提供的抽奖码：${result['code']}！希望你能抽中奖品～"]);
-        $wx->staff->message($text)->by('kf2002@KAKE_Hotel')->to($message->FromUserName)->send();
+        $wx->staff->message($text)->by($this->staff)->to($message->FromUserName)->send();
 
         $file = $this->lotteryImg('喀客KAKE x ' . $company, $result['code']);
         $result = $wx->material_temporary->uploadImage($file);

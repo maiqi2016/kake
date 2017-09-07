@@ -21,6 +21,11 @@ class WeChat extends Object
     public $app;
 
     /**
+     * @var array For listen events
+     */
+    public $listenFn;
+
+    /**
      * __constructor
      *
      * @access public
@@ -65,21 +70,22 @@ class WeChat extends Object
      */
     public function listen($fnArray)
     {
-        $this->server->setMessageHandler(function ($message) use ($fnArray) {
+        $this->listenFn = $fnArray;
+        $this->server->setMessageHandler(function ($message) {
 
             $reply = null;
             $type = strtolower($message->MsgType);
 
-            if (empty($fnArray[$type]) && $fnArray[$type] === false) {
+            if (empty($this->listenFn[$type]) && $this->listenFn[$type] === false) {
                 $function = 'reply' . ucfirst($type);
-                $fnArray[$type] = [
+                $this->listenFn[$type] = [
                     $this,
                     $function
                 ];
             }
 
-            if ($fnArray[$type]) {
-                $reply = call_user_func($fnArray[$type], $message);
+            if ($this->listenFn[$type]) {
+                $reply = call_user_func($this->listenFn[$type], $message);
             }
 
             return $reply;
@@ -98,16 +104,26 @@ class WeChat extends Object
     public function replyEvent($message)
     {
         $reply = null;
-        switch (strtolower($message->Event)) {
+        $event = strtolower($message->Event);
+        $fn = 'event_' . $event;
+        switch ($event) {
             case 'subscribe' :
-                $reply = 'welcome subscribe us.';
+                if (!empty($this->listenFn[$fn])) {
+                    $reply = call_user_func($this->listenFn[$fn], $message);
+                } else {
+                    $reply = 'welcome subscribe us.';
+                }
+                break;
+
+            case 'scan' :
+                if (!empty($this->listenFn[$fn])) {
+                    $reply = call_user_func($this->listenFn[$fn], $message);
+                }
                 break;
 
             case 'click' :
-                switch ($message->EventKey) {
-                    case 'key_code' :
-                        $reply = 'do something.';
-                        break;
+                if (!empty($this->listenFn[$fn])) {
+                    $reply = call_user_func($this->listenFn[$fn], $message);
                 }
                 break;
         }
