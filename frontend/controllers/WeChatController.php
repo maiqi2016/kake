@@ -42,17 +42,15 @@ class WeChatController extends GeneralController
                 'text' => function ($message) use ($wx) {
                     return $this->replyTextLottery($message, $wx);
                 },
+
                 'event_subscribe' => function ($message) use ($wx) {
-                    $text = new Text(['content' => json_encode($message)]);
-                    $wx->staff->message($text)->by($this->staff)->to($message->FromUserName)->send();
-
-                    return '🙄';
+                    $name = $message->EventKey ? str_replace('qrscene_', '', $message->EventKey) : '官方推广';
+                    $groupId = $wx->group($name);
+                    $wx->user_group->moveUser($message->FromUserName, $groupId);
                 },
-                'event_scan' => function ($message) use ($wx) {
-                    $text = new Text(['content' => json_encode($message)]);
-                    $wx->staff->message($text)->by($this->staff)->to($message->FromUserName)->send();
 
-                    return '🙃';
+                'event_scan' => function ($message) use ($wx) {
+                    return '🙄扫码来源：' . $message->EventKey;
                 }
             ]);
         }
