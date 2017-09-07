@@ -76,7 +76,9 @@ class ProducerController extends GeneralController
     public function actionLink()
     {
         $this->sourceCss = null;
-        $this->sourceJs = false;
+        $this->sourceJs = [
+            ''
+        ];
         $channel = Helper::integerEncode($this->user->id);
 
         return $this->render('link', compact('channel'));
@@ -88,7 +90,10 @@ class ProducerController extends GeneralController
     public function actionProductList()
     {
         $this->sourceCss = null;
-        $this->sourceJs = null;
+        $this->sourceJs = [
+            'producer/product-list',
+            '/node_modules/clipboard/dist/clipboard.min'
+        ];
 
         $controller = $this->controller('producer-product');
         $controller::$uid = $this->user->id;
