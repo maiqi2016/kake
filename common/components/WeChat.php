@@ -106,32 +106,49 @@ class WeChat extends Object
         $reply = null;
         $event = strtolower($message->Event);
         $fn = 'event_' . $event;
-        Yii::error('A:' . $fn);
+
+        $text = function ($defaultReply = null) use ($fn, $message) {
+            if (!empty($this->listenFn[$fn])) {
+                $reply = call_user_func($this->listenFn[$fn], $message);
+            } else {
+                $reply = $defaultReply;
+            }
+
+            return $reply;
+        };
+
         switch ($event) {
+            // 关注
             case 'subscribe' :
-                Yii::error('B: subscribe');
-                if (!empty($this->listenFn[$fn])) {
-                    $reply = call_user_func($this->listenFn[$fn], $message);
-                } else {
-                    $reply = 'welcome subscribe us.';
-                }
+                $reply = $text('welcome subscribe us.');
                 break;
 
+            // 取消关注
+            case 'unsubscribe' :
+                $reply = $text();
+                break;
+
+            // 扫码
             case 'scan' :
-                Yii::error('B: scan');
-                if (!empty($this->listenFn[$fn])) {
-                    $reply = call_user_func($this->listenFn[$fn], $message);
-                }
+                $reply = $text();
                 break;
 
+            // 点击菜单拉取消息
             case 'click' :
-                if (!empty($this->listenFn[$fn])) {
-                    $reply = call_user_func($this->listenFn[$fn], $message);
-                }
+                $reply = $text();
                 break;
-            
+
+            // 点击菜单跳转页面
+            case 'view' :
+                $reply = $text();
+                break;
+
+            // 上报地理位置
+            case 'location' :
+                $reply = $text();
+                break;
+
             default:
-                Yii::error('B: unknown');
                 break;
         }
 
@@ -149,6 +166,29 @@ class WeChat extends Object
     {
         // return 'you say: ' . $message->Content;
         return null;
+    }
+
+    /**
+     * Get group id by name when not exists create it
+     *
+     * @access public
+     *
+     * @param string $name
+     *
+     * @return integer
+     */
+    public function group($name)
+    {
+        $groups = $this->user_group->lists()->groups;
+        $groups = array_combine(array_column($groups, 'name'), $groups);
+
+        if (isset($groups[$name])) {
+            $id = $groups[$name]['id'];
+        } else {
+            $id = $this->user_group->create($name)['group']['id'];
+        }
+
+        return $id;
     }
 
     /**
