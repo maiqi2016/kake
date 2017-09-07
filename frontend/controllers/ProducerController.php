@@ -5,12 +5,26 @@ namespace frontend\controllers;
 use common\components\Helper;
 use Yii;
 use Intervention\Image\ImageManagerStatic as Image;
+use yii\helpers\Url;
 
 /**
  * Producer controller
  */
 class ProducerController extends GeneralController
 {
+    /**
+     * @var array Avatar config
+     */
+    public static $avatar = [
+        'suffix' => [
+            'png',
+            'jpg',
+            'jpeg'
+        ],
+        'pic_sizes' => '256-MAX*256-MAX',
+        'max_size' => 1024 * 5
+    ];
+
     /**
      * 菜单
      */
@@ -29,10 +43,21 @@ class ProducerController extends GeneralController
     public function actionSetting()
     {
         $this->sourceCss = null;
-        $this->sourceJs = null;
+        $this->sourceJs = [
+            'producer/setting',
+            'jquery.ajaxupload'
+        ];
         $producer = $this->getProducer($this->user->id);
+        $angular = Helper::pullSome($producer, [
+            'id',
+            'name',
+            'attachment_id',
+            'logo_attachment_id',
+            'account_type',
+            'account_number'
+        ]);
 
-        return $this->render('setting', compact('producer'));
+        return $this->render('setting', compact('producer', 'angular'));
     }
 
     /**
@@ -53,7 +78,7 @@ class ProducerController extends GeneralController
             $this->fail($result);
         }
 
-        $this->success($result);
+        $this->success(Url::to(['producer/index']));
     }
 
     /**
@@ -189,15 +214,21 @@ class ProducerController extends GeneralController
      */
     public function actionUploadAvatar()
     {
-        $this->uploader([
-            'suffix' => [
-                'png',
-                'jpg',
-                'jpeg'
-            ],
-            'pic_sizes' => '128-MAX*128-MAX',
-            'max_size' => 1024 * 5
-        ]);
+        $this->uploader(self::$avatar);
+    }
+
+    /**
+     * ajax 上传头像 - 自动裁剪
+     */
+    public function actionUploadAvatarCrop()
+    {
+        $result = $this->uploader(self::$avatar, null, false);
+
+        $url = Yii::$app->params['upload_path'];
+        $img = Helper::joinString('/', $url, $result['deep_path'], $result['filename']);
+        $this->thumbCrop($img, 256, 256, true);
+
+        $this->success($result);
     }
 
     /**
