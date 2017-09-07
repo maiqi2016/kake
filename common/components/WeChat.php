@@ -76,7 +76,7 @@ class WeChat extends Object
             $reply = null;
             $type = strtolower($message->MsgType);
 
-            if (empty($this->listenFn[$type]) && $this->listenFn[$type] === false) {
+            if (empty($this->listenFn[$type])) {
                 $function = 'reply' . ucfirst($type);
                 $this->listenFn[$type] = [
                     $this,
