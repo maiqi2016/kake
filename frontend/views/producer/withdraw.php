@@ -36,7 +36,7 @@ $params = \Yii::$app->params;
             <p class="p1">提现余额</p>
             <div class="txt2">
                 <span class="s1">￥</span>
-                <input class="s2" type="text">
+                <input class="s2" style="border:none;">
             </div>
         </div>
         <div class="account3 common">
