@@ -23,7 +23,7 @@ $params = \Yii::$app->params;
                 </div>
             </div>
             <div class="qr-code">
-                <img class="photo" src="<?= $params['frontend_source'] ?>/img/producer/2.png"/>
+                <img class="photo" src="<?= $data[1] ?>"/>
             </div>
         </div>
     </div>

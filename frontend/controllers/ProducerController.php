@@ -90,7 +90,7 @@ class ProducerController extends GeneralController
         $this->sourceJs = false;
 
         $producer = $this->getProducer($this->user->id);
-        $data = $this->controller('producer-setting')->spreadInfo($this->user->id, true);
+        $data = $this->controller('producer-setting')->spreadInfo($this->user->id);
 
         return $this->render('qr-code', compact('producer', 'data'));
     }
