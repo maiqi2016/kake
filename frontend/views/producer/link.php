@@ -15,9 +15,10 @@ $params = \Yii::$app->params;
 <div class="body">
     
     <div class="blank" style="margin-top:40px"></div>
-    <div class="link">
+    <div class="link" kk-copy-text>
         <div class="txt">推广链接</div>
         <div class="popularize-link">
-            <p>fdg fghsfysjg dddddddddddddgdfjh djg kkkfgfghgkkkghjdghjdghj</p>
+            <p>ndksjnfkjdsnfkjndskjfnjsndjvnsdjknvjkdfnjkvndfkjnvjkbdfvjdksndksnfjdsnfdsfsdfsdfsdfsfsdfsdfsdfsdsdfsdfsdf</p>
         </div>
+        <div class="copy" data-clipboard-text="amy"><img src="<?= $params['frontend_source'] ?>/img/producer/icon/copy-link.svg"></div>
     </div>
