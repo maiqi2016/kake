@@ -48,14 +48,4 @@ class DistributionController extends GeneralController
 
         return $this->render('index', compact('producer', 'product'));
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function beforeAction($action)
-    {
-        $this->mustLogin();
-
-        return parent::beforeAction($action);
-    }
 }

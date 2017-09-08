@@ -44,6 +44,13 @@ class GeneralController extends MainController
             $this->user = (object) Yii::$app->session->get(self::USER);
         }
 
+        if (!in_array($this->module->requestedRoute, [
+            'order/ali-paid',
+            'order/wx-paid'
+        ])
+        ) {
+            $this->mustLogin();
+        }
         $this->weChatLogin();
 
         return true;

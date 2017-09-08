@@ -127,14 +127,6 @@ class OrderController extends GeneralController
      */
     public function beforeAction($action)
     {
-        if (!in_array($action->id, [
-            'ali-pay',
-            'ali-paid'
-        ])
-        ) {
-            $this->mustLogin();
-        }
-
         if (in_array($action->id, [
             'wx-paid',
             'ali-paid'
@@ -604,9 +596,6 @@ class OrderController extends GeneralController
 
         // 微信浏览器
         if ($this->weChatBrowser()) {
-
-            $this->mustLogin();
-
             $this->sourceCss = ['order/open-with-browser'];
             $this->sourceJs = ['order/index'];
 
