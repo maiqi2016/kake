@@ -50,7 +50,7 @@ class WeChatController extends GeneralController
                 },
 
                 'event_scan' => function ($message) use ($wx) {
-                    return '🙄扫码来源：' . $message->EventKey;
+                    // return '🙄扫码来源：' . $message->EventKey;
                 }
             ]);
         }
