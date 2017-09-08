@@ -12,16 +12,6 @@ use Intervention\Image\ImageManagerStatic as Image;
 class ActivityController extends GeneralController
 {
     /**
-     * @inheritdoc
-     */
-    public function beforeAction($action)
-    {
-        $this->mustLogin();
-
-        return parent::beforeAction($action);
-    }
-
-    /**
      * 我和酒店的故事
      */
     public function actionStory()

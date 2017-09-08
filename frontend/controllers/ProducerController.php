@@ -127,7 +127,7 @@ class ProducerController extends GeneralController
         $controller = $this->controller('producer-product');
         $controller::$uid = $this->user->id;
         $list = $controller->showList('my', true, false, [
-            'size' => 6
+            'size' => 0
         ])[0];
 
         return $this->render('product-list', compact('list'));
@@ -147,7 +147,10 @@ class ProducerController extends GeneralController
             'size' => 0
         ])[0];
 
-        return $this->render('order-list', compact('list'));
+        $total = count($list);
+        $quota = Helper::money(array_sum(array_column($list, 'commission_quota')), '%s');
+
+        return $this->render('order-list', compact('list', 'total', 'quota'));
     }
 
     /**
@@ -266,15 +269,5 @@ class ProducerController extends GeneralController
         }
 
         $this->success(Url::to(['site/index']));
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function beforeAction($action)
-    {
-        $this->mustLogin();
-
-        return parent::beforeAction($action);
     }
 }
