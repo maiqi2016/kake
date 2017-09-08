@@ -17,18 +17,35 @@ $params = \Yii::$app->params;
 
     <div class="rest">
         <div class="rest-money common">
-            <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/record.svg">
+            <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/rest-money.svg">
             <p class="txt">佣金余额（元）</p>
         </div>
+        <div class="money">0.00</div>
     </div>
 
     <div class="blank"></div>
 
     <div class="withdraw">
-        <div class="acount common">
-            <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/record.svg">
+        <div class="account1 common">
+            <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/acount.svg">
+            <p class="txt">提现账号</p>
+            <span class="right"><?= $producer['phone'] ?> (支付宝)</span>
+        </div>
+        <div class="account2 common">
+            <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/withdraw-money.svg">
+            <p class="p1">提现余额</p>
+            <div class="txt2">
+                <span class="s1">￥</span>
+                <input class="s2" type="text">
+            </div>
+        </div>
+        <div class="account3 common">
+            <span class="right">全部提取</span>
         </div>
     </div>
 
+    <div class="blank"></div>
+
+    <div class="save">确认提取</div>
     
 </div>
