@@ -264,10 +264,26 @@ class ProducerLogController extends GeneralController
     public function myCondition()
     {
         $condition = $this->indexCondition();
+
+        $condition['join'][] = [
+            'left_table' => 'product',
+            'table' => 'attachment',
+            'left_on_field' => 'attachment_cover'
+        ];
+
+        $condition['select'] = array_merge($condition['select'], [
+            'product.attachment_cover',
+            'attachment.deep_path AS cover_deep_path',
+            'attachment.filename AS cover_filename'
+        ]);
+
         $condition['where'][1] = ['order.state' => 1];
-        $condition['where'][] = ['producer_log.producer_id' => self::$uid];
-        $condition['where'][] = ['producer_product.producer_id' => self::$uid];
-        $condition['where'][] = ['producer_log.state' => 1];
+
+        $condition['where'] = array_merge($condition['where'], [
+            ['producer_log.producer_id' => self::$uid],
+            ['producer_log.producer_id' => self::$uid],
+            ['producer_log.state' => 1]
+        ]);
 
         return $condition;
     }
@@ -535,6 +551,9 @@ class ProducerLogController extends GeneralController
             'index',
             'my'
         ])) {
+            // 生成封面图附件地址
+            $record = $this->createAttachmentUrl($record, ['attachment_cover' => 'cover']);
+
             $productCtrl = $this->controller('product');
             $data = $this->callMethod('sufHandleField', [], [
                 ['id' => $record['product_id']],
@@ -572,7 +591,7 @@ class ProducerLogController extends GeneralController
     /**
      * 在前置字段处理后处理列表
      *
-     * @param array $list
+     * @param array  $list
      * @param string $action
      *
      * @return array
