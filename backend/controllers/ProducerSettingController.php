@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\components\Helper;
 use Yii;
+use Intervention\Image\ImageManagerStatic as Image;
 
 /**
  * 分销商设置
@@ -450,6 +451,11 @@ class ProducerSettingController extends GeneralController
                 null
             ];
         }
+
+        $logoBg = Image::make(self::getPathByUrl('img/qr-code-logo-bg.png', 'frontend_source'));
+        $logo = Image::make($logoPath)->resize(94, 94);
+        $logoBg->insert($logo, 'center');
+        $logoBg->save($logoPath);
 
         $qr = $this->createQrCode($link, 200, $logoPath);
         $file = $qr->writeDataUri();

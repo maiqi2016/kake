@@ -28,6 +28,6 @@ $params = \Yii::$app->params;
         </div>
     </div>
 
-    <div class="save">保存我的二维码</div>
+    <div class="save">长按可保存二维码</div>
 
 </div>

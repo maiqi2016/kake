@@ -13,12 +13,17 @@ $params = \Yii::$app->params;
 </header>
 
 <div class="body">
-    
+
     <div class="blank" style="margin-top:40px"></div>
     <div class="link" kk-copy-text>
         <div class="txt">推广链接</div>
-        <div class="popularize-link">
-            <p>ndksjnfkjdsnfkjndskjfnjsndjvnsdjknvjkdfnjkvndfkjnvjkbdfvjdksndksnfjdsnfdsfsdfsdfsdfsfsdfsdfsdfsdsdfsdfsdf</p>
-        </div>
-        <div class="copy" data-clipboard-text="amy"><img src="<?= $params['frontend_source'] ?>/img/producer/icon/copy-link.svg"></div>
+
+        <?php foreach ($links as $item): ?>
+            <div class="popularize-link">
+                <p><?= $item ?></p>
+                <div class="copy" data-clipboard-text="<?= $item ?>">
+                    <img src="<?= $params['frontend_source'] ?>/img/producer/icon/copy-link.svg">
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>

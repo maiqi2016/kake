@@ -1,8 +1,10 @@
 <?php
 /* @var $this yii\web\View */
 
+use common\components\Helper;
+
 $params = \Yii::$app->params;
-\Yii::$app->params['ng_ctrl'] = 'producer';
+\Yii::$app->params['ng_ctrl'] = 'generic';
 ?>
 
 <header>
@@ -14,28 +16,20 @@ $params = \Yii::$app->params;
 
 <div class="list" kk-copy-text>
 
+    <?php foreach ($list as $item): ?>
     <div class="product">
         <div class="img">
-            <img src="<?= $params['frontend_source'] ?>/img/producer/card.png"/>
+            <img src="<?= current($item['cover_preview_url']) ?>"/>
         </div>
+        <?php $url = $item['link_url'] . '&channel=' . $item['channel'] ?>
         <div class="txt">
-            <p class="t1">恒大海上威尼斯 邂逅那一片“双色海”</p>
-            <p class="t2">酒店名称：启东 | 恒大海上威尼斯酒店</p>
-            <p class="t2">分佣金额：7.9￥起</p>
-            <div class="copy" data-clipboard-text="amy clipboard.js"><img src="<?= $params['frontend_source'] ?>/img/producer/icon/copy-link.svg"></div>
+            <p class="t1"><a href="<?= $url ?>"><?= $item['title'] ?></a></p>
+            <p class="t2">酒店名称：<?= $item['name'] ?></p>
+            <p class="t2">分佣金额：<?= Helper::money($item['min_commission']) ?>起</p>
+            <div class="copy" data-clipboard-text="<?= $url ?>">
+                <img src="<?= $params['frontend_source'] ?>/img/producer/icon/copy-link.svg">
+            </div>
         </div>
     </div>
-
-    <div class="product">
-        <div class="img">
-            <img src="<?= $params['frontend_source'] ?>/img/producer/card.png"/>
-        </div>
-        <div class="txt">
-            <p class="t1">恒大海上威尼斯 邂逅那一片“双色海”</p>
-            <p class="t2">酒店名称：启东 | 恒大海上威尼斯酒店</p>
-            <p class="t2">分佣金额：7.9￥起</p>
-            <div class="copy" data-clipboard-text="amy clipboard.js"><img src="<?= $params['frontend_source'] ?>/img/producer/icon/copy-link.svg"></div>
-        </div>
-    </div>
-    
+    <?php endforeach; ?>
 </div>
