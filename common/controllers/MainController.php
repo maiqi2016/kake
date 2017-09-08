@@ -539,6 +539,7 @@ class MainController extends Controller
         if (!$ajaxMode) {
             $result['deep_path'] = $file['save_path'];
             $result['filename'] = $file['save_name'];
+
             return $result;
         }
 
@@ -1097,7 +1098,7 @@ class MainController extends Controller
         $qrCode->setWriterByName('png');
         $qrCode->setMargin($qrWidth / 25);
         $qrCode->setEncoding('utf-8');
-        $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::MEDIUM);
+        $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::QUARTILE);
         $qrCode->setForegroundColor([
             'r' => 0,
             'g' => 0,
@@ -1110,6 +1111,7 @@ class MainController extends Controller
         ]);
 
         if ($logo) {
+            $this->handleQrLogo($logo);
             $qrCode->setLogoPath($logo);
             $logoWidth = $logoWidth ?: $qrWidth / 4;
             $qrCode->setLogoWidth($logoWidth);
@@ -1157,6 +1159,25 @@ class MainController extends Controller
         $url = Yii::$app->params['upload_url'] . '/' . $path['deep'] . '/' . $path['filename'];
 
         return rename($file, $path['file']) ? $url : false;
+    }
+
+    /**
+     * Handle file for Qr picture
+     *
+     * @access public
+     *
+     * @param &$path
+     *
+     * @return void
+     */
+    public function handleQrLogo(&$path)
+    {
+        $logoBg = Image::make(self::getPathByUrl('img/qr-code-logo-bg.png', 'frontend_source'));
+        $logo = Image::make($path)->resize(94, 94);
+        $logoBg->insert($logo, 'center');
+
+        $path = str_replace('.jpg', '.png', $path);
+        $logoBg->save($path);
     }
 
     /**
