@@ -74,16 +74,14 @@ $cover = empty($params['cover']) ? $params['frontend_source'] . '/img/logo.png' 
 <div id="menu">
     <div class="triangle"></div>
     <div>
-        <a href="<?= Url::to(['site/index']) ?>">
+        <a href="<?= Url::to(['site/index']) ?>" class="hr">
             <img src="<?= $params['frontend_source'] ?>/img/site.svg"/>
             首页
         </a>
-        <hr/>
-        <a href="<?= Url::to(['order/index']) ?>">
+        <a href="<?= Url::to(['order/index']) ?>" class="hr">
             <img class="order-center" src="<?= $params['frontend_source'] ?>/img/order-center.svg"/>
             订单中心
         </a>
-        <hr/>
         <a href="tel:<?= Yii::$app->params['company_tel'] ?>">
             <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
             咨询客服
