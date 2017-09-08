@@ -16,7 +16,7 @@ $params = \Yii::$app->params;
 </header>
 <div class="body">
     
-    <div class="blank" style="margin-top:40px"></div>
+    <div class="blank"></div>
 
     <div class="kake-travel">
         <img class="photo" src="<?= current($producer['logo_preview_url']) ?>">

@@ -13,7 +13,7 @@ $params = \Yii::$app->params;
 </header>
 <div class="body">
 
-    <div class="blank" style="margin-top:40px"></div>
+    <div class="blank"></div>
 
     <div class="out" ng-init='setting = <?= json_encode($angular) ?>'>
         <div class="inner" kk-ajax-upload="div.photo" data-action="producer/upload-avatar-crop" data-callback="handleUpload">
