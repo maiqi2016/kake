@@ -324,13 +324,21 @@ class ProducerProductController extends GeneralController
                     'left_on_field' => 'id',
                     'right_on_field' => 'product_id'
                 ],
+                [
+                    'left_table' => 'product',
+                    'table' => 'attachment',
+                    'left_on_field' => 'attachment_cover'
+                ],
             ],
             'select' => [
                 'product.title',
+                'product.attachment_cover',
                 'hotel.name',
                 'producer_product.*',
                 'user.username',
-                'product_package.price'
+                'product_package.price',
+                'attachment.deep_path AS cover_deep_path',
+                'attachment.filename AS cover_filename',
             ],
             'where' => [['producer_id' => self::$uid]],
             'order' => [
@@ -507,6 +515,9 @@ class ProducerProductController extends GeneralController
             'index',
             'my'
         ])) {
+            // 生成封面图附件地址
+            $record = $this->createAttachmentUrl($record, ['attachment_cover' => 'cover']);
+
             $record = $this->createLinkUrl($record, 'product_id', function ($id) {
                 return [
                     'detail/index',

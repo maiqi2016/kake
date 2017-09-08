@@ -4,7 +4,6 @@ namespace frontend\controllers;
 
 use common\components\Helper;
 use Yii;
-use Intervention\Image\ImageManagerStatic as Image;
 use yii\helpers\Url;
 
 /**
@@ -102,11 +101,17 @@ class ProducerController extends GeneralController
     {
         $this->sourceCss = null;
         $this->sourceJs = [
-            ''
+            '/node_modules/clipboard/dist/clipboard.min'
         ];
         $channel = Helper::integerEncode($this->user->id);
 
-        return $this->render('link', compact('channel'));
+        $url = Yii::$app->params['frontend_url'];
+        $links = [
+            $url . Url::toRoute(['distribution/index', 'channel' => $channel]),
+            $url . Url::toRoute(['items/distributor', 'channel' => $channel])
+        ];
+
+        return $this->render('link', compact('links'));
     }
 
     /**
@@ -116,7 +121,6 @@ class ProducerController extends GeneralController
     {
         $this->sourceCss = null;
         $this->sourceJs = [
-            'producer/product-list',
             '/node_modules/clipboard/dist/clipboard.min'
         ];
 
@@ -157,9 +161,9 @@ class ProducerController extends GeneralController
         $record = $this->controller('producer-quota')->showFormWithRecord([
             'producer_id' => $this->user->id,
             'state' => 1
-        ], null, true);
+        ], 'my', true);
 
-        $quota = Helper::money(empty($record) ? 0 : $record['quota']);
+        $quota = Helper::money(empty($record) ? 0 : $record['quota'], '%s');
         $producer = $this->getProducer($this->user->id);
 
         return $this->render('withdraw', compact('quota', 'producer'));
@@ -178,16 +182,16 @@ class ProducerController extends GeneralController
         }
 
         $result = $this->service(parent::$apiNewly, [
-            'table' => 'producer-quota',
+            'table' => 'producer_withdraw',
             'producer_id' => $this->user->id,
-            'withdraw' => $quota
+            'withdraw' => $quota * 100
         ]);
 
         if (is_string($result)) {
             $this->fail($result);
         }
 
-        $this->success($result);
+        $this->success(Url::to(['producer/index']));
     }
 
     /**
@@ -261,7 +265,7 @@ class ProducerController extends GeneralController
             $this->fail($result);
         }
 
-        $this->success($result);
+        $this->success(Url::to(['site/index']));
     }
 
     /**
