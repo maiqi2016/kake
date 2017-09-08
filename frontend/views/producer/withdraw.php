@@ -6,14 +6,14 @@ $params = \Yii::$app->params;
 ?>
 
 <header>
-    佣金提现页面
+    分佣提现
     <div class="menu detail" kk-menu="#menu">
         <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/list.svg"/>
     </div>
 </header>
 
 <div class="body">
-    <div class="blank" style="margin-top:40px"></div>
+    <div class="blank"></div>
 
     <div class="rest">
         <div class="rest-money common">
@@ -36,7 +36,7 @@ $params = \Yii::$app->params;
             <p class="p1">提现余额</p>
             <div class="txt2">
                 <span class="s1">￥</span>
-                <input type="number" ng-model="money.withdraw" class="s2" style="border:none;">
+                <input type="number" ng-model="money.withdraw" class="s2">
             </div>
         </div>
         <div class="account3 common" kk-tap="withdrawAll()">

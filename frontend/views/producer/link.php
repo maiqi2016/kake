@@ -14,7 +14,7 @@ $params = \Yii::$app->params;
 
 <div class="body">
 
-    <div class="blank" style="margin-top:40px"></div>
+    <div class="blank"></div>
     <div class="link" kk-copy-text>
         <div class="txt">推广链接</div>
 
