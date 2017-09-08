@@ -452,12 +452,7 @@ class ProducerSettingController extends GeneralController
             ];
         }
 
-        $logoBg = Image::make(self::getPathByUrl('img/qr-code-logo-bg.png', 'frontend_source'));
-        $logo = Image::make($logoPath)->resize(94, 94);
-        $logoBg->insert($logo, 'center');
-        $logoBg->save($logoPath);
-
-        $qr = $this->createQrCode($link, 200, $logoPath);
+        $qr = $this->createQrCode($link, 400, $logoPath);
         $file = $qr->writeDataUri();
 
         if ($saveTmp) {
