@@ -7,7 +7,6 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'generic';
 ?>
 
-<!-- <?= \common\components\Helper::dump($producer) ?> -->
 
 <header>
     个人中心
