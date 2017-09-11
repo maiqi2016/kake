@@ -46,7 +46,9 @@ class GeneralController extends MainController
 
         if (!in_array($this->module->requestedRoute, [
             'order/ali-paid',
-            'order/wx-paid'
+            'order/wx-paid',
+            'distribution/items',
+            'distribution/index',
         ])
         ) {
             $this->mustLogin();
@@ -56,6 +58,15 @@ class GeneralController extends MainController
         Yii::$app->view->params['user_info'] = $this->user;
 
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function runAction($id, $params = [])
+    {
+        unset($_GET['table'], $_GET['from']);
+        return parent::runAction($id, $params);
     }
 
     /**
