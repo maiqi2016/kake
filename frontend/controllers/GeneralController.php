@@ -53,6 +53,8 @@ class GeneralController extends MainController
         }
         $this->weChatLogin();
 
+        Yii::$app->view->params['user_info'] = $this->user;
+
         return true;
     }
 
