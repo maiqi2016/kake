@@ -21,7 +21,7 @@ class ProducerProductController extends GeneralController
     /**
      * @var array Hook
      */
-    public static $hookPriceNumber = ['price'];
+    public static $hookPriceNumber = ['min_price'];
 
     public static $uid;
 
@@ -312,16 +312,20 @@ class ProducerProductController extends GeneralController
                     'sub' => [
                         'select' => [
                             'product_id',
-                            'min(price) AS price'
+                            'min(price) AS min_price'
                         ],
                         'where' => [
                             ['product_package.bidding' => 1],
                             ['product_package.state' => 1],
-                            ['>', 'product_package.price', Yii::$app->params['commission_min_price']]
+                            [
+                                '>',
+                                'product_package.price',
+                                Yii::$app->params['commission_min_price']
+                            ]
                         ],
                         'group' => 'product_id'
                     ],
-                    'left_on_field' => 'id',
+                    'left_on_field' => 'product_id',
                     'right_on_field' => 'product_id'
                 ],
                 [
@@ -336,7 +340,7 @@ class ProducerProductController extends GeneralController
                 'hotel.name',
                 'producer_product.*',
                 'user.username',
-                'product_package.price',
+                'product_package.min_price',
                 'attachment.deep_path AS cover_deep_path',
                 'attachment.filename AS cover_filename',
             ],
@@ -541,7 +545,7 @@ class ProducerProductController extends GeneralController
             // 计算最低分佣金
             $data = current($record['commission_data']);
             $controller = $this->controller('producer-log');
-            $price = $record['price'] / 100;
+            $price = $record['min_price'] / 100;
             $record['min_commission'] = $controller::calCommission($data['type'], $price, $price, $data['commission']);
         }
 
