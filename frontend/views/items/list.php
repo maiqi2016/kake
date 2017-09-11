@@ -22,10 +22,3 @@ use yii\helpers\Url;
         </div>
     <?php endforeach ?>
 <?php endif; ?>
-
-<header>
-     全部目的地
-    <div class="menu detail" kk-menu="#menu">
-        <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/list.svg"/>
-    </div>
-</header>
