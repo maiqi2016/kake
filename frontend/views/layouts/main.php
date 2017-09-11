@@ -5,7 +5,6 @@
 
 use yii\helpers\Html;
 use frontend\assets\AppAsset;
-use common\widgets\Alert;
 use yii\helpers\Url;
 
 AppAsset::register($this);
@@ -74,7 +73,7 @@ $cover = empty($params['cover']) ? $params['frontend_source'] . '/img/logo.png' 
 <div id="menu">
     <div class="triangle"></div>
     <div>
-        <a href="<?= Url::to(['site/index']) ?>" class="hr">
+        <a href="<?= Url::to(['site/index']) ?>">
             <img src="<?= $params['frontend_source'] ?>/img/site.svg"/>
             首页
         </a>
@@ -82,10 +81,16 @@ $cover = empty($params['cover']) ? $params['frontend_source'] . '/img/logo.png' 
             <img class="order-center" src="<?= $params['frontend_source'] ?>/img/order-center.svg"/>
             订单中心
         </a>
-        <a href="tel:<?= Yii::$app->params['company_tel'] ?>">
+        <a href="tel:<?= $params['company_tel'] ?>" class="hr">
             <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
             咨询客服
         </a>
+        <?php if (!empty($this->params['user_info']->role) && $this->params['user_info']->role <= 10): ?>
+            <a href="<?= Url::to(['producer/index']) ?>" class="hr">
+                <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
+                分销管理
+            </a>
+        <?php endif; ?>
     </div>
 </div>
 
