@@ -7,4 +7,8 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'distribution';
 ?>
 
-<center style="margin-top: 50px;"><h4>页面开发中</h4></center>
+<div class="header">
+    <div class="menu detail" kk-menu="#menu">
+        <img src="<?= $params['frontend_source'] ?>/img/menu.svg"/>
+    </div>
+</div>
