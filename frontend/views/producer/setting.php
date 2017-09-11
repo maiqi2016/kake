@@ -16,11 +16,11 @@ $params = \Yii::$app->params;
     <div class="blank"></div>
 
     <div class="out" ng-init='setting = <?= json_encode($angular) ?>'>
+        <div class="photo">
+            <span>头像</span>
+            <img class="right" src="<?= current($producer['logo_preview_url']) ?>">
+        </div>
         <div class="inner" kk-ajax-upload="div.photo" data-action="producer/upload-avatar-crop" data-callback="handleUpload">
-            <div class="photo">
-                <span>头像</span>
-                <img class="right" src="<?= current($producer['logo_preview_url']) ?>">
-            </div>
             <div class="name">
                 <span>名称</span>
                 <input class="right" ng-model="setting.name" placeholder="名称32个字符内">
