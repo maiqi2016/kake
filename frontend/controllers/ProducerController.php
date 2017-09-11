@@ -107,8 +107,8 @@ class ProducerController extends GeneralController
 
         $url = Yii::$app->params['frontend_url'];
         $links = [
-            $url . Url::toRoute(['distribution/index', 'channel' => $channel]),
-            $url . Url::toRoute(['items/distributor', 'channel' => $channel])
+            urldecode($url . Url::toRoute(['distribution/index', 'channel' => $channel])),
+            urldecode($url . Url::toRoute(['distribution/items', 'channel' => $channel]))
         ];
 
         return $this->render('link', compact('links'));
