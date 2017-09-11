@@ -16,10 +16,10 @@ $params = \Yii::$app->params;
     <div class="card">
         <div class="out">
             <div class="info">
-                <img class="photo" src="<?= current($producer['logo_preview_url']) ?>">
+                <img class="photo" src="<?= current($data[2]['logo_preview_url']) ?>">
                 <div class="txt">
-                    <p class="info"><?= $producer['name'] ?></p>
-                    <span class="phone-number"><?= $producer['phone'] ?></span>
+                    <p class="info"><?= $data[2]['name'] ?></p>
+                    <span class="phone-number"><?= $data[2]['phone'] ?></span>
                 </div>
             </div>
             <div class="qr-code">
