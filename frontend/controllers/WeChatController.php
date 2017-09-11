@@ -37,23 +37,25 @@ class WeChatController extends GeneralController
     {
         $wx = Yii::$app->wx;
 
-        if (Yii::$app->request->get('signature')) {
-            $wx->listen([
-                'text' => function ($message) use ($wx) {
-                    return $this->replyTextLottery($message, $wx);
-                },
-
-                'event_subscribe' => function ($message) use ($wx) {
-                    $name = $message->EventKey ? str_replace('qrscene_', '', $message->EventKey) : '官方推广';
-                    $groupId = $wx->group($name);
-                    $wx->user_group->moveUser($message->FromUserName, $groupId);
-                },
-
-                'event_scan' => function ($message) use ($wx) {
-                    // return '🙄扫码来源：' . $message->EventKey;
-                }
-            ]);
+        if (!Yii::$app->request->get('signature')) {
+            return null;
         }
+
+        $wx->listen([
+            'text' => function ($message) use ($wx) {
+                return $this->replyTextLottery($message, $wx);
+            },
+
+            'event_subscribe' => function ($message) use ($wx) {
+                $name = $message->EventKey ? str_replace('qrscene_', '', $message->EventKey) : '官方推广';
+                $groupId = $wx->group($name);
+                $wx->user_group->moveUser($message->FromUserName, $groupId);
+            },
+
+            'event_scan' => function ($message) use ($wx) {
+                // return '🙄扫码来源：' . $message->EventKey;
+            }
+        ]);
     }
 
     /**
@@ -73,6 +75,7 @@ class WeChatController extends GeneralController
         $user->nickname = Helper::filterEmjoy($user->nickname);
 
         // 回复格式 { ([\d\w]{8}) }
+        /*
         if (preg_match('/^[\d\w]{8}$/i', $text)) {
             $result = $this->service('activity.log-winning-code', [
                 'code' => $text,
@@ -110,9 +113,9 @@ class WeChatController extends GeneralController
                 }
             }
         }
+        */
 
-        // 回复格式 { 品牌名+姓名+手机号码 }
-        // 格式判断
+        // 回复格式 { 品牌名+姓名+手机号码 } 或者 { 指定品牌名 }
         if (in_array(strtolower($text), [
             '阿里巴巴'
         ])) {
