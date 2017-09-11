@@ -448,7 +448,8 @@ class ProducerSettingController extends GeneralController
         if (!$logoPath) {
             return [
                 $link,
-                null
+                null,
+                $producer
             ];
         }
 
@@ -462,7 +463,8 @@ class ProducerSettingController extends GeneralController
 
         return [
             $link,
-            $file
+            $file,
+            $producer
         ];
     }
 

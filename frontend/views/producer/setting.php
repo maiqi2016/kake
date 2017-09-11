@@ -23,12 +23,12 @@ $params = \Yii::$app->params;
             </div>
             <div class="name">
                 <span>名称</span>
-                <input class="right" ng-model="setting.name">
+                <input class="right" ng-model="setting.name" placeholder="名称32个字符内">
             </div>
             <div class="style">
                 <div class="out" kk-tap="show_way = !show_way">
                     <span>收款账号类型</span>
-                    <span class="right">{{payment_method[setting.account_type]}}</span>
+                    <span class="right">{{payment_method[setting.account_type] || '请选择账号类型'}}</span>
                 </div>
                 <div class="style-2 kk-animate" ng-show="show_way" ng-class="{'kk-b2s-show': show_way}">
                     <span class="way" ng-repeat="(i, name) in payment_method" kk-repeat-done="radio" data-key="{{i}}" ng-class="{'active': i == setting.account_type}">{{name}}</span>
@@ -37,7 +37,7 @@ $params = \Yii::$app->params;
 
             <div class="number">
                 <span>收款账号</span>
-                <input class="right" ng-model="setting.account_number">
+                <input class="right" ng-model="setting.account_number" placeholder="收款账号">
             </div>
         </div>
     </div>
