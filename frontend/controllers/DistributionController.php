@@ -48,4 +48,18 @@ class DistributionController extends GeneralController
 
         return $this->render('index', compact('producer', 'product'));
     }
+
+    /**
+     * 分销商首页
+     *
+     * @access public
+     * @return string
+     */
+    public function actionItems()
+    {
+        $this->sourceCss = null;
+        $this->sourceJs = null;
+
+        return $this->render('items');
+    }
 }
