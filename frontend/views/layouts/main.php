@@ -129,7 +129,7 @@ foreach ($items as $item) {
 
 <!-- Footer -->
 <div class="hidden">
-    <span ng-init="common()"></span>
+    <span ng-init="common({message: '<?= \Yii::$app->session->getFlash("message") ?>'})"></span>
     <span ng-init='wxSDK(<?= Yii::$app->wx->js->config([
         'hideMenuItems',
         'onMenuShareTimeline',

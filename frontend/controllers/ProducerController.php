@@ -32,6 +32,11 @@ class ProducerController extends GeneralController
         $this->sourceCss = null;
         $this->sourceJs = false;
         $producer = $this->getProducer($this->user->id);
+        if (empty($producer)) {
+            Yii::$app->session->setFlash('message', '请先完善个人资料');
+
+            return $this->redirect(['producer/setting']);
+        }
 
         return $this->render('index', compact('producer'));
     }
@@ -47,10 +52,14 @@ class ProducerController extends GeneralController
             'jquery.ajaxupload'
         ];
         $producer = $this->getProducer($this->user->id);
+        if (empty($producer)) {
+            $producer['logo_preview_url'] = [
+                Yii::$app->params['frontend_source'] . '/img/logo.png'
+            ];
+        }
         $angular = Helper::pullSome($producer, [
             'id',
             'name',
-            'attachment_id',
             'logo_attachment_id',
             'account_type',
             'account_number'
@@ -65,10 +74,11 @@ class ProducerController extends GeneralController
     public function actionAjaxEditSetting()
     {
         $profile = Yii::$app->request->post();
-        $result = $this->service(parent::$apiEdit, array_merge($profile, [
+        $result = $this->service(parent::$apiNewlyOrEdit, array_merge($profile, [
             'table' => 'producer_setting',
             'where' => [
-                'id' => $profile['id'],
+                'id' => empty($profile['id']) ? 0 : $profile['id'],
+                'producer_id' => $this->user->id,
                 'state' => 1
             ]
         ]));
@@ -88,10 +98,14 @@ class ProducerController extends GeneralController
         $this->sourceCss = null;
         $this->sourceJs = false;
 
-        $producer = $this->getProducer($this->user->id);
         $data = $this->controller('producer-setting')->spreadInfo($this->user->id);
+        if (empty($data)) {
+            Yii::$app->session->setFlash('message', '请先完善个人资料');
 
-        return $this->render('qr-code', compact('producer', 'data'));
+            return $this->redirect(['producer/setting']);
+        }
+
+        return $this->render('qr-code', compact('data'));
     }
 
     /**
@@ -105,10 +119,18 @@ class ProducerController extends GeneralController
         ];
         $channel = Helper::integerEncode($this->user->id);
 
-        $url = Yii::$app->params['frontend_url'];
+        $url = function ($router) use ($channel) {
+            $url = Yii::$app->params['frontend_url'];
+            $url .= Url::toRoute([
+                $router,
+                'channel' => $channel
+            ]);
+
+            return urldecode($url);
+        };
         $links = [
-            urldecode($url . Url::toRoute(['distribution/index', 'channel' => $channel])),
-            urldecode($url . Url::toRoute(['distribution/items', 'channel' => $channel]))
+            $url('distribution/index'),
+            $url('distribution/items')
         ];
 
         return $this->render('link', compact('links'));
@@ -168,6 +190,11 @@ class ProducerController extends GeneralController
 
         $quota = Helper::money(empty($record) ? 0 : $record['quota'], '%s');
         $producer = $this->getProducer($this->user->id);
+        if (empty($producer)) {
+            Yii::$app->session->setFlash('message', '请先完善个人资料');
+
+            return $this->redirect(['producer/setting']);
+        }
 
         return $this->render('withdraw', compact('quota', 'producer'));
     }
