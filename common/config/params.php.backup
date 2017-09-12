@@ -47,11 +47,12 @@ return [
     'upgrade' => false,
     'upgrade_title' => 'System upgrade',
     'upgrade_minute' => 15,
-    'upgrade_message' => '系统版本升级中，本次升级约需 %d 分钟，尽情期待',
+    'upgrade_message' => '系统版本升级中，本次升级约需 %d 分钟，尽请期待',
 
     'order_pay_timeout' => 30,
 
     'distribution_limit' => 5,
+    'distribution_items_limit' => 8,
 
     'commission_min_price' => 99,
 ];

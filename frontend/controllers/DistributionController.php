@@ -12,34 +12,28 @@ class DistributionController extends GeneralController
 {
     /**
      * Displays index.
+     *
+     * @access public
+     *
+     * @param string $channel
+     *
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex($channel)
     {
         $this->sourceCss = null;
         $this->sourceJs = null;
 
-        $channel = Yii::$app->request->get('channel');
-        $channel = Helper::integerDecode($channel);
-        if (!$channel) {
-            $this->error(Yii::t('common', 'distributor params illegal'));
-        }
-
-        // 获取分销商信息
-        $producer = $this->getProducer($channel);
-        if (empty($producer)) {
-            $this->error(Yii::t('common', 'distributor params illegal'));
+        list($producer, $uid) = $this->getProducerByChannel($channel);
+        if (is_string($producer)) {
+            $this->error($producer);
         }
 
         // 获取分销产品
-        $limit = Yii::$app->params['distribution_limit'];
-        $product = $this->service('producer.list-product-ids', [
-            'producer_id' => $channel,
-            'limit' => $limit
-        ]);
+        $product = $this->listProducerProduct($uid, 1, Yii::$app->params['distribution_limit']);
         if (empty($product)) {
             $this->error(Yii::t('common', 'the distributor need select product first'));
         }
-        $product = $this->listProduct(1, null, DAY, ['ids' => $product]);
 
         $this->seo([
             'title' => $producer['name'],
@@ -53,13 +47,67 @@ class DistributionController extends GeneralController
      * 分销商首页
      *
      * @access public
+     *
+     * @param string $channel
+     *
      * @return string
      */
-    public function actionItems()
+    public function actionItems($channel)
     {
         $this->sourceCss = null;
         $this->sourceJs = null;
 
-        return $this->render('items');
+        list($producer, $uid) = $this->getProducerByChannel($channel);
+        if (is_string($producer)) {
+            $this->error($producer);
+        }
+
+        $top = null;
+        $topNumber = 4;
+        list($html, $over) = $this->renderItemsPage($uid, 1, function ($list, $limit) use ($topNumber, &$top) {
+            $top = array_slice($list, 0, $topNumber);
+
+            return [array_slice($list, $topNumber), $limit - $topNumber];
+        });
+
+        return $this->render('items', compact('producer', 'top', 'html', 'over'));
+    }
+
+    /**
+     * ajax 获取下一页列表
+     */
+    public function actionAjaxItems()
+    {
+        $uid = Yii::$app->request->post('uid');
+        $page = Yii::$app->request->post('page');
+
+        list($html, $over) = $this->renderItemsPage($uid, $page);
+        $this->success(compact('html', 'over'));
+    }
+
+    /**
+     * 渲染列表视图并返回 html
+     *
+     * @access private
+     *
+     * @param integer  $uid
+     * @param integer  $page
+     * @param callable $callback
+     *
+     * @return array
+     */
+    private function renderItemsPage($uid, $page, $callback = null)
+    {
+        $pageSize = Yii::$app->params['distribution_items_limit'];
+        $list = $this->listProducerProduct($uid, $page, $pageSize);
+        if ($callback) {
+            list($list, $pageSize) = call_user_func_array($callback, [$list, $pageSize]);
+        }
+        $content = $this->renderPartial('items-list', compact('list'));
+
+        return [
+            $content,
+            count($list) < $pageSize
+        ];
     }
 }
