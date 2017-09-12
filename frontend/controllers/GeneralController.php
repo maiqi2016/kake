@@ -66,6 +66,7 @@ class GeneralController extends MainController
     public function runAction($id, $params = [])
     {
         unset($_GET['table'], $_GET['from']);
+
         return parent::runAction($id, $params);
     }
 
@@ -133,17 +134,6 @@ class GeneralController extends MainController
     }
 
     /**
-     * 微信浏览器判断
-     *
-     * @access public
-     * @return bool
-     */
-    public function weChatBrowser()
-    {
-        return strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false;
-    }
-
-    /**
      * 需要登录
      *
      * @access public
@@ -162,7 +152,7 @@ class GeneralController extends MainController
         } else { // normal method
             $url = $this->currentUrl();
 
-            if ($this->weChatBrowser()) {
+            if (Helper::weChatBrowser()) {
                 Yii::$app->wx->config('oauth.callback', $url);
                 Yii::$app->wx->auth();
             } else {
@@ -599,6 +589,69 @@ class GeneralController extends MainController
 
             return $list;
         }, $time, null, Yii::$app->params['use_cache']);
+    }
+
+    /**
+     * 通过渠道号获取分销商信息
+     *
+     * @access public
+     *
+     * @param string $channel
+     *
+     * @return array
+     */
+    public function getProducerByChannel($channel)
+    {
+        $uid = Helper::integerDecode($channel);
+        if (!$uid) {
+            return [
+                Yii::t('common', 'distributor params illegal'),
+                $uid
+            ];
+        }
+
+        // 获取分销商信息
+        $producer = $this->getProducer($uid);
+        if (empty($producer)) {
+            return [
+                Yii::t('common', 'distributor params illegal'),
+                $uid
+            ];
+        }
+
+        return [
+            $producer,
+            $uid
+        ];
+    }
+
+    /**
+     * 获取分销商的产品
+     *
+     * @access public
+     *
+     * @param integer $producer_id
+     * @param integer $page
+     * @param integer $limit
+     *
+     * @return array
+     */
+    public function listProducerProduct($producer_id, $page = null, $limit = null)
+    {
+        list($offset, $page) = Helper::page($page, $limit);
+
+        $product = $this->service('producer.list-product-ids', [
+            'producer_id' => $producer_id,
+            'limit' => $limit ?: Yii::$app->params['distribution_items_limit'],
+            'page' => $page
+        ]);
+        if (empty($product)) {
+            return $product;
+        }
+
+        $product = $this->listProduct(1, null, DAY, ['ids' => $product]);
+
+        return $product;
     }
 
     /**
