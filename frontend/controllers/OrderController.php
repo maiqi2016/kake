@@ -156,6 +156,7 @@ class OrderController extends GeneralController
         ];
 
         list($html, $over) = $this->renderListPage(1, $type);
+        $this->seo(['title' => '订单中心']);
 
         return $this->render('index-' . $type, compact('html', 'over'));
     }
@@ -529,6 +530,7 @@ class OrderController extends GeneralController
         $this->sourceJs = [
             'order/index'
         ];
+        $this->seo(['title' => '微信支付']);
 
         return $this->render('wx-pay', [
             'json' => $json,
@@ -598,6 +600,7 @@ class OrderController extends GeneralController
         if ($this->weChatBrowser()) {
             $this->sourceCss = ['order/open-with-browser'];
             $this->sourceJs = ['order/index'];
+            $this->seo(['title' => '支付宝支付']);
 
             return $this->render('open-with-browser', [
                 'order_number' => $params['order_number'],
@@ -724,6 +727,6 @@ class OrderController extends GeneralController
                     'order_number' => $order_number
                 ], 'order/' . $payment_method . '-pay/', $payment_method == 'wx' ? true : false)
             ]
-        ]);
+        ], '支付结果');
     }
 }

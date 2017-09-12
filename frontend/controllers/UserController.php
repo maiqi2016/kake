@@ -21,5 +21,8 @@ class UserController extends GeneralController
     {
         $p = Yii::$app->session->cookieParams;
         SsoClient::logout('KK_SESS', $p['path'], $p['domain']);
+        $this->seo(['title' => '退出系统']);
+
+        echo '<script>history.go(0);</script>';
     }
 }
