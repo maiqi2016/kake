@@ -263,6 +263,20 @@ class MainController extends Controller
     }
 
     /**
+     * SEO
+     *
+     * @param array $params
+     *
+     * @return void
+     */
+    protected function seo($params)
+    {
+        foreach ($params as $key => $value) {
+            Yii::$app->params[$key] = $value;
+        }
+    }
+
+    /**
      * 显示正确提示页面
      *
      * @access public
@@ -290,6 +304,7 @@ class MainController extends Controller
             'extra' => $extraHtml
         ];
 
+        $this->seo(['title' => $title]);
         $content = $this->renderFile(Yii::$app->getViewPath() . DS . 'message.php', $params);
         $content = $this->renderContent($content);
 

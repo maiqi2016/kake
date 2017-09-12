@@ -788,20 +788,6 @@ class GeneralController extends MainController
     }
 
     /**
-     * SEO
-     *
-     * @param array $params
-     *
-     * @return void
-     */
-    protected function seo($params)
-    {
-        foreach ($params as $key => $value) {
-            Yii::$app->params[$key] = $value;
-        }
-    }
-
-    /**
      * 系统维护页面
      *
      * @access public
@@ -810,7 +796,7 @@ class GeneralController extends MainController
     public function actionUpgrade()
     {
         $params = Yii::$app->params;
-        if (!$params['upgrade']) {
+        if ($params['upgrade']) {
             return $this->redirect(['site/index']);
         }
 

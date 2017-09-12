@@ -39,6 +39,7 @@ class SiteController extends GeneralController
         // 精品推荐
         list($standardHtml, $over) = $this->renderListPage(1);
 
+        $this->seo(['title' => '首页']);
         $producer = null;
         if ($channel = Yii::$app->request->get('channel')) {
             $producer = $this->getProducer(Helper::integerDecode($channel));
