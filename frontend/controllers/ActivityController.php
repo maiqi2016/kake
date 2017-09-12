@@ -22,6 +22,8 @@ class ActivityController extends GeneralController
             'jquery.ajaxupload'
         ];
 
+        $this->seo(['title' => '我和酒店的故事']);
+
         return $this->render('story');
     }
 
