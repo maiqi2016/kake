@@ -447,7 +447,7 @@ class OrderController extends GeneralController
      */
     public function actionWx()
     {
-        if (!$this->weChatBrowser()) {
+        if (!Helper::weChatBrowser()) {
             $this->error(Yii::t('common', 'payment with wechat must on the client'));
         }
 
@@ -597,7 +597,7 @@ class OrderController extends GeneralController
         $params = $this->validateSafeLink(false);
 
         // 微信浏览器
-        if ($this->weChatBrowser()) {
+        if (Helper::weChatBrowser()) {
             $this->sourceCss = ['order/open-with-browser'];
             $this->sourceJs = ['order/index'];
             $this->seo(['title' => '支付宝支付']);
