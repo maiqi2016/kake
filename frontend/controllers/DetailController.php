@@ -109,6 +109,8 @@ class DetailController extends GeneralController
         $productId = Yii::$app->request->get('id');
         $packageList = $this->listProductPackage($productId);
 
+        $this->seo(['title' => '商品支付']);
+
         return $this->render('choose-package', compact('packageList', 'productId'));
     }
 

@@ -18,6 +18,7 @@ class ItemsController extends GeneralController
         $this->sourceJs = false;
 
         list($html, $over) = $this->renderListPage(Yii::$app->request->get());
+        $this->seo(['title' => '商品列表']);
 
         return $this->render('index', compact('html', 'over'));
     }
@@ -68,6 +69,7 @@ class ItemsController extends GeneralController
         $this->sourceCss = null;
 
         $region = $this->listRegion($plate);
+        $this->seo(['title' => '地区列表']);
 
         return $this->render('region', compact('region'));
     }

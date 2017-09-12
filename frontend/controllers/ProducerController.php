@@ -37,6 +37,7 @@ class ProducerController extends GeneralController
 
             return $this->redirect(['producer/setting']);
         }
+        $this->seo(['title' => '分销商管理']);
 
         return $this->render('index', compact('producer'));
     }
@@ -64,6 +65,7 @@ class ProducerController extends GeneralController
             'account_type',
             'account_number'
         ]);
+        $this->seo(['title' => '分销商管理']);
 
         return $this->render('setting', compact('producer', 'angular'));
     }
@@ -104,6 +106,7 @@ class ProducerController extends GeneralController
 
             return $this->redirect(['producer/setting']);
         }
+        $this->seo(['title' => '分销商管理']);
 
         return $this->render('qr-code', compact('data'));
     }
@@ -132,6 +135,7 @@ class ProducerController extends GeneralController
             $url('distribution/index'),
             $url('distribution/items')
         ];
+        $this->seo(['title' => '分销商管理']);
 
         return $this->render('link', compact('links'));
     }
@@ -151,6 +155,7 @@ class ProducerController extends GeneralController
         $list = $controller->showList('my', true, false, [
             'size' => 0
         ])[0];
+        $this->seo(['title' => '分销商管理']);
 
         return $this->render('product-list', compact('list'));
     }
@@ -171,6 +176,7 @@ class ProducerController extends GeneralController
 
         $total = count($list);
         $quota = Helper::money(array_sum(array_column($list, 'commission_quota')), '%s');
+        $this->seo(['title' => '分销商管理']);
 
         return $this->render('order-list', compact('list', 'total', 'quota'));
     }
@@ -195,6 +201,7 @@ class ProducerController extends GeneralController
 
             return $this->redirect(['producer/setting']);
         }
+        $this->seo(['title' => '分销商管理']);
 
         return $this->render('withdraw', compact('quota', 'producer'));
     }
@@ -238,7 +245,7 @@ class ProducerController extends GeneralController
             'jquery.ajaxupload'
         ];
 
-        $this->seo(['title' => '加入喀客KAKE']);
+        $this->seo(['title' => '加入喀客平台']);
 
         return $this->render('apply-distributor');
     }

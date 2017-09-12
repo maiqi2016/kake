@@ -81,16 +81,16 @@ $cover = empty($params['cover']) ? $params['frontend_source'] . '/img/logo.png' 
             <img class="order-center" src="<?= $params['frontend_source'] ?>/img/order-center.svg"/>
             订单中心
         </a>
-        <a href="tel:<?= $params['company_tel'] ?>" class="hr">
-            <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
-            咨询客服
-        </a>
         <?php if (!empty($this->params['user_info']->role) && $this->params['user_info']->role <= 10): ?>
             <a href="<?= Url::to(['producer/index']) ?>" class="hr">
                 <img src="<?= $params['frontend_source'] ?>/img/producer.svg"/>
                 分销管理
             </a>
         <?php endif; ?>
+        <a href="tel:<?= $params['company_tel'] ?>" class="hr">
+            <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
+            咨询客服
+        </a>
     </div>
 </div>
 
