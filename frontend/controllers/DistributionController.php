@@ -57,6 +57,11 @@ class DistributionController extends GeneralController
         $this->sourceCss = null;
         $this->sourceJs = null;
 
+        $region = $this->listPlateAndRegion();
+        $hotel = $this->listHotels(function ($name) {
+            return preg_replace('/[ ]+\|[ ]+/', ' ', $name);
+        });
+
         list($producer, $uid) = $this->getProducerByChannel($channel);
         if (is_string($producer)) {
             $this->error($producer);
@@ -67,10 +72,13 @@ class DistributionController extends GeneralController
         list($html, $over) = $this->renderItemsPage($uid, 1, function ($list, $limit) use ($topNumber, &$top) {
             $top = array_slice($list, 0, $topNumber);
 
-            return [array_slice($list, $topNumber), $limit - $topNumber];
+            return [
+                array_slice($list, $topNumber),
+                $limit - $topNumber
+            ];
         });
 
-        return $this->render('items', compact('producer', 'top', 'html', 'over'));
+        return $this->render('items', compact('region', 'hotel', 'producer', 'top', 'html', 'over'));
     }
 
     /**
@@ -90,8 +98,8 @@ class DistributionController extends GeneralController
      *
      * @access private
      *
-     * @param integer  $uid
-     * @param integer  $page
+     * @param integer $uid
+     * @param integer $page
      * @param callable $callback
      *
      * @return array
@@ -101,7 +109,10 @@ class DistributionController extends GeneralController
         $pageSize = Yii::$app->params['distribution_items_limit'];
         $list = $this->listProducerProduct($uid, $page, $pageSize);
         if ($callback) {
-            list($list, $pageSize) = call_user_func_array($callback, [$list, $pageSize]);
+            list($list, $pageSize) = call_user_func_array($callback, [
+                $list,
+                $pageSize
+            ]);
         }
         $content = $this->renderPartial('items-list', compact('list'));
 
