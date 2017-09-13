@@ -70,7 +70,7 @@ class DistributionController extends GeneralController
         }
 
         $top = null;
-        $topNumber = 4;
+        $topNumber = 2;
         list($html, $over) = $this->renderItemsPage($uid, 1, function ($list, $limit) use ($topNumber, &$top) {
             $top = array_slice($list, 0, $topNumber);
 
@@ -79,8 +79,9 @@ class DistributionController extends GeneralController
                 $limit - $topNumber
             ];
         });
+        $this->seo(['title' => $producer['name'] . '的小店']);
 
-        return $this->render('items', compact('region', 'hotel', 'producer', 'top', 'html', 'over'));
+        return $this->render('items', compact('region', 'hotel', 'producer', 'top', 'html', 'over', 'uid'));
     }
 
     /**
