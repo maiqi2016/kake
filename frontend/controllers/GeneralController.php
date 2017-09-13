@@ -549,7 +549,7 @@ class GeneralController extends MainController
         ], function () use ($page, $pageSize, $time, $options) {
             $where = [];
 
-            // 具体列表
+            // 具体 id 列表
             if (!empty($options['ids'])) {
                 $ids = is_array($options['ids']) ? $options['ids'] : explode(',', $options['ids']);
                 $where[] = ['product.id' => $ids];
@@ -589,6 +589,12 @@ class GeneralController extends MainController
                 $where[] = ['hotel_region.id' => $options['region']];
             }
 
+            // 酒店 id
+            if (!empty($options['hotel'])) {
+                $ids = is_array($options['hotel']) ? $options['hotel'] : explode(',', $options['hotel']);
+                $where[] = ['hotel.id' => $ids];
+            }
+
             // 关键字
             if (!empty($options['keyword'])) {
                 $where[] = [
@@ -601,6 +607,11 @@ class GeneralController extends MainController
                     [
                         'like',
                         'hotel_region.name',
+                        $options['keyword']
+                    ],
+                    [
+                        'like',
+                        'hotel.name',
                         $options['keyword']
                     ]
                 ];
