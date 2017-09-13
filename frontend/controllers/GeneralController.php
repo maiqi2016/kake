@@ -65,7 +65,7 @@ class GeneralController extends MainController
      */
     public function runAction($id, $params = [])
     {
-        unset($_GET['table'], $_GET['from']);
+        // unset($_GET['table'], $_GET['from']);
 
         return parent::runAction($id, $params);
     }
