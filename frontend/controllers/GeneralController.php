@@ -153,11 +153,9 @@ class GeneralController extends MainController
             $url = $this->currentUrl();
 
             if (Helper::weChatBrowser()) {
-                echo 'DEBUG1';die;
                 Yii::$app->wx->config('oauth.callback', $url);
                 Yii::$app->wx->auth();
             } else {
-                echo 'DEBUG2';die;
                 $result = SsoClient::auth($url);
 
                 if (is_string($result)) {
