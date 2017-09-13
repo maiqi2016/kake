@@ -85,6 +85,7 @@ class GeneralController extends MainController
 
         if (!$this->user) {
             $result = Yii::$app->wx->user();
+            $this->dump($result);
             $result['nickname'] = Helper::filterEmjoy($result['nickname']);
             $result = $this->service('user.get-with-we-chat', $result);
             if (is_string($result)) {
