@@ -849,7 +849,7 @@ class GeneralController extends MainController
     public function actionUpgrade()
     {
         $params = Yii::$app->params;
-        if ($params['upgrade']) {
+        if (!$params['upgrade']) {
             return $this->redirect(['site/index']);
         }
 
