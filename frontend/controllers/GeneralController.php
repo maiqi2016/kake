@@ -53,6 +53,7 @@ class GeneralController extends MainController
         ) {
             $this->mustLogin();
         }
+        echo 'DEBUG';die;
         $this->weChatLogin();
 
         Yii::$app->view->params['user_info'] = $this->user;
