@@ -485,6 +485,51 @@ class GeneralController extends MainController
     }
 
     /**
+     * 列表板块和下级地区
+     *
+     * @access public
+     * @return array
+     */
+    public function listPlateAndRegion()
+    {
+        return $this->cache('list-plate-and-region', function () {
+
+            $list = $this->service(parent::$apiList, [
+                'table' => 'hotel_region',
+                'where' => [
+                    ['hotel_region.state' => 1]
+                ],
+                'join' => [
+                    ['table' => 'hotel_plate']
+                ],
+                'select' => [
+                    'hotel_plate.name AS plate_name',
+                    'hotel_region.id',
+                    'hotel_region.name',
+                ],
+                'order' => [
+                    'ISNULL(hotel_region.sort), hotel_region.sort ASC',
+                    'hotel_region.update_time DESC'
+                ]
+            ]);
+
+            $_list = [];
+            foreach ($list as $item) {
+                $_list[$item['plate_name']][$item['id']] = $item['name'];
+            }
+
+            $key = '其他';
+            if (isset($_list[$key])) {
+                $val = $_list[$key];
+                unset($_list[$key]);
+                $_list[$key] = $val;
+            }
+
+            return $_list;
+        }, MONTH, null, Yii::$app->params['use_cache']);
+    }
+
+    /**
      * 列表产品
      *
      * @access public
@@ -652,6 +697,36 @@ class GeneralController extends MainController
         $product = $this->listProduct(1, null, DAY, ['ids' => $product]);
 
         return $product;
+    }
+
+    /**
+     * List hotels
+     *
+     * @access public
+     *
+     * @param callable $handler
+     *
+     * @return array
+     */
+    public function listHotels($handler)
+    {
+        $hotel = $this->service(parent::$apiList, [
+            'table' => 'hotel',
+            'select' => [
+                'id',
+                'name'
+            ],
+            'where' => [
+                ['state' => 1]
+            ]
+        ]);
+
+        $hotel = Helper::arrayColumnSimple($hotel, 'id', 'name');
+        if (is_callable($handler)) {
+            $hotel = array_map($handler, $hotel);
+        }
+
+        return $hotel;
     }
 
     /**
