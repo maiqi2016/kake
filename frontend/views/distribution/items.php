@@ -9,8 +9,8 @@ $params = \Yii::$app->params;
 
 <div class="header" ng-init='hotel = <?= json_encode($hotel, JSON_UNESCAPED_UNICODE) ?>'>
     <div class="inner">
-        <div class="area" ng-init="area = true" kk-tap="toggle()">筛选</div>
-        <div class="search" id="box">
+        <div class="area" kk-tap="showTab = !showTab">筛选</div>
+        <div class="search" id="box" kk-location-on-input="<?= Url::to(['items/index']) ?>">
             <input id="search-info" type="text" name="keyword" ng-model="search" placeholder="关键字">
             <ul ng-show="search">
                 <a href="<?= Url::to(['items/index', 'hotel' => '']) ?>{{item.id}}" ng-repeat="item in hotel | filter:search">
@@ -20,7 +20,7 @@ $params = \Yii::$app->params;
         </div>
         <div class="menu" kk-menu="#menu"><img src="<?= $params['frontend_source'] ?>/img/menu.svg"></div>
     </div>
-    <div class="select-area hidden" ng-toggle="areaSelect">
+    <div class="select-area kk-animate" ng-class="{'kk-show': showTab}" ng-show="showTab">
         <ul class="left" kk-tab-card="active" data-element="li">
             <?php
             $index = 0;
