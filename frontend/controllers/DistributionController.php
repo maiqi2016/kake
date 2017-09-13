@@ -58,8 +58,10 @@ class DistributionController extends GeneralController
         $this->sourceJs = null;
 
         $region = $this->listPlateAndRegion();
-        $hotel = $this->listHotels(function ($name) {
-            return preg_replace('/[ ]+\|[ ]+/', ' ', $name);
+        $hotel = $this->listHotels(function ($item) {
+            $item['name'] = preg_replace('/[ ]+\|[ ]+/', ' ', $item['name']);
+
+            return $item;
         });
 
         list($producer, $uid) = $this->getProducerByChannel($channel);
@@ -98,8 +100,8 @@ class DistributionController extends GeneralController
      *
      * @access private
      *
-     * @param integer $uid
-     * @param integer $page
+     * @param integer  $uid
+     * @param integer  $page
      * @param callable $callback
      *
      * @return array

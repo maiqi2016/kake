@@ -721,7 +721,6 @@ class GeneralController extends MainController
             ]
         ]);
 
-        $hotel = Helper::arrayColumnSimple($hotel, 'id', 'name');
         if (is_callable($handler)) {
             $hotel = array_map($handler, $hotel);
         }
