@@ -53,7 +53,6 @@ class GeneralController extends MainController
         ) {
             $this->mustLogin();
         }
-        echo 'DEBUG';die;
         $this->weChatLogin();
 
         Yii::$app->view->params['user_info'] = $this->user;
@@ -66,7 +65,7 @@ class GeneralController extends MainController
      */
     public function runAction($id, $params = [])
     {
-        // unset($_GET['table'], $_GET['from']);
+        unset($_GET['table'], $_GET['from']);
 
         return parent::runAction($id, $params);
     }
@@ -86,7 +85,6 @@ class GeneralController extends MainController
 
         if (!$this->user) {
             $result = Yii::$app->wx->user();
-            $this->dump($result);
             $result['nickname'] = Helper::filterEmjoy($result['nickname']);
             $result = $this->service('user.get-with-we-chat', $result);
             if (is_string($result)) {
@@ -155,9 +153,11 @@ class GeneralController extends MainController
             $url = $this->currentUrl();
 
             if (Helper::weChatBrowser()) {
+                echo 'DEBUG1';die;
                 Yii::$app->wx->config('oauth.callback', $url);
                 Yii::$app->wx->auth();
             } else {
+                echo 'DEBUG2';die;
                 $result = SsoClient::auth($url);
 
                 if (is_string($result)) {
