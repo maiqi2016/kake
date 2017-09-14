@@ -57,11 +57,15 @@ foreach ($items as $item) {
     } elseif (is_array($this->context->{$variable})) {
         foreach ($this->context->{$variable} as $value) {
             if (strpos($value, '/') === 0) {
-                $source = "{$value}.{$item}";
+                $source = "${sourceUrl}{$value}.{$item}";
+            } else if (strpos($value, 'http:') === 0 || strpos($value, 'https:') === 0) {
+                $source = $value;
             } else {
-                $source = "/{$item}{$minDirectory}/{$value}.{$item}";
+                $source = "${sourceUrl}/{$item}{$minDirectory}/{$value}.{$item}";
             }
-            $this->{$register}($sourceUrl . $source . "?version=" . $suffix);
+
+            $char = strpos($source, '?') !== false ? '&' : '?';
+            $this->{$register}($source . $char . "version=" . $suffix, ['position' => \yii\web\View::POS_HEAD]);
         }
     }
 }
