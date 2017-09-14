@@ -108,7 +108,8 @@ class SsoClient extends Object
         }
 
         if (isset($result['info'])) {
-            throw new \Exception($result['info']);
+            return $result['info'];
+            // throw new \Exception($result['info']);
         }
 
         return $result;
@@ -200,6 +201,11 @@ class SsoClient extends Object
         if (!$token) {
             if (!Yii::$app->request->get(self::$responseType)) {
                 self::code($url);
+            }
+
+            $token = self::token($url);
+            if (is_string($token)) {
+                return $token;
             }
 
             $token = self::token($url)['access_token'];
