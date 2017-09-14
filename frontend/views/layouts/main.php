@@ -20,13 +20,15 @@ $ngApp = empty($params['ng_app']) ? 'kkApp' : $params['ng_app'];
 $ngCtl = empty($params['ng_ctrl']) ? null : (' ng-controller="' . $params['ng_ctrl'] . '"');
 
 $title = empty($params['title']) ? $params['app_title'] : $params['title'];
+$shareTitle = empty($params['share_title']) ? $title : $params['share_title'];
 $keywords = empty($params['keywords']) ? $params['app_keywords'] : $params['keywords'];
 $description = empty($params['description']) ? $params['app_description'] : $params['description'];
+$shareDescription = empty($params['share_description']) ? $description : $params['share_description'];
 
 $keywords = str_replace('"', '“', $keywords);
 $description = str_replace('"', '“', $description);
 
-$cover = empty($params['cover']) ? $params['frontend_source'] . '/img/logo.png' : $params['cover'];
+$shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img/logo.png' : $params['share_cover'];
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -145,7 +147,7 @@ foreach ($items as $item) {
         'hideMenuItems',
         'onMenuShareTimeline',
         'onMenuShareAppMessage'
-    ]) ?>, "<?= $title ?>", "<?= $description ?>", "<?= $cover ?>")'></span>
+    ]) ?>, "<?= $shareTitle ?>", "<?= $shareDescription ?>", "<?= $shareCover ?>")'></span>
 </div>
 </body>
 <script>
