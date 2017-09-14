@@ -45,11 +45,12 @@ class GeneralController extends MainController
         }
 
         if (!in_array($this->module->requestedRoute, [
-            'order/ali-paid',
-            'order/wx-paid',
-            'general/clear-cache',
-            'distribution/items',
-            'distribution/index',
+            'order/ali-paid',       // 阿里支付后处理
+            'order/wx-paid',        // 微信支付后处理
+            'general/clear-cache',  // 清除前台缓存
+            'user/logout',          // 退出
+            'distribution/items',   // 分销商首页
+            'distribution/index',   // 分销商小车引导页
         ])
         ) {
             $this->mustLogin();
