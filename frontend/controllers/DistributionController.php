@@ -36,8 +36,9 @@ class DistributionController extends GeneralController
         }
 
         $this->seo([
-            'title' => $producer['name'],
-            'cover' => current($producer['logo_preview_url'])
+            'title' => $producer['name'] . '的小店',
+            'share_title' => $producer['name'] . '的小店',
+            'share_cover' => current($producer['logo_preview_url'])
         ]);
 
         return $this->render('index', compact('producer', 'product'));
@@ -79,7 +80,12 @@ class DistributionController extends GeneralController
                 $limit - $topNumber
             ];
         });
-        $this->seo(['title' => $producer['name'] . '的小店']);
+
+        $this->seo([
+            'title' => $producer['name'] . '的小店',
+            'share_title' => $producer['name'] . '的小店',
+            'share_cover' => current($producer['logo_preview_url'])
+        ]);
 
         return $this->render('items', compact('region', 'hotel', 'producer', 'top', 'html', 'over', 'uid'));
     }
