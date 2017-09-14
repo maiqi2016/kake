@@ -91,6 +91,10 @@ $cover = empty($params['cover']) ? $params['frontend_source'] . '/img/logo.png' 
             <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
             咨询客服
         </a>
+        <a href="" class="hr">
+            <img src="<?= $params['frontend_source'] ?>/img/exit.svg"/>
+            退出
+        </a>
     </div>
 </div>
 
