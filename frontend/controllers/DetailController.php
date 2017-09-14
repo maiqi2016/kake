@@ -91,8 +91,10 @@ class DetailController extends GeneralController
 
         $this->seo([
             'title' => '商品详情',
+            'share_title' => $detail['title'],
             'description' => $detail['hotel_name'] . ' - ' . $detail['title'],
-            'cover' => $detail['slave_preview_url'][0]
+            'share_description' => $detail['hotel_name'] . ' - ' . $detail['title'],
+            'share_cover' => $detail['slave_preview_url'][0]
         ]);
 
         return $this->render('index', compact('detail'));
