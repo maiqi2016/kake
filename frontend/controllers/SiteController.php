@@ -40,15 +40,8 @@ class SiteController extends GeneralController
         list($standardHtml, $over) = $this->renderListPage(1);
 
         $this->seo(['title' => '首页']);
-        $producer = null;
-        if ($channel = Yii::$app->request->get('channel')) {
-            $producer = $this->getProducer(Helper::integerDecode($channel));
-            if (!empty($producer)) {
-                $this->seo(['title' => $producer['name']]);
-            }
-        }
 
-        return $this->render('index', compact('focusList', 'plateList', 'flashSalesList', 'bannerList', 'standardHtml', 'over', 'producer'));
+        return $this->render('index', compact('focusList', 'plateList', 'flashSalesList', 'bannerList', 'standardHtml', 'over'));
     }
 
     /**
