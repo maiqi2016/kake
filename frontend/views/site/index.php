@@ -7,26 +7,7 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'site';
 ?>
 
-<?php if (!empty($producer)): ?>
-    <div class="opening" ng-init="showBody = false" kk-tap="hidden()">
-        <div class="small_bj">
-            <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
-        </div>
-        <div class="hang">
-            <img src="<?= $params['frontend_source'] ?>/img/opening/hang.png">
-        </div>
-        <img class="photo" src="<?= current($producer['logo_preview_url']) ?>">
-        <div class="guangquan">
-            <img src="<?= $params['frontend_source'] ?>/img/opening/guangquan2.png">
-        </div>
-
-        <div kk-print-text="<?= $producer['name'] ?>" class="txt"></div>
-
-        <img src="<?= $params['frontend_source'] ?>/img/opening/openingarrow.png" class="openingarrow">
-    </div>
-<?php endif; ?>
-
-<div class="body" ng-show="showBody">
+<div class="body">
     <!-- Banner -->
     <div class="banner" kk-fixed>
         <div class="menu-box" kk-menu="#menu" data-pos-x="-15" data-pos-y="-15">
