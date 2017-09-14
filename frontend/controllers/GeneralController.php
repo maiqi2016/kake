@@ -161,7 +161,9 @@ class GeneralController extends MainController
                 $result = SsoClient::auth($url);
 
                 if (is_string($result)) {
-                    throw new \Exception($result);
+                    header('Location: ' . Yii::$app->params['frontend_url']);
+                    exit();
+                    // throw new \Exception($result);
                 }
                 $this->loginUser($result, 'sso-login');
             }
