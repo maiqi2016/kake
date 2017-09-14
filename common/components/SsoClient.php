@@ -208,7 +208,7 @@ class SsoClient extends Object
                 return $token;
             }
 
-            $token = self::token($url)['access_token'];
+            $token = $token['access_token'];
             Yii::$app->session->set($tokenKey, $token);
         }
 
