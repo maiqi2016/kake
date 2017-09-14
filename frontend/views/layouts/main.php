@@ -6,6 +6,7 @@
 use yii\helpers\Html;
 use frontend\assets\AppAsset;
 use yii\helpers\Url;
+use common\components\SsoClient;
 
 AppAsset::register($this);
 
@@ -91,9 +92,9 @@ $cover = empty($params['cover']) ? $params['frontend_source'] . '/img/logo.png' 
             <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
             咨询客服
         </a>
-        <a href="" class="hr">
+        <a href="<?= SsoClient::$ssoHost ?><?= Url::toRoute(['auth/logout']) ?>" class="hr">
             <img src="<?= $params['frontend_source'] ?>/img/exit.svg"/>
-            退出
+            退出登录
         </a>
     </div>
 </div>
@@ -107,6 +108,7 @@ $cover = empty($params['cover']) ? $params['frontend_source'] . '/img/logo.png' 
 $minDirectory = (YII_ENV == 'dev' ? null : '_min');
 $suffix = (YII_ENV == 'dev' ? time() : VERSION);
 
+$sourceUrl = $params['frontend_source'];
 $items = [
     'css',
     'js'
@@ -117,15 +119,19 @@ foreach ($items as $item) {
 
     if (is_null($this->context->{$variable}) || 'auto' == $this->context->{$variable}) {
         $source = "/{$item}{$minDirectory}/{$controller}/{$action}.{$item}";
-        $this->{$register}($params['frontend_source'] . $source . "?version=" . $suffix);
+        $this->{$register}($sourceUrl . $source . "?version=" . $suffix);
     } elseif (is_array($this->context->{$variable})) {
         foreach ($this->context->{$variable} as $value) {
             if (strpos($value, '/') === 0) {
-                $source = "{$value}.{$item}";
+                $source = "${sourceUrl}{$value}.{$item}";
+            } else if (strpos($value, 'http:') === 0 || strpos($value, 'https:') === 0) {
+                $source = $value;
             } else {
-                $source = "/{$item}{$minDirectory}/{$value}.{$item}";
+                $source = "${sourceUrl}/{$item}{$minDirectory}/{$value}.{$item}";
             }
-            $this->{$register}($params['frontend_source'] . $source . "?version=" . $suffix);
+
+            $char = strpos($source, '?') !== false ? '&' : '?';
+            $this->{$register}($source . $char . "version=" . $suffix);
         }
     }
 }
