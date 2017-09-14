@@ -442,7 +442,7 @@ class ProducerSettingController extends GeneralController
         }
 
         $channel = Helper::integerEncode($userId);
-        $link = Yii::$app->params['frontend_url'] . '/?r=distribution&channel=' . $channel;
+        $link = Yii::$app->params['frontend_url'] . '/?r=distribution/items&channel=' . $channel;
 
         $logoPath = parent::getPathByUrl(current($producer['logo_preview_url']));
         if (!$logoPath) {
