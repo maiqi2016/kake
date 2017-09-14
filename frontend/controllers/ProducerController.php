@@ -264,6 +264,9 @@ class ProducerController extends GeneralController
     public function actionUploadAvatarCrop()
     {
         $result = $this->uploader(self::$avatar, null, false);
+        if (is_string($result)) {
+            $this->fail($result);
+        }
 
         $url = Yii::$app->params['upload_path'];
         $img = Helper::joinString('/', $url, $result['deep_path'], $result['filename']);
