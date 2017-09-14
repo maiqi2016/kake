@@ -47,6 +47,7 @@ class GeneralController extends MainController
         if (!in_array($this->module->requestedRoute, [
             'order/ali-paid',
             'order/wx-paid',
+            'general/clear-cache',
             'distribution/items',
             'distribution/index',
         ])
