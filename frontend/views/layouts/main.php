@@ -10,10 +10,11 @@ use common\components\SsoClient;
 
 AppAsset::register($this);
 
-$params = \Yii::$app->params;
+$app = Yii::$app;
+$params = $app->params;
 
-$controller = \Yii::$app->controller->id;
-$action = \Yii::$app->controller->action->id;
+$controller = $app->controller->id;
+$action = $app->controller->action->id;
 
 $ngApp = empty($params['ng_app']) ? 'kkApp' : $params['ng_app'];
 $ngCtl = empty($params['ng_ctrl']) ? null : (' ng-controller="' . $params['ng_ctrl'] . '"');
@@ -29,7 +30,7 @@ $cover = empty($params['cover']) ? $params['frontend_source'] . '/img/logo.png' 
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html ng-app="<?= $ngApp ?>" lang="<?= \Yii::$app->language ?>">
+<html ng-app="<?= $ngApp ?>" lang="<?= $app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -139,7 +140,7 @@ foreach ($items as $item) {
 
 <!-- Footer -->
 <div class="hidden">
-    <span ng-init="common({message: '<?= \Yii::$app->session->getFlash("message") ?>'})"></span>
+    <span ng-init="common({message: '<?= $app->session->getFlash("message") ?>'})"></span>
     <span ng-init='wxSDK(<?= Yii::$app->wx->js->config([
         'hideMenuItems',
         'onMenuShareTimeline',
