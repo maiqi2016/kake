@@ -51,6 +51,7 @@ class GeneralController extends MainController
             'user/logout',          // 退出
             'distribution/items',   // 分销商首页
             'distribution/index',   // 分销商小车引导页
+            'we-chat/reply',        // 微信自动回复
         ])
         ) {
             $this->mustLogin();
