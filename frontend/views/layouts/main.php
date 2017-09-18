@@ -25,8 +25,8 @@ $keywords = empty($params['keywords']) ? $params['app_keywords'] : $params['keyw
 $description = empty($params['description']) ? $params['app_description'] : $params['description'];
 $shareDescription = empty($params['share_description']) ? $description : $params['share_description'];
 
-$keywords = str_replace('"', '“', $keywords);
-$description = str_replace('"', '“', $description);
+$shareTitle = str_replace('"', '“', $shareTitle);
+$shareDescription = str_replace('"', '“', $shareDescription);
 
 $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img/logo.png' : $params['share_cover'];
 ?>
