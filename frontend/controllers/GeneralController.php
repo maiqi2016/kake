@@ -45,18 +45,26 @@ class GeneralController extends MainController
         }
 
         if (!in_array($this->module->requestedRoute, [
-            'order/ali-paid',       // 阿里支付后处理
-            'order/wx-paid',        // 微信支付后处理
-            'general/clear-cache',  // 清除前台缓存
-            'user/logout',          // 退出
-            'distribution/items',   // 分销商首页
-            'distribution/index',   // 分销商小车引导页
-            'we-chat/reply',        // 微信自动回复
+            // 阿里支付后处理
+            'order/ali-paid',
+            // 阿里支付
+            'order/ali-pay',
+            // 微信支付后处理
+            'order/wx-paid',
+            // 清除前台缓存
+            'general/clear-cache',
+            // 退出
+            'user/logout',
+            // 分销商首页
+            'distribution/items',
+            // 分销商小车引导页
+            'distribution/index',
+            // 微信自动回复
+            'we-chat/reply',
         ])
         ) {
             $this->mustLogin();
         }
-        $this->weChatLogin();
 
         Yii::$app->view->params['user_info'] = $this->user;
 
@@ -74,34 +82,6 @@ class GeneralController extends MainController
     }
 
     /**
-     * 微信授权登录
-     *
-     * @access public
-     * @return void
-     */
-    public function weChatLogin()
-    {
-        // 授权请求
-        if (!Yii::$app->request->get('code')) {
-            return;
-        }
-
-        if (!$this->user) {
-            $result = Yii::$app->wx->user();
-            $result['nickname'] = Helper::filterEmjoy($result['nickname']);
-            $result = $this->service('user.get-with-we-chat', $result);
-            if (is_string($result)) {
-                $this->redirect([
-                    '/general/error',
-                    'message' => Yii::t('common', $result)
-                ]);
-            } else {
-                $this->loginUser($result, isset($result['state']) ? 'we-chat-login' : 'we-chat-bind');
-            }
-        }
-    }
-
-    /**
      * 清理缓存
      */
     public function actionClearCache()
@@ -109,31 +89,6 @@ class GeneralController extends MainController
         $this->ipa(function () {
             return Yii::$app->cache->flush();
         });
-    }
-
-    /**
-     * 用户登录
-     *
-     * @access public
-     *
-     * @param array  $user
-     * @param string $type
-     * @param string $system
-     *
-     * @return void
-     */
-    public function loginUser($user, $type = 'we-chat-login', $system = 'kake')
-    {
-        Yii::trace("将用户信息设置到 Session 中 - 来自 <{$system}> 系统的 <{$type}> 类型登录");
-
-        Yii::$app->session->set(self::USER, $user);
-        $this->user = (object) array_merge((array) $this->user, $user);
-
-        $this->service('user.login-log', [
-            'id' => $user['id'],
-            'ip' => Yii::$app->request->userIP,
-            'type' => $type
-        ]);
     }
 
     /**
@@ -152,21 +107,50 @@ class GeneralController extends MainController
         // ajax
         if (Yii::$app->request->isAjax) {
             $this->fail('login first');
-        } else { // normal method
-            $url = $this->currentUrl();
+        }
 
-            if (Helper::weChatBrowser()) {
-                Yii::$app->wx->config('oauth.callback', $url);
-                Yii::$app->wx->auth();
-            } else {
-                $result = SsoClient::auth($url);
+        $loginUser = function ($user, $type, $system = 'kake') {
+            Yii::trace("将用户信息设置到 Session 中 - 来自 <{$system}> 系统的 <{$type}> 类型登录");
 
+            Yii::$app->session->set(self::USER, $user);
+            $this->user = (object) array_merge((array) $this->user, $user);
+
+            $this->service('user.login-log', [
+                'id' => $user['id'],
+                'ip' => Yii::$app->request->userIP,
+                'type' => $type
+            ]);
+        };
+
+        // normal
+        if (Helper::weChatBrowser()) {
+
+            // 授权请求
+            if (Yii::$app->request->get('code')) {
+                $result = Yii::$app->wx->user();
+                $result['nickname'] = Helper::filterEmjoy($result['nickname']);
+                $result = $this->service('user.get-with-we-chat', $result);
                 if (is_string($result)) {
-                    header('Location: ' . Yii::$app->params['frontend_url']);
-                    exit();
-                    // throw new \Exception($result);
+                    $this->redirect([
+                        '/general/error',
+                        'message' => urlencode(Yii::t('common', $result))
+                    ]);
+                } else {
+                    $loginUser($result, isset($result['state']) ? 'we-chat-login' : 'we-chat-bind');
                 }
-                $this->loginUser($result, 'sso-login');
+            } else {
+                Yii::$app->wx->config('oauth.callback', $this->currentUrl());
+                Yii::$app->wx->auth();
+            }
+        } else {
+            $result = SsoClient::auth($this->currentUrl());
+            if (is_string($result)) {
+                $this->redirect([
+                    '/general/error',
+                    'message' => urlencode(Yii::t('common', $result))
+                ]);
+            } else {
+                $loginUser($result, 'sso-login');
             }
         }
     }
@@ -182,16 +166,11 @@ class GeneralController extends MainController
      */
     public function params($keys)
     {
-        $get = Yii::$app->request->get();
-        $post = Yii::$app->request->post();
-
+        $p = array_merge(Yii::$app->request->post(), Yii::$app->request->get());
         $params = [];
+
         foreach ((array) $keys as $item) {
-            if (isset($get[$item])) {
-                $params[$item] = $get[$item];
-            } else if (isset($post[$item])) {
-                $params[$item] = $post[$item];
-            }
+            $params[$item] = isset($p[$item]) ? $p[$item] : null;
         }
 
         if (empty($params)) {
