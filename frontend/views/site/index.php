@@ -10,7 +10,7 @@ $params = \Yii::$app->params;
 <div class="body">
     <!-- Banner -->
     <div class="banner" kk-fixed>
-        <div class="menu-box" kk-menu="#menu" data-pos-x="-15" data-pos-y="-15">
+        <div class="menu-box" kk-menu-lm>
             <div class="menu">
                 <img src="<?= $params['frontend_source'] ?>/img/menu.svg"/>
             </div>

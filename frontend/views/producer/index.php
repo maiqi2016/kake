@@ -10,7 +10,7 @@ $params = \Yii::$app->params;
 
 <header>
     个人中心
-    <div class="menu detail" kk-menu="#menu">
+    <div class="menu detail" kk-menu-lm>
         <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/list.svg"/>
     </div>
 </header>
