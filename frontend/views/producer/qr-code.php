@@ -7,7 +7,7 @@ $params = \Yii::$app->params;
 
 <header>
     我的二维码
-    <div class="menu detail" kk-menu="#menu">
+    <div class="menu detail" kk-menu-lm>
         <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/list.svg"/>
     </div>
 </header>

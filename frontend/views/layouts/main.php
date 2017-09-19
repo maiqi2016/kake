@@ -49,34 +49,87 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
 </script>
 
 <body<?= $ngCtl ?>>
+<div class="all-lm">
+    <!-- Loading -->
+    <div id="loading" class="kk-animate kk-show hidden">
+        <div class="loading-bar loading-bounce kk-animate kk-t2b-show">
+            <div class="in"></div>
+            <div class="out"></div>
+        </div>
+    </div>
 
-<!-- Loading -->
-<div id="loading" class="kk-animate kk-show hidden">
-    <div class="loading-bar loading-bounce kk-animate kk-t2b-show">
-        <div class="in"></div>
-        <div class="out"></div>
+    <!-- Message -->
+    <div id="message" class="kk-animate kk-show hidden">
+        <div class="message-bar kk-animate kk-t2b-show">
+            <p class="message-box"></p>
+        </div>
+    </div>
+
+    <!-- Hit -->
+    <div id="hit" class="hidden">
+        <div class="hit-bar hit-bounce kk-animate">
+            <div class="in"></div>
+            <div class="out"></div>
+        </div>
+    </div>
+
+
+    <!-- Body -->
+    <?php $this->beginBody() ?>
+    <?= $content ?>
+    <?php $this->endBody() ?>
+
+    <?php
+    $minDirectory = (YII_ENV == 'dev' ? null : '_min');
+    $suffix = (YII_ENV == 'dev' ? time() : VERSION);
+
+    $sourceUrl = $params['frontend_source'];
+    $items = [
+        'css',
+        'js'
+    ];
+    foreach ($items as $item) {
+        $variable = 'source' . ucfirst($item);
+        $register = 'register' . ucfirst($item) . 'File';
+
+        if (is_null($this->context->{$variable}) || 'auto' == $this->context->{$variable}) {
+            $source = "/{$item}{$minDirectory}/{$controller}/{$action}.{$item}";
+            $this->{$register}($sourceUrl . $source . "?version=" . $suffix);
+        } elseif (is_array($this->context->{$variable})) {
+            foreach ($this->context->{$variable} as $value) {
+                if (strpos($value, '/') === 0) {
+                    $source = "${sourceUrl}{$value}.{$item}";
+                } else if (strpos($value, 'http:') === 0 || strpos($value, 'https:') === 0) {
+                    $source = $value;
+                } else {
+                    $source = "${sourceUrl}/{$item}{$minDirectory}/{$value}.{$item}";
+                }
+
+                $char = strpos($source, '?') !== false ? '&' : '?';
+                $this->{$register}($source . $char . "version=" . $suffix);
+            }
+        }
+    }
+    ?>
+
+    <!-- Footer -->
+    <div class="hidden">
+        <span ng-init="common({message: '<?= $app->session->getFlash("message") ?>'})"></span>
+        <span ng-init='wxSDK(<?= Yii::$app->wx->js->config([
+            'hideMenuItems',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage'
+        ]) ?>, "<?= $shareTitle ?>", "<?= $shareDescription ?>", "<?= $shareCover ?>")'></span>
     </div>
 </div>
 
-<!-- Message -->
-<div id="message" class="kk-animate kk-show hidden">
-    <div class="message-bar kk-animate kk-t2b-show">
-        <p class="message-box"></p>
-    </div>
-</div>
-
-<!-- Hit -->
-<div id="hit" class="hidden">
-    <div class="hit-bar hit-bounce kk-animate">
-        <div class="in"></div>
-        <div class="out"></div>
-    </div>
-</div>
-
+<!-- 菜单 -->
 <!-- Menu -->
-<div id="menu">
-    <div class="triangle"></div>
+<div class="menu-lm">
+    <!-- 小三角 -->
+    <!-- <div class="triangle"></div> -->
     <div>
+        <p>喀客旅行KAKE</p>
         <a href="<?= Url::to(['site/index']) ?>">
             <img src="<?= $params['frontend_source'] ?>/img/site.svg"/>
             首页
@@ -102,53 +155,6 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
     </div>
 </div>
 
-<!-- Body -->
-<?php $this->beginBody() ?>
-<?= $content ?>
-<?php $this->endBody() ?>
-
-<?php
-$minDirectory = (YII_ENV == 'dev' ? null : '_min');
-$suffix = (YII_ENV == 'dev' ? time() : VERSION);
-
-$sourceUrl = $params['frontend_source'];
-$items = [
-    'css',
-    'js'
-];
-foreach ($items as $item) {
-    $variable = 'source' . ucfirst($item);
-    $register = 'register' . ucfirst($item) . 'File';
-
-    if (is_null($this->context->{$variable}) || 'auto' == $this->context->{$variable}) {
-        $source = "/{$item}{$minDirectory}/{$controller}/{$action}.{$item}";
-        $this->{$register}($sourceUrl . $source . "?version=" . $suffix);
-    } elseif (is_array($this->context->{$variable})) {
-        foreach ($this->context->{$variable} as $value) {
-            if (strpos($value, '/') === 0) {
-                $source = "${sourceUrl}{$value}.{$item}";
-            } else if (strpos($value, 'http:') === 0 || strpos($value, 'https:') === 0) {
-                $source = $value;
-            } else {
-                $source = "${sourceUrl}/{$item}{$minDirectory}/{$value}.{$item}";
-            }
-
-            $char = strpos($source, '?') !== false ? '&' : '?';
-            $this->{$register}($source . $char . "version=" . $suffix);
-        }
-    }
-}
-?>
-
-<!-- Footer -->
-<div class="hidden">
-    <span ng-init="common({message: '<?= $app->session->getFlash("message") ?>'})"></span>
-    <span ng-init='wxSDK(<?= Yii::$app->wx->js->config([
-        'hideMenuItems',
-        'onMenuShareTimeline',
-        'onMenuShareAppMessage'
-    ]) ?>, "<?= $shareTitle ?>", "<?= $shareDescription ?>", "<?= $shareCover ?>")'></span>
-</div>
 </body>
 <script>
     var _hmt = _hmt || [];
