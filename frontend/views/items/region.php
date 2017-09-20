@@ -14,14 +14,14 @@ $params = \Yii::$app->params;
 </header>
 
 <!-- All-hot-aim -->
-<div class="allaim">
+<div class="body clearfix">
 	<ul>
-	<?php foreach ($region as $item): ?>
-	    <a href="<?= Url::to(['items/index', 'region' => $item['id']]) ?>">
-			<li>
-				<img src="<?= current($item['preview_url']) ?>"/>
-			</li>
-		</a>
-	<?php endforeach; ?>
+    	<?php foreach ($region as $item): ?>
+    	    <a href="<?= Url::to(['items/index', 'region' => $item['id']]) ?>">
+    			<li>
+    				<img src="<?= current($item['preview_url']) ?>"/>
+    			</li>
+    		</a>
+    	<?php endforeach; ?>
 	</ul>
 </div>

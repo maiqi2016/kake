@@ -32,7 +32,7 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html ng-app="<?= $ngApp ?>" lang="<?= $app->language ?>">
+<html class="noscroll" ng-app="<?= $ngApp ?>" lang="<?= $app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -49,6 +49,7 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
 </script>
 
 <body<?= $ngCtl ?>>
+
 <div class="all-lm">
     <!-- Loading -->
     <div id="loading" class="kk-animate kk-show hidden">
@@ -57,7 +58,7 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
             <div class="out"></div>
         </div>
     </div>
-
+  
     <!-- Message -->
     <div id="message" class="kk-animate kk-show hidden">
         <div class="message-bar kk-animate kk-t2b-show">
@@ -126,10 +127,10 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
 <!-- 菜单 -->
 <!-- Menu -->
 <div class="menu-lm">
-    <!-- 小三角 -->
+    <!-- Triangle -->
     <!-- <div class="triangle"></div> -->
     <div>
-        <p>喀客旅行KAKE</p>
+        <p class="menuclose">KAKE</p>
         <a href="<?= Url::to(['site/index']) ?>">
             <img src="<?= $params['frontend_source'] ?>/img/site.svg"/>
             首页

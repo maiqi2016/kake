@@ -27,7 +27,7 @@ $params = \Yii::$app->params;
             'order/index',
             'type' => 'completed'
         ]) ?>">
-            <div">
+            <div>
                 <span>已完成</span>
             </div>
         </a>

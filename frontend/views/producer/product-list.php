@@ -14,7 +14,7 @@ $params = \Yii::$app->params;
     </div>
 </header>
 
-<div class="list" kk-copy-text>
+<div class="body" kk-copy-text>
 
     <?php foreach ($list as $item): ?>
     <div class="product">
