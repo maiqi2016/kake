@@ -8,7 +8,7 @@ $params = \Yii::$app->params;
 ?>
 
 <?php if (!empty($producer)): ?>
-    <div class="opening" ng-init="showBody = false; autoHide()" kk-tap="hidden()">
+    <div class="opening" >
         <div class="small_bj">
             <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
         </div>
@@ -22,7 +22,11 @@ $params = \Yii::$app->params;
 
         <div kk-print-text="<?= $producer['name'] ?>" class="txt"></div>
 
-        <img src="<?= $params['frontend_source'] ?>/img/opening/openingarrow.png" class="openingarrow">
+        <div class="out-q" ng-init="showBody = false; autoHide()" kk-tap="hidden()">
+            <div class="in-q"></div>
+        </div>
+
+
     </div>
 <?php endif; ?>
 
@@ -39,7 +43,7 @@ $params = \Yii::$app->params;
                     </a>
                 </ul>
             </form>
-            <div class="menu" kk-menu="#menu"><img src="<?= $params['frontend_source'] ?>/img/menu.svg"></div>
+            <div class="menu" kk-menu-lm><img src="<?= $params['frontend_source'] ?>/img/menu.svg"></div>
         </div>
         <div class="out kk-animate" ng-show="showTab" ng-class="{'kk-show': showTab}">
             <div class="select-area">

@@ -9,11 +9,7 @@ $params = \Yii::$app->params;
 
 <div class="body" ng-init="service.goToTop('.back-top')">
     <div class="banner">
-<<<<<<< Updated upstream
-	    	<div class="menu-box"  kk-menu="#menu" data-pos-x="-15" data-pos-y="-15">
-=======
 	    <div class="menu-box"  kk-menu-lm data-pos-x="-15" data-pos-y="-15">
->>>>>>> Stashed changes
 	    		<div class="menu">
 	            <img src="<?= $params['frontend_source'] ?>/img/menu.svg"/>
 	        </div>
@@ -108,3 +104,4 @@ $params = \Yii::$app->params;
             <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/back-top.svg"/>
         </div>
     </footer>
+</div>
