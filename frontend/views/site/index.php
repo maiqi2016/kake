@@ -6,10 +6,9 @@ use yii\helpers\Url;
 $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'site';
 ?>
-
 <div class="body">
     <!-- Banner -->
-    <div class="banner" kk-fixed>
+    <div class="banner">
         <div class="menu-box" kk-menu-lm>
             <div class="menu">
                 <img src="<?= $params['frontend_source'] ?>/img/menu.svg"/>
