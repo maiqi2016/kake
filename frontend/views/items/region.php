@@ -8,20 +8,20 @@ $params = \Yii::$app->params;
 ?>
 <header>
      全部目的地
-    <div class="menu detail" kk-menu="#menu">
+    <div class="menu detail" kk-menu-lm>
         <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/list.svg"/>
     </div>
 </header>
 
 <!-- All-hot-aim -->
-<div class="allaim">
+<div class="body clearfix">
 	<ul>
-	<?php foreach ($region as $item): ?>
-	    <a href="<?= Url::to(['items/index', 'region' => $item['id']]) ?>">
-			<li>
-				<img src="<?= current($item['preview_url']) ?>"/>
-			</li>
-		</a>
-	<?php endforeach; ?>
+    	<?php foreach ($region as $item): ?>
+    	    <a href="<?= Url::to(['items/index', 'region' => $item['id']]) ?>">
+    			<li>
+    				<img src="<?= current($item['preview_url']) ?>"/>
+    			</li>
+    		</a>
+    	<?php endforeach; ?>
 	</ul>
 </div>
