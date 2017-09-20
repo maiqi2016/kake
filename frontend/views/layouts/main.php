@@ -74,9 +74,17 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
 </div>
 
 <!-- Menu -->
+<<<<<<< Updated upstream
 <div id="menu">
     <div class="triangle"></div>
     <div>
+=======
+<div class="menu-lm">
+    <!-- Triangle -->
+    <!-- <div class="triangle"></div> -->
+    <div>
+        <p class="menuclose">KAKE</p>
+>>>>>>> Stashed changes
         <a href="<?= Url::to(['site/index']) ?>">
             <img src="<?= $params['frontend_source'] ?>/img/site.svg"/>
             首页
