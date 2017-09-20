@@ -32,7 +32,7 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html ng-app="<?= $ngApp ?>" lang="<?= $app->language ?>">
+<html class="noscroll" ng-app="<?= $ngApp ?>" lang="<?= $app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -49,6 +49,18 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
 </script>
 
 <body<?= $ngCtl ?>>
+<<<<<<< Updated upstream
+=======
+
+<div class="all-lm">
+    <!-- Loading -->
+    <div id="loading" class="kk-animate kk-show hidden">
+        <div class="loading-bar loading-bounce kk-animate kk-t2b-show">
+            <div class="in"></div>
+            <div class="out"></div>
+        </div>
+    </div>
+>>>>>>> Stashed changes
 
 <!-- Loading -->
 <div id="loading" class="kk-animate kk-show hidden">
@@ -74,9 +86,17 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
 </div>
 
 <!-- Menu -->
+<<<<<<< Updated upstream
 <div id="menu">
     <div class="triangle"></div>
     <div>
+=======
+<div class="menu-lm">
+    <!-- Triangle -->
+    <!-- <div class="triangle"></div> -->
+    <div>
+        <p class="menuclose">KAKE</p>
+>>>>>>> Stashed changes
         <a href="<?= Url::to(['site/index']) ?>">
             <img src="<?= $params['frontend_source'] ?>/img/site.svg"/>
             首页
