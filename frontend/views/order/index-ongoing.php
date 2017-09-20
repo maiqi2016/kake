@@ -9,7 +9,7 @@ $params = \Yii::$app->params;
 
 <header>
     订单中心
-    <div class="menu detail" kk-menu="#menu">
+    <div class="menu detail" kk-menu-lm>
         <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/list.svg"/>
     </div>
 </header>
@@ -27,7 +27,7 @@ $params = \Yii::$app->params;
             'order/index',
             'type' => 'completed'
         ]) ?>">
-            <div">
+            <div>
                 <span>已完成</span>
             </div>
         </a>

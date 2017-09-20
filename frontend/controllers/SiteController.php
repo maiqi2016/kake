@@ -16,7 +16,10 @@ class SiteController extends GeneralController
     public function actionIndex()
     {
         $this->sourceCss = null;
-        $this->sourceJs = null; // ['/node_modules/vconsole/dist/vconsole.min'];
+        $this->sourceJs = [
+            '/node_modules/alloytouch/transformjs/asset/tick',
+            'site/index'
+        ];
 
         $params = Yii::$app->params;
 
