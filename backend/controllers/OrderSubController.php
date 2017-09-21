@@ -530,7 +530,7 @@ class OrderSubController extends GeneralController
         $info = '<' . $payment . ' : 接口反馈> ' . $info;
         Yii::info('UID:' . $this->user->id . ' -> ' . $info);
 
-        if (!$success) {
+        if ($success) {
             Yii::$app->wx->notice->send([
                 'touser' => $order['openid'],
                 'template_id' => 'X3ZhVd77-4eddoTx2PJzkWAk7Cu0vSqGNXX5sUYbHcg',
@@ -555,9 +555,9 @@ class OrderSubController extends GeneralController
                     ]
                 ]
             ]);
-            Yii::$app->session->setFlash($success ? 'success' : 'danger', $info);
-        } else {
             Yii::$app->session->setFlash('success', $info);
+        } else {
+            Yii::$app->session->setFlash('danger', $info);
         }
 
         $this->goReference($this->getControllerName('index'));
