@@ -32,7 +32,7 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html class="noscroll" ng-app="<?= $ngApp ?>" lang="<?= $app->language ?>">
+<html ng-app="<?= $ngApp ?>" lang="<?= $app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -152,6 +152,7 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
             </a>
         </div>
     </div>
+
 </body>
 <script>
     var _hmt = _hmt || [];
