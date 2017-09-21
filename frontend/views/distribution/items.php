@@ -21,12 +21,15 @@ $params = \Yii::$app->params;
         </div>
 
         <div kk-print-text="<?= $producer['name'] ?>" class="txt"></div>
+<<<<<<< Updated upstream
 
         <div class="out-q" ng-init="showBody = false; autoHide()" kk-tap="hidden()">
             <div class="in-q"></div>
         </div>
 
 
+=======
+>>>>>>> Stashed changes
     </div>
 <?php endif; ?>
 
