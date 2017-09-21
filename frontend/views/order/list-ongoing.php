@@ -29,7 +29,7 @@ $params = \Yii::$app->params;
 
             <?php if (empty($item['payment_state'])): ?>
 
-                <div class="order-status-button">
+                <div class="order-status-button clearfix">
                     <div>
                         <button class="cancel-button" kk-tap="cancelOrder('<?= $item['order_number'] ?>')">取消订单</button>
                         <button class="appointment-button"
@@ -66,7 +66,7 @@ $params = \Yii::$app->params;
                         <p>退款原因:</p>
                         <textarea type="text" ng-model="<?= $sub ?>.remark" placeholder="请填写退款原因"/></textarea>
                     </div>
-                    <div class="invoice-confirm">
+                    <div class="invoice-confirm clearfix">
                         <p></p>
                         <span kk-tap="applyRefund(<?= $item['id'] ?>)">提交</span>
                     </div>
@@ -136,7 +136,7 @@ $params = \Yii::$app->params;
 
                 <div class="confirmation-number kk-animate ng-hide" ng-class="{'kk-b2s-show': <?= $info ?>}"
                      ng-show="<?= $info ?>">
-                    <div class="confirmation-number-name">
+                    <div class="confirmation-number-name clearfix">
                         确认号:
                     </div>
                     <div class="confirmation-number-no"><?= $item['conformation_number'] ?: '请联系客服更新' ?></div>

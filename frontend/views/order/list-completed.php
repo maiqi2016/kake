@@ -59,7 +59,7 @@ $params = \Yii::$app->params;
                         <?php $sub = 'bill[' . $item['id'] . ']'; ?>
                         <?php $company = $sub . '.company' ?>
 
-                        <div class="invoice-name">
+                        <div class="invoice-name clearfix">
                             发票抬头:
                         </div>
                         <div class="invoice-title">
