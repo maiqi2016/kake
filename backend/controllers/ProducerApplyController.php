@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\components\Helper;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * 分销商申请管理
@@ -235,6 +236,30 @@ class ProducerApplyController extends GeneralController
                 $this->thumbCrop($img, 256, 256, true);
             }
 
+            Yii::$app->wx->notice->send([
+                'touser' => $result['openid'],
+                'template_id' => '',
+                'url' => Yii::$app->params['frontend_url'] . Url::toRoute(['producer/index']),
+                'data' => [
+                    'first' => "您的分销商申请已被通过\n",
+                    'keyword1' => [
+                        date('Y-m-d H:i:s'),
+                        '#999'
+                    ],
+                    'keyword2' => [
+                        Helper::integerEncode($result['user_id']),
+                        '#999'
+                    ],
+                    'keyword3' => [
+                        $result['name'],
+                        '#999'
+                    ],
+                    'remark' => [
+                        "\n如有疑问请联系客服 " . Yii::$app->params['company_tel'],
+                        '#fda443'
+                    ]
+                ]
+            ]);
             Yii::$app->session->setFlash('success', '通过申请操作完成');
         }
 

@@ -37,7 +37,7 @@ $params = \Yii::$app->params;
 	                            	<div class="lable">
 	                            		<b ng-class="{'current': <?= $number ?>}"></b>
 	                               	<span class="title"><?= $item['name'] ?></span>
-	                               	<i class="price">￥<?= $item['min_price'] ?><i/>
+	                               	<i class="price">￥<?= $item['min_price'] ?></i>
 	                            	</div>
                             </div>
                             <div class="combo-2 kk-animate ng-hide" ng-class="{'kk-b2s-show': <?= $number ?>}"
@@ -81,6 +81,10 @@ $params = \Yii::$app->params;
             <span> <img src="<?= $params['frontend_source'] ?>/img/classify.svg"/></span>
             联系人信息
         </div>
+        <?php if (!empty($contact)): ?>
+        <p ng-init="buy.user_info.name = '<?= $contact["real_name"] ?>'"></p>
+        <p ng-init="buy.user_info.phone = <?= $contact['phone'] ?>"></p>
+        <?php endif; ?>
         <input type="text" class="input-border" name="name" ng-model="buy.user_info.name" placeholder="姓名"/>
         <input type="number" class="input-border" name="phone" ng-model="buy.user_info.phone" placeholder="手机号码"/>
 

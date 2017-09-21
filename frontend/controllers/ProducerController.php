@@ -175,10 +175,30 @@ class ProducerController extends GeneralController
         ])[0];
 
         $total = count($list);
-        $quota = Helper::money(array_sum(array_column($list, 'commission_quota')), '%s');
+        $quota = 0;
+        foreach ($list as $item) {
+            if ($item['payment_state']) {
+                $quota += ($item['commission_quota'] + $item['commission_quota_out']);
+            } else {
+                $quota += $item['commission_quota_out'];
+            }
+        }
+        $quota = Helper::money($quota, '%s');
         $this->seo(['title' => '分销商管理']);
 
         return $this->render('order-list', compact('list', 'total', 'quota'));
+    }
+
+    /**
+     * ajax 结算
+     */
+    public function actionAjaxSettlement()
+    {
+        $controller = $this->controller('producer-log');
+        $controller::$uid = $this->user->id;
+
+        $result = $controller->settlement();
+        $this->success($result);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\components\Helper;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * Site controller
@@ -82,12 +83,12 @@ class SiteController extends GeneralController
     }
 
     /**
-     * 微信测试代码
+     * 测试代码片段
      *
      * @access public
      * @return void
      */
-    public function actionWx()
+    public function actionDebug()
     {
         $wx = Yii::$app->wx;
 
@@ -119,6 +120,5 @@ class SiteController extends GeneralController
             ],
         ]);
         //*/
-
     }
 }

@@ -2,7 +2,9 @@
 
 namespace backend\controllers;
 
+use common\components\Helper;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * 子订单管理
@@ -367,33 +369,6 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * 通过子订单 ID 获取简单版订单情况
-     *
-     * @access public
-     *
-     * @param integer $order_sub_id
-     *
-     * @return array
-     */
-    public function getOrderBySubId($order_sub_id)
-    {
-        return $this->service('order.detail', [
-            'table' => 'order_sub',
-            'join' => [
-                ['table' => 'order']
-            ],
-            'where' => [
-                ['order_sub.id' => $order_sub_id],
-            ],
-            'select' => [
-                'order.*',
-                'order.price AS total_price',
-                'order_sub.*'
-            ],
-        ]);
-    }
-
-    /**
      * 同意预约
      *
      * @access public
@@ -410,6 +385,38 @@ class OrderSubController extends GeneralController
         if (is_string($result)) {
             Yii::$app->session->setFlash('danger', Yii::t('common', $result));
         } else {
+            Yii::$app->wx->notice->send([
+                'touser' => $result['openid'],
+                'template_id' => 'f4MEfyNJQafoJl70GYAlblo_L0dBhf-E1cwUjGme16U',
+                'url' => null,
+                'data' => [
+                    'first' => "您的预约入住已被通过\n",
+                    'keyword1' => [
+                        $result['name'],
+                        '#999'
+                    ],
+                    'keyword2' => [
+                        '在线预订',
+                        '#999'
+                    ],
+                    'keyword3' => [
+                        $result['check_in_name'],
+                        '#999'
+                    ],
+                    'keyword4' => [
+                        $result['check_in_phone'],
+                        '#999'
+                    ],
+                    'keyword5' => [
+                        $result['check_in_time'],
+                        '#999'
+                    ],
+                    'remark' => [
+                        "\n如有疑问请联系客服 " . Yii::$app->params['company_tel'],
+                        '#fda443'
+                    ]
+                ]
+            ]);
             Yii::$app->session->setFlash('success', '同意预约操作完成');
         }
 
@@ -433,6 +440,38 @@ class OrderSubController extends GeneralController
         if (is_string($result)) {
             Yii::$app->session->setFlash('danger', Yii::t('common', $result));
         } else {
+            Yii::$app->wx->notice->send([
+                'touser' => $result['openid'],
+                'template_id' => 'f4MEfyNJQafoJl70GYAlblo_L0dBhf-E1cwUjGme16U',
+                'url' => null,
+                'data' => [
+                    'first' => "您的预约入住已被拒绝\n",
+                    'keyword1' => [
+                        $result['name'],
+                        '#999'
+                    ],
+                    'keyword2' => [
+                        '在线预订',
+                        '#999'
+                    ],
+                    'keyword3' => [
+                        $result['check_in_name'],
+                        '#999'
+                    ],
+                    'keyword4' => [
+                        $result['check_in_phone'],
+                        '#999'
+                    ],
+                    'keyword5' => [
+                        $result['check_in_time'],
+                        '#999'
+                    ],
+                    'remark' => [
+                        "\n" . $params['remark'] . "\n\n如有疑问请联系客服 " . Yii::$app->params['company_tel'],
+                        '#fda443'
+                    ]
+                ]
+            ]);
             Yii::$app->session->setFlash('success', '拒绝预约操作完成');
         }
 
@@ -448,7 +487,15 @@ class OrderSubController extends GeneralController
      */
     public function actionAgreeRefund($id)
     {
-        $order = $this->getOrderBySubId($id);
+        $order = $this->service('order.agree-refund', [
+            'order_sub_id' => $id,
+            'user_id' => $this->user->id
+        ]);
+
+        if (is_string($order)) {
+            Yii::$app->session->setFlash('danger', Yii::t('common', $order));
+            $this->goReference($this->getControllerName('index'));
+        }
 
         $orderNo = $order['order_number'];
         $refundNo = $order['id'] . 'R' . $orderNo;
@@ -484,17 +531,33 @@ class OrderSubController extends GeneralController
         Yii::info('UID:' . $this->user->id . ' -> ' . $info);
 
         if (!$success) {
-            Yii::$app->session->setFlash('danger', $info);
-        } else {
-            $result = $this->service('order.agree-refund', [
-                'order_sub_id' => $id,
-                'user_id' => $this->user->id
+            Yii::$app->wx->notice->send([
+                'touser' => $order['openid'],
+                'template_id' => 'X3ZhVd77-4eddoTx2PJzkWAk7Cu0vSqGNXX5sUYbHcg',
+                'url' => null,
+                'data' => [
+                    'first' => "您的退款申请已被通过\n",
+                    'keyword1' => [
+                        $order['order_number'],
+                        '#999'
+                    ],
+                    'keyword2' => [
+                        date('Y-m-d H:i:s'),
+                        '#999'
+                    ],
+                    'keyword3' => [
+                        Helper::money($order['price'] / 100, '%s'),
+                        '#999'
+                    ],
+                    'remark' => [
+                        "\n如有疑问请联系客服 " . Yii::$app->params['company_tel'],
+                        '#fda443'
+                    ]
+                ]
             ]);
-            if (is_string($result)) {
-                Yii::$app->session->setFlash('danger', Yii::t('common', $result));
-            } else {
-                Yii::$app->session->setFlash('success', $info);
-            }
+            Yii::$app->session->setFlash($success ? 'success' : 'danger', $info);
+        } else {
+            Yii::$app->session->setFlash('success', $info);
         }
 
         $this->goReference($this->getControllerName('index'));
@@ -517,6 +580,30 @@ class OrderSubController extends GeneralController
         if (is_string($result)) {
             Yii::$app->session->setFlash('danger', Yii::t('common', $result));
         } else {
+            Yii::$app->wx->notice->send([
+                'touser' => $result['openid'],
+                'template_id' => 'X3ZhVd77-4eddoTx2PJzkWAk7Cu0vSqGNXX5sUYbHcg',
+                'url' => null,
+                'data' => [
+                    'first' => "您的退款申请已被拒绝\n",
+                    'keyword1' => [
+                        $result['order_number'],
+                        '#999'
+                    ],
+                    'keyword2' => [
+                        date('Y-m-d H:i:s'),
+                        '#999'
+                    ],
+                    'keyword3' => [
+                        Helper::money($result['price'] / 100, '%s'),
+                        '#999'
+                    ],
+                    'remark' => [
+                        "\n" . $params['remark'] . "\n\n如有疑问请联系客服 " . Yii::$app->params['company_tel'],
+                        '#fda443'
+                    ]
+                ]
+            ]);
             Yii::$app->session->setFlash('success', '拒绝退款操作完成');
         }
 
