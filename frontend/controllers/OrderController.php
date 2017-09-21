@@ -557,6 +557,7 @@ class OrderController extends GeneralController
 
                 return $result;
             }
+            $this->wxTplMessageForPayment($result);
 
             return true;
         });
@@ -598,6 +599,9 @@ class OrderController extends GeneralController
 
         // 微信浏览器
         if (Helper::weChatBrowser()) {
+
+            $this->mustLogin();
+
             $this->sourceCss = ['order/open-with-browser'];
             $this->sourceJs = ['order/index'];
             $this->seo(['title' => '支付宝支付']);
@@ -696,10 +700,14 @@ class OrderController extends GeneralController
 
         if (is_string($result)) {
             Yii::error(Yii::t('common', $result));
+
+            return null;
         }
+
+        $this->wxTplMessageForPayment($result);
     }
 
-    // --↓↓- Common Payment -↓↓--
+    // --↓↓- Common -↓↓--
 
     /**
      * 支付结果页面
@@ -707,7 +715,7 @@ class OrderController extends GeneralController
      * @param string $order_number
      * @param string $payment_method
      *
-     * @return void
+     * @return string
      */
     public function actionPayResult($order_number, $payment_method = 'wx')
     {
@@ -715,6 +723,10 @@ class OrderController extends GeneralController
             $this->error(Yii::t('common', 'param illegal', ['param' => 'payment_method']));
         }
 
+        $this->sourceCss = null;
+        $this->sourceJs = ['order/index'];
+
+        /*
         $this->message([
             'payment with problems',
             'action1' => [
@@ -728,5 +740,93 @@ class OrderController extends GeneralController
                 ], 'order/' . $payment_method . '-pay/', $payment_method == 'wx' ? true : false)
             ]
         ], '支付结果');
+        */
+
+        return $this->render('pay-result', [
+            'link_first' => Url::to(['order/index']),
+            'link_second' => $this->createSafeLink([
+                'order_number' => $order_number
+            ], 'order/' . $payment_method . '-pay/', $payment_method == 'wx' ? true : false)
+        ]);
+    }
+
+    /**
+     * 发送微信模板消息
+     *
+     * @access public
+     *
+     * @param array $result
+     *
+     * @return void
+     */
+    public function wxTplMessageForPayment($result)
+    {
+        $wx = Yii::$app->wx;
+
+        if (!empty($result['user_openid'])) {
+            $wx->notice->send([
+                'touser' => $result['user_openid'],
+                'template_id' => 'sURDDDE9mymmFni3-zKEyPmPl4pid3Ttf42rrnR_8ZI',
+                'url' => Yii::$app->params['frontend_url'] . Url::toRoute(['order/index']),
+                'data' => [
+                    'first' => "订单支付成功\n",
+                    'keyword1' => [
+                        $result['name'],
+                        '#999'
+                    ],
+                    'keyword2' => [
+                        '　' . $result['username'],
+                        '#999'
+                    ],
+                    'keyword3' => [
+                        '进入平台菜单>订单中心预约',
+                        '#999'
+                    ],
+                    'keyword4' => [
+                        $result['sub_total'],
+                        '#999'
+                    ],
+                    'keyword5' => [
+                        Helper::money($result['price'] / 100, '%s'),
+                        '#999'
+                    ],
+                    'remark' => [
+                        "\n如有疑问请联系客服 " . Yii::$app->params['company_tel'],
+                        '#fda443'
+                    ]
+                ],
+            ]);
+        }
+
+        if (!empty($result['producer_openid'])) {
+            $wx->notice->send([
+                'touser' => $result['producer_openid'],
+                'template_id' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
+                'url' => Yii::$app->params['frontend_url'] . Url::toRoute(['producer/order-list']),
+                'data' => [
+                    'first' => "您有新的分销订单产生\n",
+                    'keyword1' => [
+                        date('Y-m-d H:i:s'),
+                        '#999'
+                    ],
+                    'keyword2' => [
+                        $result['payment_method'] ? '支付宝支付' : '微信支付',
+                        '#999'
+                    ],
+                    'keyword3' => [
+                        $result['order_number'],
+                        '#999'
+                    ],
+                    'keyword4' => [
+                        Helper::money($result['price'] / 100, '%s'),
+                        '#999'
+                    ],
+                    'remark' => [
+                        "\n如有疑问请联系客服 " . Yii::$app->params['company_tel'],
+                        '#fda443'
+                    ]
+                ],
+            ]);
+        }
     }
 }
