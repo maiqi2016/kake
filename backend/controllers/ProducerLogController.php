@@ -610,19 +610,24 @@ class ProducerLogController extends GeneralController
             $product = $value['product_id'];
             $value['counter'] = 0;
             $value['commission_quota'] = 0;
+            $value['commission_quota_out'] = 0;
 
-            if (empty($counter[$product]) || empty($value['commission_data'])) {
+            if (empty($value['commission_data'])) {
                 continue;
             }
 
             $count = $value['counter'] = $counter[$product];
+            foreach ($value['commission_data'] as $key => $item) {
 
-            $value['commission_quota'] = 0;
-            foreach ($value['commission_data'] as $item) {
+                $in = $value['amount_in'];
+                $out = $value['amount_out'];
+                $total = $in + $out;
+
+                if (!$key) {
+                    $value['commission_quota_out'] = self::calCommission($value['type'], $out, $total, $item['commission']);
+                }
+
                 if ($count >= $item['from_sales'] && (empty($item['to_sales']) || $count <= $item['to_sales'])) {
-                    $in = $value['amount_in'];
-                    $total = $in + $value['amount_out'];
-
                     $value['commission_quota'] = self::calCommission($value['type'], $in, $total, $item['commission']);
                     break;
                 }
