@@ -6,6 +6,7 @@ use yii\helpers\Url;
 $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'site';
 ?>
+
 <div class="body">
     <!-- Banner -->
     <div class="banner">
