@@ -21,15 +21,6 @@ $params = \Yii::$app->params;
         </div>
 
         <div kk-print-text="<?= $producer['name'] ?>" class="txt"></div>
-<<<<<<< Updated upstream
-
-        <div class="out-q" ng-init="showBody = false; autoHide()" kk-tap="hidden()">
-            <div class="in-q"></div>
-        </div>
-
-
-=======
->>>>>>> Stashed changes
     </div>
 <?php endif; ?>
 
@@ -92,7 +83,7 @@ $params = \Yii::$app->params;
                         <a href="<?= Url::to(['detail/index', 'id' => $item['id']]) ?>">
                             <div class="photo">
                                 <img src="<?= current($item['cover_preview_url']) ?>">
-                                <div class="price"><span class="s">￥</span><span class="b"><?= $item['min_price'] ?></span></div>
+                                <span class="price"><i>￥</i><?= $item['min_price'] ?></span>
                                 <p><?= $item['name'] ?></p>
                             </div>
                         </a> 
