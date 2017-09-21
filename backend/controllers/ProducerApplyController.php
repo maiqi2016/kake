@@ -238,7 +238,7 @@ class ProducerApplyController extends GeneralController
 
             Yii::$app->wx->notice->send([
                 'touser' => $result['openid'],
-                'template_id' => '',
+                'template_id' => 'NuIJGBNJTRsFArlK5ZfAWweTbUW1teHcEFk4pL4XEfY',
                 'url' => Yii::$app->params['frontend_url'] . Url::toRoute(['producer/index']),
                 'data' => [
                     'first' => "您的分销商申请已被通过\n",
