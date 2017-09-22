@@ -60,6 +60,20 @@ class ProductPackageController extends GeneralController
                     return ['id' => $record['product_id']];
                 }
             ],
+            [
+                'alt' => '排序',
+                'level' => 'default',
+                'icon' => 'sort-by-attributes',
+                'type' => 'script',
+                'value' => '$.sortField',
+                'params' => function ($record) {
+                    return [
+                        'product-package.sort',
+                        $record['id'],
+                        $record['sort']
+                    ];
+                },
+            ]
         ]);
     }
 
@@ -132,7 +146,8 @@ EOF
     {
         return [
             'product_id',
-            'price'
+            'price',
+            'sort'
         ];
     }
 
@@ -171,6 +186,7 @@ EOF
                 ],
                 'info'
             ],
+            'sort' => 'code',
             'purchase_limit' => [
                 'code',
                 'empty',
@@ -225,6 +241,9 @@ EOF
                 'elem' => 'select',
                 'tip' => '是否参与最低价格显示',
                 'value' => 1
+            ],
+            'sort' => [
+                'placeholder' => '大于零的整数，越小越靠前'
             ],
             'purchase_limit' => [
                 'placeholder' => '0表示不限制',
@@ -361,6 +380,11 @@ EOF
                 'product.state AS status',
                 'hotel.name AS hotel_name',
                 'product_package.*'
+            ],
+            'order' => [
+                'product_package.state DESC',
+                'ISNULL(product_package.sort), product_package.sort ASC',
+                'product_package.update_time DESC'
             ]
         ]);
     }
