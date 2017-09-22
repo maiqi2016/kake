@@ -55,6 +55,9 @@ class ProducerProductController extends GeneralController
             [
                 'text' => '新增分销产品',
                 'value' => 'producer-product/add',
+                'params' => [
+                    'producer_id' => Yii::$app->request->get('producer_id')
+                ],
                 'icon' => 'plus'
             ]
         ];
@@ -123,6 +126,10 @@ class ProducerProductController extends GeneralController
     public static function myFilter()
     {
         return [
+            'producer_id' => [
+                'elem' => 'input',
+                'equal' => true
+            ],
             'product_id' => [
                 'elem' => 'input',
                 'equal' => true
@@ -279,7 +286,8 @@ class ProducerProductController extends GeneralController
         $assist['producer_id'] = [
             'readonly' => true,
             'same_row' => true,
-            'label' => 2
+            'label' => 2,
+            'value' => intval(Yii::$app->request->get('producer_id')) ?: null,
         ];
         $assist['select_producer'] = [
             'title' => false,

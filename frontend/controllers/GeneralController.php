@@ -533,10 +533,13 @@ class GeneralController extends MainController
         ], function () use ($page, $pageSize, $time, $options) {
             $where = [];
 
+            $condition = DetailController::$productListCondition;
+
             // 具体 id 列表
             if (!empty($options['ids'])) {
                 $ids = is_array($options['ids']) ? $options['ids'] : explode(',', $options['ids']);
                 $where[] = ['product.id' => $ids];
+                $condition['order'] = 'field(product.id, ' . implode(',', $ids) . ')';
             }
 
             // 表现方式
@@ -601,7 +604,6 @@ class GeneralController extends MainController
                 ];
             }
 
-            $condition = DetailController::$productListCondition;
             $condition['where'] = array_merge($condition['where'], $where);
 
             if (!empty($options['hot'])) {
@@ -678,7 +680,7 @@ class GeneralController extends MainController
      */
     public function listProducerProduct($producer_id, $page = null, $limit = null)
     {
-        list($offset, $page) = Helper::page($page, $limit);
+        list($offset, $limit, $page) = Helper::page($page, $limit);
 
         $product = $this->service('producer.list-product-ids', [
             'producer_id' => $producer_id,
