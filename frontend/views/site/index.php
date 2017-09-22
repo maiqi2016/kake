@@ -59,7 +59,7 @@ $params = \Yii::$app->params;
         <div class="carousel kake-theme" id="carousel-scroller-aim" kk-scroll data-callback-change="effect">
             <div class="carousel-scroller scroll">
                 <?php foreach ($plateList as $i => $item): ?>
-                    <div kk-spread>
+                    <div>
                         <a href="<?= Url::to([
                             'items/index',
                             'plate' => $item['id']
