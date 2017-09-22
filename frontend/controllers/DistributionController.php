@@ -71,8 +71,8 @@ class DistributionController extends GeneralController
         }
 
         $top = null;
-        $topNumber = 2;
-        list($html, $over) = $this->renderItemsPage($uid, 1, function ($list, $limit) use ($topNumber, &$top) {
+        list($html, $over) = $this->renderItemsPage($uid, 1, function ($list, $limit) use (&$top) {
+            $topNumber = count($list) >= 5 ? 4 : 2;
             $top = array_slice($list, 0, $topNumber);
 
             return [

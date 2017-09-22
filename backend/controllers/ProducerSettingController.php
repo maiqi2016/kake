@@ -83,7 +83,9 @@ class ProducerSettingController extends GeneralController
                 'value' => 'producer-product/index',
                 'level' => 'info',
                 'icon' => 'link',
-                'params' => ['username']
+                'params' => function($record) {
+                    return ['producer_id' => $record['producer_id']];
+                }
             ],
             [
                 'text' => '用户',
