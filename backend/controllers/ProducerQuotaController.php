@@ -173,6 +173,10 @@ class ProducerQuotaController extends GeneralController
             return '请输入申请提现金额';
         }
 
+        if ($quota < Yii::$app->params['withdraw_min']) {
+            return '提现金额不能小于 ' . Yii::$app->params['withdraw_min'];
+        }
+
         // 判断是否有申请中的提现记录
         $controller = $this->controller('producer-withdraw');
         $withdraw = $controller->showFormWithRecord([
