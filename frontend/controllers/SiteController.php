@@ -17,10 +17,7 @@ class SiteController extends GeneralController
     public function actionIndex()
     {
         $this->sourceCss = null;
-        $this->sourceJs = [
-            '/node_modules/alloytouch/transformjs/asset/tick',
-            'site/index'
-        ];
+        $this->sourceJs = null;
 
         $params = Yii::$app->params;
 

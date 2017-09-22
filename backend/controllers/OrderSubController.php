@@ -538,7 +538,7 @@ class OrderSubController extends GeneralController
                 'data' => [
                     'first' => "您的退款申请已被通过\n",
                     'keyword1' => [
-                        $order['order_number'],
+                        '　' . $order['order_number'],
                         '#999'
                     ],
                     'keyword2' => [
@@ -587,7 +587,7 @@ class OrderSubController extends GeneralController
                 'data' => [
                     'first' => "您的退款申请已被拒绝\n",
                     'keyword1' => [
-                        $result['order_number'],
+                        '　' . $result['order_number'],
                         '#999'
                     ],
                     'keyword2' => [
