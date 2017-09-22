@@ -7,7 +7,6 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'generic';
 ?>
 
-
 <header>
     个人中心
     <div class="menu detail" kk-menu-lm>
