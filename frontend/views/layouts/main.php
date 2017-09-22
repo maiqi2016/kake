@@ -124,33 +124,30 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
 
     <!-- Menu -->
     <div class="menu-lm">
-        <!-- Triangle -->
-        <!-- <div class="triangle"></div> -->
-        <div>
-            <p class="menuclose">KAKE</p>
-            <a href="<?= Url::to(['site/index']) ?>">
-                <img src="<?= $params['frontend_source'] ?>/img/site.svg"/>
-                首页
+        <p class="menuclose">KAKE</p>
+        <a href="<?= Url::to(['site/index']) ?>">
+            <img src="<?= $params['frontend_source'] ?>/img/site.svg"/>
+            首页
+        </a>
+        <a href="<?= Url::to(['order/index']) ?>" class="hr">
+            <img class="order-center" src="<?= $params['frontend_source'] ?>/img/order-center.svg"/>
+            订单中心
+        </a>
+        <?php if (!empty($this->params['user_info']->role) && $this->params['user_info']->role <= 10): ?>
+            <a href="<?= Url::to(['producer/index']) ?>" class="hr">
+                <img src="<?= $params['frontend_source'] ?>/img/producer.svg"/>
+                分销管理
             </a>
-            <a href="<?= Url::to(['order/index']) ?>" class="hr">
-                <img class="order-center" src="<?= $params['frontend_source'] ?>/img/order-center.svg"/>
-                订单中心
-            </a>
-            <?php if (!empty($this->params['user_info']->role) && $this->params['user_info']->role <= 10): ?>
-                <a href="<?= Url::to(['producer/index']) ?>" class="hr">
-                    <img src="<?= $params['frontend_source'] ?>/img/producer.svg"/>
-                    分销管理
-                </a>
-            <?php endif; ?>
-            <a href="tel:<?= $params['company_tel'] ?>" class="hr">
-                <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
-                咨询客服
-            </a>
-            <a href="<?= SsoClient::$ssoHost ?><?= Url::toRoute(['auth/logout']) ?>" class="hr">
-                <img src="<?= $params['frontend_source'] ?>/img/exit.svg"/>
-                退出登录
-            </a>
-        </div>
+        <?php endif; ?>
+        <a href="tel:<?= $params['company_tel'] ?>" class="hr">
+            <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
+            咨询客服
+        </a>
+        <a href="<?= SsoClient::$ssoHost ?><?= Url::toRoute(['auth/logout']) ?>" class="hr">
+            <img src="<?= $params['frontend_source'] ?>/img/exit.svg"/>
+            退出登录
+        </a>
+        <!-- <p><input type="text"></p> -->
     </div>
 
 </body>
