@@ -42,6 +42,13 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
     <title><?= $title ?></title>
     <?php $this->head() ?>
 </head>
+<script type="text/javascript">
+    function setRem(){
+        // 设置rem
+        document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + 'px';
+    }
+    setRem();
+</script>
 
 <script type="text/javascript">
     var baseUrl = '<?= $params["frontend_url"];?>';
