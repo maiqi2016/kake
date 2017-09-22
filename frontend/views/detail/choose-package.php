@@ -118,9 +118,6 @@ $params = \Yii::$app->params;
             </li>
         </ul>
     </div>
-    <div class="blank blank-bottom">
-
-    </div>
 </div>
 
 <footer>
