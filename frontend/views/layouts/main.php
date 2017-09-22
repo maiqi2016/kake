@@ -125,6 +125,11 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
     <!-- Menu -->
     <div class="menu-lm">
         <p class="menuclose">KAKE</p>
+        <form class="search" id="box" action="/">
+            <input type="hidden" name="r" value="items/index">
+            <input type="search" name="keyword" placeholder="目的地">
+            <!-- <img src="<?= $params['frontend_source'] ?>/img/search.svg"> -->
+        </form>
         <a href="<?= Url::to(['site/index']) ?>">
             <img src="<?= $params['frontend_source'] ?>/img/site.svg"/>
             首页
@@ -147,7 +152,6 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
             <img src="<?= $params['frontend_source'] ?>/img/exit.svg"/>
             退出登录
         </a>
-        <!-- <p><input type="text"></p> -->
     </div>
 
 </body>
