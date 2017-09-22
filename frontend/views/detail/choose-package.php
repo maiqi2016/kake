@@ -32,10 +32,13 @@ $params = \Yii::$app->params;
                     <?php if ($item['min_purchase_limit'] != 0): ?>
                         <li class="combo_1">
                             <?php $_item = '{id: ' . $item['id'] . ', number: 1, price: ' . $item['min_price'] . '}'; ?>
-                            <div class="combo-1"
-                                 kk-tap="<?= $package ?> = (<?= $number ?> ? null : <?= $_item ?>); calPrice()">
+                            <div class="combo-1">
 	                            	<div class="lable">
-	                            		<b ng-class="{'current': <?= $number ?>}"></b>
+	                            		<div class="click-b" 
+                                            kk-tap="<?= $package ?> = (<?= $number ?> ? null : <?= $_item ?>); calPrice()">
+                                            <b  ng-class="{'current': <?= $number ?>}">
+                                            </b>
+                                        </div>
 	                               	<span class="title"><?= $item['name'] ?></span>
 	                               	<i class="price">￥<?= $item['min_price'] ?></i>
 	                            	</div>
@@ -115,7 +118,7 @@ $params = \Yii::$app->params;
             </li>
         </ul>
     </div>
-    <div class="blank ">
+    <div class="blank blank-bottom">
 
     </div>
 </div>
