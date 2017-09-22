@@ -25,7 +25,7 @@ $params = \Yii::$app->params;
 
     <div class="blank"></div>
 
-    <div class="withdraw" ng-init="money.quota = <?= $quota ?>">
+    <div class="withdraw" ng-init="money.quota = <?= $quota ?>; money.withdrawBegin = <?= $params['withdraw_min'] ?>">
         <div class="account1 common">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/acount.svg">
             <p class="txt">提现账号</p>
@@ -33,7 +33,7 @@ $params = \Yii::$app->params;
         </div>
         <div class="account2 common">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/withdraw-money.svg">
-            <p class="p1">提现余额</p>
+            <p class="p1">提现金额 (≥{{money.withdrawBegin}})</p>
             <div class="txt2">
                 <span class="s1">￥</span>
                 <input type="number" ng-model="money.withdraw" class="s2">
