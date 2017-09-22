@@ -55,4 +55,5 @@ return [
     'distribution_items_limit' => 8,
 
     'commission_min_price' => 99,
+    'withdraw_min' => 100,
 ];

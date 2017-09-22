@@ -87,7 +87,7 @@ $params = \Yii::$app->params;
                     </div>
                     <div class="invoice-address">
                     	<p>入住时间:</p>
-                        <input type="date"  ng-model="<?= $sub ?>.date" placeholder="点我选择入住日期" onchange="this.className=(this.value!=''?'has-value':'')" style="background: url(../../../vendor/bower-asset/bootstrap/docs/examples/screenshots/carousel.jpg);"/>
+                        <input type="date"  ng-model="<?= $sub ?>.date" placeholder="点我选择入住日期" onchange="this.className=(this.value !== '' ? 'has-value' : '')" style="background: none"/>
                     </div>
                     <div class="invoice-confirm">
                         <p></p>
