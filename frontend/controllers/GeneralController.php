@@ -684,8 +684,8 @@ class GeneralController extends MainController
 
         $product = $this->service('producer.list-product-ids', [
             'producer_id' => $producer_id,
-            'limit' => $limit ?: Yii::$app->params['distribution_items_limit'],
-            'page' => $page
+            'page_number' => $page,
+            'limit' => ($limit ?: Yii::$app->params['distribution_items_limit'])
         ]);
         if (empty($product)) {
             return $product;

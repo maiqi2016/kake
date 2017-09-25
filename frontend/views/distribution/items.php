@@ -7,25 +7,23 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'distribution';
 ?>
 
-<?php if (!empty($producer)): ?>
-    <div class="opening" ng-init="showBody = false; autoHide()" kk-tap="hidden()">
-        <div class="opening_bj">
-            <img src="<?= $params['frontend_source'] ?>/img/opening/opening_bj.jpg" class="opening_bg">
-        </div>
-        <div class="small_bj">
-            <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
-        </div>
-        <div class="hang">
-            <img src="<?= $params['frontend_source'] ?>/img/opening/hang.png">
-        </div>
-        <img class="photo" src="<?= current($producer['logo_preview_url']) ?>">
-        <div class="guangquan">
-            <img src="<?= $params['frontend_source'] ?>/img/opening/guangquan2.png">
-        </div>
-
-        <div kk-print-text="<?= $producer['name'] ?>" class="txt"></div>
+<div class="opening" ng-show="showAnimate" ng-init="autoHide()" kk-tap="hidden()">
+    <div class="opening_bj">
+        <img src="<?= $params['frontend_source'] ?>/img/opening/opening_bj.jpg" class="opening_bg">
     </div>
-<?php endif; ?>
+    <div class="small_bj">
+        <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
+    </div>
+    <div class="hang">
+        <img src="<?= $params['frontend_source'] ?>/img/opening/hang.png">
+    </div>
+    <img class="photo" src="<?= current($producer['logo_preview_url']) ?>">
+    <div class="guangquan">
+        <img src="<?= $params['frontend_source'] ?>/img/opening/guangquan2.png">
+    </div>
+
+    <div kk-print-text="<?= $producer['name'] ?>" class="txt"></div>
+</div>
 
 <div ng-show="showBody">
     <div class="header" ng-init='hotel = <?= json_encode($hotel, JSON_UNESCAPED_UNICODE) ?>'>
