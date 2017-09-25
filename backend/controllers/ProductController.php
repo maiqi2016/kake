@@ -468,6 +468,9 @@ class ProductController extends GeneralController
     {
         return [
             'id' => 'code',
+            'hotel_name' => [
+                'title' => '酒店名称'
+            ],
             'title',
             'producer' => [
                 'hidden',

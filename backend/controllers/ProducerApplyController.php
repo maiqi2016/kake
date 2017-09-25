@@ -228,11 +228,11 @@ class ProducerApplyController extends GeneralController
             Yii::$app->session->setFlash('danger', Yii::t('common', $result));
         } else {
 
-            if (!empty($result['avatar'])) {
-                $url = Yii::$app->params['upload_path'];
+            $result = $result['avatar'];
 
-                $avatar = $result['avatar'];
-                $img = Helper::joinString('/', $url, $avatar['deep_path'], $avatar['filename']);
+            if (!empty($result['deep_path'])) {
+                $url = Yii::$app->params['upload_path'];
+                $img = Helper::joinString('/', $url, $result['deep_path'], $result['filename']);
                 $this->thumbCrop($img, 256, 256, true);
             }
 
