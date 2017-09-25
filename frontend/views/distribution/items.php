@@ -73,11 +73,11 @@ $params = \Yii::$app->params;
     </div>   
 
     <div class="body">
-        <div class="product-one">
+        <div class="product-one clearfix">
             <div class="line"></div>
             <div class="title">产品列表</div>
             <div class="product-detail">
-                <ul class="clearfix"> 
+                <ul class="cleafix">
                 <?php foreach ($top as $item): ?>
                     <li>
                         <a href="<?= Url::to(['detail/index', 'id' => $item['id']]) ?>">
@@ -93,7 +93,7 @@ $params = \Yii::$app->params;
             </div>
         </div>
 
-        <ul class="product-two" kk-ajax-load="distribution/ajax-items" data-over="<?= $over ?>" data-params="uid=<?= $uid ?>">
+        <ul class="product-two clearfix" kk-ajax-load="distribution/ajax-items" data-over="<?= $over ?>" data-params="uid=<?= $uid ?>">
             <?= trim($html) ?>
         </ul>
     </div>
