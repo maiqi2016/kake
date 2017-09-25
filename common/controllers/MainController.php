@@ -1285,6 +1285,29 @@ class MainController extends Controller
         return $path;
     }
 
+    /**
+     * 渲染模态框
+     *
+     * @access public
+     *
+     * @param string $view
+     * @param array  $params
+     * @param string $title
+     *
+     * @return bool
+     */
+    public function modal($view, $params = [], $title = null)
+    {
+        $tpl = Yii::$app->getViewPath() . DS . ltrim($view, '/') . '.php';
+        $content = $this->renderFile($tpl, $params);
+        $this->success([
+            'title' => $title,
+            'message' => $content
+        ]);
+
+        return true;
+    }
+
     // --- Display ---
 
     /**
