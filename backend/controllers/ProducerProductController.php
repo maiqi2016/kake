@@ -82,15 +82,22 @@ class ProducerProductController extends GeneralController
         return array_merge(parent::indexOperation(), [
             [
                 'text' => '二维码',
+                'level' => 'success',
+                'icon' => 'qrcode',
                 'type' => 'script',
                 'value' => '$.showQrCode',
                 'params' => function ($record) {
-                    $url = "${record['link_url']}&channel=${record['channel']}";
-
-                    return [$url];
-                },
-                'level' => 'success',
-                'icon' => 'qrcode'
+                    return ["${record['link_url']}&channel=${record['channel']}"];
+                }
+            ],
+            [
+                'alt' => '复制推广链接',
+                'level' => 'default copy',
+                'icon' => 'copy',
+                'type' => 'attr',
+                'params' => function ($record) {
+                    return ['data-clipboard-text' => "${record['link_url']}&channel=${record['channel']}"];
+                }
             ],
             [
                 'alt' => '排序',
@@ -565,6 +572,10 @@ class ProducerProductController extends GeneralController
      */
     public function beforeAction($action)
     {
+        if ($action->id == 'index') {
+            $this->sourceJs = ['/node_modules/clipboard/dist/clipboard.min'];
+        }
+
         parent::beforeAction($action);
         self::$uid = $this->user->id;
 
