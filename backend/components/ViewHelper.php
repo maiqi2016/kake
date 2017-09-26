@@ -162,12 +162,18 @@ class ViewHelper extends Object
                 $params = Helper::pullSome($item, $params);
             }
 
+            $attrStr = null;
             if ($type == 'url') {
                 $url = strpos($value['value'], '/') ? $value['value'] : ($controller . '/' . $value['value']);
                 $url = Url::to(array_merge([$url], $params));
-            } else {
+            } else if ($type == 'script') {
                 $params = $params ? self::escapeParams($params) : '';
                 $url = 'javascript:' . self::escapeScript($value['value']) . $params . ';';
+            } else if ($type == 'attr') {
+                $url = 'javascript:void(null)';
+                foreach ($params as $name => $v) {
+                    $attrStr .= ' ' . $name . '=\'' . $v . '\'';
+                }
             }
 
             $icon = empty($value['icon']) ? null : '<span class="glyphicon glyphicon-' . $value['icon'] . '"></span>';
@@ -180,7 +186,7 @@ class ViewHelper extends Object
             $alt = Helper::emptyDefault($value, 'alt');
 
             empty($value['text']) && $value['text'] = null;
-            $buttons .= "<a href='{$url}' class='btn btn-{$level} {$_size}' title='{$alt}'>{$icon} {$value['text']}</a>" . PHP_EOL;
+            $buttons .= "<a href='{$url}' class='btn btn-{$level} {$_size}' title='{$alt}'{$attrStr}>{$icon} {$value['text']}</a>" . PHP_EOL;
         }
 
         return $buttons;
