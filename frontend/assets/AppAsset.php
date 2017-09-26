@@ -37,6 +37,7 @@ class AppAsset extends AssetBundle
         $this->js = [
             "node_modules/jquery/dist/jquery.min.js?version=" . $suffix,
             "node_modules/angular/angular.min.js?version=" . $suffix,
+            "node_modules/bootstrap/dist/js/bootstrap.js?version=" . $suffix,
             "node_modules/alloytouch/alloy_touch.js?version=" . $suffix,
             "node_modules/alloyfinger/alloy_finger.js?version=" . $suffix,
             "node_modules/alloyfinger/transformjs/transform.js?version=" . $suffix,
