@@ -233,6 +233,15 @@ class ProductController extends GeneralController
                 'icon' => 'qrcode'
             ],
             [
+                'alt' => '复制推广链接',
+                'level' => 'default copy',
+                'icon' => 'copy',
+                'type' => 'attr',
+                'params' => function ($record) {
+                    return ['data-clipboard-text' => $record['link_url']];
+                }
+            ],
+            [
                 'alt' => '排序',
                 'level' => 'default',
                 'icon' => 'sort-by-attributes',
@@ -949,7 +958,8 @@ class ProductController extends GeneralController
             'jquery.ajaxupload',
             'ckeditor/ckeditor',
             '/node_modules/sortablejs/Sortable.min',
-            '/node_modules/cropper/dist/cropper.min'
+            '/node_modules/cropper/dist/cropper.min',
+            '/node_modules/clipboard/dist/clipboard.min'
         ];
         $this->sourceCss = ['/node_modules/cropper/dist/cropper.min'];
 
