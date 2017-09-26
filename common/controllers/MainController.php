@@ -1300,10 +1300,11 @@ class MainController extends Controller
     {
         $tpl = Yii::$app->getViewPath() . DS . ltrim($view, '/') . '.php';
         $content = $this->renderFile($tpl, $params);
-        $this->success([
-            'title' => $title,
-            'message' => $content
-        ]);
+
+        $response = ['message' => $content];
+        $title && $response['title'] = $title;
+
+        $this->success($response);
 
         return true;
     }

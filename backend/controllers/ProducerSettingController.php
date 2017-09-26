@@ -478,7 +478,7 @@ class ProducerSettingController extends GeneralController
         // 生成封面图附件地址
         if (!empty($record['logo_attachment_id'])) {
             $record = $this->createAttachmentUrl($record, ['logo_attachment_id' => 'logo']);
-        } else {
+        } else if (!empty($record['head_img_url'])) {
             $record['logo_preview_url'][1] = $record['head_img_url'];
         }
 
