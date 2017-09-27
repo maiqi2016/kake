@@ -497,6 +497,10 @@ class OrderController extends GeneralController
      */
     public function actionWxPay()
     {
+        if (!Helper::weChatBrowser()) {
+            $this->error(Yii::t('common', 'payment with wechat must on the client'));
+        }
+
         $params = $this->validateSafeLink();
         $order = $this->getOrder($params['order_number'], 'order_number');
 
@@ -758,22 +762,6 @@ class OrderController extends GeneralController
 
         $this->sourceCss = null;
         $this->sourceJs = ['order/index'];
-
-        /*
-        $this->message([
-            'payment with problems',
-            'action1' => [
-                'text' => '已经完成',
-                'router' => ['order/index']
-            ],
-            'action2' => [
-                'text' => '重新支付',
-                'router' => $this->createSafeLink([
-                    'order_number' => $order_number
-                ], 'order/' . $payment_method . '-pay/', $payment_method == 'wx' ? true : false)
-            ]
-        ], '支付结果');
-        */
 
         return $this->render('pay-result', [
             'link_first' => Url::to(['order/index']),
