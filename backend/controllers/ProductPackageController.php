@@ -190,11 +190,21 @@ EOF
             'purchase_limit' => [
                 'code',
                 'empty',
-                'not_set_info' => '<span class="not-set">+∞</span>'
+                'not_set_info' => '<span class="not-set">+∞</span>',
+                'tip'
             ],
             'info' => [
                 'max-width' => '250px',
                 'tpl' => '<pre>%s</pre>'
+            ],
+            'verify_sold' => [
+                'code',
+                'color' => [
+                    0 => 'default',
+                    1 => 'primary'
+                ],
+                'info',
+                'tip'
             ],
             'state' => [
                 'code',
@@ -255,6 +265,10 @@ EOF
                 'row' => 8,
                 'placeholder' => '256个字以内'
             ],
+            'verify_sold' => [
+                'elem' => 'select',
+                'value' => 0
+            ],
             'state' => [
                 'elem' => 'select',
                 'value' => 1
@@ -285,6 +299,9 @@ EOF
                 'tip' => '是否参与最低价格显示',
                 'value' => 1
             ],
+            'sort' => [
+                'placeholder' => '大于零的整数，越小越靠前'
+            ],
             'purchase_limit' => [
                 'placeholder' => '0表示不限制',
                 'tip' => '以用户为单位进行限购',
@@ -295,6 +312,10 @@ EOF
                 'label' => 8,
                 'row' => 8,
                 'placeholder' => '256个字以内'
+            ],
+            'verify_sold' => [
+                'elem' => 'select',
+                'value' => 0
             ]
         ];
     }
