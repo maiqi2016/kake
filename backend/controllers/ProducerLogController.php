@@ -31,8 +31,8 @@ class ProducerLogController extends GeneralController
     public static $uid;
 
     // 标记
-    public static $success = '<span class="text-success">✔</span>';
-    public static $fail = '<span class="text-danger">✘</span>';
+    public static $success = '<span class="text-success">Yes</span>';
+    public static $fail = '<span class="text-danger">No</span>';
 
     /**
      * @inheritDoc
@@ -115,16 +115,16 @@ class ProducerLogController extends GeneralController
                 'title' => '酒店',
                 'tip'
             ],
-            'producer_name' => [
-                'title' => '分销商',
-                'code'
-            ],
             'buyer_name' => [
-                'code',
-                'title' => '购买粉丝'
+                'title' => '购买粉丝',
+                'tip'
+            ],
+            'producer_name' => [
+                'title' => '分销商'
             ],
             'product_id' => [
-                'title' => '产品ID',
+                'title' => '产品编号',
+                'code',
                 'tip'
             ],
             'type' => [
@@ -134,7 +134,8 @@ class ProducerLogController extends GeneralController
                 'color' => [
                     0 => 'default',
                     1 => 'primary'
-                ]
+                ],
+                'tip'
             ],
             'survey_table' => [
                 'html',
@@ -170,7 +171,7 @@ class ProducerLogController extends GeneralController
                 'info',
                 'color' => [
                     0 => 'default',
-                    1 => 'info',
+                    1 => 'success',
                 ]
             ]
         ];
@@ -508,7 +509,10 @@ class ProducerLogController extends GeneralController
             }
         }
 
-        return $counter;
+        return [
+            $counter,
+            $subList
+        ];
     }
 
     /**
@@ -591,7 +595,7 @@ class ProducerLogController extends GeneralController
     /**
      * 在前置字段处理后处理列表
      *
-     * @param array  $list
+     * @param array $list
      * @param string $action
      *
      * @return array
@@ -603,11 +607,13 @@ class ProducerLogController extends GeneralController
         }
 
         $productIds = array_column($list, 'product_id');
-        $counter = $this->productCounter(self::$uid, $productIds);
+        list($counter, $subList) = $this->productCounter(self::$uid, $productIds);
 
         foreach ($list as &$value) {
 
             $product = $value['product_id'];
+            $order = $value['order_id'];
+
             $value['counter'] = 0;
             $value['commission_quota'] = 0;
             $value['commission_quota_out'] = 0;
@@ -615,6 +621,14 @@ class ProducerLogController extends GeneralController
             if (empty($value['commission_data'])) {
                 continue;
             }
+
+            $description = null;
+            foreach ($subList[$order] as $k => $v) {
+                if (is_numeric($k)) {
+                    $description .= $v['info'] . '*' . $v['number'] . ',';
+                }
+            }
+            $value['description'] = rtrim($description, ',');
 
             $count = $value['counter'] = $counter[$product];
             foreach ($value['commission_data'] as $key => $item) {

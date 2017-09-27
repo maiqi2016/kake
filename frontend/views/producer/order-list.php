@@ -49,6 +49,7 @@ $params = \Yii::$app->params;
                     <p class="t1"><?= $item['title'] ?></p>
                     <p class="t2">购买粉丝：<?= $item['buyer_name'] ?></p>
                     <p class="t2">酒店名称：<?= $item['name'] ?></p>
+                    <p class="t2">套餐状态：<?= $item['description'] ?></p>
                     <?php if ($item['payment_state']): ?>
                         <p class="t2">已达分佣：<?= Helper::money($item['commission_quota']) ?></p>
                         <p class="t2">未达分佣：<?= Helper::money($item['commission_quota_out']) ?></p>
