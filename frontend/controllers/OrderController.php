@@ -413,6 +413,7 @@ class OrderController extends GeneralController
         $orderNumber = Helper::createOrderNumber($payCode, $this->user->id);
 
         // 本地下单
+        $channel = Yii::$app->request->get('channel');
         $result = $this->service('order.add', [
             'order_number' => $orderNumber,
             'user_id' => $this->user->id,
@@ -421,11 +422,43 @@ class OrderController extends GeneralController
             'price' => $price,
             'order_contacts_id' => $params['order_contacts_id'],
             'package' => $_package,
-            'producer_id' => Helper::integerDecode(Yii::$app->request->get('channel'))
+            'producer_id' => Helper::integerDecode($channel)
         ]);
 
         if (is_string($result)) {
             $this->error(Yii::t('common', $result));
+        }
+
+        $openidArr = $this->listAdmin(null, 'openid');
+        foreach ($openidArr as $uid => $openid) {
+            Yii::$app->wx->notice->send([
+                'touser' => $openid,
+                'template_id' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
+                'url' => null,
+                'data' => [
+                    'first' => "平台有新的订单产生\n",
+                    'keyword1' => [
+                        date('Y-m-d H:i:s'),
+                        '#999'
+                    ],
+                    'keyword2' => [
+                        empty($channel) ? '平台流量' : '分销渠道',
+                        '#999'
+                    ],
+                    'keyword3' => [
+                        $orderNumber,
+                        '#999'
+                    ],
+                    'keyword4' => [
+                        Helper::money($price / 100),
+                        '#999'
+                    ],
+                    'remark' => [
+                        "\n订单管理与追踪请登录后台系统",
+                        '#fda443'
+                    ]
+                ],
+            ]);
         }
 
         return [

@@ -1309,6 +1309,81 @@ class MainController extends Controller
         return true;
     }
 
+    /**
+     * 获取根用户
+     *
+     * @access public
+     *
+     * @param string $firstKey
+     * @param string $secondKey
+     *
+     * @return array
+     */
+    public function getRootUsers($firstKey = 'private', $secondKey = 'root_user_ids')
+    {
+        if (empty(Yii::$app->params[$firstKey])) {
+            return [];
+        }
+
+        if (empty(Yii::$app->params[$firstKey][$secondKey])) {
+            return [];
+        }
+
+        $user = Yii::$app->params[$firstKey][$secondKey];
+        if (is_array($user)) {
+            return $user;
+        }
+
+        $user = Helper::handleString($user);
+
+        return $user;
+    }
+
+    /**
+     * 列表管理员
+     *
+     * @access public
+     *
+     * @param array  $user_ids
+     * @param string $get_field
+     *
+     * @return array
+     */
+    public function listAdmin($user_ids = null, $get_field = 'username')
+    {
+        $admin = $this->cache([
+            'list.admin',
+            func_get_args()
+        ], function () use ($user_ids, $get_field) {
+
+            $where = [
+                ['role' => 1],
+                ['state' => 1]
+            ];
+
+            if ($user_ids) {
+                if (is_string($user_ids)) {
+                    $user_ids = explode(',', $user_ids);
+                }
+                $where[] = ['id' => $user_ids];
+            }
+
+            $admin = $this->service(static::$apiList, [
+                'table' => 'user',
+                'select' => [
+                    'id',
+                    $get_field
+                ],
+                'size' => 0,
+                'where' => $where
+            ], 'yes');
+
+            return Helper::arrayColumnSimple($admin, 'id', $get_field);
+        }, WEEK, null, Yii::$app->params['use_cache']);
+
+        return $admin;
+    }
+
     // --- Display ---
 
     /**

@@ -111,9 +111,6 @@ class GeneralController extends MainController
         'GeneralController'
     ];
 
-    // 权限控制
-    private static $rootUserKey = 'root_user_ids';
-
     // 权限控制 - 手动排除
     private static $keyInheritExcept = '@auth-inherit-except';
 
@@ -202,32 +199,6 @@ class GeneralController extends MainController
         }
 
         return true;
-    }
-
-    /**
-     * 获取根用户
-     *
-     * @access protected
-     * @return array
-     */
-    protected function getRootUsers()
-    {
-        if (empty(Yii::$app->params['private'])) {
-            return [];
-        }
-
-        if (empty(Yii::$app->params['private'][self::$rootUserKey])) {
-            return [];
-        }
-
-        $user = Yii::$app->params['private'][self::$rootUserKey];
-        if (is_array($user)) {
-            return $user;
-        }
-
-        $user = Helper::handleString($user);
-
-        return $user;
     }
 
     /**
@@ -2328,30 +2299,5 @@ class GeneralController extends MainController
         }
 
         return $this->render($view, $params);
-    }
-
-    /**
-     * 列表管理员
-     *
-     * @access public
-     * @return array
-     */
-    public function listAdmin()
-    {
-        $admin = $this->service(static::$apiGeneralList, [
-            'table' => 'user',
-            'select' => [
-                'id',
-                'username'
-            ],
-            'size' => 0,
-            'where' => [
-                ['role' => 1],
-                ['state' => 1]
-            ]
-        ], 'yes');
-        $admin = Helper::arrayColumnSimple($admin, 'id', 'username');
-
-        return $admin;
     }
 }
