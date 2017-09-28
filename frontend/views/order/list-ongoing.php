@@ -46,12 +46,12 @@ $params = \Yii::$app->params;
 
                 <div class="order-status-button">
                     <div>
-                        <button class="cancel-button" kk-tap="<?= $refund ?> = !<?= $refund ?>; <?= $order ?> = 0">
+                        <button class="cancel-button" kk-tap="<?= $refund ?> = !<?= $refund ?>; <?= $order ?> = 0; posBox($event, $elem)">
                             申请退款
                         </button>
                         <?php if (!empty($item['bidding'])): ?>
                             <button class="appointment-button"
-                                    kk-tap="<?= $order ?> = !<?= $order ?>; <?= $refund ?> = 0">立即预约
+                                    kk-tap="<?= $order ?> = !<?= $order ?>; <?= $refund ?> = 0; posBox($event, $elem)">立即预约
                             </button>
                         <?php endif; ?>
                     </div>
@@ -101,7 +101,7 @@ $params = \Yii::$app->params;
 
                 <div class="order-status-button">
                     <div>
-                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>">预约信息</button>
+                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">预约信息</button>
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@ $params = \Yii::$app->params;
                 <div class="order-status-button">
                     <div>
                         <button class="cancel-button" kk-tap="completed(<?= $item['id'] ?>)">我已入住</button>
-                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>">查看确认号</button>
+                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">查看确认号</button>
                     </div>
                 </div>
 
@@ -149,7 +149,7 @@ $params = \Yii::$app->params;
 
                 <div class="order-status-button">
                     <div>
-                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>">退款信息</button>
+                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">退款信息</button>
                     </div>
                 </div>
 
