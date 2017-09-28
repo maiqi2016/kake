@@ -32,7 +32,7 @@ $params = \Yii::$app->params;
 
                 <div class="order-status-button">
                     <div>
-                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>">退款说明</button>
+                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">退款说明</button>
                     </div>
                 </div>
 
@@ -50,7 +50,7 @@ $params = \Yii::$app->params;
 
                     <div class="order-status-button">
                         <div>
-                            <button class="appointment-button" kk-tap="<?= $form ?> = !<?= $form ?>">开具发票</button>
+                            <button class="appointment-button" kk-tap="<?= $form ?> = !<?= $form ?>; posBox($event, $elem)">开具发票</button>
                         </div>
                     </div>
 
@@ -63,8 +63,8 @@ $params = \Yii::$app->params;
                             发票抬头:
                         </div>
                         <div class="invoice-title">
-                            <span kk-tap="<?= $company ?> = 0" ng-class="{active: !<?= $company ?>}">个人</span>
-                            <span kk-tap="<?= $company ?> = 1" ng-class="{active: <?= $company ?>}">公司</span>
+                            <span kk-tap="<?= $company ?> = 0; posBox($event, $elem)" ng-class="{active: !<?= $company ?>}">个人</span>
+                            <span kk-tap="<?= $company ?> = 1; posBox($event, $elem)" ng-class="{active: <?= $company ?>}">公司</span>
                         </div>
                         <div class="invoice-address" ng-show="<?= $company ?>">
                             <p>公司名称:</p>
@@ -84,7 +84,7 @@ $params = \Yii::$app->params;
 
                     <div class="order-status-button">
                         <div>
-                            <button class="invoice-schedule" kk-tap="<?= $schedule ?> = !<?= $schedule ?>">发票进度
+                            <button class="invoice-schedule" kk-tap="<?= $schedule ?> = !<?= $schedule ?>; posBox($event, $elem)">发票进度
                             </button>
                         </div>
                     </div>
