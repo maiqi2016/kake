@@ -561,12 +561,12 @@ class ProducerLogController extends GeneralController
             $productCtrl = $this->controller('product');
             $data = $this->callMethod('sufHandleField', [], [
                 ['id' => $record['product_id']],
-                'ajaxModalListProducer'
+                'listProducer'
             ], $productCtrl);
 
             $key = ProductController::$type[$record['type']];
-            $record['commission_data'] = $data['commission_data_' . $key];
-            $record['commission_table'] = $data['commission_table_' . $key];
+            $record['commission_data'] = empty($data['commission_data_' . $key]) ? [] : $data['commission_data_' . $key];
+            $record['commission_table'] = empty($data['commission_table_' . $key]) ? null : $data['commission_table_' . $key];
 
             $orderCtrl = $this->controller('order');
             $record = $this->callMethod('sufHandleField', [], [$record], $orderCtrl);
@@ -617,10 +617,6 @@ class ProducerLogController extends GeneralController
             $value['counter'] = 0;
             $value['commission_quota'] = 0;
             $value['commission_quota_out'] = 0;
-
-            if (empty($value['commission_data'])) {
-                continue;
-            }
 
             $description = null;
             foreach ($subList[$order] as $k => $v) {

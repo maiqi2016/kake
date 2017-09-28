@@ -62,6 +62,8 @@ class GeneralController extends MainController
             'distribution/index',
             // 微信自动回复
             'we-chat/reply',
+            // 商品详情
+            'detail/index'
         ])
         ) {
             $this->mustLogin();

@@ -504,6 +504,24 @@ class ProductController extends GeneralController
     }
 
     /**
+     * 生成列表页的辅助数据 (无页面)
+     *
+     * @inheritDoc
+     */
+    public static function listProducerAssist()
+    {
+        return [
+            'producer' => [
+                'hidden',
+                'table' => 'product_producer',
+                'foreign_key' => 'product_id',
+                'service_api' => 'product.producer-list',
+                'service_params' => ['where'  => []]
+            ]
+        ];
+    }
+
+    /**
      * 生成编辑表单的辅助数据
      *
      * @inheritDoc
@@ -907,7 +925,10 @@ class ProductController extends GeneralController
         }
 
         // 生成产品分销数据
-        if ($action == 'ajaxModalListProducer') {
+        if (in_array($action, [
+            'ajaxModalListProducer',
+            'listProducer'
+        ])) {
             $record = $this->listForeignData($record, 'producer', null, $action);
 
             foreach ($record['producer'] as $item) {
