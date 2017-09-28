@@ -767,7 +767,10 @@ class MainController extends Controller
             $assist = $assists[$key];
 
             $api = isset($assist['service_api']) ? $assist['service_api'] : null;
-            $record[$key] = $this->service($api, [$assist['foreign_key'] => $record['id']]);
+            $params = isset($assist['service_params']) ? $assist['service_params'] : [];
+            $params = array_merge($params, [$assist['foreign_key'] => $record['id']]);
+
+            $record[$key] = $this->service($api, $params);
 
             if (isset($assist['handler_controller'])) {
                 $controller = $assist['handler_controller'];

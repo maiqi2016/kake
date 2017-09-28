@@ -429,7 +429,7 @@ class OrderController extends GeneralController
             $this->error(Yii::t('common', $result));
         }
 
-        $openidArr = $this->listAdmin(null, 'openid');
+        $openidArr = $this->listAdmin($this->getRootUsers(), 'openid');
         foreach ($openidArr as $uid => $openid) {
             Yii::$app->wx->notice->send([
                 'touser' => $openid,
@@ -442,7 +442,7 @@ class OrderController extends GeneralController
                         '#999'
                     ],
                     'keyword2' => [
-                        empty($channel) ? '平台流量' : '分销渠道',
+                        (empty($channel) ? '平台流量' : '分销渠道') . ' (' . $this->user->username . ')',
                         '#999'
                     ],
                     'keyword3' => [
