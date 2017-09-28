@@ -574,7 +574,10 @@ class ProducerProductController extends GeneralController
      */
     public function beforeAction($action)
     {
-        if ($action->id == 'index') {
+        if (in_array($action->id, [
+            'index',
+            'my'
+        ])) {
             $this->sourceJs = ['/node_modules/clipboard/dist/clipboard.min'];
         }
 

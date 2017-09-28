@@ -418,6 +418,7 @@ class ProducerLogController extends GeneralController
             if (empty($_list[$item['order_id']])) {
                 $_list[$item['order_id']] = [
                     'sub_counter' => 0,
+                    'sub_counter_out' => 0,
                     'amount_in' => 0,
                     'amount_out' => 0
                 ];
@@ -428,6 +429,7 @@ class ProducerLogController extends GeneralController
                 $_item['sub_counter'] += 1;
                 $_item['amount_in'] += $item['price'];
             } else {
+                $_item['sub_counter_out'] += 1;
                 $_item['amount_out'] += $item['price'];
             }
 
@@ -535,6 +537,7 @@ class ProducerLogController extends GeneralController
             $item['survey'] = $subList[$item['order_id']];
             $survey = Helper::popSome($item['survey'], [
                 'sub_counter',
+                'sub_counter_out',
                 'amount_in',
                 'amount_out'
             ]);
@@ -595,7 +598,7 @@ class ProducerLogController extends GeneralController
     /**
      * 在前置字段处理后处理列表
      *
-     * @param array $list
+     * @param array  $list
      * @param string $action
      *
      * @return array
@@ -634,11 +637,11 @@ class ProducerLogController extends GeneralController
                 $total = $in + $out;
 
                 if (!$key) {
-                    $value['commission_quota_out'] = self::calCommission($value['type'], $out, $total, $item['commission']);
+                    $value['commission_quota_out'] = self::calCommission($value['type'], $out, $total, $item['commission'], $value['sub_counter_out']);
                 }
 
                 if ($count >= $item['from_sales'] && (empty($item['to_sales']) || $count <= $item['to_sales'])) {
-                    $value['commission_quota'] = self::calCommission($value['type'], $in, $total, $item['commission']);
+                    $value['commission_quota'] = self::calCommission($value['type'], $in, $total, $item['commission'], $value['sub_counter']);
                     break;
                 }
             }
@@ -652,14 +655,15 @@ class ProducerLogController extends GeneralController
      *
      * @access public
      *
-     * @param string $type
-     * @param float  $inQuota
-     * @param float  $totalQuota
-     * @param float  $commission
+     * @param string  $type
+     * @param float   $inQuota
+     * @param float   $totalQuota
+     * @param float   $commission
+     * @param integer $number
      *
      * @return float
      */
-    public static function calCommission($type, $inQuota, $totalQuota, $commission)
+    public static function calCommission($type, $inQuota, $totalQuota, $commission, $number = 1)
     {
         $cal = 0;
         if (empty($inQuota) || empty($totalQuota) || empty($commission)) {
@@ -672,7 +676,7 @@ class ProducerLogController extends GeneralController
         if ($type == 'percent') {
             $cal = $inQuota * (($commission / 100) * $rate);
         } else if ($type == 'fixed') {
-            $cal = $commission * $rate;
+            $cal = $commission * $rate * $number;
         }
 
         return $cal;
