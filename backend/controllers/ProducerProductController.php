@@ -198,7 +198,8 @@ class ProducerProductController extends GeneralController
             ],
             'name' => [
                 'title' => '酒店',
-                'max-width' => '180px'
+                'max-width' => '180px',
+                'tip'
             ],
             'type' => [
                 'code',
@@ -553,12 +554,13 @@ class ProducerProductController extends GeneralController
             $record['commission'] = isset($data[$key]) ? $data[$key] : null;
 
             $key = $record['type'] ? 'commission_data_percent' : 'commission_data_fixed';
-            $record['commission_data'] = isset($data[$key]) ? $data[$key] : null;
+            $record['commission_data'] = isset($data[$key]) ? $data[$key] : [];
 
             $record['channel'] = Helper::integerEncode($record['producer_id']);
 
             // 计算最低分佣金
             $data = current($record['commission_data']);
+
             $controller = $this->controller('producer-log');
             $price = $record['min_price'] / 100;
             $record['min_commission'] = $controller::calCommission($data['type'], $price, $price, $data['commission']);

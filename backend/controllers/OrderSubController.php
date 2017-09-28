@@ -30,8 +30,8 @@ class OrderSubController extends GeneralController
     public static $hookPriceNumber = ['price'];
 
     public static $stateOk = [
-        5,
-        6
+        5, // 已入住
+        6, // 已完成
     ];
 
     /**
