@@ -40,7 +40,11 @@ class SiteController extends GeneralController
         // 精品推荐
         list($standardHtml, $over) = $this->renderListPage(1);
 
-        $this->seo(['title' => '首页']);
+        $this->seo([
+            'title' => '首页',
+            'share_title' => Yii::$app->params['app_title'],
+            'share_description' => Yii::$app->params['app_description'],
+        ]);
 
         return $this->render('index', compact('focusList', 'plateList', 'flashSalesList', 'bannerList', 'standardHtml', 'over'));
     }
