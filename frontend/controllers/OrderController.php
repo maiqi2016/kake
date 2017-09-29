@@ -645,8 +645,7 @@ class OrderController extends GeneralController
 
             return $this->render('open-with-browser', [
                 'order_number' => $params['order_number'],
-                'user_id' => $this->user->id,
-                'time' => date('Y-m-d H:i:s')
+                'user_id' => $this->user->id
             ]);
         }
 
