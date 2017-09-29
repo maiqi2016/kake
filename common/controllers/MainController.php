@@ -1415,7 +1415,7 @@ class MainController extends Controller
             extract($error);
             $trace = YII_DEBUG ? strval($exception->getPrevious()) : null;
         } else {
-            $message = base64_decode($message);
+            $message = urldecode($message);
             $trace = null;
         }
 
