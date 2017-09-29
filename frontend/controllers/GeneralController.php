@@ -136,7 +136,7 @@ class GeneralController extends MainController
                 if (is_string($result)) {
                     $this->redirect([
                         '/general/error',
-                        'message' => urlencode(Yii::t('common', $result))
+                        'message' => base64_encode(Yii::t('common', $result))
                     ]);
                 } else {
                     $loginUser($result, isset($result['state']) ? 'we-chat-login' : 'we-chat-bind');
@@ -150,7 +150,7 @@ class GeneralController extends MainController
             if (is_string($result)) {
                 $this->redirect([
                     '/general/error',
-                    'message' => urlencode(Yii::t('common', $result))
+                    'message' => base64_encode(Yii::t('common', $result))
                 ]);
             } else {
                 $loginUser($result, 'sso-login');
