@@ -31,7 +31,8 @@ class AppAsset extends AssetBundle
         $suffix = (YII_ENV == 'dev' ? time() : VERSION);
 
         $this->css = [
-            "node_modules/bootstrap/dist/css/bootstrap.css?version=" . $suffix
+            "node_modules/bootstrap/dist/css/bootstrap.css?version=" . $suffix,
+            "node_modules/animate.css/animate.min.css?version=" . $suffix
         ];
         $this->js = [
             "node_modules/jquery/dist/jquery.min.js?version=" . $suffix,

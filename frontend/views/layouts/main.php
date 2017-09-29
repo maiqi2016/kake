@@ -129,7 +129,7 @@ foreach ($items as $item) {
 </div>
 
 <!-- Menu -->
-<div class="menu-lm">
+<div class="menu-lm animated hidden">
     <p class="menuclose">KAKE</p>
     <form class="search" id="box" action="/">
         <input type="hidden" name="r" value="items/index">
@@ -163,7 +163,6 @@ foreach ($items as $item) {
 </body>
 
 <script>
-    /*
     var _hmt = _hmt || [];
     (function () {
         var hm = document.createElement("script");
@@ -171,7 +170,6 @@ foreach ($items as $item) {
         var s = document.getElementsByTagName("script")[0];
         s.parentNode.insertBefore(hm, s);
     })();
-    */
 </script>
 </html>
 <?php $this->endPage() ?>
