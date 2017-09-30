@@ -729,9 +729,15 @@ class OrderController extends GeneralController
             Yii::error('支付宝异步回调, 签名验证失败: ' . json_encode($params, JSON_UNESCAPED_UNICODE));
         }
 
+        // 判断交易结果
+        $successful = false;
+        if (in_array($params['trade_status'], ['TRADE_SUCCESS', 'TRADE_FINISHED'])) {
+            $successful = true;
+        }
+
         $result = $this->service('order.pay-handler', [
             'order_number' => $params['out_trade_no'],
-            'paid_result' => true
+            'paid_result' => $successful
         ]);
 
         if (is_string($result)) {
