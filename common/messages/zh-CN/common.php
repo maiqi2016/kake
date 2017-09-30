@@ -57,7 +57,7 @@ return [
     'order sub id required' => '子订单ID参数未指定',
     'order does not exist' => '订单不存在',
     'the order has been paid' => '该订单已经支付',
-    'resubmit the order please' => '订单已完成或异常, 有需要可重新下单',
+    'resubmit the order please' => '订单已完成或失效, 有需要请重新下单',
     'order package required' => '订单套餐不能为空',
     'product data error' => '产品数据异常',
     'product price error' => '产品价格异常',
