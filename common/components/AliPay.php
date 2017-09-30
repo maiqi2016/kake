@@ -87,7 +87,7 @@ class AliPay extends Object
 
         $params['product_code'] = 'QUICK_WAP_PAY';
         if (!isset($params['timeout_express'])) {
-            $params['timeout_express'] = '30m';
+            $params['timeout_express'] = Yii::$app->params['order_pay_timeout'] . 'm';
         }
 
         $this->request($params);

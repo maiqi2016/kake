@@ -244,7 +244,11 @@ class WeChat extends Object
      */
     public function order($params)
     {
-        $attributes = array_merge(['trade_type' => 'JSAPI'], $params);
+        $attributes = array_merge([
+            'trade_type' => 'JSAPI',
+            'time_start' => date('YmdHis', TIME),
+            'time_expire' => date('YmdHis', TIME + Yii::$app->params['order_pay_timeout'] * MINUTE)
+        ], $params);
         $order = new Order($attributes);
 
         $result = $this->payment->prepare($order);

@@ -239,7 +239,7 @@ class GeneralController extends MainController
             $error = '支付链接签名错误';
         }
 
-        $timeout = Yii::$app->params['order_pay_timeout'] * 600;
+        $timeout = Yii::$app->params['order_pay_timeout'] * MINUTE;
         if (!$error && (empty($item['time']) || TIME - $item['time'] > $timeout)) {
             $error = '支付链接已经超时';
         }
