@@ -506,6 +506,17 @@ class OrderController extends GeneralController
 
         // 查询订单
         $result = Yii::$app->wx->payment->query($order['order_number']);
+
+        $stateInfo = [
+            'SUCCESS' => '支付成功',
+            'REFUND' => '转入退款',
+            'NOTPAY' => '未支付',
+            'CLOSED' => '已关闭',
+            'REVOKED' => '已撤销(刷卡支付)',
+            'USERPAYING' => '用户支付中',
+            'PAYERROR' => '支付失败(如银行返回失败)',
+        ];
+
         if (!in_array($result->trade_state, [
             'NOTPAY',
             'PAYERROR'
@@ -655,11 +666,14 @@ class OrderController extends GeneralController
         $result = Yii::$app->ali->alipayTradeQuery($order['order_number']);
         if (is_array($result)) {
 
-            if (!in_array($result['trade_status'], [
-                'WAIT_BUYER_PAY',
-                'TRADE_CLOSED'
-            ])
-            ) {
+            $stateInfo = [
+                'WAIT_BUYER_PAY' => '交易创建，等待买家付款',
+                'TRADE_CLOSED' => '未付款交易超时关闭，或支付完成后全额退款',
+                'TRADE_SUCCESS' => '交易支付成功',
+                'TRADE_FINISHED' => '交易结束，不可退款',
+            ];
+
+            if ($result['trade_status'] != 'WAIT_BUYER_PAY') {
                 $this->error(Yii::t('common', 'resubmit the order please'));
             }
 
@@ -731,7 +745,10 @@ class OrderController extends GeneralController
 
         // 判断交易结果
         $successful = false;
-        if (in_array($params['trade_status'], ['TRADE_SUCCESS', 'TRADE_FINISHED'])) {
+        if (in_array($params['trade_status'], [
+            'TRADE_SUCCESS',
+            'TRADE_FINISHED'
+        ])) {
             $successful = true;
         }
 
