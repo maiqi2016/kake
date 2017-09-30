@@ -360,7 +360,10 @@ class ProducerProductController extends GeneralController
                 'attachment.deep_path AS cover_deep_path',
                 'attachment.filename AS cover_filename',
             ],
-            'where' => [['producer_id' => self::$uid]],
+            'where' => [
+                ['product.state' => 1],
+                ['producer_id' => self::$uid]
+            ],
             'order' => [
                 'producer_product.state DESC',
                 'ISNULL(producer_product.sort), producer_product.sort ASC',
@@ -375,7 +378,7 @@ class ProducerProductController extends GeneralController
     public function indexCondition($as = null)
     {
         $condition = $this->myCondition();
-        unset($condition['where']);
+        unset($condition['where'][1]);
 
         return array_merge(parent::indexCondition(), $condition);
     }
