@@ -17,46 +17,47 @@ $params = \Yii::$app->params;
     
     <div class="blank"></div>
 
-    <div class="kake-travel">
+    <a class="kake-travel" href="<?= Url::to(['producer/setting']) ?>">
         <img class="photo" src="<?= current($producer['logo_preview_url']) ?>">
-        <a class="txt" href="<?= Url::to(['producer/setting']) ?>">
+        <div class="txt">
             <p class="info"><?= $producer['name'] ?></p>
             <span class="phone-number"><?= $producer['phone'] ?></span>
-        </a>
+        </div>
         <img class="arrow-01" src="<?= $params['frontend_source'] ?>/img/producer/icon/arrow-01.svg">
-    </div>
+    </a>
+
 
     <div class="blank"></div>
 
     <div class="link-info">
-        <div class="two-code common">
+        <a class="two-code common" href="<?= Url::to(['producer/qr-code']) ?>">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/two-code.svg">
-            <a href="<?= Url::to(['producer/qr-code']) ?>">我的二维码</a>
-        </div>
+            我的二维码
+        </a>
 
-        <div class="popularize-link common">
+        <a class="popularize-link common" href="<?= Url::to(['producer/link']) ?>">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/popularize-link.svg">
-            <a href="<?= Url::to(['producer/link']) ?>">我的推广链接</a>
-        </div>  
+            我的推广链接
+        </a>
     </div>
 
     <div class="blank"></div>
 
     <div class="distribution">
-        <div class="product-list common">
+        <a class="product-list common" href="<?= Url::to(['producer/product-list']) ?>">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/product-list.svg">
-            <a href="<?= Url::to(['producer/product-list']) ?>">分销产品列表</a>
-        </div>
+            分销产品列表
+        </a>
 
-        <div class="record common">
+        <a class="record common" href="<?= Url::to(['producer/order-list']) ?>">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/record.svg">
-            <a href="<?= Url::to(['producer/order-list']) ?>">分销记录</a>
-        </div>
+            分销记录
+        </a>
 
-        <div class="get-money common">
+        <a class="get-money common" href="<?= Url::to(['producer/withdraw']) ?>">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/get-money.svg">
-            <a href="<?= Url::to(['producer/withdraw']) ?>">分佣提现</a>
-        </div>
+            分佣提现
+        </a>
 
     </div>
 

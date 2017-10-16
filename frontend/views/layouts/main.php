@@ -131,7 +131,7 @@ foreach ($items as $item) {
 <!-- Menu -->
 <div class="menu-lm animated hidden">
     <p class="menuclose">KAKE</p>
-    <form class="search" id="box" action="/">
+    <form class="search" id="box1" action="/">
         <input type="hidden" name="r" value="items/index">
         <input type="search" name="keyword" placeholder="目的地">
         <!-- <img src="<?= $params['frontend_source'] ?>/img/search.svg"> -->
