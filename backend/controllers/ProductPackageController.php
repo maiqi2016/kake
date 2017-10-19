@@ -6,7 +6,7 @@ use common\components\Helper;
 use Yii;
 
 /**
- * 酒店产品套餐管理
+ * 产品套餐管理
  *
  * @auth-inherit-except front sort
  */
@@ -16,7 +16,7 @@ class ProductPackageController extends GeneralController
     public static $modelName = 'ProductPackage';
 
     // 模型描述
-    public static $modelInfo = '酒店产品套餐';
+    public static $modelInfo = '产品套餐';
 
     /**
      * @var array Hook
@@ -28,6 +28,15 @@ class ProductPackageController extends GeneralController
 
     public static $_status;
 
+    public static $supplierIdAssist = [
+        'title' => '核销方',
+        'list_table' => 'product_supplier',
+        'list_value' => 'name',
+        'list_except' => [
+            0 => '无需核销'
+        ]
+    ];
+
     /**
      * @inheritDoc
      */
@@ -35,7 +44,7 @@ class ProductPackageController extends GeneralController
     {
         return [
             [
-                'text' => '新增套餐',
+                'text' => '新增产品套餐',
                 'value' => 'product-package/add',
                 'params' => [
                     'product_id' => Yii::$app->request->get('product_id')
@@ -117,13 +126,16 @@ EOF
                 'elem' => 'input',
                 'table' => 'product'
             ],
-            'hotel_name' => [
-                'title' => '酒店',
+            'product_upstream_name' => [
+                'title' => '上游名称',
                 'elem' => 'input',
-                'table' => 'hotel',
+                'table' => 'product_upstream',
                 'field' => 'name'
             ],
             'info' => 'input',
+            'product_product_supplier_id' => array_merge(self::$supplierIdAssist, [
+                'list_except' => null
+            ]),
             'bidding' => [
                 'value' => parent::SELECT_KEY_ALL
             ],
@@ -169,8 +181,8 @@ EOF
                 'title' => '产品',
                 'tip'
             ],
-            'hotel_name' => [
-                'title' => '酒店',
+            'product_upstream_name' => [
+                'title' => '上游名称',
                 'tip'
             ],
             'price' => 'code',
@@ -197,15 +209,15 @@ EOF
                 'max-width' => '250px',
                 'tpl' => '<pre>%s</pre>'
             ],
-            'verify_sold' => [
+            'product_supplier_id' => array_merge(self::$supplierIdAssist, [
                 'code',
+                'info',
                 'color' => [
                     0 => 'default',
                     1 => 'primary'
                 ],
-                'info',
                 'tip'
-            ],
+            ]),
             'state' => [
                 'code',
                 'color' => 'auto',
@@ -235,7 +247,7 @@ EOF
             'select_product' => [
                 'title' => false,
                 'elem' => 'button',
-                'value' => '选择酒店产品',
+                'value' => '选择产品',
                 'script' => '$.showPage("product.list", {state: 1})'
             ],
             'name' => [
@@ -265,10 +277,10 @@ EOF
                 'row' => 8,
                 'placeholder' => '256个字以内'
             ],
-            'verify_sold' => [
+            'product_supplier_id' => array_merge(self::$supplierIdAssist, [
                 'elem' => 'select',
                 'value' => 0
-            ],
+            ]),
             'state' => [
                 'elem' => 'select',
                 'value' => 1
@@ -313,10 +325,10 @@ EOF
                 'row' => 8,
                 'placeholder' => '256个字以内'
             ],
-            'verify_sold' => [
+            'product_supplier_id' => array_merge(self::$supplierIdAssist, [
                 'elem' => 'select',
                 'value' => 0
-            ]
+            ])
         ];
     }
 
@@ -332,7 +344,7 @@ EOF
             }
 
             $model = parent::model(self::$modelName);
-            self::$_status = $model->_state;
+            self::$_status = $model->_status;
             $record = $this->getFieldInfo($record, 'status');
 
             if (!empty($record['sale_rate'])) {
@@ -389,7 +401,7 @@ EOF
                 ['table' => 'product'],
                 [
                     'left_table' => 'product',
-                    'table' => 'hotel'
+                    'table' => 'product_upstream'
                 ]
             ],
             'select' => [
@@ -399,7 +411,7 @@ EOF
                 'product.sale_from',
                 'product.sale_to',
                 'product.state AS status',
-                'hotel.name AS hotel_name',
+                'product_upstream.name AS product_upstream_name',
                 'product_package.*'
             ],
             'order' => [

@@ -390,28 +390,28 @@ class GeneralController extends MainController
     {
         return $this->cache('list-plate.' . $limit, function () use ($limit) {
             $list = $this->service(parent::$apiList, [
-                'table' => 'hotel_plate',
+                'table' => 'product_plate',
                 'where' => [
-                    ['hotel_plate.state' => 1]
+                    ['product_plate.state' => 1]
                 ],
                 'join' => [
                     ['table' => 'attachment']
                 ],
                 'select' => [
-                    'hotel_plate.id',
-                    'hotel_plate.name',
-                    'hotel_plate.attachment_id',
+                    'product_plate.id',
+                    'product_plate.name',
+                    'product_plate.attachment_id',
                     'attachment.deep_path',
                     'attachment.filename',
                 ],
                 'order' => [
-                    'ISNULL(hotel_plate.sort), hotel_plate.sort ASC',
-                    'hotel_plate.update_time DESC'
+                    'ISNULL(product_plate.sort), product_plate.sort ASC',
+                    'product_plate.update_time DESC'
                 ],
                 'limit' => $limit
             ]);
 
-            $controller = $this->controller('hotel-plate');
+            $controller = $this->controller('product-plate');
             array_walk($list, function (&$item) use ($controller) {
                 $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
             });
@@ -437,32 +437,32 @@ class GeneralController extends MainController
             func_get_args()
         ], function () use ($plate, $limit) {
 
-            $where = [['hotel_region.state' => 1]];
+            $where = [['product_region.state' => 1]];
             if (!empty($plate)) {
-                $where[] = ['hotel_region.hotel_plate_id' => (array) $plate];
+                $where[] = ['product_region.product_plate_id' => (array) $plate];
             }
 
             $list = $this->service(parent::$apiList, [
-                'table' => 'hotel_region',
+                'table' => 'product_region',
                 'where' => $where,
                 'join' => [
                     ['table' => 'attachment']
                 ],
                 'select' => [
-                    'hotel_region.id',
-                    'hotel_region.name',
-                    'hotel_region.attachment_id',
+                    'product_region.id',
+                    'product_region.name',
+                    'product_region.attachment_id',
                     'attachment.deep_path',
                     'attachment.filename',
                 ],
                 'order' => [
-                    'ISNULL(hotel_region.sort), hotel_region.sort ASC',
-                    'hotel_region.update_time DESC'
+                    'ISNULL(product_region.sort), product_region.sort ASC',
+                    'product_region.update_time DESC'
                 ],
                 'limit' => $limit
             ]);
 
-            $controller = $this->controller('hotel-region');
+            $controller = $this->controller('product-region');
             array_walk($list, function (&$item) use ($controller) {
                 $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
             });
@@ -482,27 +482,27 @@ class GeneralController extends MainController
         return $this->cache('list-plate-and-region', function () {
 
             $list = $this->service(parent::$apiList, [
-                'table' => 'hotel_region',
+                'table' => 'product_region',
                 'where' => [
-                    ['hotel_region.state' => 1]
+                    ['product_region.state' => 1]
                 ],
                 'join' => [
-                    ['table' => 'hotel_plate']
+                    ['table' => 'product_plate']
                 ],
                 'select' => [
-                    'hotel_plate.name AS plate_name',
-                    'hotel_region.id',
-                    'hotel_region.name',
+                    'product_plate.name AS product_plate_name',
+                    'product_region.id',
+                    'product_region.name',
                 ],
                 'order' => [
-                    'ISNULL(hotel_region.sort), hotel_region.sort ASC',
-                    'hotel_region.update_time DESC'
+                    'ISNULL(product_region.sort), product_region.sort ASC',
+                    'product_region.update_time DESC'
                 ]
             ]);
 
             $_list = [];
             foreach ($list as $item) {
-                $_list[$item['plate_name']][$item['id']] = $item['name'];
+                $_list[$item['product_plate_name']][$item['id']] = $item['name'];
             }
 
             $key = '其他';
@@ -552,7 +552,7 @@ class GeneralController extends MainController
 
             // 分类
             if (isset($options['classify']) && is_numeric($options['classify'])) {
-                $where[] = ['product.classify' => $options['classify']];
+                $where[] = ['product_upstream.classify' => $options['classify']];
             }
 
             // 折扣中
@@ -576,13 +576,13 @@ class GeneralController extends MainController
             }
 
             if (!empty($options['region'])) {
-                $where[] = ['hotel_region.id' => $options['region']];
+                $where[] = ['product_region.id' => $options['region']];
             }
 
-            // 酒店 id
-            if (!empty($options['hotel'])) {
-                $ids = is_array($options['hotel']) ? $options['hotel'] : explode(',', $options['hotel']);
-                $where[] = ['hotel.id' => $ids];
+            // 产品上游 id
+            if (!empty($options['upstream'])) {
+                $ids = is_array($options['upstream']) ? $options['upstream'] : explode(',', $options['upstream']);
+                $where[] = ['product_upstream.id' => $ids];
             }
 
             // 关键字
@@ -596,12 +596,12 @@ class GeneralController extends MainController
                     ],
                     [
                         'like',
-                        'hotel_region.name',
+                        'product_region.name',
                         $options['keyword']
                     ],
                     [
                         'like',
-                        'hotel.name',
+                        'product_upstream.name',
                         $options['keyword']
                     ]
                 ];
@@ -708,10 +708,10 @@ class GeneralController extends MainController
      *
      * @return array
      */
-    public function listHotels($handler)
+    public function listUpstreams($handler)
     {
-        $hotel = $this->service(parent::$apiList, [
-            'table' => 'hotel',
+        $upstream = $this->service(parent::$apiList, [
+            'table' => 'product_upstream',
             'select' => [
                 'id',
                 'name'
@@ -722,10 +722,10 @@ class GeneralController extends MainController
         ]);
 
         if (is_callable($handler)) {
-            $hotel = array_map($handler, $hotel);
+            $upstream = array_map($handler, $upstream);
         }
 
-        return $hotel;
+        return $upstream;
     }
 
     /**
@@ -742,11 +742,11 @@ class GeneralController extends MainController
     {
         $map = $this->cache('list-region.' . $plate, function () {
             $result = $this->service(self::$apiList, [
-                'table' => 'hotel_region',
+                'table' => 'product_region',
                 'where' => [['state' => 1]],
                 'select' => [
                     'id',
-                    'hotel_plate_id',
+                    'product_plate_id',
                     'name'
                 ]
             ]);
@@ -757,7 +757,7 @@ class GeneralController extends MainController
 
             $_map = [];
             foreach ($result as $item) {
-                $_map[$item['hotel_plate_id']][$item['id']] = $item['name'];
+                $_map[$item['product_plate_id']][$item['id']] = $item['name'];
             }
 
             return $_map;

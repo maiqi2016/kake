@@ -20,18 +20,27 @@ class OrderSubController extends GeneralController
     public static $modelInfo = '子订单';
 
     /**
-     * @var string 模态框的名称
-     */
-    public static $ajaxModalListTitle = '选择子订单';
-
-    /**
      * @var array Hook
      */
     public static $hookPriceNumber = ['price'];
 
+    /**
+     * @var string 模态框的名称
+     */
+    public static $ajaxModalListTitle = '选择子订单';
+
+    public static $uid;
+
+    public static $_sold_state;
+
+    /**
+     * @var array 已完成的子订单状态集
+     */
     public static $stateOk = [
-        5, // 已入住
-        6, // 已完成
+        5,
+        // 已入住
+        6,
+        // 已完成
     ];
 
     /**
@@ -118,6 +127,34 @@ class OrderSubController extends GeneralController
     }
 
     /**
+     * @inheritdoc
+     */
+    public static function soldOperation()
+    {
+        return [
+            [
+                'text' => '编辑',
+                'value' => 'order-sold-code/edit',
+                'icon' => 'pencil',
+                'params' => function ($record) {
+                    return ['id' => $record['sold_id']];
+                }
+            ]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function mySoldOperation()
+    {
+        $operation = self::soldOperation();
+        $operation[0]['value'] = 'order-sold-code/my-edit';
+
+        return $operation;
+    }
+
+    /**
      * @inheritDoc
      */
     public static function editOperation()
@@ -191,6 +228,53 @@ class OrderSubController extends GeneralController
     /**
      * @inheritDoc
      */
+    public static function soldFilter()
+    {
+        return [
+            'order_number' => [
+                'table' => 'order',
+                'field' => 'order_number',
+                'elem' => 'input',
+                'equal' => true
+            ],
+            'username' => [
+                'table' => 'user',
+                'elem' => 'input'
+            ],
+            'product_supplier_name' => [
+                'title' => '核销方',
+                'list_table' => 'product_supplier',
+                'list_value' => 'name',
+                'value' => parent::SELECT_KEY_ALL
+            ],
+            'code' => [
+                'title' => '核销码',
+                'elem' => 'input',
+                'table' => 'order_sold_code'
+            ],
+            'sold_state' => [
+                'title' => '核销状态',
+                'table' => 'order_sold_code',
+                'field' => 'state',
+                'value' => parent::SELECT_KEY_ALL
+            ],
+            'state' => [
+                'value' => parent::SELECT_KEY_ALL
+            ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function mySoldFilter()
+    {
+        return self::soldFilter();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function ajaxModalListFilter()
     {
         return [
@@ -230,6 +314,25 @@ class OrderSubController extends GeneralController
     /**
      * @inheritDoc
      */
+    public static function soldSorter()
+    {
+        $sorter = self::indexSorter();
+        unset($sorter['payment_state']);
+
+        return $sorter;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function mySoldSorter()
+    {
+        return self::soldSorter();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function indexAssist()
     {
         return [
@@ -249,6 +352,10 @@ class OrderSubController extends GeneralController
                 'empty',
                 'tip'
             ],
+            'username' => [
+                'tip',
+                'table' => 'user'
+            ],
             'check_in_name' => 'empty',
             'check_in_phone' => 'empty',
             'check_in_time' => 'empty',
@@ -262,6 +369,11 @@ class OrderSubController extends GeneralController
                     1 => 'success',
                     2 => 'default'
                 ]
+            ],
+            'product_supplier_name' => [
+                'tip',
+                'title' => '核销方',
+                'code'
             ],
             'add_time' => 'tip',
             'update_time' => 'tip',
@@ -279,6 +391,69 @@ class OrderSubController extends GeneralController
                 ]
             ]
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function soldAssist()
+    {
+        return [
+            'id' => 'code',
+            'order_number' => [
+                'table' => 'order',
+                'field' => 'order_number',
+                'code',
+                'color' => 'default'
+            ],
+            'username' => [
+                'table' => 'user'
+            ],
+            'name' => [
+                'title' => '套餐',
+                'max-width' => '350px'
+            ],
+            'price' => 'code',
+            'product_supplier_name' => [
+                'title' => '核销方',
+                'code',
+                'color' => 'primary'
+            ],
+            'add_time' => 'tip',
+            'update_time' => 'tip',
+            'code' => [
+                'title' => '核销码',
+                'max-width' => '150px',
+                'tpl' => '<p class="bg-info text-center">%s</p>',
+                'color' => 'default'
+            ],
+            'sold_state' => [
+                'title' => '核销状态',
+                'code',
+                'info',
+                'color' => [
+                    0 => 'default',
+                    1 => 'success',
+                    2 => 'warning'
+                ]
+            ],
+            'state' => [
+                'code',
+                'info',
+                'color' => [
+                    0 => 'default',
+                    6 => 'success'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function mySoldAssist()
+    {
+        return self::soldAssist();
     }
 
     /**
@@ -344,18 +519,76 @@ class OrderSubController extends GeneralController
                 [
                     'left_table' => 'order',
                     'table' => 'user'
+                ],
+                [
+                    'left_table' => 'product_package',
+                    'table' => 'product_supplier'
                 ]
             ],
             'select' => [
                 'product_package.name',
                 'order.order_number',
                 'order.payment_state',
-                'order_sub.*'
+                'order_sub.*',
+                'user.username',
+                'product_supplier.name AS product_supplier_name'
             ],
             'order' => [
                 'order_sub.update_time DESC'
             ],
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function soldCondition()
+    {
+        $condition = self::indexCondition();
+        $condition['where'][] = [
+            '>',
+            'product_package.product_supplier_id',
+            0
+        ];
+        $condition['join'][] = [
+            'table' => 'order_sold_code',
+            'left_on_field' => 'id',
+            'right_on_field' => 'order_sub_id'
+        ];
+        $condition['select'][] = 'order_sold_code.code';
+        $condition['select'][] = 'order_sold_code.id AS sold_id';
+        $condition['select'][] = 'order_sold_code.state AS sold_state';
+
+        return $condition;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function mySoldCondition()
+    {
+        $condition = self::soldCondition();
+        $condition['where'][] = [
+            'product_package.product_supplier_id' => $this->user->supplier
+        ];
+
+        return $condition;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function sufHandleField($record, $action = null, $callback = null)
+    {
+        $model = parent::model(self::$modelName);
+        self::$_sold_state = $model->_sold_state;
+        $record = $this->getFieldInfo($record, 'sold_state');
+
+        if (!empty($record['code'])) {
+            $record['code'] = wordwrap($record['code'], 4, ' ', true);
+        }
+
+        return parent::sufHandleField($record, $action, $callback);
     }
 
     /**
@@ -366,6 +599,24 @@ class OrderSubController extends GeneralController
     public function actionAjaxModalList()
     {
         return $this->showList();
+    }
+
+    /**
+     * 供应商订单列表
+     */
+    public function actionSold()
+    {
+        return $this->showList();
+    }
+
+    /**
+     * @auth-pass-all
+     */
+    public function actionMySold()
+    {
+        $this->user->supplier = $this->listSupplier($this->user->id);
+
+        return $this->showList('mySold');
     }
 
     /**

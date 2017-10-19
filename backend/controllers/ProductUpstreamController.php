@@ -3,22 +3,22 @@
 namespace backend\controllers;
 
 /**
- * 酒店管理
+ * 产品上游管理
  *
  * @auth-inherit-except front sort
  */
-class HotelController extends GeneralController
+class ProductUpstreamController extends GeneralController
 {
     // 模型
-    public static $modelName = 'Hotel';
+    public static $modelName = 'ProductUpstream';
 
     // 模型描述
-    public static $modelInfo = '酒店';
+    public static $modelInfo = '产品上游';
 
     /**
      * @var string 模态框的名称
      */
-    public static $ajaxModalListTitle = '选择酒店';
+    public static $ajaxModalListTitle = '选择上游';
 
     /**
      * @inheritDoc
@@ -29,7 +29,7 @@ class HotelController extends GeneralController
             [
                 'text' => '选定',
                 'script' => true,
-                'value' => '$.modalRadioValueToInput("radio", "hotel_id")',
+                'value' => '$.modalRadioValueToInput("radio", "product_upstream_id")',
                 'icon' => 'flag'
             ]
         ];
@@ -42,8 +42,8 @@ class HotelController extends GeneralController
     {
         return [
             [
-                'text' => '新增酒店',
-                'value' => 'hotel/add',
+                'text' => '新增产品上游',
+                'value' => 'product-upstream/add',
                 'icon' => 'plus'
             ]
         ];
@@ -59,9 +59,12 @@ class HotelController extends GeneralController
                 'elem' => 'input',
                 'equal' => true
             ],
+            'classify' => [
+                'value' => parent::SELECT_KEY_ALL
+            ],
             'name' => 'input',
-            'hotel_region_id' => [
-                'list_table' => 'hotel_region',
+            'product_region_id' => [
+                'list_table' => 'product_region',
                 'list_value' => 'name',
                 'value' => parent::SELECT_KEY_ALL
             ],
@@ -79,9 +82,12 @@ class HotelController extends GeneralController
     public static function ajaxModalListFilter()
     {
         return [
+            'classify' => [
+                'value' => parent::SELECT_KEY_ALL
+            ],
             'name' => 'input',
-            'hotel_region_id' => [
-                'list_table' => 'hotel_region',
+            'product_region_id' => [
+                'list_table' => 'product_region',
                 'list_value' => 'name',
                 'value' => parent::SELECT_KEY_ALL,
             ],
@@ -100,7 +106,8 @@ class HotelController extends GeneralController
     {
         return [
             'id',
-            'name'
+            'name',
+            'classify'
         ];
     }
 
@@ -111,19 +118,34 @@ class HotelController extends GeneralController
     {
         return [
             'id' => 'code',
+            'classify' => [
+                'code',
+                'info',
+                'color' => [
+                    0 => 'primary',
+                    1 => 'success',
+                    2 => 'info',
+                    3 => 'default'
+                ]
+            ],
             'name' => [
                 'max-width' => '250px'
             ],
-            'hotel_region_id' => [
-                'list_table' => 'hotel_region',
+            'product_region_id' => [
+                'list_table' => 'product_region',
                 'list_value' => 'name',
                 'info',
                 'code'
             ],
-            'principal',
-            'contact',
+            'principal' => [
+                'empty',
+                'tip'
+            ],
+            'contact' => [
+                'empty',
+                'tip'
+            ],
             'address' => [
-                'title' => '地址',
                 'max-width' => '400px'
             ],
             'state' => [
@@ -140,9 +162,19 @@ class HotelController extends GeneralController
     public static function ajaxModalListAssist()
     {
         return [
+            'classify' => [
+                'code',
+                'info',
+                'color' => [
+                    0 => 'primary',
+                    1 => 'success',
+                    2 => 'info',
+                    3 => 'default'
+                ]
+            ],
             'name',
-            'hotel_region_id' => [
-                'list_table' => 'hotel_region',
+            'product_region_id' => [
+                'list_table' => 'product_region',
                 'list_value' => 'name',
                 'info',
                 'code'
@@ -164,18 +196,24 @@ class HotelController extends GeneralController
     public static function editAssist($action = null)
     {
         return [
+            'classify' => [
+                'elem' => 'select',
+                'value' => 1
+            ],
             'name' => [
                 'placeholder' => '64个字以内'
             ],
-            'hotel_region_id' => [
-                'list_table' => 'hotel_region',
+            'product_region_id' => [
+                'list_table' => 'product_region',
                 'list_value' => 'name',
                 'elem' => 'select'
             ],
             'principal' => [
-                'placeholder' => '32个字以内'
+                'placeholder' => '非必填，32个字以内'
             ],
-            'contact',
+            'contact' => [
+                'placeholder' => '非必填'
+            ],
             'address' => [
                 'label' => 5,
                 'placeholder' => '64个字以内'
@@ -188,7 +226,7 @@ class HotelController extends GeneralController
     }
 
     /**
-     * 选择酒店 - 弹出层
+     * 选择上游 - 弹出层
      *
      * @auth-pass-all
      */

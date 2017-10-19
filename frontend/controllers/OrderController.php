@@ -44,10 +44,10 @@ class OrderController extends GeneralController
             ],
             [
                 'left_table' => 'product',
-                'table' => 'hotel'
+                'table' => 'product_upstream'
             ],
             [
-                'table' => 'bill',
+                'table' => 'order_bill',
                 'left_on_field' => 'id',
                 'right_on_field' => 'order_sub_id'
             ],
@@ -82,13 +82,13 @@ class OrderController extends GeneralController
             'attachment.deep_path AS cover_deep_path',
             'attachment.filename AS cover_filename',
 
-            'hotel.name AS hotel_name',
+            'product_upstream.name AS product_upstream_name',
 
-            'bill.id AS bill_id',
-            'bill.courier_company',
-            'bill.courier_number',
-            'bill.invoice_title',
-            'bill.address',
+            'order_bill.id AS order_bill_id',
+            'order_bill.courier_company',
+            'order_bill.courier_number',
+            'order_bill.invoice_title',
+            'order_bill.address',
 
             'log.remark',
         ],

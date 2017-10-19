@@ -28,7 +28,7 @@ $params = \Yii::$app->params;
     </div>
     <div class="hotel-detail">
         <div class="hotel-detail-1">
-            <?= $detail['hotel_name'] ?>
+            <?= $detail['product_upstream_name'] ?>
         </div>
         <div class="hotel-detail-2">
          <span class="hotel-detail-2-1"><?= $detail['title'] ?></span>

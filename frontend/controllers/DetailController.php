@@ -37,13 +37,13 @@ class DetailController extends GeneralController
                 'right_on_field' => 'id'
             ],
             [
-                'table' => 'hotel',
-                'left_on_field' => 'hotel_id',
+                'table' => 'product_upstream',
+                'left_on_field' => 'product_upstream_id',
                 'right_on_field' => 'id'
             ],
             [
-                'left_table' => 'hotel',
-                'table' => 'hotel_region'
+                'left_table' => 'product_upstream',
+                'table' => 'product_region'
             ]
         ],
         'select' => [
@@ -59,8 +59,8 @@ class DetailController extends GeneralController
             'product_package.price',
             'cover.deep_path AS cover_deep_path',
             'cover.filename AS cover_filename',
-            'hotel.name',
-            'hotel_region.name AS region'
+            'product_upstream.name',
+            'product_region.name AS product_region'
         ],
         'where' => [
             ['product.state' => 1]
@@ -92,8 +92,8 @@ class DetailController extends GeneralController
         $this->seo([
             'title' => '商品详情',
             'share_title' => $detail['title'],
-            'description' => $detail['hotel_name'] . ' - ' . $detail['title'],
-            'share_description' => $detail['hotel_name'] . ' - ' . $detail['title'],
+            'description' => $detail['product_upstream_name'] . ' - ' . $detail['title'],
+            'share_description' => $detail['product_upstream_name'] . ' - ' . $detail['title'],
             'share_cover' => $detail['slave_preview_url'][0]
         ]);
 
