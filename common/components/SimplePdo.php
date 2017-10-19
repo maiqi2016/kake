@@ -16,13 +16,13 @@ class SimplePdo extends Object
     /**
      * @var object instance of Log
      */
-    public $logger;
+    public $logger = null;
 
     /**
      * @license optional change
      * @var string Log template
      */
-    public $logtpl = 'SQL: [%s] [%s] %s';
+    public $logTpl = 'SQL: [%s] [%s] %s';
 
     /**
      * @var object The instance of PDO
@@ -53,7 +53,7 @@ class SimplePdo extends Object
      * @var array Configs
      */
     private $_config = [
-        'dsn' => 'mysql:dbname=test;host=127.0.0.1;charset:utf8',
+        'dsn' => 'mysql:dbname=mysql;host=127.0.0.1;charset:utf8',
         'username' => 'root',
         'password' => '123456',
         'timeout' => 1
@@ -172,8 +172,8 @@ class SimplePdo extends Object
                 $sql = preg_replace('/\?/', $value, $sql, 1);
             }
 
-            $message = sprintf($this->logtpl, Helper::cost('begin', 'end'), Helper::cost('begin', 'end', 'm'), $sql);
-            $this->logger->sql($message);
+            $message = sprintf($this->logTpl, Helper::cost('begin', 'end'), Helper::cost('begin', 'end', 'm'), $sql);
+            $this->logger && $this->logger->sql($message);
 
             return true;
         }
@@ -198,8 +198,8 @@ class SimplePdo extends Object
 
         if ($result) {
 
-            $message = sprintf($this->logtpl, Helper::cost('begin', 'end'), Helper::cost('begin', 'end', 'm'), $statement);
-            $this->logger->sql($message);
+            $message = sprintf($this->logTpl, Helper::cost('begin', 'end'), Helper::cost('begin', 'end', 'm'), $statement);
+            $this->logger && $this->logger->sql($message);
 
             $this->_pdoStatement = $result;
             $this->_sql = $statement;

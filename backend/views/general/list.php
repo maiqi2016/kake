@@ -20,6 +20,9 @@ $action = \Yii::$app->controller->action->id;
     <?php if (!empty($filter)): ?>
         <form class="form-inline filter">
             <input type="hidden" name="r" value="<?= $controller ?>/<?= $action ?>">
+            <?php if (!empty($fileName = Yii::$app->request->get('field_name'))): ?>
+            <input type="hidden" name="field_name" value="<?= $fileName ?>">
+            <?php endif; ?>
             <?php if ($sortQuery = Yii::$app->request->get('sorter')): ?>
                 <input type="hidden" name="sorter" value="<?= $sortQuery ?>">
             <?php endif; ?>
@@ -195,9 +198,17 @@ $action = \Yii::$app->controller->action->id;
             <tr <?= $tip ?>>
                 <?php if (!empty($recordFilter)): ?>
                     <td>
+                        <?php
+                        if (is_array($recordFilterValueName)) {
+                            $value = Helper::pullSome($item, $recordFilterValueName);
+                            $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+                        } else {
+                            $value = $item[$recordFilterValueName];
+                        }
+                        ?>
                         <input type="<?= $recordFilter ?>"
                                name="<?= $recordFilterName ?>"
-                               value="<?= $item[$recordFilterValueName] ?>">
+                               value='<?= $value ?>'>
                     </td>
                 <?php endif; ?>
                 <td>

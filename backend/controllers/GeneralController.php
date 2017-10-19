@@ -105,7 +105,7 @@ class GeneralController extends MainController
 
     // ---
 
-    // 权限控制 - 只用于继承的控制器
+    // 权限控制 - 只用于继承的控制器，不纳入权限控制列表
     private static $inheritControllers = [
         'MainController',
         'GeneralController'
@@ -258,8 +258,8 @@ class GeneralController extends MainController
             $list = $this->reflectionAuthList();
             $_list = [];
 
-            // 统一处理
             foreach ($list as $ctrl => $item) {
+                // 权限列表页 => 排除 => 被继承的控制器
                 if ($manager && in_array($ctrl, self::$inheritControllers)) {
                     continue;
                 }
@@ -268,6 +268,7 @@ class GeneralController extends MainController
                 foreach ($item['sub'] as $act) {
                     $key = $act['controller'] . '/' . $act['action'];
                     if ($manager) {
+                        // 权限列表页 => 排除 => 不含以下标识的方法
                         if (!empty($act[self::$keySame]) || isset($act[self::$keyPassAll])) {
                             continue;
                         }
@@ -283,7 +284,7 @@ class GeneralController extends MainController
                 }
             }
 
-            // 非管理页列表时特殊处理
+            // 非权限列表页 => 数据加工
             if (!$manager) {
                 $authRecord = $this->getAuthRecord($this->user->id);
                 $_list = array_merge(...(array_values($_list)));
@@ -453,7 +454,7 @@ class GeneralController extends MainController
                 $_ctrl = str_replace('Controller', null, $ctrl);
                 $_ctrl = Helper::camelToUnder($_ctrl, '-');
                 if (empty($val['info'])) {
-                    $val['info'] = "${_ctrl}/${act} 不规范的注释";
+                    $val['info'] = "${_ctrl}/${act} 需规范注释";
                 }
 
                 if (!empty($val[self::$keySame])) {
@@ -606,6 +607,10 @@ class GeneralController extends MainController
                 'size' => 0
             ]);
             $list = Helper::arrayColumnSimple($list, 'id', 'name');
+
+            if (!empty($item['list_except'])) {
+                $list = array_merge($item['list_except'], $list);
+            }
 
             return $list;
         }, YEAR, null, Yii::$app->params['use_cache']);

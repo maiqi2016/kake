@@ -1360,6 +1360,7 @@ class MainController extends Controller
         ], function () use ($user_ids, $get_field) {
 
             $where = [
+                ['manager' => 1],
                 ['role' => 1],
                 ['state' => 1]
             ];
@@ -1385,6 +1386,29 @@ class MainController extends Controller
         }, WEEK, null, Yii::$app->params['use_cache']);
 
         return $admin;
+    }
+
+    /**
+     * 列表指定用户所属的供应商
+     *
+     * @access public
+     *
+     * @param integer $user_id
+     *
+     * @return array
+     */
+    public function listSupplier($user_id)
+    {
+        $result = $this->service(self::$apiList, [
+            'table' => 'product_supplier_user',
+            'where' => [
+                ['state' => 1],
+                ['user_id' => $user_id]
+            ],
+            'select' => ['product_supplier_id']
+        ]);
+
+        return array_column($result, 'product_supplier_id');
     }
 
     // --- Display ---

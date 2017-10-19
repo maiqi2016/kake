@@ -47,15 +47,6 @@ if ($modal) {
             return Helper::$fn($data, $key, $default);
         };
 
-        // 下一个 item 与当前 item 同一行
-        $same_row = $empty('same_row');
-
-        // 开始标签和结尾标签
-        $html_begin_div = $pre_same_row ? null : '<div class="form-group ' . ($empty('hidden', false) ? 'hidden' : null) . '">';
-        $html_end_div = $same_row ? null : '</div>';
-
-        $pre_same_row = $same_row;
-
         // 栅格数和标题
         $html_label = ($item['title'] === false) ? null : '<label class="col-sm-2 control-label">' . $empty('title') . '</label>';
 
@@ -84,8 +75,20 @@ if ($modal) {
 
         $as_tip = null;
         if ($tip = $empty('tip')) {
-            $as_tip = 'data-toggle="tooltip" data-html="true" data-placement="' . $empty('placement', 'right') . '" title="' . $tip . '"';
+            $as_tip = 'data-toggle="tooltip" data-html="true" data-placement="' . $empty('pos', 'right') . '" title="' . $tip . '"';
         }
+
+        // 下一个 item 与当前 item 同一行
+        $same_row = $empty('same_row');
+
+        // 开始标签和结尾标签
+        $html_begin_div = $pre_same_row ? null : '<div class="form-group box_' . $av_name . ' ' . ($empty('hidden', false) ? 'hidden' : null) . '">';
+        $html_end_div = $same_row ? null : '</div>';
+
+        $pre_same_row = $same_row;
+
+        // 显示条件
+        $show_condition = $empty('show', null);
         ?>
 
         <?php if ($element == 'input' && $av_type == 'file'): ?> <!-- input.file description -->
@@ -287,6 +290,35 @@ if ($modal) {
                     type="button"
                 <?= $as_script ?>><?= $av_value ?></button>
         </div>
+    <?php endif; ?>
+    <?php if (!empty($show_condition)): ?>
+        <script type="text/javascript">
+            $(function () {
+                var son = 'input, select, textarea';
+                var change = function () {
+                    var showNum = '<?= count($show_condition) ?>';
+                    var show = 0;
+                    <?php foreach ($show_condition as $k => $v): ?>
+                    var value = $('.box_<?= $k ?>').find(son).val();
+                    show += eval('<?= $v ?>') ? 1 : 0;
+                    <?php endforeach; ?>
+
+                    var box = $('.box_<?= $av_name ?>');
+                    if (show >= showNum) {
+                        box.removeClass('hidden');
+                    } else {
+                        box.addClass('hidden');
+                    }
+                };
+
+                change();
+                <?php foreach ($show_condition as $k => $v): ?>
+                $('.box_<?= $k ?>').find(son).change(function () {
+                    change();
+                });
+                <?php endforeach; ?>
+            });
+        </script>
     <?php endif; ?>
         <?= $html_end_div ?>
     <?php endforeach; ?>

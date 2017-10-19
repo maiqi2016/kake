@@ -154,7 +154,7 @@ class ProductProducerController extends GeneralController
             'select_product' => [
                 'title' => false,
                 'elem' => 'button',
-                'value' => '选择酒店产品',
+                'value' => '选择产品',
                 'script' => '$.showPage("product.list", {state: 1})'
             ],
 

@@ -87,11 +87,11 @@ class OrderController extends GeneralController
                 'elem' => 'input',
                 'title' => '产品标题'
             ],
-            'hotel_name' => [
-                'table' => 'hotel',
+            'product_upstream_name' => [
+                'table' => 'product_upstream',
                 'field' => 'name',
                 'elem' => 'input',
-                'title' => '酒店名称'
+                'title' => '上游名称'
             ],
             'payment_method' => [
                 'value' => parent::SELECT_KEY_ALL
@@ -149,8 +149,8 @@ class OrderController extends GeneralController
                 'title' => '产品标题',
                 'tip'
             ],
-            'hotel_name' => [
-                'title' => '酒店名称',
+            'product_upstream_name' => [
+                'title' => '上游名称',
                 'tip'
             ],
             'price' => 'code',
@@ -202,8 +202,8 @@ class OrderController extends GeneralController
             'username' => [
                 'title' => '下单用户'
             ],
-            'hotel_name' => [
-                'title' => '酒店名称'
+            'product_upstream_name' => [
+                'title' => '上游名称'
             ],
             'product_title' => [
                 'title' => '产品标题'
@@ -222,6 +222,9 @@ class OrderController extends GeneralController
     public static function editAssist($action = null)
     {
         return [
+            'order_number' => [
+                'hidden' => true
+            ],
             'payment_state' => [
                 'elem' => 'select'
             ],
@@ -242,8 +245,8 @@ class OrderController extends GeneralController
                 ['table' => 'product'],
                 [
                     'left_table' => 'product',
-                    'table' => 'hotel',
-                    'left_on_field' => 'hotel_id'
+                    'table' => 'product_upstream',
+                    'left_on_field' => 'product_upstream_id'
                 ],
                 [
                     'left_table' => 'order',
@@ -260,7 +263,7 @@ class OrderController extends GeneralController
             'select' => [
                 'user.username',
                 'product.title AS product_title',
-                'hotel.name AS hotel_name',
+                'product_upstream.name AS product_upstream_name',
                 'order_contacts.real_name',
                 'order_contacts.phone',
                 'producer_user.username AS producer_username',
@@ -290,6 +293,21 @@ class OrderController extends GeneralController
         }
 
         return parent::sufHandleField($record, $action, $callback);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function preHandleField($record, $action = null)
+    {
+        if (isset($record['payment_state'])) {
+            $this->service('order.pay-handler', [
+                'order_number' => $record['order_number'],
+                'paid_result' => !!$record['payment_state']
+            ]);
+        }
+
+        return parent::preHandleField($record, $action);
     }
 
     /**

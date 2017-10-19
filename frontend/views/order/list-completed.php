@@ -20,7 +20,7 @@ $params = \Yii::$app->params;
                 <div class="apply-refund-right">
                     <div class="apply-refund-right-1"><?= $item['title'] ?></div>
                     <p>订单金额: <span>￥<?= $item['price'] ?></span></p>
-                    <p>酒店名称: <span><?= $item['hotel_name'] ?></span></p>
+                    <p>酒店名称: <span><?= $item['product_upstream_name'] ?></span></p>
                     <p>套餐名称: <span><?= $item['package_name'] ?></span></p>
                     <p>订单编号: <span><?= $item['order_number'] ?></span></p>
                 </div>
@@ -46,7 +46,7 @@ $params = \Yii::$app->params;
                 <?php $form = 'show_bill_form[' . $item['id'] . ']' ?>
                 <?php $schedule = 'show_bill_schedule[' . $item['id'] . ']' ?>
 
-                <?php if (!$item['bill_id']): ?>
+                <?php if (!$item['order_bill_id']): ?>
 
                     <div class="order-status-button">
                         <div>

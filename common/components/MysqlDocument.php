@@ -16,7 +16,7 @@ class MysqlDocument extends Object
     /**
      * @var object Instance of PDO
      */
-    public $simplepdo;
+    public $pdo;
 
     /**
      * @license optional init
@@ -81,13 +81,17 @@ EOS;
      *
      * @access public
      *
-     * @param array $config
+     * @param object $pdo
+     * @param array  $databases
+     * @param array  $config
      */
-    public function __construct($config = [])
+    public function __construct($pdo, $databases = null, $config = [])
     {
-        parent::__construct();
+        parent::__construct($config);
 
-        $config && $this->databases = $config;
+        $this->pdo = $pdo;
+        $databases && $this->databases = $databases;
+
         $this->_replaceDbName();
     }
 
@@ -142,7 +146,7 @@ EOS;
      */
     private function _listMain()
     {
-        $listMain = $this->simplepdo->fetchAll($this->_sqlListMain);
+        $listMain = $this->pdo->fetchAll($this->_sqlListMain);
 
         if (empty($listMain)) {
             return [];
@@ -170,7 +174,7 @@ EOS;
      */
     private function _listTableComment()
     {
-        $listTableComment = $this->simplepdo->fetchAll($this->_sqlListTableComment);
+        $listTableComment = $this->pdo->fetchAll($this->_sqlListTableComment);
 
         if (empty($listTableComment)) {
             return [];
@@ -200,7 +204,7 @@ EOS;
         $_sqlGetIndex = str_replace('[DB]', $dbName, $_sqlGetIndex);
         $_sqlGetIndex = str_replace('[TABLE]', $tableName, $_sqlGetIndex);
 
-        $getIndex = $this->simplepdo->fetchAll($_sqlGetIndex);
+        $getIndex = $this->pdo->fetchAll($_sqlGetIndex);
 
         if (empty($getIndex)) {
             return [];
