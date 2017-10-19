@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 /**
- * 抽奖码管理
+ * 活动抽奖码管理
  *
  * @auth-inherit-except add edit front sort
  */

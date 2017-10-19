@@ -3,17 +3,17 @@
 namespace backend\controllers;
 
 /**
- * 发票管理
+ * 订单发票管理
  *
  * @auth-inherit-except front sort
  */
-class BillController extends GeneralController
+class OrderBillController extends GeneralController
 {
     // 模型
-    public static $modelName = 'Bill';
+    public static $modelName = 'OrderBill';
 
     // 模型描述
-    public static $modelInfo = '发票';
+    public static $modelInfo = '订单发票';
 
     /**
      * @var array Hook
@@ -58,19 +58,19 @@ class BillController extends GeneralController
             0 => [
                 [
                     'or',
-                    ['bill.courier_number' => ''],
-                    ['bill.courier_number' => null],
+                    ['order_bill.courier_number' => ''],
+                    ['order_bill.courier_number' => null],
                 ]
             ],
             1 => [
                 [
                     '<>',
-                    'bill.courier_number',
+                    'order_bill.courier_number',
                     ''
                 ],
                 [
                     'NOT',
-                    ['bill.courier_number' => null],
+                    ['order_bill.courier_number' => null],
                 ]
             ]
         ];
@@ -85,8 +85,8 @@ class BillController extends GeneralController
     {
         return [
             [
-                'text' => '新增发票',
-                'value' => 'bill/add',
+                'text' => '新增订单发票',
+                'value' => 'order_bill/add',
                 'icon' => 'plus'
             ]
         ];
@@ -196,7 +196,7 @@ class BillController extends GeneralController
             'select' => [
                 'order.order_number',
                 'order_sub.price',
-                'bill.*'
+                'order_bill.*'
             ],
         ]);
     }

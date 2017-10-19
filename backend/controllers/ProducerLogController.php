@@ -112,7 +112,7 @@ class ProducerLogController extends GeneralController
                 'tip'
             ],
             'name' => [
-                'title' => '酒店',
+                'title' => '上游',
                 'tip'
             ],
             'buyer_name' => [
@@ -232,7 +232,7 @@ class ProducerLogController extends GeneralController
                 ],
                 [
                     'left_table' => 'product',
-                    'table' => 'hotel'
+                    'table' => 'product_upstream'
                 ],
             ],
             'select' => [
@@ -243,7 +243,7 @@ class ProducerLogController extends GeneralController
                 'buyer_user.username AS buyer_name',
                 'producer_user.username AS producer_name',
                 'product.title',
-                'hotel.name',
+                'product_upstream.name',
                 'producer_log.id',
                 'producer_log.product_id',
                 'producer_log.state'

@@ -6,7 +6,7 @@ use common\components\Helper;
 use Yii;
 
 /**
- * 分销账目管理
+ * 余额账目管理
  *
  * @auth-inherit-except add edit front sort
  */
@@ -16,7 +16,7 @@ class ProducerQuotaController extends GeneralController
     public static $modelName = 'ProducerQuota';
 
     // 模型描述
-    public static $modelInfo = '分销账目';
+    public static $modelInfo = '余额账目';
 
     /**
      * @var array Hook

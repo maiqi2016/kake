@@ -143,38 +143,6 @@ class MemoryShare extends Object
     }
 
     /**
-     * Gets the current shared memory block id
-     *
-     * @access public
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Gets the current shared memory block permissions
-     *
-     * @access public
-     */
-    public function getPermissions()
-    {
-        return $this->perms;
-    }
-
-    /**
-     * Sets the default permission (octal) that will be used in created memory blocks
-     *
-     * @access public
-     *
-     * @param string $perms Permissions, in octal form
-     */
-    public function setPermissions($perms)
-    {
-        $this->perms = $perms;
-    }
-
-    /**
      * __destructor
      *
      * @access public

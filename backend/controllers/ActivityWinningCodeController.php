@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 /**
- * 核对抽奖码管理
+ * 活动兑奖管理
  *
  * @auth-inherit-except add edit front sort
  */
@@ -13,7 +13,7 @@ class ActivityWinningCodeController extends GeneralController
     public static $modelName = 'ActivityWinningCode';
 
     // 模型描述
-    public static $modelInfo = '活动核对抽奖码';
+    public static $modelInfo = '活动兑奖';
 
     /**
      * @var array Hook

@@ -6,7 +6,7 @@ use common\components\Helper;
 use yii\helpers\Html;
 
 /**
- * 项目运行日志管理
+ * 运行日志管理
  *
  * @auth-inherit-except add edit front sort
  */
@@ -16,7 +16,7 @@ class AppLogController extends GeneralController
     public static $modelName = 'AppLog';
 
     // 模型描述
-    public static $modelInfo = '项目运行日志';
+    public static $modelInfo = '运行日志';
 
     /**
      * @var array Hook

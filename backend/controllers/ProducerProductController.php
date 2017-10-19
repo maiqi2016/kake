@@ -148,8 +148,8 @@ class ProducerProductController extends GeneralController
             ],
             'name' => [
                 'elem' => 'input',
-                'title' => '酒店',
-                'table' => 'hotel'
+                'title' => '上游',
+                'table' => 'product_upstream'
             ],
             'type' => [
                 'value' => parent::SELECT_KEY_ALL
@@ -197,7 +197,7 @@ class ProducerProductController extends GeneralController
                 'max-width' => '180px'
             ],
             'name' => [
-                'title' => '酒店',
+                'title' => '上游',
                 'max-width' => '180px',
                 'tip'
             ],
@@ -321,7 +321,7 @@ class ProducerProductController extends GeneralController
                 ],
                 [
                     'left_table' => 'product',
-                    'table' => 'hotel'
+                    'table' => 'product_upstream'
                 ],
                 [
                     'table' => 'product_package',
@@ -353,7 +353,7 @@ class ProducerProductController extends GeneralController
             'select' => [
                 'product.title',
                 'product.attachment_cover',
-                'hotel.name',
+                'product_upstream.name',
                 'producer_product.*',
                 'user.username',
                 'product_package.min_price',
