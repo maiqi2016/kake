@@ -9,23 +9,24 @@ $params = \Yii::$app->params;
 
 <div class="body">
     <!-- Banner -->
-    <div class="banner">
-        <div class="menu-box" kk-menu-lm>
-            <div class="menu">
-                <img src="<?= $params['frontend_source'] ?>/img/menu.svg"/>
-            </div>
+
+    <div class="menu-box" kk-menu-lm>
+        <div class="menu">
+            <img src="<?= $params['frontend_source'] ?>/img/menu.svg"/>
         </div>
-        <?php if (!empty($focusList)): ?>
-            <ul class="focus-point">
-                <?php foreach ($focusList as $focus): ?>
-                    <li></li>
-                <?php endforeach ?>
-            </ul>
-        <?php endif ?>
     </div>
+    <?php if (!empty($focusList)): ?>
+        <ul class="focus-point">
+            <?php foreach ($focusList as $focus): ?>
+                <li></li>
+            <?php endforeach ?>
+        </ul>
+    <?php endif ?>
+
     <?php if (!empty($focusList)): ?>
         <div class="carousel index-banner-height" id="focus-hot" kk-focus=".focus-point" data-point-current="on"
              style="overflow:hidden">
+
             <div class="carousel-scroller product-focus">
                 <?php foreach ($focusList as $focus): ?>
                     <?php
