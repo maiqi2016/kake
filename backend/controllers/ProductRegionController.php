@@ -3,17 +3,17 @@
 namespace backend\controllers;
 
 /**
- * 酒店板块管理
+ * 产品地区管理
  *
  * @auth-inherit-except front
  */
-class HotelPlateController extends GeneralController
+class ProductRegionController extends GeneralController
 {
     // 模型
-    public static $modelName = 'HotelPlate';
+    public static $modelName = 'ProductRegion';
 
     // 模型描述
-    public static $modelInfo = '酒店板块';
+    public static $modelInfo = '产品地区';
 
     /**
      * @inheritDoc
@@ -22,8 +22,8 @@ class HotelPlateController extends GeneralController
     {
         return [
             [
-                'text' => '新增酒店板块',
-                'value' => 'hotel-plate/add',
+                'text' => '新增产品地区',
+                'value' => 'product-region/add',
                 'icon' => 'plus'
             ]
         ];
@@ -45,7 +45,7 @@ class HotelPlateController extends GeneralController
                 'value' => '$.sortField',
                 'params' => function ($record) {
                     return [
-                        'hotel-plate.sort',
+                        'product_region.sort',
                         $record['id'],
                         $record['sort']
                     ];
@@ -65,6 +65,11 @@ class HotelPlateController extends GeneralController
                 'equal' => true
             ],
             'name' => 'input',
+            'product_plate_id' => [
+                'list_table' => 'product_plate',
+                'list_value' => 'name',
+                'value' => parent::SELECT_KEY_ALL
+            ],
             'state' => [
                 'value' => parent::SELECT_KEY_ALL
             ]
@@ -93,14 +98,19 @@ class HotelPlateController extends GeneralController
             'name' => [
                 'max-width' => '350px'
             ],
+            'product_plate_id' => [
+                'list_table' => 'product_plate',
+                'list_value' => 'name',
+                'info',
+                'code'
+            ],
             'preview_url' => [
-                'title' => '板块封面图',
+                'title' => '地区封面图',
                 'img' => [
-                    'pos' => 'right'
+                    'pos' => 'left'
                 ],
                 'width' => '128px'
             ],
-            'update_time',
             'sort' => 'code',
             'state' => [
                 'code',
@@ -119,6 +129,11 @@ class HotelPlateController extends GeneralController
             'name' => [
                 'placeholder' => '32个字以内'
             ],
+            'product_plate_id' => [
+                'elem' => 'select',
+                'list_table' => 'product_plate',
+                'list_value' => 'name',
+            ],
 
             'attachment_id' => [
                 'hidden' => true
@@ -128,7 +143,7 @@ class HotelPlateController extends GeneralController
                 'hidden' => true
             ],
             'preview_url' => [
-                'title' => '板块封面图',
+                'title' => '地区封面图',
                 'elem' => 'img',
                 'img_label' => 4,
                 'upload_name' => 'upload'
@@ -138,7 +153,7 @@ class HotelPlateController extends GeneralController
                 'tag' => 1,
                 'rules' => [
                     'suffix' => 'jpg,jpeg,png',
-                    'pic_sizes' => '188*380',
+                    'pic_sizes' => '336*234',
                     'max_size' => 512
                 ],
                 'preview_name' => 'preview_url',
@@ -165,14 +180,14 @@ class HotelPlateController extends GeneralController
                 ['table' => 'attachment']
             ],
             'select' => [
-                'hotel_plate.*',
+                'product_region.*',
                 'attachment.deep_path AS deep_path',
                 'attachment.filename AS filename'
             ],
             'order' => [
-                'hotel_plate.state DESC',
-                'ISNULL(hotel_plate.sort), hotel_plate.sort ASC',
-                'hotel_plate.update_time DESC'
+                'product_region.state DESC',
+                'ISNULL(product_region.sort), product_region.sort ASC',
+                'product_region.update_time DESC'
             ]
         ]);
     }

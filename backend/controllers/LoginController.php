@@ -6,7 +6,7 @@ use common\components\Helper;
 use yii;
 
 /**
- * 用户登录
+ * 用户登录控制
  *
  * @auth-inherit-except add edit front sort
  */

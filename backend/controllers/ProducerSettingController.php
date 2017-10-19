@@ -363,11 +363,13 @@ class ProducerSettingController extends GeneralController
     public function actionSetting()
     {
         $reference = $this->getControllerName('center');
+        $post = Yii::$app->request->post();
+        $post['producer_id'] = $this->user->id;
 
-        if (Yii::$app->request->post('id')) {
-            $this->actionEditForm($reference, 'edit');
+        if (!empty($post['id'])) {
+            $this->actionEditForm($reference, 'edit', $post);
         } else {
-            $this->actionAddForm($reference, 'add');
+            $this->actionAddForm($reference, 'add', $post);
         }
     }
 

@@ -61,7 +61,8 @@ class UserController extends GeneralController
      */
     public static function ajaxModalListOperations()
     {
-        $field = Yii::$app->request->get('field_name', 'producer_id');
+        $field = Yii::$app->request->get('field_name') ?: Yii::$app->request->post('field_name', 'producer_id');
+
         return [
             [
                 'text' => '选定',
@@ -84,6 +85,9 @@ class UserController extends GeneralController
             ],
             'username' => 'input',
             'phone' => 'input',
+            'manager' => [
+                'value' => parent::SELECT_KEY_ALL
+            ],
             'role' => [
                 'value' => parent::SELECT_KEY_ALL
             ],
@@ -112,6 +116,8 @@ class UserController extends GeneralController
         return [
             'id',
             'username',
+            'manager',
+            'role',
             'update_time',
             'state'
         ];
@@ -125,6 +131,9 @@ class UserController extends GeneralController
         return [
             'username' => 'input',
             'phone' => 'input',
+            'manager' => [
+                'value' => parent::SELECT_KEY_ALL
+            ],
             'role' => [
                 'value' => parent::SELECT_KEY_ALL
             ],
@@ -150,7 +159,22 @@ class UserController extends GeneralController
             ],
             'username',
             'phone' => 'empty',
-            'role' => 'info',
+            'manager' => [
+                'code',
+                'color' => [
+                    0 => 'default',
+                    1 => 'success'
+                ],
+                'info'
+            ],
+            'role' => [
+                'code',
+                'color' => [
+                    0 => 'default',
+                    1 => 'primary'
+                ],
+                'info'
+            ],
             'sex' => [
                 'code',
                 'color' => [
@@ -181,7 +205,22 @@ class UserController extends GeneralController
         return [
             'username',
             'phone' => 'empty',
-            'role' => 'info',
+            'manager' => [
+                'code',
+                'color' => [
+                    0 => 'default',
+                    1 => 'success'
+                ],
+                'info'
+            ],
+            'role' => [
+                'code',
+                'color' => [
+                    0 => 'default',
+                    1 => 'primary'
+                ],
+                'info'
+            ],
             'sex' => [
                 'code',
                 'color' => [
@@ -209,14 +248,14 @@ class UserController extends GeneralController
                 'placeholder' => '建议填写'
             ],
             'phone',
+            'manager' => [
+                'elem' => 'select',
+                'value' => 0
+            ],
             'role' => [
                 'elem' => 'select',
                 'value' => 0,
-                'tip' => [
-                    '普通用户' => '无法登录后台',
-                    '管理员' => '管理整个后台',
-                    '分销商' => '管理个人分销系统'
-                ]
+                'tip' => '该标识仅用于默认权限控制，请谨慎选择'
             ],
             'openid' => [
                 'label' => 4,

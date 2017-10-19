@@ -26,14 +26,14 @@ $params = \Yii::$app->params;
 </div>
 
 <div ng-show="showBody">
-    <div class="header" ng-init='hotel = <?= json_encode($hotel, JSON_UNESCAPED_UNICODE) ?>'>
+    <div class="header" ng-init='upstream = <?= json_encode($upstream, JSON_UNESCAPED_UNICODE) ?>'>
         <div class="inner">
             <div class="area" kk-tap="toggle()">筛选</div>
             <form class="search" id="box" action="/">
                 <input type="hidden" name="r" value="items/index">
                 <input id="search-info" type="search" name="keyword" ng-model="search" placeholder="关键字">
                 <ul ng-show="search">
-                    <a href="<?= Url::to(['items/index', 'hotel' => '']) ?>{{item.id}}" ng-repeat="item in hotel | filter:search">
+                    <a href="<?= Url::to(['items/index', 'upstream' => '']) ?>{{item.id}}" ng-repeat="item in upstream | filter:search">
                         <li>{{item.name}}</li>
                     </a>
                 </ul>

@@ -5,7 +5,7 @@ namespace backend\controllers;
 use Yii;
 
 /**
- * 订单操作日志
+ * 订单操作日志管理
  *
  * @auth-inherit-except add edit front sort
  */

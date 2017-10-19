@@ -59,7 +59,7 @@ class DistributionController extends GeneralController
         $this->sourceJs = null;
 
         $region = $this->listPlateAndRegion();
-        $hotel = $this->listHotels(function ($item) {
+        $upstream = $this->listUpstreams(function ($item) {
             $item['name'] = preg_replace('/[ ]+\|[ ]+/', ' ', $item['name']);
 
             return $item;
@@ -82,12 +82,12 @@ class DistributionController extends GeneralController
         });
 
         $this->seo([
-            'title' => $producer['name'] . '的小店',
-            'share_title' => $producer['name'] . '的小店',
+            'title' => $producer['name'],
+            'share_title' => $producer['name'],
             'share_cover' => current($producer['logo_preview_url'])
         ]);
 
-        return $this->render('items', compact('region', 'hotel', 'producer', 'top', 'html', 'over', 'uid'));
+        return $this->render('items', compact('region', 'upstream', 'producer', 'top', 'html', 'over', 'uid'));
     }
 
     /**

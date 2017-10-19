@@ -8,7 +8,7 @@ use Yii;
 use yii\helpers\Url;
 
 /**
- * 酒店产品管理
+ * 产品管理
  *
  * @auth-inherit-except front
  */
@@ -22,7 +22,7 @@ class ProductController extends GeneralController
     /**
      * @var string 模型描述
      */
-    public static $modelInfo = '酒店产品';
+    public static $modelInfo = '产品';
 
     /**
      * @var string 添加操作使用到的 api
@@ -37,7 +37,7 @@ class ProductController extends GeneralController
     /**
      * @var string 模态框的名称
      */
-    public static $ajaxModalListTitle = '选择酒店产品';
+    public static $ajaxModalListTitle = '选择产品';
 
     /**
      * @var string 模态框的名称
@@ -163,7 +163,7 @@ class ProductController extends GeneralController
     {
         return [
             [
-                'text' => '新增酒店产品',
+                'text' => '新增产品',
                 'value' => 'product/add',
                 'icon' => 'plus'
             ]
@@ -298,19 +298,20 @@ class ProductController extends GeneralController
                 'equal' => true
             ],
             'title' => 'input',
-            'hotel_name' => [
+            'product_upstream_name' => [
                 'elem' => 'input',
-                'table' => 'hotel',
+                'table' => 'product_upstream',
                 'field' => 'name',
-                'title' => '酒店名称'
+                'title' => '上游名称'
             ],
-            'hotel_region_id' => [
-                'table' => 'hotel',
-                'list_table' => 'hotel_region',
+            'product_region_id' => [
+                'table' => 'product_upstream',
+                'list_table' => 'product_region',
                 'list_value' => 'name',
                 'value' => parent::SELECT_KEY_ALL
             ],
             'classify' => [
+                'table' => 'product_upstream',
                 'value' => parent::SELECT_KEY_ALL
             ],
             'sale_type' => [
@@ -344,13 +345,14 @@ class ProductController extends GeneralController
     {
         return [
             'title' => 'input',
-            'hotel_name' => [
+            'product_upstream_name' => [
                 'elem' => 'input',
-                'table' => 'hotel',
+                'table' => 'product_upstream',
                 'field' => 'name',
-                'title' => '酒店名称'
+                'title' => '上游名称'
             ],
             'classify' => [
+                'table' => 'product_upstream',
                 'value' => parent::SELECT_KEY_ALL
             ],
             'state' => [
@@ -374,8 +376,19 @@ class ProductController extends GeneralController
     {
         return [
             'id',
-            'sort'
+            'sort',
+            'classify' => [
+                'table' => 'product_upstream'
+            ]
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function ajaxModalListSorter()
+    {
+        return self::indexSorter();
     }
 
     /**
@@ -393,22 +406,29 @@ class ProductController extends GeneralController
             'title' => [
                 'max-width' => '250px'
             ],
-            'hotel_name' => [
-                'table' => 'hotel',
+            'product_upstream_name' => [
+                'table' => 'product_upstream',
                 'field' => 'name',
-                'title' => '酒店名称',
+                'title' => '上游名称',
                 'tip'
             ],
-            'hotel_region_id' => [
-                'table' => 'hotel',
-                'list_table' => 'hotel_region',
+            'product_region_id' => [
+                'table' => 'product_upstream',
+                'list_table' => 'product_region',
                 'list_value' => 'name',
                 'info',
                 'code'
             ],
             'classify' => [
+                'table' => 'product_upstream',
                 'code',
-                'info'
+                'info',
+                'color' => [
+                    0 => 'primary',
+                    1 => 'success',
+                    2 => 'info',
+                    3 => 'default'
+                ]
             ],
             'sale' => [
                 'title' => '打折中',
@@ -436,17 +456,6 @@ class ProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
-     */
-    public static function ajaxModalListSorter()
-    {
-        return [
-            'id',
-            'classify'
-        ];
-    }
-
-    /**
      * 生成列表页的辅助数据
      *
      * @inheritDoc
@@ -457,8 +466,15 @@ class ProductController extends GeneralController
             'id' => 'code',
             'title',
             'classify' => [
+                'table' => 'product_upstream',
                 'code',
-                'info'
+                'info',
+                'color' => [
+                    0 => 'primary',
+                    1 => 'success',
+                    2 => 'info',
+                    3 => 'default'
+                ]
             ],
             'state' => [
                 'code',
@@ -477,8 +493,8 @@ class ProductController extends GeneralController
     {
         return [
             'id' => 'code',
-            'hotel_name' => [
-                'title' => '酒店名称'
+            'product_upstream_name' => [
+                'title' => '上游名称'
             ],
             'title',
             'producer' => [
@@ -516,7 +532,7 @@ class ProductController extends GeneralController
                 'table' => 'product_producer',
                 'foreign_key' => 'product_id',
                 'service_api' => 'product.producer-list',
-                'service_params' => ['where'  => []]
+                'service_params' => ['where' => []]
             ]
         ];
     }
@@ -536,20 +552,16 @@ class ProductController extends GeneralController
                 'placeholder' => '64个字以内',
                 'label' => 4
             ],
-            'hotel_id' => [
+            'product_upstream_id' => [
                 'readonly' => true,
                 'same_row' => true,
-                'table' => 'hotel'
+                'table' => 'product_upstream'
             ],
             'select_hotel' => [
                 'title' => false,
                 'elem' => 'button',
-                'value' => '选择酒店',
-                'script' => '$.showPage("hotel.list", {state: 1})'
-            ],
-            'classify' => [
-                'elem' => 'select',
-                'value' => 4
+                'value' => '选择上游',
+                'script' => '$.showPage("product-upstream.list", {state: 1})'
             ],
             'sale_type' => [
                 'elem' => 'select',
@@ -612,7 +624,7 @@ class ProductController extends GeneralController
             'add_package' => [
                 'title' => '',
                 'elem' => 'button',
-                'value' => '添加酒店套餐',
+                'value' => '添加套餐',
                 'script' => '$.showPage("product-package.package")'
             ],
 
@@ -631,7 +643,7 @@ class ProductController extends GeneralController
             ],
             'night_times' => [
                 'tip' => '留空时在详情页将不显示该数据',
-                'placeholder' => '套餐晚间次数'
+                'placeholder' => '套餐跨晚次'
             ],
             'manifestation' => [
                 'elem' => 'select',
@@ -704,31 +716,31 @@ class ProductController extends GeneralController
             'cost' => [
                 'elem' => 'ckeditor',
                 'title' => $description['cost'],
-                'placement' => 'left',
                 'tip' => '必须填写',
+                'pos' => 'left',
                 'width' => 414
             ],
             'recommend' => [
                 'elem' => 'ckeditor',
                 'title' => $description['recommend'],
-                'placement' => 'left',
                 'tip' => '必须填写',
+                'pos' => 'left',
                 'width' => 414
             ],
             'use' => [
                 'elem' => 'ckeditor',
                 'row' => 6,
                 'title' => $description['use'],
-                'placement' => 'left',
                 'tip' => '必须填写',
+                'pos' => 'left',
                 'width' => 414
             ],
             'back' => [
                 'elem' => 'ckeditor',
                 'row' => 6,
                 'title' => $description['back'],
-                'placement' => 'left',
                 'tip' => '必须填写',
+                'pos' => 'left',
                 'width' => 414
             ],
 
@@ -756,13 +768,14 @@ class ProductController extends GeneralController
                     'as' => 'master',
                     'left_on_field' => 'attachment_cover'
                 ],
-                ['table' => 'hotel']
+                ['table' => 'product_upstream']
             ],
             'select' => [
                 'master.deep_path AS master_deep_path',
                 'master.filename AS master_filename',
-                'hotel.name AS hotel_name',
-                'hotel.hotel_region_id',
+                'product_upstream.name AS product_upstream_name',
+                'product_upstream.product_region_id',
+                'product_upstream.classify',
                 'product.*'
             ],
             'order' => [
@@ -771,6 +784,16 @@ class ProductController extends GeneralController
                 'product.update_time DESC'
             ]
         ];
+    }
+
+    /**
+     * 列表页面的查询构建器
+     *
+     * @inheritdoc
+     */
+    public function ajaxModalListCondition()
+    {
+        return self::indexCondition();
     }
 
     /**
@@ -820,14 +843,14 @@ class ProductController extends GeneralController
                 ],
                 ['table' => 'product_description'],
                 [
-                    'table' => 'hotel',
+                    'table' => 'product_upstream',
                     'field' => 'name'
                 ]
             ],
             'select' => [
                 'cover.deep_path AS cover_deep_path',
                 'cover.filename AS cover_filename',
-                'hotel.name AS hotel_name',
+                'product_upstream.name AS product_upstream_name',
                 'product_description.*',
                 'product.*'
             ],
@@ -835,7 +858,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 选择酒店 - 弹出层
+     * 选择上游 - 弹出层
      *
      * @auth-pass-all
      */
@@ -845,7 +868,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 选择酒店 - 弹出层
+     * 选择上游 - 弹出层
      *
      * @auth-pass-all
      */
@@ -876,7 +899,7 @@ class ProductController extends GeneralController
                 'edit'
             ]) && empty($record['package_ids']) && empty($record['new_package_ids'])
         ) {
-            Yii::$app->session->setFlash('warning', '酒店产品至少设定一个套餐');
+            Yii::$app->session->setFlash('warning', '产品至少设定一个套餐');
             Yii::$app->session->setFlash('list', $record);
             $this->goReference('product/' . $action);
         }
@@ -988,11 +1011,11 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 填写酒店 - 弹出层
+     * 填写上游 - 弹出层
      *
      * @auth-pass-all
      */
-    public function actionAjaxModalHotel()
+    public function actionAjaxModalProductUpstream()
     {
         $this->showForm();
     }

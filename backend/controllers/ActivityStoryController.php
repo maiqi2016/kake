@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 /**
- * 酒店故事管理
+ * 活动故事管理
  *
  * @auth-inherit-except add edit front sort
  */
@@ -13,7 +13,7 @@ class ActivityStoryController extends GeneralController
     public static $modelName = 'ActivityStory';
 
     // 模型描述
-    public static $modelInfo = '酒店故事';
+    public static $modelInfo = '活动故事';
 
     /**
      * @inheritDoc
