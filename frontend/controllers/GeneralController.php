@@ -861,6 +861,7 @@ class GeneralController extends MainController
 
         $controller = $this->controller('order');
         array_walk($list, function (&$item) use ($controller) {
+            $item['code'] = wordwrap($item['code'], 4, ' ', true);
             $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
             $item = $this->createAttachmentUrl($item, ['attachment_cover' => 'cover']);
         });

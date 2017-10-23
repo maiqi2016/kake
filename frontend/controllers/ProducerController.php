@@ -123,11 +123,10 @@ class ProducerController extends GeneralController
         $channel = Helper::integerEncode($this->user->id);
 
         $url = function ($router) use ($channel) {
-            $url = Yii::$app->params['frontend_url'];
-            $url .= Url::toRoute([
+            $url = Url::to([
                 $router,
                 'channel' => $channel
-            ]);
+            ], true);
 
             return urldecode($url);
         };

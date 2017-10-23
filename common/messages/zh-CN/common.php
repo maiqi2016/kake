@@ -46,7 +46,6 @@ return [
 
     // logic order
     'payment with wechat must on the client' => '该支付方式必须在微信客户端',
-    'payment with problems' => '订单支付 {action1} 或者遇到错误需 {action2}',
     'payment link illegal' => '支付链接异常',
     'product id required' => '产品ID参数未指定',
     'product package id required' => '产品套餐ID参数未指定',
@@ -70,7 +69,12 @@ return [
     'cancel order success' => '取消订单操作成功',
     'order request submitted' => '预约申请已提交',
     'check in success' => '入住操作成功',
+    'is not supplier' => '非核销用户无法使用核销功能',
+    'sold code not exists' => '该核销码不存在',
+    'sold code used' => '该核销码已失效或被使用',
+    'sold code verify success' => '该套餐已成功核销<br><br> {action1} / {action2}',
 
+    // activity
     'has been involved in lottery' => '已经参与过抽奖',
 
     // producer

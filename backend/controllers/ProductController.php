@@ -858,9 +858,9 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 选择上游 - 弹出层
+     * 选择上游 - 套餐/产品分销选择时弹出层
      *
-     * @auth-pass-all
+     * @auth-pass-role 1
      */
     public function actionAjaxModalList()
     {
@@ -868,9 +868,9 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 选择上游 - 弹出层
+     * 选择上游 - 分销产品选择时弹出层
      *
-     * @auth-pass-all
+     * @auth-pass-role 1
      */
     public function actionAjaxModalListProducer()
     {
@@ -1008,15 +1008,5 @@ class ProductController extends GeneralController
         $this->sourceCss = ['/node_modules/cropper/dist/cropper.min'];
 
         return parent::beforeAction($action);
-    }
-
-    /**
-     * 填写上游 - 弹出层
-     *
-     * @auth-pass-all
-     */
-    public function actionAjaxModalProductUpstream()
-    {
-        $this->showForm();
     }
 }

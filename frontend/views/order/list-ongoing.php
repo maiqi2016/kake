@@ -20,10 +20,13 @@ $params = \Yii::$app->params;
                 </div>
                 <div class="apply-refund-right">
                     <div class="apply-refund-right-1"><?= $item['title'] ?></div>
-                    <p>订单金额: <span>￥<?= $item['price'] ?></span></p>
-                    <p>酒店名称: <span><?= $item['product_upstream_name'] ?></span></p>
                     <p>套餐名称: <span><?= $item['package_name'] ?></span></p>
+                    <p>套餐金额: <span>￥<?= $item['price'] ?></span></p>
                     <p>订单编号: <span><?= $item['order_number'] ?></span></p>
+                    <?php if (!empty($item['code'])): ?>
+                        <p>核销编码: <code><?= $item['code'] ?></code></p>
+                    <?php endif; ?>
+                    <p>产品名称: <span><?= $item['product_upstream_name'] ?></span></p>
                 </div>
             </div>
 
@@ -31,7 +34,8 @@ $params = \Yii::$app->params;
 
                 <div class="order-status-button clearfix">
                     <div>
-                        <button class="cancel-button" kk-tap="cancelOrder('<?= $item['order_number'] ?>')">取消订单</button>
+                        <button class="cancel-button" kk-tap="cancelOrder('<?= $item['order_number'] ?>')">取消订单
+                        </button>
                         <button class="appointment-button"
                                 kk-tap="paymentAgain(<?= $item['payment_method'] ?>, '<?= $item['order_number'] ?>')">
                             立即支付
@@ -46,12 +50,23 @@ $params = \Yii::$app->params;
 
                 <div class="order-status-button">
                     <div>
-                        <button class="cancel-button" kk-tap="<?= $refund ?> = !<?= $refund ?>; <?= $order ?> = 0; posBox($event, $elem)">
+                        <button class="cancel-button"
+                                kk-tap="<?= $refund ?> = !<?= $refund ?>; <?= $order ?> = 0; posBox($event, $elem)">
                             申请退款
                         </button>
-                        <?php if (!empty($item['bidding'])): ?>
+                        <?php if (empty($item['code'])): ?>
+                            <?php if (!empty($item['bidding'])): ?>
+                                <button class="appointment-button"
+                                        kk-tap="<?= $order ?> = !<?= $order ?>; <?= $refund ?> = 0; posBox($event, $elem)">
+                                    立即预约
+                                </button>
+                            <?php endif; ?>
+                        <?php else: ?>
                             <button class="appointment-button"
-                                    kk-tap="<?= $order ?> = !<?= $order ?>; <?= $refund ?> = 0; posBox($event, $elem)">立即预约
+                                    kk-modal="order/ajax-sold-qr-code"
+                                    data-width="268px"
+                                    data-params="order_sub_id=<?= $item['id'] ?>">
+                                展示二维码
                             </button>
                         <?php endif; ?>
                     </div>
@@ -86,8 +101,10 @@ $params = \Yii::$app->params;
                         <input type="text" ng-model="<?= $sub ?>.phone" placeholder="请填写入住人联系方式"/>
                     </div>
                     <div class="invoice-address">
-                    	<p>入住时间:</p>
-                        <input type="date"  ng-model="<?= $sub ?>.date" placeholder="点我选择入住日期" onchange="this.className=(this.value !== '' ? 'has-value' : '')" style="background: none"/>
+                        <p>入住时间:</p>
+                        <input type="date" ng-model="<?= $sub ?>.date" placeholder="点我选择入住日期"
+                               onchange="this.className=(this.value !== '' ? 'has-value' : '')"
+                               style="background: none"/>
                     </div>
                     <div class="invoice-confirm">
                         <p></p>
@@ -101,7 +118,9 @@ $params = \Yii::$app->params;
 
                 <div class="order-status-button">
                     <div>
-                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">预约信息</button>
+                        <button class="appointment-button"
+                                kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">预约信息
+                        </button>
                     </div>
                 </div>
 
@@ -121,7 +140,9 @@ $params = \Yii::$app->params;
                 <div class="order-status-button">
                     <div>
                         <button class="cancel-button" kk-tap="completed(<?= $item['id'] ?>)">我已入住</button>
-                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">查看确认号</button>
+                        <button class="appointment-button"
+                                kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">查看确认号
+                        </button>
                     </div>
                 </div>
 
@@ -149,7 +170,9 @@ $params = \Yii::$app->params;
 
                 <div class="order-status-button">
                     <div>
-                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">退款信息</button>
+                        <button class="appointment-button"
+                                kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">退款信息
+                        </button>
                     </div>
                 </div>
 
