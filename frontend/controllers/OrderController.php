@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\components\Helper;
 use Yii;
+use yii\helpers\Html;
 use yii\helpers\Url;
 
 /**
@@ -54,6 +55,17 @@ class OrderController extends GeneralController
             [
                 'table' => 'order_instructions_log',
                 'sub' => [
+                    'from' => [
+                        'sub' => [
+                            'select' => [
+                                'order_sub_id',
+                                'remark',
+                                'add_time'
+                            ],
+                            'order' => ['add_time DESC'],
+                            'limit' => 10000
+                        ],
+                    ],
                     'select' => [
                         'order_sub_id',
                         'remark'
@@ -62,6 +74,11 @@ class OrderController extends GeneralController
                     'group' => 'order_sub_id'
                 ],
                 'as' => 'log',
+                'left_on_field' => 'id',
+                'right_on_field' => 'order_sub_id'
+            ],
+            [
+                'table' => 'order_sold_code',
                 'left_on_field' => 'id',
                 'right_on_field' => 'order_sub_id'
             ]
@@ -91,6 +108,8 @@ class OrderController extends GeneralController
             'order_bill.address',
 
             'log.remark',
+
+            'order_sold_code.code',
         ],
         'where' => [
             [
@@ -118,7 +137,8 @@ class OrderController extends GeneralController
         ],
         'completed' => [
             4,
-            5
+            5,
+            6
         ]
     ];
 
@@ -200,6 +220,90 @@ class OrderController extends GeneralController
             $content,
             count($list) < $pageSize
         ];
+    }
+
+    /**
+     * 展示核销产品的二维码
+     */
+    public function actionAjaxSoldQrCode()
+    {
+        $orderSubId = Yii::$app->request->post('order_sub_id');
+
+        $code = $this->service(parent::$apiDetail, [
+            'table' => 'order_sold_code',
+            'join' => [
+                ['table' => 'order_sub'],
+                [
+                    'left_table' => 'order_sub',
+                    'table' => 'order'
+                ]
+            ],
+            'where' => [
+                ['order_sold_code.state' => 1],
+                ['order_sold_code.order_sub_id' => $orderSubId],
+                ['order.user_id' => $this->user->id]
+            ]
+        ]);
+
+        $url = Url::to([
+            'order/verify-sold-code',
+            'sold' => $code['code']
+        ], true);
+        $qr = $this->createQrCode($url, 200);
+
+        $this->success(['message' => Html::img($qr->writeDataUri())]);
+    }
+
+    /**
+     * 核销
+     *
+     * @access public
+     *
+     * @param string $sold
+     *
+     * @return string
+     */
+    public function actionVerifySold($sold = null)
+    {
+        if (!$sold) {
+            $this->sourceJs = ['order/index'];
+            $this->sourceCss = ['order/verify-sold'];
+
+            return $this->render('verify-sold');
+        }
+
+        if (!in_array($this->user->role, [
+            1,
+            9
+        ])
+        ) {
+            $this->error(Yii::t('common', 'is not supplier'));
+        }
+
+        $supplier = $this->listSupplier($this->user->id);
+        $result = $this->service('order.verify-sold-code', [
+            'sold' => $sold,
+            'supplier' => $supplier
+        ]);
+
+        if (is_string($result)) {
+            $this->error(Yii::t('common', $result));
+        }
+
+        return $this->redirect(['order/verify-sold-result']);
+    }
+
+    /**
+     * 核销结果页
+     *
+     * @access public
+     * @return string
+     */
+    public function actionVerifySoldResult()
+    {
+        $this->sourceCss = ['order/verify-sold'];
+
+        return $this->render('verify-sold-result');
     }
 
     /**
@@ -810,7 +914,7 @@ class OrderController extends GeneralController
             $wx->notice->send([
                 'touser' => $result['user_openid'],
                 'template_id' => 'sURDDDE9mymmFni3-zKEyPmPl4pid3Ttf42rrnR_8ZI',
-                'url' => Yii::$app->params['frontend_url'] . Url::toRoute(['order/index']),
+                'url' => Url::to(['order/index'], true),
                 'data' => [
                     'first' => "订单支付成功\n",
                     'keyword1' => [
@@ -845,7 +949,7 @@ class OrderController extends GeneralController
             $wx->notice->send([
                 'touser' => $result['producer_openid'],
                 'template_id' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
-                'url' => Yii::$app->params['frontend_url'] . Url::toRoute(['producer/order-list']),
+                'url' => Url::to(['producer/order-list'], true),
                 'data' => [
                     'first' => "您有新的分销订单产生\n",
                     'keyword1' => [

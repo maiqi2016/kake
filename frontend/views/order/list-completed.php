@@ -19,10 +19,13 @@ $params = \Yii::$app->params;
                 </div>
                 <div class="apply-refund-right">
                     <div class="apply-refund-right-1"><?= $item['title'] ?></div>
-                    <p>订单金额: <span>￥<?= $item['price'] ?></span></p>
-                    <p>酒店名称: <span><?= $item['product_upstream_name'] ?></span></p>
                     <p>套餐名称: <span><?= $item['package_name'] ?></span></p>
+                    <p>订单金额: <span>￥<?= $item['price'] ?></span></p>
                     <p>订单编号: <span><?= $item['order_number'] ?></span></p>
+                    <?php if (!empty($item['code'])): ?>
+                        <p>核销编码: <code><?= $item['code'] ?></code></p>
+                    <?php endif; ?>
+                    <p>产品名称: <span><?= $item['product_upstream_name'] ?></span></p>
                 </div>
             </div>
 
@@ -32,12 +35,16 @@ $params = \Yii::$app->params;
 
                 <div class="order-status-button">
                     <div>
-                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">退款说明</button>
+                        <button class="appointment-button" kk-tap="<?= $info ?> = !<?= $info ?>; posBox($event, $elem)">
+                            退款说明
+                        </button>
                     </div>
                 </div>
 
-                <div class="refund-schedule kk-animate ng-hide" ng-class="{'kk-b2s-show': <?= $info ?>}" ng-show="<?= $info ?>">
-                    <div class="refund-schedule-name refund-schedule-name-refund">退还款将按支付方式原路返回，不同的支付方式到账时间在及时~7个工作日不等，若逾期还未到账请咨询客服
+                <div class="refund-schedule kk-animate ng-hide" ng-class="{'kk-b2s-show': <?= $info ?>}"
+                     ng-show="<?= $info ?>">
+                    <div class="refund-schedule-name refund-schedule-name-refund">
+                        退还款将按支付方式原路返回，不同的支付方式到账时间在及时~7个工作日不等，若逾期还未到账请咨询客服
                     </div>
                 </div>
 
@@ -50,11 +57,14 @@ $params = \Yii::$app->params;
 
                     <div class="order-status-button">
                         <div>
-                            <button class="appointment-button" kk-tap="<?= $form ?> = !<?= $form ?>; posBox($event, $elem)">开具发票</button>
+                            <button class="appointment-button"
+                                    kk-tap="<?= $form ?> = !<?= $form ?>; posBox($event, $elem)">开具发票
+                            </button>
                         </div>
                     </div>
 
-                    <div class="invoice-personal kk-animate ng-hide" ng-class="{'kk-b2s-show': <?= $form ?>}" ng-show="<?= $form ?>">
+                    <div class="invoice-personal kk-animate ng-hide" ng-class="{'kk-b2s-show': <?= $form ?>}"
+                         ng-show="<?= $form ?>">
 
                         <?php $sub = 'bill[' . $item['id'] . ']'; ?>
                         <?php $company = $sub . '.company' ?>
@@ -63,8 +73,10 @@ $params = \Yii::$app->params;
                             发票抬头:
                         </div>
                         <div class="invoice-title">
-                            <span kk-tap="<?= $company ?> = 0; posBox($event, $elem)" ng-class="{active: !<?= $company ?>}">个人</span>
-                            <span kk-tap="<?= $company ?> = 1; posBox($event, $elem)" ng-class="{active: <?= $company ?>}">公司</span>
+                            <span kk-tap="<?= $company ?> = 0; posBox($event, $elem)"
+                                  ng-class="{active: !<?= $company ?>}">个人</span>
+                            <span kk-tap="<?= $company ?> = 1; posBox($event, $elem)"
+                                  ng-class="{active: <?= $company ?>}">公司</span>
                         </div>
                         <div class="invoice-address" ng-show="<?= $company ?>">
                             <p>公司名称:</p>
@@ -84,7 +96,8 @@ $params = \Yii::$app->params;
 
                     <div class="order-status-button">
                         <div>
-                            <button class="invoice-schedule" kk-tap="<?= $schedule ?> = !<?= $schedule ?>; posBox($event, $elem)">发票进度
+                            <button class="invoice-schedule"
+                                    kk-tap="<?= $schedule ?> = !<?= $schedule ?>; posBox($event, $elem)">发票进度
                             </button>
                         </div>
                     </div>

@@ -292,7 +292,7 @@ class ProducerLogController extends GeneralController
     /**
      * 我的分销记录
      *
-     * @auth-pass-all
+     * @auth-pass-role 1,10
      */
     public function actionMy()
     {
@@ -302,7 +302,7 @@ class ProducerLogController extends GeneralController
     /**
      * 结算帮助中心
      *
-     * @auth-pass-all
+     * @auth-pass-role 1,10
      */
     public function actionAjaxModalHelp()
     {
@@ -312,7 +312,7 @@ class ProducerLogController extends GeneralController
     /**
      * 分销订单结算
      *
-     * @auth-pass-all
+     * @auth-pass-role 1,10
      */
     public function actionSettlement()
     {

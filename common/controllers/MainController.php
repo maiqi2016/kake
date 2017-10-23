@@ -1116,7 +1116,7 @@ class MainController extends Controller
         $qrCode->setWriterByName('png');
         $qrCode->setMargin($qrWidth / 25);
         $qrCode->setEncoding('utf-8');
-        $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::QUARTILE);
+        $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::LOW);
         $qrCode->setForegroundColor([
             'r' => 0,
             'g' => 0,
