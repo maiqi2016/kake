@@ -156,9 +156,9 @@ class OrderInstructionsLogController extends GeneralController
     }
 
     /**
-     * 预约操作
+     * 拒绝退款 - 弹出层
      *
-     * @auth-pass-all
+     * @auth-pass-role 1
      */
     public function actionAjaxModalRefuse()
     {

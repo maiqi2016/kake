@@ -290,9 +290,17 @@ class GeneralController extends MainController
                 $_list = array_merge(...(array_values($_list)));
 
                 foreach ($_list as $router => &$item) {
-                    if (empty($item)) {
-                        !empty($authRecord[$router]) && $item = true;
-                    } else if (isset($item[self::$keyPassAll])) {
+
+                    if (!empty($authRecord[$router])) {
+                        $item = true;
+                        continue;
+                    }
+
+                    if (!is_array($item)) {
+                        continue;
+                    }
+
+                    if (isset($item[self::$keyPassAll])) {
                         $item = true;
                     } else if (!empty($item[self::$keyPassRole])) {
                         $role = $item[self::$keyPassRole];

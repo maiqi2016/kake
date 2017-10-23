@@ -386,7 +386,7 @@ class ProducerProductController extends GeneralController
     /**
      * 我的分销产品
      *
-     * @auth-pass-all
+     * @auth-pass-role 1,10
      * @return object
      */
     public function actionMy()
@@ -405,7 +405,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @auth-pass-all
+     * @auth-same {ctrl}/add-my
      */
     public function actionAddMyForm()
     {
@@ -474,7 +474,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @auth-pass-all
+     * @auth-same {ctrl}/edit-my
      */
     public function actionEditMyForm()
     {
@@ -490,16 +490,6 @@ class ProducerProductController extends GeneralController
             'fail' => $this->getControllerName('edit-my'),
             'success' => $this->getControllerName('my')
         ], null, $post);
-    }
-
-    /**
-     * 记录前置
-     *
-     * @auth-pass-all
-     */
-    public function actionFrontMy()
-    {
-        return parent::actionFront($this->getControllerName('my'));
     }
 
     /**

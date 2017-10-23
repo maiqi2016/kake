@@ -341,9 +341,9 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * 分销商设置 - 渲染
+     * 我的分销商设置
      *
-     * @auth-pass-all
+     * @auth-pass-role 1,10
      */
     public function actionCenter()
     {
@@ -358,7 +358,7 @@ class ProducerSettingController extends GeneralController
     /**
      * 分销商设置
      *
-     * @auth-pass-all
+     * @auth-pass-role 1,10
      */
     public function actionSetting()
     {
@@ -503,7 +503,7 @@ class ProducerSettingController extends GeneralController
     /**
      * 生成推广链接
      *
-     * @auth-pass-all
+     * @auth-pass-role 1,10
      */
     public function actionSpread()
     {

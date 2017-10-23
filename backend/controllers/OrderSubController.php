@@ -257,9 +257,6 @@ class OrderSubController extends GeneralController
                 'table' => 'order_sold_code',
                 'field' => 'state',
                 'value' => parent::SELECT_KEY_ALL
-            ],
-            'state' => [
-                'value' => parent::SELECT_KEY_ALL
             ]
         ];
     }
@@ -436,14 +433,6 @@ class OrderSubController extends GeneralController
                     1 => 'success',
                     2 => 'warning'
                 ]
-            ],
-            'state' => [
-                'code',
-                'info',
-                'color' => [
-                    0 => 'default',
-                    6 => 'success'
-                ]
             ]
         ];
     }
@@ -592,9 +581,9 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * 选择订单 - 弹出层
+     * 选择订单 - 编辑发票时弹出层
      *
-     * @auth-pass-all
+     * @auth-pass-role 1
      */
     public function actionAjaxModalList()
     {
@@ -610,7 +599,9 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @auth-pass-all
+     * 我的核销
+     *
+     * @auth-pass-role 1,9
      */
     public function actionMySold()
     {
@@ -626,6 +617,7 @@ class OrderSubController extends GeneralController
      *
      * @param integer $id
      */
+
     public function actionAgreeOrder($id)
     {
         $result = $this->service('order.agree-order', [
@@ -738,18 +730,23 @@ class OrderSubController extends GeneralController
      */
     public function actionAgreeRefund($id)
     {
-        $order = $this->service('order.agree-refund', [
-            'order_sub_id' => $id,
-            'user_id' => $this->user->id
+        $order = $this->service(parent::$apiDetail, [
+            'table' => 'order_sub',
+            'join' => [
+                ['table' => 'order']
+            ],
+            'select' => [
+                'order.id',
+                'order.order_number',
+                'order.payment_method',
+                'order.price AS total_price',
+                'order_sub.price'
+            ],
+            'where' => [['order_sub.id' => $id]]
         ]);
 
-        if (is_string($order)) {
-            Yii::$app->session->setFlash('danger', Yii::t('common', $order));
-            $this->goReference($this->getControllerName('index'));
-        }
-
         $orderNo = $order['order_number'];
-        $refundNo = $order['id'] . 'R' . $orderNo;
+        $refundNo = $id . 'R' . $orderNo;
 
         // 支付宝
         $success = true;
@@ -782,6 +779,7 @@ class OrderSubController extends GeneralController
         Yii::info('UID:' . $this->user->id . ' -> ' . $info);
 
         if ($success) {
+
             Yii::$app->wx->notice->send([
                 'touser' => $order['openid'],
                 'template_id' => 'X3ZhVd77-4eddoTx2PJzkWAk7Cu0vSqGNXX5sUYbHcg',
@@ -806,6 +804,17 @@ class OrderSubController extends GeneralController
                     ]
                 ]
             ]);
+
+            $result = $this->service('order.agree-refund', [
+                'order_sub_id' => $id,
+                'user_id' => $this->user->id
+            ]);
+
+            if (is_string($result)) {
+                Yii::$app->session->setFlash('danger', Yii::t('common', $result));
+                $this->goReference($this->getControllerName('index'));
+            }
+
             Yii::$app->session->setFlash('success', $info);
         } else {
             Yii::$app->session->setFlash('danger', $info);

@@ -382,9 +382,9 @@ EOF
     }
 
     /**
-     * 填写套餐 - 弹出层
+     * 填写套餐 - 编辑产品时弹出层
      *
-     * @auth-pass-all
+     * @auth-pass-role 1
      */
     public function actionAjaxModalPackage()
     {
