@@ -120,7 +120,7 @@ class ProducerQuotaController extends GeneralController
     /**
      * 我的佣金余额
      *
-     * @auth-pass-all
+     * @auth-pass-role 1,10
      */
     public function actionMy()
     {
@@ -139,7 +139,7 @@ class ProducerQuotaController extends GeneralController
     /**
      * 提现
      *
-     * @auth-pass-all
+     * @auth-pass-role 1,10
      */
     public function actionWithdraw()
     {

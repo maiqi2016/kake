@@ -226,9 +226,9 @@ class ProductUpstreamController extends GeneralController
     }
 
     /**
-     * 选择上游 - 弹出层
+     * 选择上游 - 产品编辑时弹出层
      *
-     * @auth-pass-all
+     * @auth-pass-role 1
      */
     public function actionAjaxModalList()
     {

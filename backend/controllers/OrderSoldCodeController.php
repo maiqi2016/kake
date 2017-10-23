@@ -44,7 +44,7 @@ class OrderSoldCodeController extends GeneralController
     }
 
     /**
-     * @auth-pass-all
+     * @inheritdoc
      */
     public static function myEditAssist()
     {
@@ -53,6 +53,7 @@ class OrderSoldCodeController extends GeneralController
 
     /**
      * @inheritdoc
+     * @auth-same {ctrl}/edit
      */
     public function actionEditForm($reference = null, $action = 'edit', $post = null, $caller = null)
     {
@@ -65,7 +66,7 @@ class OrderSoldCodeController extends GeneralController
     }
 
     /**
-     * @auth-pass-all
+     * @auth-same {ctrl}/my-edit
      */
     public function actionMyEditForm()
     {
@@ -83,10 +84,44 @@ class OrderSoldCodeController extends GeneralController
     }
 
     /**
-     * @auth-pass-all
+     * 编辑我的
+     *
+     * @auth-pass-role 1,9
      */
     public function actionMyEdit()
     {
         return $this->showFormWithRecord();
+    }
+
+    /**
+     * 套餐核销
+     *
+     * @auth-pass-role 1,9
+     */
+    public function actionSoldCode()
+    {
+        $this->logReference('order-sold-code/sold-code');
+        return $this->display('sold-code');
+    }
+
+    /**
+     * @auth-same {ctrl}/sold-code
+     */
+    public function actionVerifySoldCode()
+    {
+        $supplier = $this->listSupplier($this->user->id);
+        $result = $this->service('order.verify-sold-code', [
+            'sold' => Yii::$app->request->post('sold'),
+            'supplier' => $supplier
+        ]);
+
+        if (is_string($result)) {
+            Yii::$app->session->setFlash('danger', Yii::t('common', $result));
+        } else {
+            Yii::$app->session->setFlash('success', '套餐核销成功');
+        }
+
+        $reference = $this->getControllerName('sold-code');
+        $this->goReference($reference);
     }
 }

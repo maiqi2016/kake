@@ -90,7 +90,8 @@ return [
         'j' => [
             'name' => '我的核销',
             'sub' => [
-                'order-sub.my-sold' => '子订单'
+                'order-sub.my-sold' => '子订单',
+                'order-sold-code.sold-code' => '套餐核销'
             ]
         ],
         'k' => [

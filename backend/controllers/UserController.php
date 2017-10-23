@@ -278,7 +278,7 @@ class UserController extends GeneralController
     }
 
     /**
-     * @auth-pass-all
+     * @auth-pass-role 1
      */
     public function actionAjaxModalList()
     {
