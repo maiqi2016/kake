@@ -620,8 +620,8 @@ class GeneralController extends MainController
             $list = $this->service('product.list', $condition);
             foreach ($list as $key => &$item) {
                 if (empty($item['price'])) {
-                    unset($list[$key]);
-                    continue;
+                    // unset($list[$key]);
+                    // continue;
                 }
                 $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
                 $item = $this->createAttachmentUrl($item, ['attachment_cover' => 'cover']);
