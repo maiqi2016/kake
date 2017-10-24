@@ -246,7 +246,7 @@ class OrderController extends GeneralController
         ]);
 
         $url = Url::to([
-            'order/verify-sold-code',
+            'order/verify-sold',
             'sold' => $code['code']
         ], true);
         $qr = $this->createQrCode($url, 200);
@@ -265,7 +265,7 @@ class OrderController extends GeneralController
      */
     public function actionVerifySold($sold = null)
     {
-        if (!$sold) {
+        if (!isset($sold)) {
             $this->sourceJs = ['order/index'];
             $this->sourceCss = ['order/verify-sold'];
 
@@ -278,6 +278,11 @@ class OrderController extends GeneralController
         ])
         ) {
             $this->error(Yii::t('common', 'is not supplier'));
+        }
+
+        $sold = str_replace(' ', null, $sold);
+        if (empty($sold)) {
+            $this->error(Yii::t('common', 'sold code required'));
         }
 
         $supplier = $this->listSupplier($this->user->id);
