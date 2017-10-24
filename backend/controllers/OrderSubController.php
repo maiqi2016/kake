@@ -242,7 +242,9 @@ class OrderSubController extends GeneralController
                 'elem' => 'input'
             ],
             'product_supplier_name' => [
-                'title' => '核销方',
+                'title' => '供应商',
+                'table' => 'product_supplier',
+                'field' => 'id',
                 'list_table' => 'product_supplier',
                 'list_value' => 'name',
                 'value' => parent::SELECT_KEY_ALL
@@ -369,7 +371,7 @@ class OrderSubController extends GeneralController
             ],
             'product_supplier_name' => [
                 'tip',
-                'title' => '核销方',
+                'title' => '供应商',
                 'code'
             ],
             'add_time' => 'tip',
@@ -412,7 +414,7 @@ class OrderSubController extends GeneralController
             ],
             'price' => 'code',
             'product_supplier_name' => [
-                'title' => '核销方',
+                'title' => '供应商',
                 'code',
                 'color' => 'primary'
             ],
@@ -538,6 +540,10 @@ class OrderSubController extends GeneralController
             '>',
             'product_package.product_supplier_id',
             0
+        ];
+        $condition['where'][] = [
+            'not',
+            ['order_sold_code.code' => null]
         ];
         $condition['join'][] = [
             'table' => 'order_sold_code',
