@@ -133,8 +133,9 @@ EOF
                 'field' => 'name'
             ],
             'info' => 'input',
-            'product_product_supplier_id' => array_merge(self::$supplierIdAssist, [
-                'list_except' => null
+            'product_supplier_id' => array_merge(self::$supplierIdAssist, [
+                'list_except' => null,
+                'value' => parent::SELECT_KEY_ALL
             ]),
             'bidding' => [
                 'value' => parent::SELECT_KEY_ALL

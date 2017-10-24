@@ -617,7 +617,7 @@ class GeneralController extends MainController
             $list = Helper::arrayColumnSimple($list, 'id', 'name');
 
             if (!empty($item['list_except'])) {
-                $list = array_merge($item['list_except'], $list);
+                $list = $list + $item['list_except']; // + 运算，同名键左测优先
             }
 
             return $list;
