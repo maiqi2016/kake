@@ -269,6 +269,10 @@ class OrderController extends GeneralController
             $this->sourceJs = ['order/index'];
             $this->sourceCss = ['order/verify-sold'];
 
+            $this->seo([
+                'title' => 'KAKE核销'
+            ]);
+
             return $this->render('verify-sold');
         }
 
