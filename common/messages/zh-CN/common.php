@@ -73,6 +73,7 @@ return [
     'sold code not exists' => '该核销码不存在',
     'sold code used' => '该核销码已失效或被使用',
     'sold code verify success' => '该套餐已成功核销<br><br> {action1} / {action2}',
+    'sold code required' => '请输入核销码',
 
     // activity
     'has been involved in lottery' => '已经参与过抽奖',
