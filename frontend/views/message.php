@@ -18,7 +18,7 @@ $params = \Yii::$app->params;
         <?= $message ?>
         <?php if ($type == 'error' || $type == '404'): ?>
             <br><br>
-            <a href="javascript:history.go(0)">刷新重试</a> 或 <a href="/">回到首页</a>
+            <a href="javascript:history.go(-1)">返回</a> 或 <a href="/">回到首页</a>
         <?php endif; ?>
     </div>
     <?= isset($extra) ? $extra : null ?>
