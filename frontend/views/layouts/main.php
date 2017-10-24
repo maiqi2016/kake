@@ -124,7 +124,8 @@ foreach ($items as $item) {
     <span ng-init='wxSDK(<?= $app->wx->js->config([
         'hideMenuItems',
         'onMenuShareTimeline',
-        'onMenuShareAppMessage'
+        'onMenuShareAppMessage',
+        'scanQRCode'
     ]) ?>, "<?= $shareTitle ?>", "<?= $shareDescription ?>", "<?= $shareCover ?>")'></span>
 </div>
 
