@@ -362,10 +362,11 @@ class UserController extends GeneralController
         ]);
 
         if (is_string($result)) {
-            $this->error(Yii::t('common', $result));
+            Yii::$app->session->setFlash('danger', $result);
+        } else {
+            Yii::$app->session->setFlash('success', '权限配置成功');
         }
 
-        Yii::$app->session->setFlash('success', '权限配置成功');
         $this->goReference($this->getControllerName('index'));
     }
 

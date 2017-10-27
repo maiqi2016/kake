@@ -39,7 +39,8 @@ class WxMenuController extends GeneralController
         $wx = Yii::$app->wx;
         $menu = json_decode(Yii::$app->request->post('menu'), true);
         if (empty($menu)) {
-            $this->error('菜单JSON代码为空或非法');
+            Yii::$app->session->setFlash('danger', '菜单JSON代码为空或非法');
+            return $this->redirect(['wx-menu/index']);
         }
 
         $wx->menu->destroy();

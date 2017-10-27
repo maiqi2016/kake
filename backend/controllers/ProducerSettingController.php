@@ -473,6 +473,18 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
+     * @inheritdoc
+     */
+    public function preHandleField($record, $action = null)
+    {
+        if (isset($record['account_type']) && $record['account_type'] == 0 && empty($record['account_number'])) {
+            $record['account_number'] = 'AUTO:openid';
+        }
+
+        return parent::preHandleField($record, $action);
+    }
+
+    /**
      * @inheritDoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
