@@ -30,7 +30,7 @@ class ProducerWithdrawController extends GeneralController
     {
         return [
             [
-                'text' => '转账完成',
+                'text' => '通过申请',
                 'value' => 'complete',
                 'level' => 'success confirm-button',
                 'icon' => 'eye-open',
@@ -131,6 +131,7 @@ class ProducerWithdrawController extends GeneralController
             ],
             'select' => [
                 'user.username AS producer_name',
+                'user.openid',
                 'producer_setting.account_type',
                 'producer_setting.account_number',
                 'producer_withdraw.*'
@@ -147,12 +148,43 @@ class ProducerWithdrawController extends GeneralController
      */
     public function actionComplete($id)
     {
+        $condition = self::indexCondition();
+        $condition['table'] = 'producer_withdraw';
+        $condition['where'] = [
+            [
+                'producer_withdraw.id' => $id,
+                'producer_withdraw.state' => 1
+            ]
+        ];
+        $record = $this->service(parent::$apiDetail, $condition);
+
+        if (empty($record)) {
+            Yii::$app->session->setFlash('danger', Yii::t('common', 'withdraw request not exists'));
+            $this->goReference($this->getControllerName('index'));
+        }
+
+        if ($record['account_type'] == 0) {
+            $result = Yii::$app->wx->merchant_pay->send([
+                'partner_trade_no' => 'fx' . Helper::createOrderNumber('a', $record['producer_id']),
+                'openid' => $record['openid'],
+                'check_name' => 'NO_CHECK',
+                'amount' => $record['withdraw'],
+                'desc' => '支付分销提现',
+                'spbill_create_ip' => Yii::$app->request->getUserIP()
+            ]);
+
+            if (!empty($result->err_code_des)) {
+                Yii::$app->session->setFlash('danger', '<微信接口反馈> ' . $result->err_code_des);
+                $this->goReference($this->getControllerName('index'));
+            }
+        }
+
         $result = $this->service('producer.withdraw', ['id' => $id]);
         if (is_string($result)) {
             Yii::$app->session->setFlash('danger', Yii::t('common', $result));
         } else {
             $quota = Helper::money($result['quota'] / 100);
-            Yii::$app->session->setFlash('success', "提现申请处理完成，该分销商剩余佣金余额：{$quota}，请确认已转账给该分销商");
+            Yii::$app->session->setFlash('success', "提现申请处理完成，该分销商剩余佣金余额：{$quota}");
         }
 
         $this->goReference($this->getControllerName('index'));
