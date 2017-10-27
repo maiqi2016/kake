@@ -8,9 +8,7 @@ $params = \Yii::$app->params;
 ?>
 
 <div class="opening" ng-show="showAnimate" ng-init="autoHide()" kk-tap="hidden()">
-    <div class="opening_bj">
-        <img src="<?= $params['frontend_source'] ?>/img/opening/opening_bj.jpg" class="opening_bg">
-    </div>
+    <div class="opening_bj"></div>
     <div class="small_bj">
         <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
     </div>
@@ -28,7 +26,6 @@ $params = \Yii::$app->params;
 <div ng-show="showBody">
     <div class="header" ng-init='upstream = <?= json_encode($upstream, JSON_UNESCAPED_UNICODE) ?>'>
         <div class="inner">
-            <div class="area" kk-tap="toggle()">筛选</div>
             <form class="search" id="box" action="/">
                 <input type="hidden" name="r" value="items/index">
                 <input id="search-info" type="search" name="keyword" ng-model="search" placeholder="关键字">
@@ -64,19 +61,27 @@ $params = \Yii::$app->params;
                 <?php endforeach ?>
             </div>
         </div>
-       
-        <div class="personal">
-            <div class="photo">
-                <img class="photo" src="<?= current($producer['logo_preview_url']) ?>">
-            </div>
-            <p class="info"><?= $producer['name'] ?></p>
-        </div>
+
+        <ul class="card-carousel" id="producer-focus" kk-focus-card>
+            <li><img src="<?= $params['frontend_source'] ?>/img/distribution/1.png"></li>
+            <li><img src="<?= $params['frontend_source'] ?>/img/distribution/2.png"></li>
+            <li><img src="<?= $params['frontend_source'] ?>/img/distribution/3.png"></li>
+            <li><img src="<?= $params['frontend_source'] ?>/img/distribution/4.png"></li>
+        </ul>
+
     </div>   
 
     <div class="body">
+        <div class="nav" kk-fixed="window.screen.height">
+            <ul kk-anchor="active" data-element="li">
+                <li data-anchor=".needHotel"><a href="#" class="hotel"><span>精品酒店</span></a></li>
+                <li data-anchor=".needEat"><a href="#" class="eat"><span>自助餐</span></a></li>
+                <li data-anchor=".needPlay"><a href="#" class="play"><span>亲子玩乐</span></a></li>
+            </ul>
+        </div>
+        <div class="blank"></div>
+
         <div class="product-one clearfix">
-            <div class="line"></div>
-            <div class="title">产品列表</div>
             <div class="product-detail">
                 <ul class="cleafix">
                 <?php foreach ($top as $item): ?>
@@ -94,6 +99,29 @@ $params = \Yii::$app->params;
             </div>
         </div>
 
+        <div class="needHotel same">
+            <a href="#" class="bannerHotel">
+                <img src="<?= $params['frontend_source'] ?>/img/distribution/bizhujiudian.png">
+            </a>
+        </div>
+        <ul class="product-two clearfix" kk-ajax-load="distribution/ajax-items" data-over="<?= $over ?>" data-params="uid=<?= $uid ?>">
+            <?= trim($html) ?>
+        </ul>
+
+        <div class="needEat same">
+            <a href="#" class="bannerHotel">
+                <img src="<?= $params['frontend_source'] ?>/img/distribution/bichizizhu.png">
+            </a>
+        </div>
+        <ul class="product-two clearfix" kk-ajax-load="distribution/ajax-items" data-over="<?= $over ?>" data-params="uid=<?= $uid ?>">
+            <?= trim($html) ?>
+        </ul>
+
+        <div class="needPlay same">
+            <a href="#" class="bannerHotel">
+                <img src="<?= $params['frontend_source'] ?>/img/distribution/bixuanwanle.png">
+            </a>
+        </div>
         <ul class="product-two clearfix" kk-ajax-load="distribution/ajax-items" data-over="<?= $over ?>" data-params="uid=<?= $uid ?>">
             <?= trim($html) ?>
         </ul>
