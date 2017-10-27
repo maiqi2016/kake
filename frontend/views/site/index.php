@@ -83,7 +83,7 @@ $params = \Yii::$app->params;
             <a href="<?= Url::to(['items/index']) ?>">更多<img
                         src="<?= $params['frontend_source'] ?>/img/index-icon-more.svg"/></a>
         </div>
-        <div class="carousel kake-theme" id="carousel-scroller-flash" kk-camel>
+        <div class="carousel kake-theme" id="carousel-scroller-flash" kk-focus-camel>
             <div class="carousel-scroller scroll">
                 <div class="product_image"></div>
                 <?php foreach ($flashSalesList as $flashSales): ?>
