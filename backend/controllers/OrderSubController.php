@@ -751,6 +751,11 @@ class OrderSubController extends GeneralController
             'where' => [['order_sub.id' => $id]]
         ]);
 
+        if (empty($order)) {
+            Yii::$app->session->setFlash('danger', Yii::t('common', 'abnormal operation'));
+            $this->goReference($this->getControllerName('index'));
+        }
+
         $orderNo = $order['order_number'];
         $refundNo = $id . 'R' . $orderNo;
 
@@ -770,7 +775,8 @@ class OrderSubController extends GeneralController
             try {
                 $result = Yii::$app->wx->payment->refund($orderNo, $refundNo, $order['total_price'], $order['price']);
             } catch (\Exception $e) {
-                $this->error($e->getMessage());
+                Yii::$app->session->setFlash('danger', $e->getMessage());
+                $this->goReference($this->getControllerName('index'));
             }
 
             if (isset($result) && isset($result->err_code_des)) {

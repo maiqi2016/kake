@@ -76,6 +76,9 @@ class ProducerController extends GeneralController
     public function actionAjaxEditSetting()
     {
         $profile = Yii::$app->request->post();
+        $controller = $this->controller('producer-setting');
+        $profile = $this->callMethod('preHandleField', $profile, [$profile], $controller);
+
         $result = $this->service(parent::$apiNewlyOrEdit, array_merge($profile, [
             'table' => 'producer_setting',
             'where' => [

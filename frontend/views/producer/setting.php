@@ -35,7 +35,7 @@ $params = \Yii::$app->params;
                 </div>
             </div>
 
-            <div class="number">
+            <div class="number kk-animate" ng-show="setting.account_type != 0" ng-class="{'kk-b2s-show': setting.account_type != 0}">
                 <span>收款账号</span>
                 <input class="right" ng-model="setting.account_number" placeholder="收款账号">
             </div>
