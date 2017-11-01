@@ -92,6 +92,7 @@ class OrderController extends GeneralController
 
             'product_package.name AS package_name',
             'product_package.bidding',
+            'product_package.supplier_contact',
 
             'product.title',
             'product.attachment_cover',

@@ -281,7 +281,8 @@ class ProducerSettingController extends GeneralController
                 'value' => 1
             ],
             'account_number' => [
-                'placeholder' => '佣金提现收款账号'
+                'placeholder' => '佣金提现收款账号',
+                'show' => ['account_type' => 'value != 0']
             ],
             'spread_url' => [
                 'title' => '推广链接',
