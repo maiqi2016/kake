@@ -353,6 +353,7 @@ class ProducerProductController extends GeneralController
             'select' => [
                 'product.title',
                 'product.attachment_cover',
+                'product.referral_link',
                 'product_upstream.name',
                 'producer_product.*',
                 'user.username',

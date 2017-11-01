@@ -29,7 +29,7 @@ class ProductPackageController extends GeneralController
     public static $_status;
 
     public static $supplierIdAssist = [
-        'title' => '核销方',
+        'title' => '核销供应商',
         'list_table' => 'product_supplier',
         'list_value' => 'name',
         'list_except' => [
@@ -219,6 +219,9 @@ EOF
                 ],
                 'tip'
             ]),
+            'supplier_contact' => [
+                'tip'
+            ],
             'state' => [
                 'code',
                 'color' => 'auto',
@@ -282,6 +285,9 @@ EOF
                 'elem' => 'select',
                 'value' => 0
             ]),
+            'supplier_contact' => [
+                'show' => ['product_supplier_id' => 'value != 0']
+            ],
             'state' => [
                 'elem' => 'select',
                 'value' => 1
@@ -329,8 +335,25 @@ EOF
             'product_supplier_id' => array_merge(self::$supplierIdAssist, [
                 'elem' => 'select',
                 'value' => 0
-            ])
+            ]),
+            'supplier_contact' => [
+                'show' => ['product_supplier_id' => 'value != 0']
+            ],
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function preHandleField($record, $action = null)
+    {
+        if (!empty($record['product_supplier_id']) && empty($record['supplier_contact'])) {
+            Yii::$app->session->setFlash('warning', '供应商联系电话必须填写');
+            Yii::$app->session->setFlash('list', $record);
+            $this->goReference('product-package/' . $action);
+        }
+
+        return parent::preHandleField($record, $action);
     }
 
     /**

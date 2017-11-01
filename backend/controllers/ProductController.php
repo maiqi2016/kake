@@ -446,6 +446,10 @@ class ProductController extends GeneralController
             'virtual_sales' => 'tip',
             'real_sales' => 'tip',
             'share_times' => 'tip',
+            'referral_link' => [
+                'link',
+                'url_info' => 'Article',
+            ],
             'sort' => 'code',
             'state' => [
                 'code',
@@ -746,6 +750,10 @@ class ProductController extends GeneralController
 
             'sort' => [
                 'placeholder' => '大于零的整数，越小越靠前'
+            ],
+            'referral_link' => [
+                'placeholder' => '如：微信发文链接, 可留空',
+                'label' => 6
             ],
             'state' => [
                 'elem' => 'select',
