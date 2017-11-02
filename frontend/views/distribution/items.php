@@ -28,7 +28,7 @@ $params = \Yii::$app->params;
         <div class="inner">
             <form class="search" id="box" action="/">
                 <input type="hidden" name="r" value="items/index">
-                <input id="search-info" type="search" name="keyword" ng-model="search" placeholder="关键字">
+                <input id="search-info" type="search" name="keyword" ng-model="search" placeholder="恒大海上威尼斯酒店">
                 <ul ng-show="search">
                     <a href="<?= Url::to(['items/index', 'upstream' => '']) ?>{{item.id}}" ng-repeat="item in upstream | filter:search">
                         <li>{{item.name}}</li>
@@ -62,13 +62,15 @@ $params = \Yii::$app->params;
             </div>
         </div>
 
-        <ul class="card-carousel" id="producer-focus" kk-focus-card>
-            <li><img src="<?= $params['frontend_source'] ?>/img/distribution/1.png"></li>
-            <li><img src="<?= $params['frontend_source'] ?>/img/distribution/2.png"></li>
-            <li><img src="<?= $params['frontend_source'] ?>/img/distribution/3.png"></li>
-            <li><img src="<?= $params['frontend_source'] ?>/img/distribution/4.png"></li>
-        </ul>
-
+        <div id="focus-card" class="focus-card" kk-focus-card>
+            <div></div>
+            <ul class="card-carousel">
+                <li><a href="#"><img src="<?= $params['frontend_source'] ?>/img/distribution/1.png"></a></li>
+                <li><a href="#"><img src="<?= $params['frontend_source'] ?>/img/distribution/2.png"></a></li>
+                <li><a href="#"><img src="<?= $params['frontend_source'] ?>/img/distribution/3.png"></a></li>
+                <li><a href="#"><img src="<?= $params['frontend_source'] ?>/img/distribution/4.png"></a></li>
+            </ul>
+        </div>
     </div>   
 
     <div class="body">
@@ -89,7 +91,7 @@ $params = \Yii::$app->params;
                         <a href="<?= Url::to(['detail/index', 'id' => $item['id']]) ?>">
                             <div class="photo">
                                 <img src="<?= current($item['cover_preview_url']) ?>">
-                                <span class="price"><i>￥</i><?= $item['min_price'] ?></span>
+                                <span class="price">￥<?= $item['min_price'] ?></span>
                                 <p><?= $item['name'] ?></p>
                             </div>
                         </a> 
@@ -101,7 +103,7 @@ $params = \Yii::$app->params;
 
         <div class="needHotel same">
             <a href="#" class="bannerHotel">
-                <img src="<?= $params['frontend_source'] ?>/img/distribution/bizhujiudian.png">
+                <img src="<?= $params['frontend_source'] ?>/img/distribution/bizhujiudian.gif">
             </a>
         </div>
         <ul class="product-two clearfix" kk-ajax-load="distribution/ajax-items" data-over="<?= $over ?>" data-params="uid=<?= $uid ?>">
@@ -110,7 +112,7 @@ $params = \Yii::$app->params;
 
         <div class="needEat same">
             <a href="#" class="bannerHotel">
-                <img src="<?= $params['frontend_source'] ?>/img/distribution/bichizizhu.png">
+                <img src="<?= $params['frontend_source'] ?>/img/distribution/bichizizhu.gif">
             </a>
         </div>
         <ul class="product-two clearfix" kk-ajax-load="distribution/ajax-items" data-over="<?= $over ?>" data-params="uid=<?= $uid ?>">
@@ -119,7 +121,7 @@ $params = \Yii::$app->params;
 
         <div class="needPlay same">
             <a href="#" class="bannerHotel">
-                <img src="<?= $params['frontend_source'] ?>/img/distribution/bixuanwanle.png">
+                <img src="<?= $params['frontend_source'] ?>/img/distribution/bixuanwanle.gif">
             </a>
         </div>
         <ul class="product-two clearfix" kk-ajax-load="distribution/ajax-items" data-over="<?= $over ?>" data-params="uid=<?= $uid ?>">
