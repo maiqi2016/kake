@@ -15,7 +15,7 @@ use yii\helpers\Url;
                 <div class="photo">
                     <img class="img-responsive" src="<?= current($standard['cover_preview_url']) ?>"/>
                 </div>
-                <span><i>￥</i><?= $standard['price'] ?></span>
+                <span>￥<?= $standard['price'] ?></span>
                 <div class="text">
                     <h2><?= $standard['title'] ?></h2>
                     <small><?= $standard['name'] ?></small>
