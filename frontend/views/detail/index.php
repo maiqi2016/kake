@@ -89,7 +89,7 @@ $params = \Yii::$app->params;
                 'detail/choose-package',
                 'id' => $detail['id']
             ]) ?>">
-            		<p><i>￥</i><span><?= $detail['min_price'] ?></span>
+            		<p>￥<span><?= $detail['min_price'] ?></span>
             		</p>
             		预订
             </a>
