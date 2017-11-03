@@ -91,7 +91,7 @@ class ProducerProductController extends GeneralController
                 }
             ],
             [
-                'alt' => '复制推广链接',
+                'alt' => '复制分销链接',
                 'level' => 'default copy',
                 'icon' => 'copy',
                 'type' => 'attr',

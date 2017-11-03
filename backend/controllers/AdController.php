@@ -2,6 +2,9 @@
 
 namespace backend\controllers;
 
+use backend\components\ViewHelper;
+use common\components\Helper;
+
 /**
  * 广告管理
  *
@@ -78,7 +81,7 @@ class AdController extends GeneralController
                 'value' => parent::SELECT_KEY_ALL
             ],
             'state' => [
-                'value' => parent::SELECT_KEY_ALL
+                'value' => 1
             ]
         ];
     }
@@ -89,6 +92,7 @@ class AdController extends GeneralController
     public static function indexSorter()
     {
         return [
+            'type',
             'from',
             'to',
             'sort'
@@ -139,7 +143,7 @@ class AdController extends GeneralController
             ],
             'target' => [
                 'elem' => 'select',
-                'value' => 0,
+                'value' => 1,
                 'tip' => [
                     '_self' => '当前窗口打开',
                     '_blank' => '新窗口打开',
@@ -173,6 +177,12 @@ class AdController extends GeneralController
                     'PM' => '下午'
                 ]
             ],
+            'standard_size' => [
+                'elem' => 'text',
+                'title' => '附件标准尺寸',
+                'html' => true,
+                'value' => '首页焦点：750 × 500<br>首页广告：750 × 160<br>分销焦点：648 × 432<br>分销广告：750 × 253',
+            ],
 
             'attachment_id' => [
                 'hidden' => true
@@ -190,9 +200,9 @@ class AdController extends GeneralController
                 'type' => 'file',
                 'tag' => 1,
                 'rules' => [
-                    'suffix' => 'jpg,jpeg,png',
-                    'pic_sizes' => '750*160-500',
-                    'max_size' => 512
+                    'suffix' => 'jpg,jpeg,png,gif',
+                    'pic_sizes' => '600-750*160-500',
+                    'max_size' => 2048
                 ],
                 'preview_name' => 'preview_url',
                 'field_name' => 'attachment_id'
