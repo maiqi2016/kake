@@ -10,7 +10,7 @@ use yii\helpers\Url;
             <a href="<?= Url::to(['detail/index', 'id' => $item['id']]) ?>">
                 <div class="photo">
                     <div class="outImg"><img src="<?= current($item['cover_preview_url']) ?>"></div>
-                    <span class="price"><i>￥</i> <?= $item['min_price'] ?> </span>
+                    <span class="price">￥<?= $item['min_price'] ?> </span>
                     <h2><?= $item['name'] ?></h2>
                     <small><?= $item['title'] ?></small>
                 </div> 
