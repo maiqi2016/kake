@@ -30,7 +30,7 @@ class DistributionController extends GeneralController
         }
 
         // 获取分销产品
-        $product = $this->listProducerProduct($uid, 1, Yii::$app->params['distribution_limit']);
+        $product = $this->listProducerProduct($uid, null, 1, Yii::$app->params['distribution_limit']);
         if (empty($product)) {
             $this->error(Yii::t('common', 'the distributor need select product first'));
         }
@@ -58,6 +58,16 @@ class DistributionController extends GeneralController
         $this->sourceCss = null;
         $this->sourceJs = null;
 
+        $params = Yii::$app->params;
+
+        $classify = parent::model('product_upstream')->_classify;
+
+        // 焦点图
+        $focusList = $this->listAd(2, $params['distribution_ad_focus_limit']);
+
+        // 广告
+        $bannerList = $this->listAd(3, $params['distribution_ad_banner_limit']);
+
         $region = $this->listPlateAndRegion();
         $upstream = $this->listUpstreams(function ($item) {
             $item['name'] = preg_replace('/[ ]+\|[ ]+/', ' ', $item['name']);
@@ -70,16 +80,14 @@ class DistributionController extends GeneralController
             $this->error($producer);
         }
 
-        $top = null;
-        list($html, $over) = $this->renderItemsPage($uid, 1, function ($list, $limit) use (&$top) {
-            $topNumber = count($list) >= 5 ? 4 : 2;
-            $top = array_slice($list, 0, $topNumber);
+        $list = $this->listProducerProduct($uid, 0, 1, $params['distribution_items_limit']);
+        $html_0 = $this->renderPartial('items-list', compact('list'));
 
-            return [
-                array_slice($list, $topNumber),
-                $limit - $topNumber
-            ];
-        });
+        $list = $this->listProducerProduct($uid, 1, 1, $params['distribution_items_limit']);
+        $html_1 = $this->renderPartial('items-list', compact('list'));
+
+        $list = $this->listProducerProduct($uid, 2, 1, $params['distribution_items_limit']);
+        $html_2 = $this->renderPartial('items-list', compact('list'));
 
         $this->seo([
             'title' => $producer['name'],
@@ -87,47 +95,18 @@ class DistributionController extends GeneralController
             'share_cover' => current($producer['logo_preview_url'])
         ]);
 
-        return $this->render('items', compact('region', 'upstream', 'producer', 'top', 'html', 'over', 'uid'));
-    }
-
-    /**
-     * ajax 获取下一页列表
-     */
-    public function actionAjaxItems()
-    {
-        $uid = Yii::$app->request->post('uid');
-        $page = Yii::$app->request->post('page');
-
-        list($html, $over) = $this->renderItemsPage($uid, $page);
-        $this->success(compact('html', 'over'));
-    }
-
-    /**
-     * 渲染列表视图并返回 html
-     *
-     * @access private
-     *
-     * @param integer  $uid
-     * @param integer  $page
-     * @param callable $callback
-     *
-     * @return array
-     */
-    private function renderItemsPage($uid, $page, $callback = null)
-    {
-        $pageSize = Yii::$app->params['distribution_items_limit'];
-        $list = $this->listProducerProduct($uid, $page, $pageSize);
-        if ($callback) {
-            list($list, $pageSize) = call_user_func_array($callback, [
-                $list,
-                $pageSize
-            ]);
-        }
-        $content = $this->renderPartial('items-list', compact('list'));
-
-        return [
-            $content,
-            count($list) < $pageSize
+        $params = [
+            'classify',
+            'focusList',
+            'bannerList',
+            'region',
+            'upstream',
+            'producer',
+            'html_0',
+            'html_1',
+            'html_2',
         ];
+
+        return $this->render('items', compact(...$params));
     }
 }

@@ -198,7 +198,7 @@ class ProductUpstreamController extends GeneralController
         return [
             'classify' => [
                 'elem' => 'select',
-                'value' => 1
+                'value' => 0
             ],
             'name' => [
                 'placeholder' => '64个字以内'

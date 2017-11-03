@@ -56,6 +56,7 @@ if ($modal) {
         // 标签属性值
         $av_name = $empty('name', $field);
         $av_type = $empty('type', 'text');
+        $av_html = $empty('html', false);
         $av_value = !empty($flash[$av_name]) ? $flash[$av_name] : $empty('value', null, null, 'isset');
         $av_script = ViewHelper::escapeScript($empty('script'));
         $av_class = $empty('class');
@@ -69,7 +70,7 @@ if ($modal) {
         $as_script = $av_script ? 'onclick="' . $av_script . '"' : '';
 
         if (!is_array($av_value)) {
-            $av_value = Html::encode($av_value);
+            $av_value = $av_html ? $av_value : Html::encode($av_value);
             $as_value = 'value="' . strval($av_value) . '"';
         }
 
