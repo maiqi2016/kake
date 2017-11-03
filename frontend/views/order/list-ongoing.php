@@ -25,7 +25,7 @@ $params = \Yii::$app->params;
                     <p>订单编号: <span><?= $item['order_number'] ?></span></p>
                     <?php if (!empty($item['code'])): ?>
                         <p>核销编码: <code><?= $item['code'] ?></code></p>
-                        <p>预约电话: <?= $item['supplier_contact'] ?></p>
+                        <p>预约电话: <a href="tel:<?= $item['supplier_contact'] ?>"><?= $item['supplier_contact'] ?></a></p>
                     <?php endif; ?>
                     <p>产品名称: <span><?= $item['product_upstream_name'] ?></span></p>
                 </div>

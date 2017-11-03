@@ -97,7 +97,7 @@ return [
         'k' => [
             'name' => '其他',
             'sub' => [
-                'ad.index' => '广告',
+                'ad.index' => '图片和广告',
                 'attachment.index' => '附件管理',
                 'wx-menu.index' => '服务号菜单'
             ]
