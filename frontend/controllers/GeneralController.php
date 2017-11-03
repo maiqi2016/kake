@@ -676,17 +676,19 @@ class GeneralController extends MainController
      * @access public
      *
      * @param integer $producer_id
+     * @param integer $classify
      * @param integer $page
      * @param integer $limit
      *
      * @return array
      */
-    public function listProducerProduct($producer_id, $page = null, $limit = null)
+    public function listProducerProduct($producer_id, $classify = null, $page = null, $limit = null)
     {
         list($offset, $limit, $page) = Helper::page($page, $limit);
 
         $product = $this->service('producer.list-product-ids', [
             'producer_id' => $producer_id,
+            'classify' => $classify,
             'page_number' => $page,
             'limit' => ($limit ?: Yii::$app->params['distribution_items_limit'])
         ]);

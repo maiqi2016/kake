@@ -28,36 +28,44 @@ $params = \Yii::$app->params;
         <div class="inner">
             <form class="search" id="box" action="/">
                 <input type="hidden" name="r" value="items/index">
-                <input id="search-info" type="search" name="keyword" ng-model="search" placeholder="恒大海上威尼斯酒店">
+                <input id="search-info" type="search" name="keyword" ng-model="search" placeholder="酒店名称">
                 <ul ng-show="search">
-                    <a href="<?= Url::to(['items/index', 'upstream' => '']) ?>{{item.id}}" ng-repeat="item in upstream | filter:search">
+                    <a href="<?= Url::to([
+                        'items/index',
+                        'upstream' => ''
+                    ]) ?>{{item.id}}" ng-repeat="item in upstream | filter:search">
                         <li>{{item.name}}</li>
                     </a>
                 </ul>
             </form>
             <div class="menu" kk-menu-lm><img src="<?= $params['frontend_source'] ?>/img/menu.svg"></div>
         </div>
-        <div class="out kk-animate" ng-show="showTab" ng-class="{'kk-show': showTab}">
+        <div class="out kk-animate hidden" ng-show="showTab" ng-class="{'kk-show': showTab}">
             <div class="select-area">
                 <ul class="left" kk-tab-card="active" data-element="li">
                     <?php
                     $index = 0;
                     foreach ($region as $plate => $regions):
                         $index++;
-                    ?>
+                        ?>
                         <li data-card=".region_<?= $index ?>"><?= $plate ?></li>
                     <?php endforeach ?>
                 </ul>
-                <?php 
+                <?php
                 $index = 0;
                 foreach ($region as $items):
                     $index++;
-                ?>
-                <ul class="right region_<?= $index ?>">
-                    <?php foreach ($items as $id => $name): ?>
-                        <a href="<?= Url::to(['items/index', 'region' => $id]) ?>"><li><?= $name ?></li></a>
-                    <?php endforeach ?>
-                </ul>
+                    ?>
+                    <ul class="right region_<?= $index ?>">
+                        <?php foreach ($items as $id => $name): ?>
+                            <a href="<?= Url::to([
+                                'items/index',
+                                'region' => $id
+                            ]) ?>">
+                                <li><?= $name ?></li>
+                            </a>
+                        <?php endforeach ?>
+                    </ul>
                 <?php endforeach ?>
             </div>
         </div>
@@ -65,67 +73,48 @@ $params = \Yii::$app->params;
         <div id="focus-card" class="focus-card" kk-focus-card>
             <div></div>
             <ul class="card-carousel">
-                <li><a href="#"><img src="<?= $params['frontend_source'] ?>/img/distribution/1.png"></a></li>
-                <li><a href="#"><img src="<?= $params['frontend_source'] ?>/img/distribution/2.png"></a></li>
-                <li><a href="#"><img src="<?= $params['frontend_source'] ?>/img/distribution/3.png"></a></li>
-                <li><a href="#"><img src="<?= $params['frontend_source'] ?>/img/distribution/4.png"></a></li>
+                <?php foreach ($focusList as $item): ?>
+                    <li><a href="<?= $item['link_url'] ?>"><img src="<?= current($item['preview_url']) ?>"></a></li>
+                <?php endforeach; ?>
             </ul>
         </div>
-    </div>   
+    </div>
 
     <div class="body">
         <div class="nav" kk-fixed="window.screen.height">
             <ul kk-anchor="active" data-element="li">
-                <li data-anchor=".needHotel"><a href="#" class="hotel"><span>精品酒店</span></a></li>
-                <li data-anchor=".needEat"><a href="#" class="eat"><span>自助餐</span></a></li>
-                <li data-anchor=".needPlay"><a href="#" class="play"><span>亲子玩乐</span></a></li>
+                <?php foreach ($classify as $key => $name): ?>
+                    <li data-anchor=".classify_anchor_<?= $key ?>"><a href="javascript:void(0)" class="classify_<?= $key ?>"><span><?= $name ?></span></a></li>
+                <?php endforeach; ?>
             </ul>
         </div>
         <div class="blank"></div>
 
-        <div class="product-one clearfix">
-            <div class="product-detail">
-                <ul class="cleafix">
-                <?php foreach ($top as $item): ?>
-                    <li>
-                        <a href="<?= Url::to(['detail/index', 'id' => $item['id']]) ?>">
-                            <div class="photo">
-                                <img src="<?= current($item['cover_preview_url']) ?>">
-                                <span class="price">￥<?= $item['min_price'] ?></span>
-                                <p><?= $item['name'] ?></p>
-                            </div>
-                        </a> 
-                    </li>
-                <?php endforeach; ?>
-                </ul>
-            </div>
-        </div>
-
-        <div class="needHotel same">
-            <a href="#" class="bannerHotel">
-                <img src="<?= $params['frontend_source'] ?>/img/distribution/bizhujiudian.gif">
+        <div class="needHotel same classify_anchor_0">
+            <a href="<?= $bannerList[0]['link_url'] ?>" class="bannerHotel">
+                <img src="<?= current($bannerList[0]['preview_url']) ?>">
             </a>
         </div>
-        <ul class="product-two clearfix" kk-ajax-load="distribution/ajax-items" data-over="<?= $over ?>" data-params="uid=<?= $uid ?>">
-            <?= trim($html) ?>
+        <ul class="product-two clearfix">
+            <?= trim($html_0) ? $html_0 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
 
-        <div class="needEat same">
-            <a href="#" class="bannerHotel">
-                <img src="<?= $params['frontend_source'] ?>/img/distribution/bichizizhu.gif">
+        <div class="needEat same classify_anchor_1">
+            <a href="<?= $bannerList[1]['link_url'] ?>" class="bannerHotel">
+                <img src="<?= current($bannerList[1]['preview_url']) ?>">
             </a>
         </div>
-        <ul class="product-two clearfix" kk-ajax-load="distribution/ajax-items" data-over="<?= $over ?>" data-params="uid=<?= $uid ?>">
-            <?= trim($html) ?>
+        <ul class="product-two clearfix">
+            <?= trim($html_1) ? $html_1 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
 
-        <div class="needPlay same">
-            <a href="#" class="bannerHotel">
-                <img src="<?= $params['frontend_source'] ?>/img/distribution/bixuanwanle.gif">
+        <div class="needPlay same classify_anchor_2">
+            <a href="<?= $bannerList[2]['link_url'] ?>" class="bannerHotel">
+                <img src="<?= current($bannerList[2]['preview_url']) ?>">
             </a>
         </div>
-        <ul class="product-two clearfix" kk-ajax-load="distribution/ajax-items" data-over="<?= $over ?>" data-params="uid=<?= $uid ?>">
-            <?= trim($html) ?>
+        <ul class="product-two clearfix">
+            <?= trim($html_2) ? $html_2 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
     </div>
 </div>

@@ -233,7 +233,7 @@ class ProductController extends GeneralController
                 'icon' => 'qrcode'
             ],
             [
-                'alt' => '复制推广链接',
+                'alt' => '复制产品链接',
                 'level' => 'default copy',
                 'icon' => 'copy',
                 'type' => 'attr',
