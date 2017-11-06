@@ -84,34 +84,42 @@ $params = \Yii::$app->params;
         <div class="nav" kk-fixed="window.screen.height">
             <ul kk-anchor="active" data-element="li">
                 <?php foreach ($classify as $key => $name): ?>
-                    <li data-anchor=".classify_anchor_<?= $key ?>"><a href="javascript:void(0)" class="classify_<?= $key ?>"><span><?= $name ?></span></a></li>
+                    <li data-anchor=".classify_anchor_<?= $key ?>"><a href="javascript:void(0)"
+                                                                      class="classify_<?= $key ?>"><span><?= $name ?></span></a>
+                    </li>
                 <?php endforeach; ?>
             </ul>
         </div>
         <div class="blank"></div>
 
         <div class="needHotel same classify_anchor_0">
-            <a href="<?= $bannerList[0]['link_url'] ?>" class="bannerHotel">
-                <img src="<?= current($bannerList[0]['preview_url']) ?>">
-            </a>
+            <?php if (!empty($bannerList[0])): ?>
+                <a href="<?= $bannerList[0]['link_url'] ?>" class="bannerHotel">
+                    <img src="<?= current($bannerList[0]['preview_url']) ?>">
+                </a>
+            <?php endif; ?>
         </div>
         <ul class="product-two clearfix">
             <?= trim($html_0) ? $html_0 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
 
         <div class="needEat same classify_anchor_1">
-            <a href="<?= $bannerList[1]['link_url'] ?>" class="bannerHotel">
-                <img src="<?= current($bannerList[1]['preview_url']) ?>">
-            </a>
+            <?php if (!empty($bannerList[1])): ?>
+                <a href="<?= $bannerList[1]['link_url'] ?>" class="bannerHotel">
+                    <img src="<?= current($bannerList[1]['preview_url']) ?>">
+                </a>
+            <?php endif; ?>
         </div>
         <ul class="product-two clearfix">
             <?= trim($html_1) ? $html_1 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
 
         <div class="needPlay same classify_anchor_2">
-            <a href="<?= $bannerList[2]['link_url'] ?>" class="bannerHotel">
-                <img src="<?= current($bannerList[2]['preview_url']) ?>">
-            </a>
+            <?php if (!empty($bannerList[2])): ?>
+                <a href="<?= $bannerList[2]['link_url'] ?>" class="bannerHotel">
+                    <img src="<?= current($bannerList[2]['preview_url']) ?>">
+                </a>
+            <?php endif; ?>
         </div>
         <ul class="product-two clearfix">
             <?= trim($html_2) ? $html_2 : '<div class="no-data">暂无相关产品</div>' ?>
