@@ -94,7 +94,7 @@ $params = \Yii::$app->params;
                         ]) ?>">
                             <img class="img-responsive" src="<?= current($flashSales['cover_preview_url']) ?>"/>
                         </a>
-                        <p><?= $flashSales['title'] ?></p>
+                        <p><b>￥<?= $flashSales['min_price'] ?></b><span><?= $flashSales['title'] ?></span></p>
                     </div>
                 <?php endforeach ?>
                 <div class="product_image"></div>
