@@ -99,6 +99,7 @@ $params = \Yii::$app->params;
                 </a>
             <?php endif; ?>
         </div>
+        <div class="blank"></div>
         <ul class="product-two clearfix">
             <?= trim($html_0) ? $html_0 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
@@ -110,6 +111,7 @@ $params = \Yii::$app->params;
                 </a>
             <?php endif; ?>
         </div>
+        <div class="blank"></div>
         <ul class="product-two clearfix">
             <?= trim($html_1) ? $html_1 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
@@ -121,9 +123,16 @@ $params = \Yii::$app->params;
                 </a>
             <?php endif; ?>
         </div>
+        <div class="blank"></div>
         <ul class="product-two clearfix">
             <?= trim($html_2) ? $html_2 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
+
+        <footer>
+            <a href="<?= Url::to(['order/index']) ?>">
+                <img src="<?= $params['frontend_source'] ?>/img/producer/order.png">
+            </a>
+        </footer>
     </div>
 </div>
 
