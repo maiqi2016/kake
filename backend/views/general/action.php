@@ -90,6 +90,8 @@ if ($modal) {
 
         // 显示条件
         $show_condition = $empty('show', null);
+        // 监控值的变更
+        $value_change = $empty('change', null);
         ?>
 
         <?php if ($element == 'input' && $av_type == 'file'): ?> <!-- input.file description -->
@@ -292,10 +294,13 @@ if ($modal) {
                 <?= $as_script ?>><?= $av_value ?></button>
         </div>
     <?php endif; ?>
-    <?php if (!empty($show_condition)): ?>
+
         <script type="text/javascript">
             $(function () {
                 var son = 'input, select, textarea';
+
+                // 该栏显示的条件判断
+                <?php if (!empty($show_condition)): ?>
                 var change = function () {
                     var showNum = '<?= count($show_condition) ?>';
                     var show = 0;
@@ -318,9 +323,16 @@ if ($modal) {
                     change();
                 });
                 <?php endforeach; ?>
+                <?php endif; ?>
+
+                // 监控值的修改
+                <?php if (!empty($value_change)): ?>
+                $('.box_<?= $av_name ?>').find(son).change(function () {
+                    eval('<?= $value_change ?>');
+                });
+                <?php endif; ?>
             });
         </script>
-    <?php endif; ?>
         <?= $html_end_div ?>
     <?php endforeach; ?>
 

@@ -145,11 +145,13 @@ class ProductProducerController extends GeneralController
         return [
             'type' => [
                 'elem' => 'select',
-                'class' => 'product_producer-type'
+                'class' => 'product_producer-type',
+                'change' => '$.productProducerStart()'
             ],
             'product_id' => [
                 'same_row' => true,
-                'class' => 'product_producer-product_id'
+                'class' => 'product_producer-product_id',
+                'change' => '$.productProducerStart()'
             ],
             'select_product' => [
                 'title' => false,

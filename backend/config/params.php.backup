@@ -60,13 +60,15 @@ return [
         'g' => [
             'name' => '分销管理',
             'sub' => [
+                'product-producer.index' => '产品分销设置',
                 'producer-apply.index' => '分销商申请',
                 'producer-setting.index' => '分销商',
-                'product-producer.index' => '产品分销设置',
                 'producer-product.index' => '分销产品',
                 'producer-log.index' => '分销记录',
                 'producer-quota.index' => '余额账目',
-                'producer-withdraw.index' => '提现记录'
+                'producer-withdraw.index' => '提现记录',
+                'producer-group.index' => '分组',
+                'producer-group-member.index' => '组成员'
             ]
         ],
         'h' => [

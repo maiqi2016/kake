@@ -34,14 +34,8 @@ class ProductController extends GeneralController
      */
     public static $apiGeneralUpdate = 'product.update-product';
 
-    /**
-     * @var string 模态框的名称
-     */
     public static $ajaxModalListTitle = '选择产品';
 
-    /**
-     * @var string 模态框的名称
-     */
     public static $ajaxModalListProducerTitle = '选择分销产品';
 
     // 分销策略
