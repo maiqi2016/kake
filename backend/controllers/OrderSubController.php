@@ -24,9 +24,6 @@ class OrderSubController extends GeneralController
      */
     public static $hookPriceNumber = ['price'];
 
-    /**
-     * @var string 模态框的名称
-     */
     public static $ajaxModalListTitle = '选择子订单';
 
     public static $uid;
@@ -163,7 +160,7 @@ class OrderSubController extends GeneralController
             [
                 'text' => '违约退款',
                 'type' => 'script',
-                'value' => 'alert("刺不刺激，功能待完善")',
+                'value' => '$.alert("功能待完善")',
                 'level' => 'warning confirm-button',
                 'icon' => 'exclamation-sign',
                 'show_condition' => function ($record) {

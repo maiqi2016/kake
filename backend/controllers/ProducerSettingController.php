@@ -19,9 +19,6 @@ class ProducerSettingController extends GeneralController
     // 模型描述
     public static $modelInfo = '分销商';
 
-    /**
-     * @var string 模态框的名称
-     */
     public static $ajaxModalListTitle = '选择分销商';
 
     public static $ajaxModalListRecordFilterValueName = 'producer_id';
@@ -149,14 +146,14 @@ class ProducerSettingController extends GeneralController
     public static function indexAssist()
     {
         return [
+            'producer_id' => [
+                'code',
+                'title' => 'UID'
+            ],
             'username' => [
                 'code',
                 'table' => 'user',
                 'color' => 'default'
-            ],
-            'producer_id' => [
-                'code',
-                'title' => 'UID'
             ],
             'name',
             'theme' => [

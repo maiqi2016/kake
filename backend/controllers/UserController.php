@@ -18,9 +18,6 @@ class UserController extends GeneralController
     // 模型描述
     public static $modelInfo = '用户';
 
-    /**
-     * @var string 模态框的名称
-     */
     public static $ajaxModalListTitle = '选择用户';
 
     /**
