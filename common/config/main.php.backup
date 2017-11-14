@@ -16,6 +16,7 @@ return [
         'redis' => [
             'class' => 'yii\redis\Connection',
             'hostname' => '[SECRET:redis_host]',
+            'password' => '[SECRET:redis_pwd]',
             'port' => [SECRET:redis_port],
             'database' => 0,
         ],
