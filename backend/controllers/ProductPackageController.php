@@ -347,10 +347,12 @@ EOF
      */
     public function preHandleField($record, $action = null)
     {
-        if (!empty($record['product_supplier_id']) && empty($record['supplier_contact'])) {
-            Yii::$app->session->setFlash('warning', '供应商联系电话必须填写');
-            Yii::$app->session->setFlash('list', $record);
-            $this->goReference('product-package/' . $action);
+        if (stripos($action, 'edit') !== false) {
+            if (!empty($record['product_supplier_id']) && empty($record['supplier_contact'])) {
+                Yii::$app->session->setFlash('warning', '供应商联系电话必须填写');
+                Yii::$app->session->setFlash('list', $record);
+                $this->goReference('product-package/' . $action);
+            }
         }
 
         return parent::preHandleField($record, $action);
