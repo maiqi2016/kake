@@ -2197,10 +2197,17 @@ class GeneralController extends MainController
     {
         $base64 = Yii::$app->request->post('base64');
         $url = Yii::$app->request->post('url');
-        $url = str_replace(Yii::$app->params['upload_url'], null, $url);
-        $file = Yii::$app->params['upload_path'] . $url;
+
+        $filename = str_replace(Yii::$app->params['upload_url'], null, $url);
+        $file = Yii::$app->params['tmp_path'] . $filename;
 
         Helper::saveBase64File($base64, $file);
+
+        $result = Yii::$app->oss->upload($file);
+        if (is_string($result)) {
+            @unlink($file);
+            $this->fail($result);
+        }
 
         $this->success();
     }

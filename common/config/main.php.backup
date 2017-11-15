@@ -10,7 +10,6 @@ return [
             'cookieValidationKey' => '[SECRET:cookie]',
         ],
         'cache' => [
-            // 'class' => 'yii\caching\FileCache',
             'class' => 'yii\redis\Cache',
         ],
         'redis' => [
@@ -116,6 +115,13 @@ return [
             'params' => [
                 'app_id' => '[SECRET:ali_id]',
             ],
+        ],
+        'oss' => [
+            'class' => 'common\components\AliOSS',
+            'id' => 'LTAI1lN9YV5Y8vib',
+            'secret' => 'SDzB4EJE9UkcAufEn7MAX3bFL2GDcb',
+            'endpoint' =>'oss-cn-shanghai.aliyuncs.com',
+            'default_bucket' => 'kake-file'
         ],
     ],
 ];
