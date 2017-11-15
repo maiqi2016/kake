@@ -4,3 +4,4 @@
 /rsa/*.private
 /rsa/*.pem
 /wechat/cert/*.pem
+/script/*.py

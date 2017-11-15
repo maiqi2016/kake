@@ -77,35 +77,6 @@ class MissionController extends GeneralController
     }
 
     /**
-     * 附件任务列表
-     */
-    public function actionAttachment()
-    {
-        return $this->display('attachment');
-    }
-
-    /**
-     * 清理无效附件 (谨慎)
-     *
-     * @auth-info-style <span class="text-danger">{info}</span>
-     */
-    public function actionAjaxClearAttachment()
-    {
-        $script = Yii::getAlias('@script/attachment-handler.py');
-        $uploadPath = Yii::$app->params['upload_path'];
-        $cmd = sprintf('python %s %s %s %d', ...[
-            $script,
-            'kake',
-            $uploadPath,
-            0
-        ]);
-
-        exec($cmd, $result);
-
-        $this->success(null, '该任务已执行, 数秒后将自动完成');
-    }
-
-    /**
      * 日志任务列表
      */
     public function actionLog()

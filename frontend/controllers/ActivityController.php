@@ -91,7 +91,7 @@ class ActivityController extends GeneralController
         $tmp = Yii::$app->params['tmp_path'] . '/' . $this->user->id . '.jpg';
         $img->save($tmp);
 
-        return self::getUrlByPath($tmp, 'jpg', 'screen_shot_');
+        return self::getUrlByPath($tmp, 'jpg', '-', 'screen-shot-');
     }
 
     /**

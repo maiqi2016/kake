@@ -64,7 +64,8 @@ class Upload extends Object
             [
                 'common\components\Helper',
                 'createDeepPath'
-            ]
+            ],
+            '-'
         ],
         'root_path' => null,
         'keep_name' => false,
@@ -74,6 +75,7 @@ class Upload extends Object
             'uniqid'
         ],
         'save_suffix' => null,
+        'save_ds' => '-',
         'replace' => false,
         'hash' => false
     ];
@@ -126,7 +128,7 @@ class Upload extends Object
             $this->_picSuffix = $config['picSuffix'];
         }
 
-        $this->_config['root_path'] = Yii::$app->params['upload_path'];
+        $this->_config['root_path'] = Helper::issetDefault(Yii::$app->params, 'tmp_path', $config, true);;
 
         parent::__construct();
     }
@@ -442,7 +444,7 @@ class Upload extends Object
         }
 
         $subPath = $this->_createName($rule);
-        if (!empty($subPath) && !Helper::createDirectory($this->_config['root_path'] . $subPath)) {
+        if (!empty($subPath) && $this->_config['save_ds'] === DIRECTORY_SEPARATOR && !Helper::createDirectory($this->_config['root_path'] . $subPath)) {
             $this->_error = 'create directory fail';
 
             return false;
@@ -526,9 +528,8 @@ class Upload extends Object
      */
     private function _save($file, $replace = false)
     {
-        $savePath = rtrim($this->_config['root_path'] . $file['save_path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-
-        $fileName = $savePath . $file['save_name'];
+        $fileName = rtrim($this->_config['root_path'] . $file['save_path'], $this->_config['save_ds']);
+        $fileName = $fileName . $this->_config['save_ds'] . $file['save_name'];
 
         // replace file
         if (!$replace && is_file($fileName)) {

@@ -513,22 +513,8 @@ class MainController extends Controller
             'config' => $config
         ]);
 
-        $file = $uploader->upload($_FILES);
-
-        if (is_string($file)) {
-            if (!$ajaxMode) {
-                return $file;
-            }
-            $this->fail($file);
-        }
-        $file = current($file);
-
-        $result = $this->service('general.add-for-backend', [
-            'table' => 'attachment',
-            'deep_path' => $file['save_path'],
-            'filename' => $file['save_name']
-        ]);
-
+        // 上传到本地服务器
+        $result = $uploader->upload($_FILES);
         if (is_string($result)) {
             if (!$ajaxMode) {
                 return $result;
@@ -536,13 +522,42 @@ class MainController extends Controller
             $this->fail($result);
         }
 
+        $file = current($result);
+
+        // 记录上传日志
+        $result = $this->service('general.add-for-backend', [
+            'table' => 'attachment',
+            'deep_path' => $file['save_path'],
+            'filename' => $file['save_name']
+        ]);
+
+        $attachmentId = $result['id'];
+
+        if (is_string($result)) {
+            @unlink($file['file']);
+            if (!$ajaxMode) {
+                return $result;
+            }
+            $this->fail($result);
+        }
+
+        // 上传到阿里云 OSS
+        $result = Yii::$app->oss->upload($file['file']);
+        if (is_string($result)) {
+            if (!$ajaxMode) {
+                return $result;
+            }
+            $this->fail($result);
+        }
+
+        // 返回数据
         $url = Yii::$app->params['upload_url'];
         $result = [
             'name' => $file['name'],
-            'id' => $result['id'],
+            'id' => $attachmentId,
             'width' => $file['width'],
             'height' => $file['height'],
-            'url' => Helper::joinString('/', $url, $file['save_path'], $file['save_name'])
+            'url' => $url . '/' . $file['save_path'] . '-' . $file['save_name']
         ];
 
         if ($cropData && !empty($cropData['width']) && !empty($cropData['height'])) {
@@ -598,10 +613,11 @@ class MainController extends Controller
      * @param array  $record
      * @param mixed  $items
      * @param string $suffix
+     * @param string $separator
      *
      * @return array
      */
-    public function createAttachmentUrl($record, $items, $suffix = 'preview_url')
+    public function createAttachmentUrl($record, $items, $suffix = 'preview_url', $separator = '-')
     {
         $items = (array) $items;
         foreach ($items as $attachmentIdKey => $preKey) {
@@ -622,7 +638,7 @@ class MainController extends Controller
             $url = Yii::$app->params['upload_url'];
             $id = $record[$attachmentIdKey];
             $record[$prefixTag . $suffix] = [
-                $id => Helper::joinString('/', $url, $record[$deepPath], $record[$filename])
+                $id => $url . DS . $record[$deepPath] . $separator . $record[$filename]
             ];
         }
 
@@ -1140,7 +1156,7 @@ class MainController extends Controller
     }
 
     /**
-     * 通过 url 获取文件路径
+     * 通过 url 获取临时文件路径
      *
      * @access public
      *
@@ -1167,16 +1183,23 @@ class MainController extends Controller
      *
      * @param string $file
      * @param string $ext
+     * @param string $separator
      * @param string $prefix
      *
      * @return bool|string
      */
-    public static function getUrlByPath($file, $ext = 'jpg', $prefix = null)
+    public static function getUrlByPath($file, $ext = 'jpg', $separator = '-', $prefix = null)
     {
-        $path = Helper::createFilePath(Yii::$app->params['upload_path'], $ext, $prefix);
-        $url = Yii::$app->params['upload_url'] . '/' . $path['deep'] . '/' . $path['filename'];
+        $path = Helper::createFilePath(Yii::$app->params['tmp_path'], $ext, $separator, $prefix);
+        $result = Yii::$app->oss->upload($file, $path['deep'] . '-' . $path['filename']);
+        if (is_string($result)) {
+            @unlink($file);
+            return false;
+        }
 
-        return rename($file, $path['file']) ? $url : false;
+        $url = Yii::$app->params['upload_url'] . '/' . $path['deep'] . $separator . $path['filename'];
+
+        return $url;
     }
 
     /**
@@ -1233,10 +1256,11 @@ class MainController extends Controller
      * @param integer $height
      * @param string  $bgColor
      * @param boolean $cover
+     * @param string  $separator
      *
      * @return mixed
      */
-    public function thumbOriginal($imgFile, $width, $height, $bgColor = null, $cover = false)
+    public function thumbOriginal($imgFile, $width, $height, $bgColor = null, $cover = false, $separator = '-')
     {
         $img = Image::make($imgFile);
         $result = Helper::calThumb($width, $height, $img->width(), $img->height());
@@ -1252,7 +1276,7 @@ class MainController extends Controller
         }
 
         $suffix = Helper::getSuffix($imgFile);
-        $path = Helper::createFilePath(Yii::$app->params['upload_path'], $bgColor ? $suffix : 'png', 'thumb_original_');
+        $path = Helper::createFilePath(Yii::$app->params['tmp_path'], $bgColor ? $suffix : 'png', $separator, 'thumb_original_');
         $bg->save($path['file']);
 
         return $path;
@@ -1265,10 +1289,11 @@ class MainController extends Controller
      * @param integer $width
      * @param integer $height
      * @param boolean $cover
+     * @param string  $separator
      *
      * @return mixed
      */
-    public function thumbCrop($imgFile, $width, $height, $cover = false)
+    public function thumbCrop($imgFile, $width, $height, $cover = false, $separator = '-')
     {
         $img = Image::make($imgFile);
         $img->fit($width, $height, function ($constraint) {
@@ -1282,7 +1307,7 @@ class MainController extends Controller
         }
 
         $suffix = Helper::getSuffix($imgFile);
-        $path = Helper::createFilePath(Yii::$app->params['upload_path'], $suffix, 'thumb_crop_');
+        $path = Helper::createFilePath(Yii::$app->params['tmp_path'], $suffix, $separator, 'thumb_crop_');
         $img->save($path['file']);
 
         return $path;
@@ -1460,7 +1485,7 @@ class MainController extends Controller
     public function actionAjaxSaveBase64Png()
     {
         $base64 = Yii::$app->request->post('base64');
-        $file = Helper::saveBase64File($base64, Yii::$app->params['upload_path'], 'png');
+        $file = Helper::saveBase64File($base64, Yii::$app->params['tmp_path'], 'png');
 
         $this->success([
             'url' => Yii::$app->params['upload_url'] . '/' . $file

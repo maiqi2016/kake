@@ -56,7 +56,7 @@ class AliPay extends Object
         $this->options = array_merge($this->options, $config['options']);
         $this->params = array_merge($this->params, $config['params']);
 
-        $this->options['callback'] = Yii::$app->params['alipay_callback'];
+        $this->options['callback'] = Helper::issetDefault(Yii::$app->params, 'alipay_callback', $config, true);
 
         $key = Yii::getAlias($this->options['rsa_private_key']);
         $this->options['rsa_private_key'] = file_get_contents($key);
@@ -87,7 +87,7 @@ class AliPay extends Object
 
         $params['product_code'] = 'QUICK_WAP_PAY';
         if (!isset($params['timeout_express'])) {
-            $params['timeout_express'] = Yii::$app->params['order_pay_timeout'] . 'm';
+            $params['timeout_express'] = Helper::issetDefault(Yii::$app->params, 'order_pay_timeout', 30) . 'm';
         }
 
         $this->request($params);
