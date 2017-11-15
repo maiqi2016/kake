@@ -54,7 +54,7 @@ class WeChat extends Object
         if (isset($config['payment']) && isset($config['oauth'])) {
             $config['payment']['cert_path'] = Yii::getAlias($config['payment']['cert_path']);
             $config['payment']['key_path'] = Yii::getAlias($config['payment']['key_path']);
-            $config['oauth']['callback'] = Yii::$app->params['wechat_callback'];
+            $config['oauth']['callback'] = Helper::issetDefault(Yii::$app->params, 'wechat_callback', $config, true);
         }
         $this->app = new Application($config);
 
@@ -244,10 +244,11 @@ class WeChat extends Object
      */
     public function order($params)
     {
+        $timeout = Helper::issetDefault(Yii::$app->params, 'order_pay_timeout', 30);
         $attributes = array_merge([
             'trade_type' => 'JSAPI',
             'time_start' => date('YmdHis', TIME),
-            'time_expire' => date('YmdHis', TIME + Yii::$app->params['order_pay_timeout'] * MINUTE)
+            'time_expire' => date('YmdHis', TIME + $timeout * MINUTE)
         ], $params);
         $order = new Order($attributes);
 

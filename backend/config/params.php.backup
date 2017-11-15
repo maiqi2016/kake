@@ -16,7 +16,6 @@ return [
             'name' => '计划任务',
             'sub' => [
                 'mission.cache' => '缓存任务',
-                'mission.attachment' => '附件任务',
                 'mission.log' => '日志任务'
             ]
         ],
