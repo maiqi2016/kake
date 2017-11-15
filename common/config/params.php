@@ -21,10 +21,8 @@ return [
     'backend_url' => "http://{$secondBackend}.{$domain}",
     'backend_source' => "http://{$secondSource}.{$domain}/kake/backend",
 
-    'upload_path' => '/upload/kake',
-    'upload_url' => "http://{$secondPic}.{$domain}/upload/kake",
-
-    'tmp_path' => '/tmp',
+    'tmp_path' => '/tmp/kake',
+    'upload_url' => "http://{$secondPic}.{$domain}",
 
     'wechat_callback' => "http://{$secondSite}.${domain}/",
     'alipay_callback' => "http://{$secondSite}.${domain}/",

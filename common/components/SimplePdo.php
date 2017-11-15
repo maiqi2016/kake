@@ -3,6 +3,7 @@
 namespace common\components;
 
 use yii\base\Object;
+use PDO;
 
 /**
  * Simple action for PDO
@@ -64,23 +65,23 @@ class SimplePdo extends Object
      */
     protected $_style = [
         // 返回一个索引为结果集列名和以0开始的列号的数组 [默认]
-        0 => \PDO::FETCH_BOTH,
+        0 => PDO::FETCH_BOTH,
         // 返回一个索引为结果集列名的数组
-        1 => \PDO::FETCH_ASSOC,
+        1 => PDO::FETCH_ASSOC,
         // 想要返回一个包含结果集中单独一列所有值的数组 - 查询单一字段时
-        2 => \PDO::FETCH_COLUMN,
+        2 => PDO::FETCH_COLUMN,
         // 返回TRUE ，并分配结果集中的列值给 PDOStatement::bindColumn() 方法绑定的PHP变量。
-        3 => \PDO::FETCH_BOUND,
+        3 => PDO::FETCH_BOUND,
         // 如果 fetch_style 包含 PDO::FETCH_CLASSTYPE（例如：PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE），则类名由第一列的值决定
-        4 => \PDO::FETCH_CLASS,
+        4 => PDO::FETCH_CLASS,
         // 更新一个被请求类已存在的实例，映射结果集中的列到类中命名的属性
-        5 => \PDO::FETCH_INTO,
+        5 => PDO::FETCH_INTO,
         // 结合使用 PDO::FETCH_BOTH 和 PDO::FETCH_OBJ，创建供用来访问的对象变量名
-        6 => \PDO::FETCH_LAZY,
+        6 => PDO::FETCH_LAZY,
         // 返回一个索引为以0开始的结果集列号的数组
-        7 => \PDO::FETCH_NUM,
+        7 => PDO::FETCH_NUM,
         // 返回一个属性名对应结果集列名的匿名对象
-        8 => \PDO::FETCH_OBJ
+        8 => PDO::FETCH_OBJ
     ];
 
     /**
@@ -128,17 +129,14 @@ class SimplePdo extends Object
      */
     private function _connect($config)
     {
-        try {
-            $this->_pdo = new \PDO($config['dsn'], $config['username'], $config['password'], [
-                // \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
-                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_SILENT,
-                \PDO::ATTR_TIMEOUT => $config['timeout'],
-            ]);
-            if (0 === strpos($config['dsn'], 'mysql')) {
-                $this->_pdo->query('SET NAMES utf8');
-            }
-        } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage(), 1);
+        $this->_pdo = new PDO($config['dsn'], $config['username'], $config['password'], [
+            // PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT,
+            PDO::ATTR_TIMEOUT => $config['timeout'],
+        ]);
+
+        if (0 === strpos($config['dsn'], 'mysql')) {
+            $this->_pdo->query('SET NAMES utf8');
         }
     }
 
@@ -338,7 +336,7 @@ class SimplePdo extends Object
     {
         $this->_bind = $array;
         foreach ($array as $k => $v) {
-            $this->_pdoStatement->bindValue($k + 1, $v, \PDO::PARAM_STR);
+            $this->_pdoStatement->bindValue($k + 1, $v, PDO::PARAM_STR);
         }
 
         return $this;
@@ -385,7 +383,7 @@ class SimplePdo extends Object
      */
     public static function getSupportDriver()
     {
-        return \PDO::getAvailableDrivers();
+        return PDO::getAvailableDrivers();
     }
 
     /**
@@ -396,10 +394,10 @@ class SimplePdo extends Object
      */
     public function getDriverVersion()
     {
-        $name = $this->_pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        $name = $this->_pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
 
         return [
-            $name => $this->_pdo->getAttribute(\PDO::ATTR_CLIENT_VERSION)
+            $name => $this->_pdo->getAttribute(PDO::ATTR_CLIENT_VERSION)
         ];
     }
 }
