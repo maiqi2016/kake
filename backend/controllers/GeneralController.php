@@ -250,7 +250,7 @@ class GeneralController extends MainController
     protected function getAuthList($manager = true, $userRole = null)
     {
         return $this->cache([
-            'controller.auth.list',
+            'logic.auth',
             $this->user->id,
             func_get_args()
         ], function () use ($manager, $userRole) {
@@ -342,7 +342,7 @@ class GeneralController extends MainController
     protected function getAuthRecord($userId)
     {
         return $this->cache([
-            'controller.auth.record',
+            'list.auth.record',
             func_get_args()
         ], function () use ($userId) {
             $record = $this->service(static::$apiGeneralList, [
