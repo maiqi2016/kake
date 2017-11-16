@@ -43,7 +43,7 @@ class AliOSS extends Object
     /**
      * @var object Instance
      */
-    private $client;
+    public $client;
 
     /**
      * __constructor
