@@ -14,6 +14,8 @@ return [
     'language'=>'zh-CN',
     'components' => [
         'session' => [
+            // 'class'=>'yii\redis\Session',
+            // 'keyPrefix' => 'sess_kake_frontend_',
             'name' => 'KK_SESS',
             'cookieParams' => [
                 'domain' => DOMAIN,

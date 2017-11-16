@@ -3,17 +3,17 @@
 namespace console\controllers;
 
 use common\components\Helper;
-use console\models\ActivityLotteryCode;
+use console\models\Attachment;
 use Yii;
 use yii\helpers\Console;
 
 /**
- * Activity mission about we chat
+ * Attachment mission
  *
  * @author    <jiangxilee@gmail.com>
- * @copyright 2017-05-22 13:29:40
+ * @copyright 2017-11-16 11:27:02
  */
-class ActivityController extends GeneralController
+class AttachmentController extends GeneralController
 {
     /**
      * @var integer Limit for openid list
@@ -33,7 +33,7 @@ class ActivityController extends GeneralController
     {
         $params = [];
         switch ($actionID) {
-            case 'refresh-subscribe' :
+            case 'upload-to-oss' :
                 $params = ['limit'];
                 break;
         }
@@ -53,24 +53,26 @@ class ActivityController extends GeneralController
     }
 
     /**
-     * Refresh the subscribe status
+     * Upload file to Ali OSS
      *
      * @access public
      */
-    public function actionRefreshSubscribe()
+    public function actionUploadToOss()
     {
-        $model = new ActivityLotteryCode();
+        $model = new Attachment();
 
-        $this->missionProgressForTable(function ($record) use ($model) {
+        $this->missionProgressForTable(function ($record) {
+            foreach ($record as $item) {
+                $deep = str_replace('-', DIRECTORY_SEPARATOR, $item['deep_path']);
+                $path = '/Users/Leon/Desktop/abc/' . $deep . DIRECTORY_SEPARATOR . $item['filename'];
 
-            $record = array_values(array_column($record, 'openid'));
-            $data = Yii::$app->wx->user->batchGet($record);
+                $file = $item['deep_path'] . '-' . $item['filename'];
 
-            if (!empty($data->user_info_list)) {
-                foreach ($data->user_info_list as $user) {
-                    $model::updateAll(['subscribe' => $user['subscribe'] ? 1 : 0], ['openid' => $user['openid']]);
-                }
+                Yii::$app->oss->upload($path, $file);
             }
-        }, $model, [], 'openid', $this->limit);
+        }, $model, [], [
+            'deep_path',
+            'filename'
+        ], $this->limit);
     }
 }
