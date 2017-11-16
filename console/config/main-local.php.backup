@@ -16,7 +16,7 @@ return [
                 'password' => '[SECRET:kake_pwd]',
             ],
             'masters' => [
-                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_kake_dev'],
+                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_kake'],
             ],
             // Slave
             'slaveConfig' => [
@@ -24,7 +24,7 @@ return [
                 'password' => '[SECRET:kake_pwd]',
             ],
             'slaves' => [
-                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_kake_dev'],
+                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_kake'],
             ],
         ],
         'service' => [
@@ -36,7 +36,7 @@ return [
                 'password' => '[SECRET:service_pwd]',
             ],
             'masters' => [
-                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_service_dev'],
+                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_service'],
             ],
             // Slave
             'slaveConfig' => [
@@ -44,7 +44,7 @@ return [
                 'password' => '[SECRET:service_pwd]',
             ],
             'slaves' => [
-                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_service_dev'],
+                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_service'],
             ],
         ],
     ],

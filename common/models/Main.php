@@ -180,10 +180,11 @@ class Main extends ActiveRecord
             return call_user_func($fetchFn);
         }
 
-        if (!(is_string($key) && strpos($key, '.') !== false)) {
-            $key = strtolower(static::className()) . '-' . md5(json_encode($key));
+        if (!is_string($key)) {
+            $key = strtolower(static::className()) . '_' . md5(json_encode($key));
         }
 
+        $key = strtolower(Yii::$app->params['app_name']) . '_' . $key;
         $data = Yii::$app->cache->get($key);
 
         if (false === $data) {

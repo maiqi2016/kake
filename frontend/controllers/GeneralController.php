@@ -388,7 +388,7 @@ class GeneralController extends MainController
      */
     public function listPlate($limit = 0)
     {
-        return $this->cache('list-plate.' . $limit, function () use ($limit) {
+        return $this->cache('list.plate.' . $limit, function () use ($limit) {
             $list = $this->service(parent::$apiList, [
                 'table' => 'product_plate',
                 'where' => [
@@ -433,7 +433,7 @@ class GeneralController extends MainController
     public function listRegion($plate = [], $limit = 0)
     {
         return $this->cache([
-            'list-region',
+            'list.region',
             func_get_args()
         ], function () use ($plate, $limit) {
 
@@ -479,7 +479,7 @@ class GeneralController extends MainController
      */
     public function listPlateAndRegion()
     {
-        return $this->cache('list-plate-and-region', function () {
+        return $this->cache('list.plate.and.region', function () {
 
             $list = $this->service(parent::$apiList, [
                 'table' => 'product_region',
@@ -742,7 +742,7 @@ class GeneralController extends MainController
      */
     public function getRegionByPlate($plate, $nameModel = false)
     {
-        $map = $this->cache('list-region.' . $plate, function () {
+        $map = $this->cache('list.region.' . $plate, function () {
             $result = $this->service(self::$apiList, [
                 'table' => 'product_region',
                 'where' => [['state' => 1]],
