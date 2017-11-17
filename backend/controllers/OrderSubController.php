@@ -56,6 +56,14 @@ class OrderSubController extends GeneralController
     }
 
     /**
+     * @inheritdoc
+     */
+    public static function mySoldOperationForm()
+    {
+        return self::soldOperationForm();
+    }
+
+    /**
      * @inheritDoc
      */
     public static function indexOperation()
@@ -471,6 +479,14 @@ class OrderSubController extends GeneralController
     /**
      * @inheritDoc
      */
+    public static function mySoldExportAssist()
+    {
+        return self::soldExportAssist();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function mySoldAssist()
     {
         return self::soldAssist();
@@ -638,7 +654,7 @@ class OrderSubController extends GeneralController
      */
     public function actionSoldExport()
     {
-        $this->exportList('分销记录.' . date('Ymd'));
+        $this->exportList('供应商订单.' . date('Ymd'));
     }
 
     /**
@@ -651,6 +667,17 @@ class OrderSubController extends GeneralController
         $this->user->supplier = $this->listSupplier($this->user->id);
 
         return $this->showList('mySold');
+    }
+
+    /**
+     * 我的供应商订单导出
+     *
+     * @auth-pass-role 1,9
+     */
+    public function actionMySoldExport()
+    {
+        $this->user->supplier = $this->listSupplier($this->user->id);
+        $this->exportList('我的供应商订单.' . date('Ymd'));
     }
 
     /**
