@@ -1932,9 +1932,11 @@ class GeneralController extends MainController
     {
         $caller = str_replace('Export', null, $this->getCaller(2));
         $list = $this->showList($caller, true, false, ['size' => 0]);
+        if (empty($list)) {
+            $this->error('筛选后没有数据可供导出');
+        }
 
         $assist = $this->callStatic($caller . 'ExportAssist', []);
-
         $labels = parent::model(static::$modelName)->attributeLabels();
 
         $_assist = [];
