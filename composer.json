@@ -19,7 +19,8 @@
     "endroid/qrcode": "^2.2",
     "intervention/image": "^2.4",
     "yiisoft/yii2-redis": "^2.0",
-    "aliyuncs/oss-sdk-php": "^2.2"
+    "aliyuncs/oss-sdk-php": "^2.2",
+    "phpoffice/phpspreadsheet": "1.0.0-beta"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "*",

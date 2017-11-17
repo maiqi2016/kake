@@ -41,6 +41,21 @@ class OrderSubController extends GeneralController
     ];
 
     /**
+     * @inheritdoc
+     */
+    public static function soldOperationForm()
+    {
+        return [
+            [
+                'text' => '导出Excel',
+                'type' => 'attr',
+                'level' => 'success export-excel',
+                'icon' => 'save'
+            ]
+        ];
+    }
+
+    /**
      * @inheritDoc
      */
     public static function indexOperation()
@@ -178,7 +193,7 @@ class OrderSubController extends GeneralController
         return [
             [
                 'text' => '选定',
-                'script' => true,
+                'type' => 'script',
                 'value' => '$.modalRadioValueToInput("radio", "order_sub_id")',
                 'icon' => 'flag'
             ]
@@ -439,6 +454,23 @@ class OrderSubController extends GeneralController
     /**
      * @inheritDoc
      */
+    public static function soldExportAssist()
+    {
+        return [
+            'id',
+            'order_number' => '订单编号',
+            'username' => '购买用户',
+            'name' => '套餐',
+            'price',
+            'product_supplier_name' => '供应商',
+            'code' => '核销码',
+            'sold_state_info' => '核销状态',
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function mySoldAssist()
     {
         return self::soldAssist();
@@ -599,6 +631,14 @@ class OrderSubController extends GeneralController
     public function actionSold()
     {
         return $this->showList();
+    }
+
+    /**
+     * 供应商订单导出
+     */
+    public function actionSoldExport()
+    {
+        $this->exportList('分销记录.' . date('Ymd'));
     }
 
     /**

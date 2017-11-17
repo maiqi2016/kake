@@ -95,19 +95,25 @@ class ViewHelper extends Object
 
         $buttons = null;
         foreach ($operations as $value) {
-            $script = Helper::emptyDefault($value, 'script', false);
+            $type = Helper::emptyDefault($value, 'type', 'url');
             $level = Helper::emptyDefault($value, 'level', 'primary');
             $params = Helper::emptyDefault($value, 'params', []);
 
-            if ($script) {
-                $params = $params ? self::escapeParams($params) : '';
-                $url = 'javascript:' . self::escapeScript($value['value']) . $params . ';';
-            } else {
+            $attrStr = null;
+            if ($type == 'url') {
                 if (strpos($value['value'], 'http') === 0) {
                     $url = $value['value'];
                 } else {
                     $url = strpos($value['value'], '/') ? $value['value'] : ($controller . '/' . $value['value']);
                     $url = Url::to(array_merge([$url], $params));
+                }
+            } else if ($type == 'script') {
+                $params = $params ? self::escapeParams($params) : '';
+                $url = 'javascript:' . self::escapeScript($value['value']) . $params . ';';
+            } else if ($type == 'attr') {
+                $url = 'javascript:void(null)';
+                foreach ($params as $name => $v) {
+                    $attrStr .= ' ' . $name . '=\'' . $v . '\'';
                 }
             }
 
@@ -116,7 +122,7 @@ class ViewHelper extends Object
             $alt = Helper::emptyDefault($value, 'alt');
 
             empty($value['text']) && $value['text'] = null;
-            $buttons .= "<a href='{$url}' class='btn btn-{$level} {$_size}' title='{$alt}'>{$icon} {$value['text']}</a>" . PHP_EOL;
+            $buttons .= "<a href='{$url}' class='btn btn-{$level} {$_size}' title='{$alt}' {$attrStr}>{$icon} {$value['text']}</a>" . PHP_EOL;
         }
 
         return $buttons;
