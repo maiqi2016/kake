@@ -48,7 +48,7 @@ class ProducerLogController extends GeneralController
             ],
             [
                 'text' => '结算说明',
-                'script' => true,
+                'type' => 'script',
                 'level' => 'warning',
                 'value' => '$.showPage("producer-log.help")',
                 'icon' => 'info-sign'

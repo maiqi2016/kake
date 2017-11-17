@@ -44,7 +44,7 @@ class ProducerGroupController extends GeneralController
         return [
             [
                 'text' => '选定',
-                'script' => true,
+                'type' => 'script',
                 'value' => '$.modalRadioValueToInput("radio", "producer_group_id")',
                 'icon' => 'flag'
             ]

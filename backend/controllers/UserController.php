@@ -63,7 +63,7 @@ class UserController extends GeneralController
         return [
             [
                 'text' => '选定',
-                'script' => true,
+                'type' => 'script',
                 'value' => '$.modalRadioValueToInput("radio", "' . $field . '")',
                 'icon' => 'flag'
             ]

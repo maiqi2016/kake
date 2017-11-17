@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use common\components\Helper;
 use common\controllers\MainController;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use yii;
 use yii\helpers\Url;
 
@@ -1860,6 +1862,7 @@ class GeneralController extends MainController
         $modal = strpos($caller, 'ajaxModal') !== false;
 
         // 宏操作与单记录操作
+        $operationForm = $this->callStatic($caller . 'OperationForm');
         $operation = $this->callStatic($caller . 'Operation');
         $operations = $this->callStatic($caller . 'Operations');
 
@@ -1902,6 +1905,7 @@ class GeneralController extends MainController
             'assist',
             'filter',
             'sorter',
+            'operationForm',
             'operation',
             'operations',
             'recordFilter',
@@ -1913,6 +1917,52 @@ class GeneralController extends MainController
         ];
 
         return $this->display('//general/list', compact(...$params));
+    }
+
+    /**
+     * 导出列表数据
+     *
+     * @access public
+     *
+     * @param string $filename
+     *
+     * @return void
+     */
+    public function exportList($filename)
+    {
+        $caller = str_replace('Export', null, $this->getCaller(2));
+        $list = $this->showList($caller, true, false, ['size' => 0]);
+
+        $assist = $this->callStatic($caller . 'ExportAssist', []);
+
+        $labels = parent::model(static::$modelName)->attributeLabels();
+
+        $_assist = [];
+        foreach ($assist as $key => $value) {
+            if (is_numeric($key)) {
+                $key = $value;
+                $title = isset($labels[$key]) ? $labels[$key] : Yii::t('common', $key);
+            } else {
+                $title = $value;
+            }
+            $_assist[$key] = $title;
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $_list = [array_values($_assist), []];
+        foreach ($list[0] as $item) {
+            $_list[] = array_values(Helper::pullSome($item, array_keys($_assist)));
+        }
+
+        $sheet->fromArray($_list);
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
     }
 
     /**

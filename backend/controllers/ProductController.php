@@ -174,7 +174,7 @@ class ProductController extends GeneralController
         return [
             [
                 'text' => '选定',
-                'script' => true,
+                'type' => 'script',
                 'value' => '$.modalRadioValueToInput("radio", "product_id")',
                 'icon' => 'flag'
             ]

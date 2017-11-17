@@ -79,6 +79,7 @@ $action = \Yii::$app->controller->action->id;
             <?php endforeach; ?>
 
             <button type="submit" class="btn btn-primary">筛选</button>
+            <?= ViewHelper::createButton($operationForm, $controller) ?>
 
             <!-- ajax 筛选 -->
             <?php if (!empty($ajaxFilter)): ?>
