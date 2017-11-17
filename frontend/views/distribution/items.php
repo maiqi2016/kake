@@ -10,15 +10,11 @@ $params = \Yii::$app->params;
 <div class="opening" ng-show="showAnimate" ng-init="autoHide()" kk-tap="hidden()">
     <div class="opening_bj"></div>
     <div class="small_bj">
-        <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
-    </div>
-    <div class="hang">
-        <img src="<?= $params['frontend_source'] ?>/img/opening/hang.png">
+        <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj2.png" class="small_bg">
     </div>
     <img class="photo" src="<?= current($producer['logo_preview_url']) ?>">
-    <div class="guangquan">
-        <img src="<?= $params['frontend_source'] ?>/img/opening/guangquan2.png">
-    </div>
+    <img class="flower" src="<?= $params['frontend_source'] ?>/img/opening/flower.png">
+    <img class="old_people" src="<?= $params['frontend_source'] ?>/img/opening/old_people.png">
 
     <div kk-print-text="<?= $producer['name'] ?>" class="txt"></div>
 </div>
@@ -84,8 +80,7 @@ $params = \Yii::$app->params;
         <div class="nav" kk-fixed="window.screen.height">
             <ul kk-anchor="active" data-element="li">
                 <?php foreach ($classify as $key => $name): ?>
-                    <li data-anchor=".classify_anchor_<?= $key ?>"><a href="javascript:void(0)"
-                                                                      class="classify_<?= $key ?>"><span><?= $name ?></span></a>
+                    <li data-anchor=".classify_anchor_<?= $key ?>"><a href="javascript:void(0)" class="classify_<?= $key ?>"><span><?= $name ?></span></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -131,6 +126,7 @@ $params = \Yii::$app->params;
         <footer>
             <a href="<?= Url::to(['order/index']) ?>">
                 <img src="<?= $params['frontend_source'] ?>/img/producer/order.png">
+                <p>我的订单</p>
             </a>
         </footer>
     </div>
