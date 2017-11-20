@@ -290,7 +290,6 @@ class ProducerController extends GeneralController
             $this->fail($result);
         }
 
-        // TODO file
         $url = Yii::$app->params['tmp_path'];
         $img = Helper::joinString('/', $url, $result['deep_path'], $result['filename']);
         $this->thumbCrop($img, 256, 256, true);

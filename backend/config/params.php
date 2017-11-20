@@ -15,8 +15,7 @@ return [
         'b' => [
             'name' => '计划任务',
             'sub' => [
-                'mission.cache' => '缓存任务',
-                'mission.log' => '日志任务'
+                'mission.cache' => '缓存任务'
             ]
         ],
         'c' => [

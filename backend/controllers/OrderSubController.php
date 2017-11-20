@@ -446,6 +446,9 @@ class OrderSubController extends GeneralController
                 'tpl' => '<p class="bg-info text-center">%s</p>',
                 'color' => 'default'
             ],
+            'producer_username' => [
+                'title' => '分销商'
+            ],
             'sold_state' => [
                 'title' => '核销状态',
                 'code',
@@ -472,6 +475,7 @@ class OrderSubController extends GeneralController
             'price',
             'product_supplier_name' => '供应商',
             'code' => '核销码',
+            'producer_username' => '分销商',
             'sold_state_info' => '核销状态',
         ];
     }
@@ -590,14 +594,30 @@ class OrderSubController extends GeneralController
             'not',
             ['order_sold_code.code' => null]
         ];
-        $condition['join'][] = [
-            'table' => 'order_sold_code',
-            'left_on_field' => 'id',
-            'right_on_field' => 'order_sub_id'
-        ];
-        $condition['select'][] = 'order_sold_code.code';
-        $condition['select'][] = 'order_sold_code.id AS sold_id';
-        $condition['select'][] = 'order_sold_code.state AS sold_state';
+
+        $condition['join'] = array_merge($condition['join'], [
+            [
+                'table' => 'order_sold_code',
+                'left_on_field' => 'id',
+                'right_on_field' => 'order_sub_id'
+            ],
+            [
+                'left_table' => 'order',
+                'table' => 'producer_log'
+            ],
+            [
+                'left_table' => 'producer_log',
+                'table' => 'user',
+                'as' => 'producer_user',
+                'left_on_field' => 'producer_id'
+            ]
+        ]);
+        $condition['select'] = array_merge($condition['select'], [
+            'order_sold_code.code',
+            'order_sold_code.id AS sold_id',
+            'order_sold_code.state AS sold_state',
+            'producer_user.username AS producer_username',
+        ]);
 
         return $condition;
     }
