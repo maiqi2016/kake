@@ -275,7 +275,7 @@ class ProducerSettingController extends GeneralController
 
             'account_type' => [
                 'elem' => 'select',
-                'value' => 1
+                'value' => 0
             ],
             'account_number' => [
                 'placeholder' => '佣金提现收款账号',

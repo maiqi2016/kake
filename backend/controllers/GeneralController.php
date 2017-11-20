@@ -1955,7 +1955,7 @@ class GeneralController extends MainController
 
         $_list = [array_values($_assist), []];
         foreach ($list[0] as $item) {
-            $_list[] = array_values(Helper::pullSome($item, array_keys($_assist)));
+            $_list[] = array_values(Helper::pullSome($item, array_keys($_assist), true));
         }
 
         $sheet->fromArray($_list);
