@@ -90,19 +90,30 @@ $params = \Yii::$app->params;
             </ul>
         </div>
         <div class="blank"></div>
+        <div class="product-one">
+            <div class="product-detail">
+            <ul class="clearfix">
+                <?= trim($top) ? $top : '<div class="no-data">暂无相关产品</div>' ?>
+            </ul>
+        </div>
 
+        <?php if (!empty(trim($html_0))): ?>
         <div class="needHotel same classify_anchor_0">
             <?php if (!empty($bannerList[0])): ?>
                 <a href="<?= $bannerList[0]['link_url'] ?>" class="bannerHotel">
                     <img src="<?= current($bannerList[0]['preview_url']) ?>">
                 </a>
             <?php endif; ?>
+                </ul>
+            </div>
         </div>
         <div class="blank"></div>
         <ul class="product-two clearfix">
             <?= trim($html_0) ? $html_0 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
+        <?php endif; ?>
 
+        <?php if (!empty(trim($html_1))): ?>
         <div class="needEat same classify_anchor_1">
             <?php if (!empty($bannerList[1])): ?>
                 <a href="<?= $bannerList[1]['link_url'] ?>" class="bannerHotel">
@@ -114,7 +125,9 @@ $params = \Yii::$app->params;
         <ul class="product-two clearfix">
             <?= trim($html_1) ? $html_1 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
+        <?php endif; ?>
 
+        <?php if (!empty(trim($html_2))): ?>
         <div class="needPlay same classify_anchor_2">
             <?php if (!empty($bannerList[2])): ?>
                 <a href="<?= $bannerList[2]['link_url'] ?>" class="bannerHotel">
@@ -126,6 +139,7 @@ $params = \Yii::$app->params;
         <ul class="product-two clearfix">
             <?= trim($html_2) ? $html_2 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
+        <?php endif; ?>
 
         <footer>
             <a href="<?= Url::to(['order/index']) ?>">
@@ -134,7 +148,3 @@ $params = \Yii::$app->params;
         </footer>
     </div>
 </div>
-
-
-
-

@@ -50,7 +50,7 @@ return [
     'order_pay_timeout' => 30,
 
     'distribution_limit' => 5,
-    'distribution_items_limit' => 3,
+    'distribution_items_limit' => 7,
     'distribution_ad_focus_limit' => 5,
     'distribution_ad_banner_limit' => 3,
 
