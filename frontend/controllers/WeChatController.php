@@ -14,9 +14,19 @@ use Intervention\Image\ImageManagerStatic as Image;
 class WeChatController extends GeneralController
 {
     /**
+     * @var object
+     */
+    public $api = null;
+
+    /**
      * @var string
      */
-    public $staff = 'kf2002@KAKE_Hotel';
+    public $n = PHP_EOL;
+
+    /**
+     * @var string
+     */
+    private $staff = 'kf2002@KAKE_Hotel';
 
     /**
      * @inheritdoc
@@ -27,6 +37,8 @@ class WeChatController extends GeneralController
             $action->controller->enableCsrfValidation = false;
         }
 
+        !$this->api && $this->api = Yii::$app->wx;
+
         return parent::beforeAction($action);
     }
 
@@ -35,95 +47,111 @@ class WeChatController extends GeneralController
      */
     public function actionReply()
     {
-        $wx = Yii::$app->wx;
-
         if (!Yii::$app->request->get('signature')) {
             return null;
         }
 
-        $wx->listen([
-            'text' => function ($message) use ($wx) {
-                return $this->replyTextLottery($message, $wx);
+        $this->api->listen([
+            'text' => function ($message) {
+                $message->Content = trim($message->Content);
+
+                $user = $this->api->user->get($message->FromUserName);
+                $user->nickname = Helper::filterEmjoy($user->nickname);
+
+                if (preg_match('/^[\d\w]{8}$/i', $message->Content)) {
+                    return $this->replyOnlyCode($message, $user);
+                }
+
+                return $this->replyCompanyAndProfile($message, $user);
             },
 
-            'event_subscribe' => function ($message) use ($wx) {
-                $name = $message->EventKey ? str_replace('qrscene_', '', $message->EventKey) : '官方推广';
-                $groupId = $wx->group($name);
-                $wx->user_group->moveUser($message->FromUserName, $groupId);
+            'event_subscribe' => function ($message) {
+                $name = $message->EventKey ?: '官方推广';
+                $groupId = $this->api->group($name);
+                $this->api->user_group->moveUser($message->FromUserName, $groupId);
             },
 
-            'event_scan' => function ($message) use ($wx) {
-                // return '🙄扫码来源：' . $message->EventKey;
+            'event_scan' => function ($message) {
+                return '🙄扫码来源：' . $message->EventKey;
             }
         ]);
     }
 
     /**
-     * 回复抽奖活动
+     * 回复抽奖码
+     *
+     * @access private
+     * @example xS13hL6s
      *
      * @param object $message
-     * @param object $wx
+     * @param array  $user
      *
      * @return string
      */
-    private function replyTextLottery($message, $wx)
+    private function replyOnlyCode($message, $user)
     {
-        $br = PHP_EOL;
-        $text = trim($message->Content);
+        $result = $this->service('activity.log-winning-code', [
+            'code' => $message->Content,
+            'openid' => $user->openid,
+            'nickname' => $user->nickname
+        ]);
 
-        $user = $wx->user->get($message->FromUserName);
-        $user->nickname = Helper::filterEmjoy($user->nickname);
+        if (is_string($result)) {
+            return "Oops! An error has occurred.{$this->n}{$this->n}${result}";
+        }
 
-        // 回复格式 { ([\d\w]{8}) }
-        /*
-        if (preg_match('/^[\d\w]{8}$/i', $text)) {
-            $result = $this->service('activity.log-winning-code', [
-                'code' => $text,
-                'openid' => $user->openid,
-                'nickname' => $user->nickname
-            ]);
+        if (!empty($result['error'])) {
+            switch ($result['error']) {
+                case 'user_already_receive':
+                    if ($result['winning']) {
+                        return '真的中奖了🙄🙄🙄！记得留下可联系到你的手机号码+姓名哦~';
+                    } else {
+                        return '真的没中呀😭~关注喀客喀客旅行，福利多多，再接再厉！';
+                    }
+                    break;
 
-            if (is_string($result)) {
-                return "Oops! An error has occurred.{$br}{$br}${result}";
-            }
+                case 'code_error':
+                    return '这个抽奖码不正确😌，请核对哟~';
+                    break;
 
-            if (!empty($result['error'])) {
-                switch ($result['error']) {
-                    case 'user_already_receive':
-                        if ($result['winning']) {
-                            return '咦，我刚才说的是真的，你真的中奖了🙄🙄🙄！记得留下可联系到你的手机号码+姓名哦~';
-                        } else {
-                            return '我的小可爱，刚刚我说的是真的😭~关注喀客喀客旅行，福利多多，再接再厉！';
-                        }
-                        break;
+                case 'code_already_received':
+                    return '这个抽奖码已经被别的小姐姐核领了🙄，如果你确认输入无误，请联系KAKE解决~';
+                    break;
 
-                    case 'code_error':
-                        return '这个抽奖码不正确😌，请核对哟~';
-                        break;
-
-                    case 'code_already_received':
-                        return '这个抽奖码已经被小姐姐核领了🙄，如果你确认输入无误，请联系KAKE解决~';
-                        break;
-                }
-            } else {
-                if ($result['winning']) {
-                    return '我的小可爱，恭喜你中奖了👻👏🍾🎉！惊不惊喜，开不开心？鼓掌鼓掌！喀客客服将随后与你联系，请留下你的手机号码+姓名，并保持畅通~带上心爱的人去看电影吧~';
-                } else {
-                    return '我的小可爱，很遗憾这次你没有中奖🙄🙄🙄，关注喀客旅行，下次继续，再接再厉！';
-                }
+                default :
+                    return 'Unknown error.';
+                    break;
             }
         }
-        */
 
-        // 回复格式 { 品牌名+姓名+手机号码 } 或者 { 指定品牌名 }
-        if (in_array(strtolower($text), [
+        if ($result['winning']) {
+            return '恭喜你中奖了👻👏🍾🎉 喀客客服将随后与你联系，请留下你的手机号码+姓名，并保持畅通~';
+        }
+
+        return '很遗憾这次你没有中奖🙄🙄🙄，关注喀客旅行，下次继续，再接再厉！';
+    }
+
+    /**
+     * 回复合作公司简称或并追加个人信息
+     *
+     * @access private
+     * @example 喀客+Leon+15021275672 Or 喀客
+     *
+     * @param object $message
+     * @param array  $user
+     *
+     * @return mixed
+     */
+    private function replyCompanyAndProfile($message, $user)
+    {
+        if (in_array(strtolower($message->Content), [
             '阿里巴巴'
         ])) {
-            $company = $text;
+            $company = $message->Content;
             $name = null;
             $phone = null;
         } else {
-            $text = str_replace('＋', '+', $text);
+            $text = str_replace('＋', '+', $message->Content);
             $char = substr_count($text, '+');
             if ($char < 2) {
                 return null;
@@ -170,19 +198,21 @@ class WeChatController extends GeneralController
             'phone' => $phone
         ]);
         if (is_string($result)) {
-            return "Oops! An error has occurred.{$br}{$br}${result}";
+            return "Oops! An error has occurred.{$this->n}{$this->n}${result}";
         }
 
         // 已参与判断
         if (!empty($result['exists'])) {
-            return "宝贝，不要太贪心哦~你已经参与过啦~{$br}抽奖码：${result['code']}，祝你好运~";
+            return "你已经参与过啦~{$this->n}抽奖码：${result['code']}，祝你好运~";
         }
 
-        $text = new Text(['content' => "WoW~ 这是喀客旅行为你提供的抽奖码：${result['code']}！希望你能抽中奖品～"]);
-        $wx->staff->message($text)->by($this->staff)->to($message->FromUserName)->send();
+        return "您的抽奖码是：${result['code']}，请妥善保管";
 
-        $file = $this->lotteryImg('喀客KAKE x ' . $company, $result['code']);
-        $result = $wx->material_temporary->uploadImage($file);
+        $text = new Text(['content' => "WoW~ 这是喀客旅行为你提供的抽奖码：${result['code']}！希望你能抽中奖品～"]);
+        $this->api->staff->message($text)->by($this->staff)->to($message->FromUserName)->send();
+
+        $file = $this->drawLotteryImg('喀客KAKE x ' . $company, $result['code']);
+        $result = $this->api->material_temporary->uploadImage($file);
 
         return new Img(['media_id' => $result->media_id]);
     }
@@ -190,14 +220,14 @@ class WeChatController extends GeneralController
     /**
      * 生成抽奖码图片
      *
-     * @access protected
+     * @access private
      *
      * @param string $company
      * @param string $code
      *
      * @return string
      */
-    protected function lotteryImg($company, $code)
+    private function drawLotteryImg($company, $code)
     {
         $bg = self::getPathByUrl('img/activity/lottery-bg.jpg', 'frontend_source');
         $img = Image::make($bg);

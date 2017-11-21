@@ -76,6 +76,10 @@ class WeChat extends Object
             $reply = null;
             $type = strtolower($message->MsgType);
 
+            if (!empty($message->EventKey)) {
+                $message->EventKey = str_replace('qrscene_', null, $message->EventKey);
+            }
+
             if (empty($this->listenFn[$type])) {
                 $function = 'reply' . ucfirst($type);
                 $this->listenFn[$type] = [
