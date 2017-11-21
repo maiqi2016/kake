@@ -10,16 +10,20 @@ $params = \Yii::$app->params;
 <div class="opening" ng-show="showAnimate" ng-init="autoHide()" kk-tap="hidden()">
     <div class="opening_bj"></div>
     <div class="small_bj">
-        <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj2.png" class="small_bg">
+        <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
+    </div>
+    <div class="hang">
+        <img src="<?= $params['frontend_source'] ?>/img/opening/hang.png">
     </div>
     <img class="photo" src="<?= current($producer['logo_preview_url']) ?>">
-    <img class="flower" src="<?= $params['frontend_source'] ?>/img/opening/flower.png">
-    <img class="old_people" src="<?= $params['frontend_source'] ?>/img/opening/old_people.png">
+    <div class="guangquan">
+        <img src="<?= $params['frontend_source'] ?>/img/opening/guangquan2.png">
+    </div>
 
     <div kk-print-text="<?= $producer['name'] ?>" class="txt"></div>
 </div>
 
-<div ng-show="showBody">
+<div ng-show="showBody" class="shape-fixed">
     <div class="header" ng-init='upstream = <?= json_encode($upstream, JSON_UNESCAPED_UNICODE) ?>'>
         <div class="inner">
             <form class="search" id="box" action="/">
@@ -126,7 +130,6 @@ $params = \Yii::$app->params;
         <footer>
             <a href="<?= Url::to(['order/index']) ?>">
                 <img src="<?= $params['frontend_source'] ?>/img/producer/order.png">
-                <p>我的订单</p>
             </a>
         </footer>
     </div>
