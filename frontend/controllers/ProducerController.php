@@ -133,9 +133,11 @@ class ProducerController extends GeneralController
 
             return urldecode($url);
         };
+
+        $tools = Yii::$app->wx->url;
         $links = [
-            $url('distribution/index'),
-            $url('distribution/items')
+            $tools->shorten($url('distribution/index'))['short_url'],
+            $tools->shorten($url('distribution/items'))['short_url']
         ];
         $this->seo(['title' => '分销商管理']);
 

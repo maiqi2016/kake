@@ -2148,6 +2148,9 @@ class GeneralController extends MainController
         }
 
         $post = $post ?: Yii::$app->request->post();
+        if (empty($post['id'])) {
+            $this->error('主键参数 ID 必须');
+        }
 
         if (!empty(static::$updateFunctionName)) {
             $result = $this->callMethod(static::$updateFunctionName, 'function non-exists');
