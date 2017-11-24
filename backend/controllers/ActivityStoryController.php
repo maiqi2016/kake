@@ -102,9 +102,6 @@ class ActivityStoryController extends GeneralController
                 'photo.deep_path AS photo_deep_path',
                 'photo.filename AS photo_filename',
                 'user.username'
-            ],
-            'where' => [
-                ['activity_story.state' => 1]
             ]
         ]);
     }
