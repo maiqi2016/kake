@@ -146,10 +146,10 @@ class WeChatController extends GeneralController
     {
         $model = parent::model('ActivityLotteryCode');
 
-        
-        if (in_array(strtolower($message->Content), [
-            '阿里巴巴'
-        ])) {
+        $companyOnly = Helper::pullSome($model->_company, $model->_company_only);
+        $companyOnly = array_map('strtolower', $companyOnly);
+
+        if (in_array(strtolower($message->Content), $companyOnly)) {
             $company = $message->Content;
             $name = null;
             $phone = null;
