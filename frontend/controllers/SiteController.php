@@ -17,7 +17,10 @@ class SiteController extends GeneralController
     public function actionIndex()
     {
         $this->sourceCss = null;
-        $this->sourceJs = null;
+        $this->sourceJs = [
+            'site/index',
+            '/node_modules/js-base64/base64.min'
+        ];
 
         $params = Yii::$app->params;
 
