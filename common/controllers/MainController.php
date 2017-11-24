@@ -78,7 +78,7 @@ class MainController extends Controller
             parent::init();
 
             Yii::trace('开始读取配置表中的配置');
-            $config = $this->cache('list.config.kvp', function () {
+            $config = $this->cache('list.app.config.kvp', function () {
                 return $this->service('general.config-kvp');
             }, DAY, null, Yii::$app->params['use_cache']);
 

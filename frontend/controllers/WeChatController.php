@@ -80,7 +80,7 @@ class WeChatController extends GeneralController
     /**
      * 回复抽奖码
      *
-     * @access private
+     * @access  private
      * @example xS13hL6s
      *
      * @param object $message
@@ -134,7 +134,7 @@ class WeChatController extends GeneralController
     /**
      * 回复合作公司简称或并追加个人信息
      *
-     * @access private
+     * @access  private
      * @example 喀客+Leon+15021275672 Or 喀客
      *
      * @param object $message
@@ -206,15 +206,43 @@ class WeChatController extends GeneralController
             return "你已经参与过啦~{$this->n}抽奖码：${result['code']}，祝你好运~";
         }
 
-        return "您的抽奖码是：${result['code']}，请妥善保管";
+        $msg = base64_encode("您的抽奖码是：${result['code']}，请妥善保管");
+        $url = Yii::$app->params['frontend_url'] . '?popup=lottery-code&msg=' . $msg;
 
-        $text = new Text(['content' => "WoW~ 这是喀客旅行为你提供的抽奖码：${result['code']}！希望你能抽中奖品～"]);
+        return "抽奖码生成成功，<a href='{$url}'>点击这里查看</a>";
+    }
+
+    /**
+     * 客服回复文字
+     *
+     * @access private
+     *
+     * @param string $text
+     * @param object $message
+     *
+     * @return void
+     */
+    private function staffReplyText($text, $message)
+    {
+        $text = new Text(['content' => $text]);
         $this->api->staff->message($text)->by($this->staff)->to($message->FromUserName)->send();
+    }
 
-        $file = $this->drawLotteryImg('喀客KAKE x ' . $company, $result['code']);
-        $result = $this->api->material_temporary->uploadImage($file);
-
-        return new Img(['media_id' => $result->media_id]);
+    /**
+     * 客服回复图片
+     *
+     * @access private
+     *
+     * @param string $imgPath
+     * @param object $message
+     *
+     * @return void
+     */
+    private function staffReplyImg($imgPath, $message)
+    {
+        $result = $this->api->material_temporary->uploadImage($imgPath);
+        $img = new Img(['media_id' => $result->media_id]);
+        $this->api->staff->message($img)->by($this->staff)->to($message->FromUserName)->send();
     }
 
     /**
