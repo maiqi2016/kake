@@ -144,6 +144,9 @@ class WeChatController extends GeneralController
      */
     private function replyCompanyAndProfile($message, $user)
     {
+        $model = parent::model('ActivityLotteryCode');
+
+        
         if (in_array(strtolower($message->Content), [
             '阿里巴巴'
         ])) {
@@ -165,15 +168,13 @@ class WeChatController extends GeneralController
             }
         }
 
-        $model = parent::model('ActivityLotteryCode');
-
         // 公司代码验证
         $company = strtolower($company);
         if (false === ($code = array_search($company, $model->_company))) {
             return '该品牌还不是喀客旅行的合作伙伴~';
         }
 
-        if ($code < 26) {
+        if ($code < $model->_max_activity_id) {
             return '哎呀，你来晚了！抽奖活动已经结束了！';
         }
 
