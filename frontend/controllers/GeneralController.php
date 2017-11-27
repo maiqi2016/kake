@@ -696,7 +696,7 @@ class GeneralController extends MainController
             return $product;
         }
 
-        $product = $this->listProduct(1, null, DAY, ['ids' => $product]);
+        $product = $this->listProduct(1, $limit, DAY, ['ids' => $product]);
 
         return $product;
     }
