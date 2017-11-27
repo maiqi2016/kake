@@ -90,6 +90,12 @@ class DistributionController extends GeneralController
         $list = $this->listProducerProduct($uid, 2, 1, $params['distribution_items_limit']);
         $html_2 = $this->renderPartial('items-list', compact('list'));
 
+        $ref = $this->reference();
+        $animate = true;
+        if (!empty($ref) && strpos($ref, Yii::$app->params['frontend_url']) !== false) {
+            $animate = false;
+        }
+
         $this->seo([
             'title' => $producer['name'],
             'share_title' => $producer['name'],
@@ -107,6 +113,7 @@ class DistributionController extends GeneralController
             'html_0',
             'html_1',
             'html_2',
+            'animate'
         ];
 
         return $this->render('items', compact(...$params));
