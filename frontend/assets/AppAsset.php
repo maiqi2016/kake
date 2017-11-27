@@ -2,6 +2,7 @@
 
 namespace frontend\assets;
 
+use common\components\Helper;
 use yii\web\AssetBundle;
 use yii;
 use yii\web\View;

@@ -85,16 +85,6 @@ class GeneralController extends MainController
     }
 
     /**
-     * 清理缓存
-     */
-    public function actionClearCache()
-    {
-        $this->ipa(function () {
-            return Yii::$app->cache->flush();
-        });
-    }
-
-    /**
      * 需要登录
      *
      * @access public
@@ -915,6 +905,39 @@ class GeneralController extends MainController
 
             return $adList;
         }, HOUR, null, Yii::$app->params['use_cache']);
+    }
+
+    /**
+     * 渲染模态框
+     *
+     * @access public
+     *
+     * @param string $view
+     * @param array  $params
+     * @param string $title
+     *
+     * @return bool
+     */
+    public function modal($view, $params = [], $title = null)
+    {
+        $content = $this->renderPartial($view, $params);
+
+        $response = ['message' => $content];
+        $title && $response['title'] = $title;
+
+        $this->success($response);
+
+        return true;
+    }
+
+    /**
+     * 清理缓存
+     */
+    public function actionClearCache()
+    {
+        $this->ipa(function () {
+            return Yii::$app->cache->flush();
+        });
     }
 
     /**

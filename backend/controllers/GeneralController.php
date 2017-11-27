@@ -105,8 +105,6 @@ class GeneralController extends MainController
      */
     public static $hookLogic;
 
-    // ---
-
     // 权限控制 - 只用于继承的控制器，不纳入权限控制列表
     private static $inheritControllers = [
         'MainController',
@@ -131,8 +129,6 @@ class GeneralController extends MainController
     // 权限描述相关标识
     private static $varCtrl = '{ctrl}';
     private static $varInfo = '{info}';
-
-    // ---
 
     /**
      * @inheritDoc
@@ -547,8 +543,6 @@ class GeneralController extends MainController
         $hideMenu = isset($this->user->hide_menu) ? $this->user->hide_menu : false;
         Yii::$app->view->params['hidden_menu'] = $hideMenu;
     }
-
-    // ---
 
     /**
      * 获取列表页对记录的操作
@@ -2210,7 +2204,9 @@ class GeneralController extends MainController
     public function actionSort()
     {
         $sort = Yii::$app->request->post('sort');
-        empty($sort) && $sort = '';
+        if (empty(trim($sort))) {
+            $sort = '';
+        }
 
         $model = parent::model(static::$modelName);
         $result = $this->service(self::$apiGeneralUpdate, [
@@ -2227,8 +2223,6 @@ class GeneralController extends MainController
 
         $this->success(null, 'success');
     }
-
-    // ---
 
     /**
      * 裁切图片
@@ -2338,6 +2332,30 @@ class GeneralController extends MainController
         $this->sourceCss = false;
         $this->setCommonParams(true);
         parent::error($message, $code, $trace);
+    }
+
+    /**
+     * 渲染模态框
+     *
+     * @access public
+     *
+     * @param string $view
+     * @param array  $params
+     * @param string $title
+     *
+     * @return bool
+     */
+    public function modal($view, $params = [], $title = null)
+    {
+        $tpl = Yii::$app->getViewPath() . DS . ltrim($view, '/') . '.php';
+        $content = $this->renderFile($tpl, $params);
+
+        $response = ['message' => $content];
+        $title && $response['title'] = $title;
+
+        $this->success($response);
+
+        return true;
     }
 
     /**

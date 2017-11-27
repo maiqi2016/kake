@@ -128,8 +128,6 @@ class MainController extends Controller
         return parent::beforeAction($action);
     }
 
-    // --- Function ---
-
     /**
      * 跨命名空间调用控制器方法
      *
@@ -1314,30 +1312,6 @@ class MainController extends Controller
     }
 
     /**
-     * 渲染模态框
-     *
-     * @access public
-     *
-     * @param string $view
-     * @param array  $params
-     * @param string $title
-     *
-     * @return bool
-     */
-    public function modal($view, $params = [], $title = null)
-    {
-        $tpl = Yii::$app->getViewPath() . DS . ltrim($view, '/') . '.php';
-        $content = $this->renderFile($tpl, $params);
-
-        $response = ['message' => $content];
-        $title && $response['title'] = $title;
-
-        $this->success($response);
-
-        return true;
-    }
-
-    /**
      * 获取根用户
      *
      * @access public
@@ -1435,8 +1409,6 @@ class MainController extends Controller
 
         return array_column($result, 'product_supplier_id');
     }
-
-    // --- Display ---
 
     /**
      * 公共错误控制器
@@ -1634,8 +1606,6 @@ class MainController extends Controller
 
         $this->success($html);
     }
-
-    // --- Magic ---
 
     /**
      * @inheritDoc
