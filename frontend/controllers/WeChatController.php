@@ -78,9 +78,11 @@ class WeChatController extends GeneralController
                 $this->api->user_group->moveUser($message->FromUserName, $groupId);
                 
                 if (!empty($type) && in_array($type, [1])) {
+                    
                     sleep(1);
                     $url = Yii::$app->params['frontend_url'] . Url::toRoute(['producer/apply-distributor']);
-                    $this->staffReplyText("欢迎加入喀客，<a href='{$url}'>点击这里注册分销商</a>", $message);
+                    
+                    return "欢迎加入喀客，<a href='{$url}'>点击这里注册分销商</a>";
                 }
             },
 
