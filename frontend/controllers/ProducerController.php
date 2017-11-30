@@ -125,19 +125,9 @@ class ProducerController extends GeneralController
         ];
         $channel = Helper::integerEncode($this->user->id);
 
-        $url = function ($router) use ($channel) {
-            $url = Url::to([
-                $router,
-                'channel' => $channel
-            ], true);
-
-            return urldecode($url);
-        };
-
-        $tools = Yii::$app->wx->url;
         $links = [
-            $tools->shorten($url('distribution/index'))['short_url'],
-            $tools->shorten($url('distribution/items'))['short_url']
+            $this->shortUrl(['distribution/index', 'channel' => $channel]),
+            $this->shortUrl(['distribution/items', 'channel' => $channel]),
         ];
         $this->seo(['title' => '分销商管理']);
 
@@ -159,6 +149,10 @@ class ProducerController extends GeneralController
         $list = $controller->showList('my', true, false, [
             'size' => 0
         ])[0];
+        foreach ($list as &$item) {
+            $item['link_url_short'] = $this->shortUrl($item['link_url'] . '&channel=' . $item['channel']);
+        }
+
         $this->seo(['title' => '分销商管理']);
 
         return $this->render('product-list', compact('list'));

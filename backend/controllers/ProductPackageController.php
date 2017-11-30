@@ -207,7 +207,7 @@ EOF
                 'tip'
             ],
             'info' => [
-                'max-width' => '250px',
+                'max-width' => '300px',
                 'tpl' => '<pre>%s</pre>'
             ],
             'product_supplier_id' => array_merge(self::$supplierIdAssist, [
@@ -349,9 +349,10 @@ EOF
     {
         if (stripos($action, 'edit') !== false) {
             if (!empty($record['product_supplier_id']) && empty($record['supplier_contact'])) {
-                Yii::$app->session->setFlash('warning', '供应商联系电话必须填写');
-                Yii::$app->session->setFlash('list', $record);
-                $this->goReference('product-package/' . $action);
+                $this->goReference($this->getControllerName($action), [
+                    'warning' => '供应商联系电话必须填写',
+                    'list' => $record
+                ]);
             }
         }
 

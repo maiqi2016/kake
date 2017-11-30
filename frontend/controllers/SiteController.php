@@ -97,29 +97,5 @@ class SiteController extends GeneralController
         /*
         $this->dump($wx->material->lists('news'));
         //*/
-
-        // 生成永久二维码
-        /*
-        $url = $wx->qrcode->url($wx->qrcode->forever('芝妈屋')->ticket);
-        $this->dump($url);
-        //*/
-
-        // 发送模板消息
-        /*
-        $wx->notice->send([
-            'touser' => $this->user->openid,
-            'template_id' => 'sURDDDE9mymmFni3-zKEyPmPl4pid3Ttf42rrnR_8ZI',
-            'url' => Yii::$app->params['frontend_url'],
-            'data' => [
-                'first' => '订单支付成功',
-                'keyword1' => '汉庭',
-                'keyword2' => 'Leon',
-                'keyword3' => '请到平台订单中心预约',
-                'keyword4' => '2',
-                'keyword5' => '￥768',
-                'remark' => '更多问题请联系客服'
-            ],
-        ]);
-        //*/
     }
 }

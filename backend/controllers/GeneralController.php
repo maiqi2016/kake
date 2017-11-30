@@ -610,7 +610,7 @@ class GeneralController extends MainController
                 ],
                 'size' => 0
             ]);
-            $list = Helper::arrayColumnSimple($list, 'id', 'name');
+            $list = array_column($list, 'name', 'id');
 
             if (!empty($item['list_except'])) {
                 $list = $list + $item['list_except']; // + 运算，同名键左测优先
@@ -1759,69 +1759,34 @@ class GeneralController extends MainController
     }
 
     /**
-     * 展示列表页
+     * 自定义展示列表页
      *
      * @access public
      *
+     * @param array   $list
      * @param string  $caller
+     * @param mixed   $page
+     * @param array   $sorter
+     * @param array   $filter
      * @param boolean $returnList
-     * @param boolean $logReference
-     * @param array   $defCondition
+     * @param array   $get
      *
      * @return mixed
      */
-    public function showList($caller = null, $returnList = false, $logReference = true, $defCondition = [])
+    public function showListDiy($list, $caller = null, $page = false, $sorter = null, $filter = null, $returnList = false, $get = [])
     {
         $caller = $caller ?: $this->getCaller(2);
-        if ($logReference) {
-            $this->logReference($this->getControllerName($caller));
+
+        if ($page === false) {
+            $page = new yii\data\Pagination(['totalCount' => count($list)]);
         }
 
-        $condition = $this->callMethod($caller . 'Condition', []);
-        if (!isset($condition['size'])) {
-            $condition['size'] = Yii::$app->params['pagenum'];
+        if (is_null($sorter)) {
+            list($sorterDefault, $sorter) = $this->getSorter($get, $caller);
         }
 
-        if (!empty(static::$listFunctionName)) {
-            $result = $this->callMethod(static::$listFunctionName, 'function non-exists');
-        } else {
-
-            $get = Yii::$app->request->get();
-
-            list($filterDefault, $filter) = $this->getFilter($get, $caller);
-            $filterDefault = $this->preHookLogicForWhere($filterDefault);
-            if (!Helper::arrayEmpty($filterDefault)) {
-                $_where = empty($condition['where']) ? [] : $condition['where'];
-                $condition['where'] = array_merge($_where, (array) $filterDefault);
-            }
-
-            list($sorterDefault, $sorter) = $this->getSorter($this->getSorterFromUrl($get), $caller);
-            if (!empty($sorterDefault)) {
-                $condition['order'] = $sorterDefault;
-            }
-
-            $model = parent::model(static::$modelName);
-            $params = [
-                'table' => $model->tableName,
-                'db' => static::$modelDb
-            ];
-
-            $params = array_merge($params, $condition, $get, (array) $defCondition);
-            $result = $this->service(static::$apiGeneralList, $params);
-        }
-        if (is_string($result)) {
-            $this->error(Yii::t('common', $result));
-        }
-
-        // 分页
-        if (isset($result[1]['pageParam'])) {
-            list($list, $page) = $result;
-            $pagination = new yii\data\Pagination(['totalCount' => $page['totalCount']]);
-            $pagination->setPageSize($condition['size']);
-            $page = $pagination;
-        } else {
-            $list = $result;
-            $page = null;
+        if (is_null($filter)) {
+            list($filterDefault, $filter) = $this->getFilter($this->getSorterFromUrl($get), $caller);
         }
 
         $assist = $this->getListAssist($this->callStatic($caller . 'Assist', []));
@@ -1914,20 +1879,92 @@ class GeneralController extends MainController
     }
 
     /**
+     * 展示列表页
+     *
+     * @access public
+     *
+     * @param string  $caller
+     * @param boolean $returnList
+     * @param boolean $logReference
+     * @param array   $defCondition
+     *
+     * @return mixed
+     */
+    public function showList($caller = null, $returnList = false, $logReference = true, $defCondition = [])
+    {
+        $caller = $caller ?: $this->getCaller(2);
+        if ($logReference) {
+            $this->logReference($this->getControllerName($caller));
+        }
+
+        $condition = $this->callMethod($caller . 'Condition', []);
+        if (!isset($condition['size'])) {
+            $condition['size'] = Yii::$app->params['pagenum'];
+        }
+
+        $get = Yii::$app->request->get();
+
+        list($filterDefault, $filter) = $this->getFilter($get, $caller);
+        list($sorterDefault, $sorter) = $this->getSorter($this->getSorterFromUrl($get), $caller);
+
+        if (!empty(static::$listFunctionName)) {
+            $result = $this->callMethod(static::$listFunctionName, 'function non-exists');
+        } else {
+            $filterDefault = $this->preHookLogicForWhere($filterDefault);
+            if (!Helper::arrayEmpty($filterDefault)) {
+                $_where = empty($condition['where']) ? [] : $condition['where'];
+                $condition['where'] = array_merge($_where, (array) $filterDefault);
+            }
+
+            if (!empty($sorterDefault)) {
+                $condition['order'] = $sorterDefault;
+            }
+
+            $model = parent::model(static::$modelName);
+            $params = [
+                'table' => $model->tableName,
+                'db' => static::$modelDb
+            ];
+
+            $params = array_merge($params, $condition, $get, (array) $defCondition);
+            $result = $this->service(static::$apiGeneralList, $params);
+        }
+        if (is_string($result)) {
+            $this->error(Yii::t('common', $result));
+        }
+
+        // 分页
+        if (isset($result[1]['pageParam'])) {
+            list($list, $page) = $result;
+            $pagination = new yii\data\Pagination(['totalCount' => $page['totalCount']]);
+            $pagination->setPageSize($condition['size']);
+            $page = $pagination;
+        } else {
+            $list = $result;
+            $page = null;
+        }
+
+        return $this->showListDiy($list, $caller, $page, $sorter, $filter, $returnList, $get);
+    }
+
+    /**
      * 导出列表数据
      *
      * @access public
      *
      * @param string $filename
      *
-     * @return void
+     * @return mixed
      */
     public function exportList($filename)
     {
         $caller = str_replace('Export', null, $this->getCaller(2));
-        $list = $this->showList($caller, true, false, ['size' => 0]);
+        list($list) = $this->showList($caller, true, false, ['size' => 0]);
+
         if (empty($list)) {
-            $this->error('筛选后没有数据可供导出');
+            $this->goReference($this->getControllerName($caller), [
+                'danger' => '筛选后没有数据可供导出'
+            ]);
         }
 
         $assist = $this->callStatic($caller . 'ExportAssist', []);
@@ -1947,8 +1984,11 @@ class GeneralController extends MainController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $_list = [array_values($_assist), []];
-        foreach ($list[0] as $item) {
+        $_list = [
+            array_values($_assist),
+            []
+        ];
+        foreach ($list as $item) {
             $_list[] = array_values(Helper::pullSome($item, array_keys($_assist), true));
         }
 
@@ -1959,6 +1999,8 @@ class GeneralController extends MainController
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
         $writer->save('php://output');
+
+        return null;
     }
 
     /**
@@ -1990,7 +2032,18 @@ class GeneralController extends MainController
         $list = $this->getEditAssist($assist, $default, $caller);
         $view = $this->getPageDocument($caller);
 
-        return $this->display('//general/action', compact('list', 'modelInfo', 'view'));
+        $operation = $this->callStatic($caller . 'Operation');
+        $initScript = $this->callMethod($caller . 'InitScript', []);
+
+        $params = [
+            'list',
+            'modelInfo',
+            'view',
+            'operation',
+            'initScript'
+        ];
+
+        return $this->display('//general/action', compact(...$params));
     }
 
     /**
@@ -2040,15 +2093,16 @@ class GeneralController extends MainController
             $result = $this->service(static::$apiGeneralAdd, $params);
         }
 
-        $key = $this->getControllerName();
         if (is_string($result)) {
-            Yii::$app->session->setFlash('danger', Yii::t('common', $result));
-            Yii::$app->session->setFlash('list', $post);
-            $this->goReference($reference ? $reference['fail'] : "${key}/${action}");
+            $this->goReference($reference ? $reference['fail'] : $this->getControllerName($action), [
+                'danger' => Yii::t('common', $result),
+                'list' => $post
+            ]);
         }
 
-        Yii::$app->session->setFlash('success', '新增' . $modelInfo . '成功');
-        $this->goReference($reference ? $reference['success'] : "${key}/index");
+        $this->goReference($reference ? $reference['success'] : $this->getControllerName('index'), [
+            'success' => '新增' . $modelInfo . '成功'
+        ]);
     }
 
     /**
@@ -2105,8 +2159,19 @@ class GeneralController extends MainController
 
         // 单记录操作
         $operation = $this->callStatic($caller . 'Operation');
+        $initScript = $this->callMethod($caller . 'InitScript', []);
 
-        return $this->display('//general/action', compact('id', 'list', 'result', 'modelInfo', 'view', 'operation'));
+        $params = [
+            'id',
+            'list',
+            'result',
+            'modelInfo',
+            'view',
+            'operation',
+            'initScript'
+        ];
+
+        return $this->display('//general/action', compact(...$params));
     }
 
     /**
@@ -2161,15 +2226,16 @@ class GeneralController extends MainController
             $result = $this->service(static::$apiGeneralUpdate, $params);
         }
 
-        $key = $this->getControllerName();
         if (is_string($result)) {
-            Yii::$app->session->setFlash('danger', Yii::t('common', $result));
-            Yii::$app->session->setFlash('list', $post);
-            $this->goReference($reference ? $reference['fail'] : "${key}/${action}");
+            $this->goReference($reference ? $reference['fail'] : $this->getControllerName($action), [
+                'danger' => Yii::t('common', $result),
+                'list' => $post
+            ]);
         }
 
-        Yii::$app->session->setFlash('success', '更新' . $modelInfo . '成功');
-        $this->goReference($reference ? $reference['success'] : "${key}/index");
+        $this->goReference($reference ? $reference['success'] : $this->getControllerName('index'), [
+            'success' => '更新' . $modelInfo . '成功'
+        ]);
     }
 
     /**
@@ -2190,12 +2256,12 @@ class GeneralController extends MainController
         }
 
         if (is_string($result)) {
-            Yii::$app->session->setFlash('danger', Yii::t('common', $result));
+            $flash['danger'] = Yii::t('common', $result);
         } else {
-            Yii::$app->session->setFlash('success', '记录前置成功');
+            $flash['success'] = '记录前置成功';
         }
 
-        $this->goReference($reference ?: $this->getControllerName('index'));
+        $this->goReference($reference ?: $this->getControllerName('index'), $flash);
     }
 
     /**
@@ -2250,7 +2316,7 @@ class GeneralController extends MainController
         $filename = str_replace(Yii::$app->params['upload_url'], null, $url);
         $file = Yii::$app->params['tmp_path'] . $filename;
 
-        Helper::saveBase64File($base64, $file);
+        Helper::base64ToImage($base64, $file);
 
         $result = Yii::$app->oss->upload($file);
         if (is_string($result)) {

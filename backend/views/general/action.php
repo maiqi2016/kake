@@ -11,6 +11,7 @@ $flash = \Yii::$app->session->hasFlash('list') ? \Yii::$app->session->getFlash('
 $controller = \Yii::$app->controller->id;
 $action = \Yii::$app->controller->action->id;
 $modal = empty($view['modal']) ? false : true;
+$modelInfo = empty($view['info_perfect']) ? $modelInfo : null;
 ?>
 
 <?php if (!$modal): ?>
@@ -20,21 +21,26 @@ $modal = empty($view['modal']) ? false : true;
 <?php endif; ?>
 
 <?php
-if ($modal) {
-    $script = empty($view['action']) ? 'false' : ViewHelper::escapeScript($view['action']);
-    $action = 'onsubmit="return ' . $script . '"';
-} else {
-    $action = 'method="post" action="' . Url::to(['/' . $controller . '/' . $view['action']]) . '"';
+$action = null;
+if (!empty($view['action'])) {
+    if ($modal) {
+        $script = empty($view['action']) ? 'false' : ViewHelper::escapeScript($view['action']);
+        $action = 'onsubmit="return ' . $script . '"';
+    } else {
+        $action = 'method="post" action="' . Url::to(['/' . $controller . '/' . $view['action']]) . '"';
+    }
 }
 ?>
 <form class="form-horizontal" <?= $action ?>>
-    <?php if (!$modal): ?>
-        <input name="<?= Yii::$app->request->csrfParam ?>" type="hidden" value="<?= Yii::$app->request->csrfToken ?>">
-    <?php endif; ?>
+    <?php
+    if (!$modal) {
+        echo Html::input('hidden', Yii::$app->request->csrfParam, Yii::$app->request->csrfToken);
+    }
 
-    <?php if (!empty($view['action']) && strpos($view['action'], 'edit') !== false): ?>
-        <input name="id" type="hidden" value="<?= $id ?>">
-    <?php endif; ?>
+    if (!empty($view['action']) && strpos($view['action'], 'edit') !== false) {
+        echo Html::input('hidden', 'id', $id);
+    }
+    ?>
 
     <?php $pre_same_row = false ?>
     <?php foreach ($list as $field => $item): ?>
@@ -46,9 +52,6 @@ if ($modal) {
 
             return Helper::$fn($data, $key, $default);
         };
-
-        // 栅格数和标题
-        $html_label = ($item['title'] === false) ? null : '<label class="col-sm-2 control-label">' . $empty('title') . '</label>';
 
         // 主标签声明
         $element = $empty('elem', 'input');
@@ -84,6 +87,9 @@ if ($modal) {
 
         // 开始标签和结尾标签
         $html_begin_div = $pre_same_row ? null : '<div class="form-group box_' . $av_name . ' ' . ($empty('hidden', false) ? 'hidden' : null) . '">';
+        // 栅格数和标题
+        $html_label = ($item['title'] === false) ? null : '<label class="col-sm-2 control-label">' . $empty('title') . '</label>';
+        // 补充html
         $html_end_div = $same_row ? null : '</div>';
 
         $pre_same_row = $same_row;
@@ -157,10 +163,6 @@ if ($modal) {
             });
         </script>
     <?php endif; ?>
-    <?php elseif ($element == 'text'): ?> <!-- text -->
-        <div class="col-sm-<?= $empty('label', 3) ?> <?= $av_class ?>" <?= $as_tip ?>>
-            <p class="bg-info" <?= $as_name ?> <?= $as_script ?>><?= $av_value ?></p>
-        </div>
     <?php elseif ($element == 'img'): ?> <!-- img -->
         <div class="col-sm-<?= $empty('label', 10) ?> <?= $av_class ?>" <?= $as_tip ?> <?= $as_script ?>>
             <div class="row" <?= $as_name ?>>
@@ -293,6 +295,11 @@ if ($modal) {
                     type="button"
                 <?= $as_script ?>><?= $av_value ?></button>
         </div>
+    <?php elseif ($element == 'text'): ?> <!-- text -->
+        <div class="col-sm-<?= $empty('label', 3) ?>" <?= $as_tip ?>>
+        <?php $tag = $empty('tag', 'p') ?>
+        <<?= $tag ?> class="<?= $av_class ?>" <?= $as_name ?> <?= $as_script ?>><?= $av_value ?></<?= $tag ?>>
+        </div>
     <?php endif; ?>
 
         <script type="text/javascript">
@@ -328,7 +335,11 @@ if ($modal) {
                 // 监控值的修改
                 <?php if (!empty($value_change)): ?>
                 $('.box_<?= $av_name ?>').find(son).change(function () {
-                    eval('<?= $value_change ?>');
+                    try {
+                        eval('<?= $value_change ?>');
+                    } catch (e) {
+                        $.alert('`change` 表达式或表达式内容报错', 'danger');
+                    }
                 });
                 <?php endif; ?>
             });
@@ -336,18 +347,27 @@ if ($modal) {
         <?= $html_end_div ?>
     <?php endforeach; ?>
 
+    <script type="text/javascript">
+        $(function () {
+            // 页面初始化执行
+            <?= implode(';', $initScript) ?>
+        });
+    </script>
+
     <br>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">
-                <!--
-                <?= $view['button_info'] ?><?= $modal ? null : $modelInfo ?>
-                -->
-                确认提交
-            </button>
+            <?php if (!empty($view['button_info'])): ?>
+                <button type="submit" class="btn btn-primary">
+                    <?= $view['button_info'] ?><?= $modal ? null : $modelInfo ?>
+                </button>
+            <?php endif; ?>
 
             <?php if (!empty($operation)): ?>
-                <?= ViewHelper::createButtonForRecord($operation, $result, $controller) ?>
+                <?php
+                $result = empty($result) ? [] : $result;
+                echo ViewHelper::createButtonForRecord($operation, $result, $controller);
+                ?>
             <?php endif; ?>
         </div>
     </div>

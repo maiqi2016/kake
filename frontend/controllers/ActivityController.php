@@ -57,9 +57,9 @@ class ActivityController extends GeneralController
      */
     private function screenShot($story, $text)
     {
-        $bg = self::getPathByUrl('img/activity/story-bg.jpg', 'frontend_source');
-        $story = self::getPathByUrl($story);
-        $ele = self::getPathByUrl('img/activity/story-ele.png', 'frontend_source');
+        $bg = parent::getPathByUrl('img/activity/story-bg.jpg', 'frontend_source');
+        $story = parent::getPathByUrl($story);
+        $ele = parent::getPathByUrl('img/activity/story-ele.png', 'frontend_source');
 
         $story = Image::make($story);
         $data = Helper::calThumb(564, 330, $story->width(), $story->height());
@@ -72,7 +72,7 @@ class ActivityController extends GeneralController
         $img->insert($story, 'top-left', $x, $y);
 
         $img->insert($ele);
-        $fonts = self::getPathByUrl('fonts/hanyi.ttf', 'frontend_source');
+        $fonts = parent::getPathByUrl('fonts/hanyi.ttf', 'frontend_source');
 
         $textArr = Helper::strSplit($text, 14, [
             'zh-cn',
@@ -91,7 +91,7 @@ class ActivityController extends GeneralController
         $tmp = Yii::$app->params['tmp_path'] . '/' . $this->user->id . '.jpg';
         $img->save($tmp);
 
-        return self::getUrlByPath($tmp, 'jpg', '-', 'screen-shot-');
+        return parent::getUrlByPath($tmp, 'jpg', '-', 'screen-shot-');
     }
 
     /**

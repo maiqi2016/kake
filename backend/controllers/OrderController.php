@@ -353,7 +353,8 @@ class OrderController extends GeneralController
             }
         }
 
-        Yii::$app->session->setFlash('info', '<' . $payment . ' : 接口反馈> ' . $info);
-        $this->goReference($this->getControllerName('index'));
+        $this->goReference($this->getControllerName('index'), [
+            'info' => '<' . $payment . ' : 接口反馈> ' . $info
+        ]);
     }
 }

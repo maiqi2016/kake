@@ -77,6 +77,92 @@ class ViewHelper extends Object
     }
 
     /**
+     * 处理按钮事件类型
+     *
+     * @access private
+     *
+     * @param array  $value
+     * @param string $controller
+     * @param array  $params
+     * @param string $buttons
+     * @param string $size
+     *
+     * @return string
+     */
+    private static function handleUrl($value, $controller, $params, $buttons, $size)
+    {
+        $type = Helper::emptyDefault($value, 'type', 'url');
+        $level = Helper::emptyDefault($value, 'level', 'primary');
+
+        $attrStr = null;
+        $form = null;
+        $url = 'javascript:void(null)';
+
+        // 拼接属性
+        $extendAttr = function ($attrArr, $attrStr) {
+            foreach ((array) $attrArr as $name => $v) {
+                $attrStr .= ' ' . $name . '=\'' . $v . '\'';
+            }
+
+            return $attrStr;
+        };
+
+        if ($type == 'url') {
+
+            $isPost = (!empty($value['method']) && strtolower($value['method']) === 'post');
+
+            if (strpos($value['value'], 'http') === 0) {
+                $url = $value['value'];
+            } else {
+                $url = strpos($value['value'], '/') ? $value['value'] : ($controller . '/' . $value['value']);
+                !$isPost && $url = array_merge([$url], $params);
+                $url = Url::to((array) $url);
+            }
+
+            if ($isPost) {
+                $form .= Html::beginForm($url);
+                foreach ($params as $key => $val) {
+                    $form .= Html::input('hidden', $key, $val);
+                }
+            }
+
+        } else if ($type == 'script') {
+            $params = $params ? self::escapeParams($params) : '';
+            $url = 'javascript:' . self::escapeScript($value['value']) . $params . ';';
+        } else if ($type == 'attr') {
+            $attrStr = $extendAttr($params, $attrStr);
+        }
+
+        if (!empty($value['attrs'])) {
+            $attrStr = $extendAttr($value['attrs'], $attrStr);
+        }
+
+        // 组装
+        $icon = empty($value['icon']) ? null : '<span class="glyphicon glyphicon-' . $value['icon'] . '"></span>';
+
+        if (!empty($value['br'])) {
+            $buttons .= '<br>';
+        }
+
+        $_size = $size ? "btn-{$size}" : null;
+        $alt = Helper::emptyDefault($value, 'alt');
+
+        empty($value['text']) && $value['text'] = null;
+
+        if ($form) {
+            $buttons .= $form . Html::button("{$icon} {$value['text']}", [
+                    'class' => "btn btn-{$level} {$_size}",
+                    'title' => $alt,
+                    'type' => 'submit'
+                ]) . Html::endForm();
+        } else {
+            $buttons .= "<a href='{$url}' class='btn btn-{$level} {$_size}' title='{$alt}' {$attrStr}>{$icon} {$value['text']}</a>" . PHP_EOL;
+        }
+
+        return $buttons;
+    }
+
+    /**
      * 根据数组规则创建按钮组
      *
      * @access public
@@ -95,34 +181,8 @@ class ViewHelper extends Object
 
         $buttons = null;
         foreach ($operations as $value) {
-            $type = Helper::emptyDefault($value, 'type', 'url');
-            $level = Helper::emptyDefault($value, 'level', 'primary');
             $params = Helper::emptyDefault($value, 'params', []);
-
-            $attrStr = null;
-            if ($type == 'url') {
-                if (strpos($value['value'], 'http') === 0) {
-                    $url = $value['value'];
-                } else {
-                    $url = strpos($value['value'], '/') ? $value['value'] : ($controller . '/' . $value['value']);
-                    $url = Url::to(array_merge([$url], $params));
-                }
-            } else if ($type == 'script') {
-                $params = $params ? self::escapeParams($params) : '';
-                $url = 'javascript:' . self::escapeScript($value['value']) . $params . ';';
-            } else if ($type == 'attr') {
-                $url = 'javascript:void(null)';
-                foreach ($params as $name => $v) {
-                    $attrStr .= ' ' . $name . '=\'' . $v . '\'';
-                }
-            }
-
-            $icon = empty($value['icon']) ? null : '<span class="glyphicon glyphicon-' . $value['icon'] . '"></span>';
-            $_size = $size ? "btn-{$size}" : null;
-            $alt = Helper::emptyDefault($value, 'alt');
-
-            empty($value['text']) && $value['text'] = null;
-            $buttons .= "<a href='{$url}' class='btn btn-{$level} {$_size}' title='{$alt}' {$attrStr}>{$icon} {$value['text']}</a>" . PHP_EOL;
+            $buttons = self::handleUrl($value, $controller, $params, $buttons, $size);
         }
 
         return $buttons;
@@ -158,41 +218,16 @@ class ViewHelper extends Object
             }
 
             $type = Helper::emptyDefault($value, 'type', 'url');
-            $level = Helper::emptyDefault($value, 'level', 'primary');
-
             $defaultParams = $type == 'url' ? ['id'] : [];
             $params = Helper::emptyDefault($value, 'params', $defaultParams);
+
             if (is_callable($params)) {
                 $params = $params($item);
             } else {
                 $params = Helper::pullSome($item, $params);
             }
 
-            $attrStr = null;
-            if ($type == 'url') {
-                $url = strpos($value['value'], '/') ? $value['value'] : ($controller . '/' . $value['value']);
-                $url = Url::to(array_merge([$url], $params));
-            } else if ($type == 'script') {
-                $params = $params ? self::escapeParams($params) : '';
-                $url = 'javascript:' . self::escapeScript($value['value']) . $params . ';';
-            } else if ($type == 'attr') {
-                $url = 'javascript:void(null)';
-                foreach ($params as $name => $v) {
-                    $attrStr .= ' ' . $name . '=\'' . $v . '\'';
-                }
-            }
-
-            $icon = empty($value['icon']) ? null : '<span class="glyphicon glyphicon-' . $value['icon'] . '"></span>';
-
-            if (!empty($value['br'])) {
-                $buttons .= '<br>';
-            }
-
-            $_size = $size ? "btn-{$size}" : null;
-            $alt = Helper::emptyDefault($value, 'alt');
-
-            empty($value['text']) && $value['text'] = null;
-            $buttons .= "<a href='{$url}' class='btn btn-{$level} {$_size}' title='{$alt}'{$attrStr}>{$icon} {$value['text']}</a>" . PHP_EOL;
+            $buttons = self::handleUrl($value, $controller, $params, $buttons, $size);
         }
 
         return $buttons;
@@ -307,7 +342,7 @@ class ViewHelper extends Object
                         data-toggle="tooltip"
                         data-html="true"
                         data-placement="' . $adorn['img']['pos'] . '"
-                        title="<img style=\'max-width: ' . $adorn['img']['max-width'] . ';\' src=' . $content . '>">';
+                        title="<img style=\'max-width: ' . $adorn['img']['max-width'] . ';\' src=' . $content . '>"';
                 }
 
                 $content = '

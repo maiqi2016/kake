@@ -19,15 +19,19 @@ $action = \Yii::$app->controller->action->id;
     <!-- 筛选器 -->
     <?php if (!empty($filter)): ?>
         <form class="form-inline filter">
-            <input type="hidden" name="r" value="<?= $controller ?>/<?= $action ?>">
-            <?php if (!empty($fileName = Yii::$app->request->get('field_name'))): ?>
-            <input type="hidden" name="field_name" value="<?= $fileName ?>">
-            <?php endif; ?>
-            <?php if ($sortQuery = Yii::$app->request->get('sorter')): ?>
-                <input type="hidden" name="sorter" value="<?= $sortQuery ?>">
-            <?php endif; ?>
-            <?php foreach ($filter as $field => $item): ?>
+            <?php
+            echo Html::input('hidden', 'r', "{$controller}/{$action}");
 
+            if (!empty($fieldName = Yii::$app->request->get('field_name'))) {
+                echo Html::input('hidden', 'field_name', $fieldName);
+            }
+
+            if ($sortQuery = Yii::$app->request->get('sorter')) {
+                echo Html::input('hidden', 'sorter', $sortQuery);
+            }
+            ?>
+
+            <?php foreach ($filter as $field => $item): ?>
                 <?php
                 $empty = function ($key, $default = null, $data = null, $fn = 'empty') use ($item) {
                     $data = $data ?: $item;
@@ -186,7 +190,7 @@ $action = \Yii::$app->controller->action->id;
 
             if (!empty($tip)) {
                 array_walk($tip, function (&$value, $key) use ($maxLen) {
-                    $key = str_pad($key, $maxLen, '　', STR_PAD_LEFT);
+                    $key = str_pad($key, $maxLen, SPACE, STR_PAD_LEFT);
                     $value = $key . ' : ' . $value;
                 });
                 $tip = implode('<br>', $tip);

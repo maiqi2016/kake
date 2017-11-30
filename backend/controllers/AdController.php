@@ -179,6 +179,7 @@ class AdController extends GeneralController
             ],
             'standard_size' => [
                 'elem' => 'text',
+                'class' => 'bg-info',
                 'title' => '附件标准尺寸',
                 'html' => true,
                 'value' => '首页焦点：750 × 500<br>首页广告：750 × 160<br>分销焦点：648 × 432<br>分销广告：750 × 253',

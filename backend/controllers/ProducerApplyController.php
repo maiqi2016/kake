@@ -225,7 +225,7 @@ class ProducerApplyController extends GeneralController
         $result = $this->service('producer.agree-apply', ['id' => $id]);
 
         if (is_string($result)) {
-            Yii::$app->session->setFlash('danger', Yii::t('common', $result));
+            $flash['danger'] = Yii::t('common', $result);
         } else {
 
             $result = $result['avatar'];
@@ -236,33 +236,23 @@ class ProducerApplyController extends GeneralController
                 $this->thumbCrop($img, 256, 256, true);
             }
 
-            Yii::$app->wx->notice->send([
-                'touser' => $result['openid'],
-                'template_id' => 'NuIJGBNJTRsFArlK5ZfAWweTbUW1teHcEFk4pL4XEfY',
-                'url' => Yii::$app->params['frontend_url'] . Url::toRoute(['producer/index']),
-                'data' => [
-                    'first' => "您的分销商申请已被通过\n",
-                    'keyword1' => [
-                        date('Y-m-d H:i:s'),
-                        '#999'
-                    ],
-                    'keyword2' => [
-                        Helper::integerEncode($result['user_id']),
-                        '#999'
-                    ],
-                    'keyword3' => [
-                        $result['name'],
-                        '#999'
-                    ],
-                    'remark' => [
-                        "\n如有疑问请联系客服 " . Yii::$app->params['company_tel'],
-                        '#fda443'
-                    ]
-                ]
-            ]);
-            Yii::$app->session->setFlash('success', '通过申请操作完成');
+            if (!empty($result['openid'])) {
+                Yii::$app->wx->sendTplMsg([
+                    'to' => $result['openid'],
+                    'tpl' => 'NuIJGBNJTRsFArlK5ZfAWweTbUW1teHcEFk4pL4XEfY',
+                    'url' => Yii::$app->params['frontend_url'] . Url::toRoute(['producer/index']),
+                    'header' => '您的分销商申请已被通过',
+                    'footer' => "如有疑问请联系客服 " . Yii::$app->params['company_tel'],
+                ], [
+                    date('Y-m-d H:i:s'),
+                    Helper::integerEncode($result['user_id']),
+                    $result['name'],
+                ]);
+            }
+
+            $flash['success'] = '通过申请操作完成';
         }
 
-        $this->goReference($this->getControllerName('index'));
+        $this->goReference($this->getControllerName('index'), $flash);
     }
 }

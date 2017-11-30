@@ -23,6 +23,27 @@ class ConfigController extends GeneralController
     /**
      * @inheritDoc
      */
+    public static function fileOperation()
+    {
+        return [
+            [
+                'text' => '纳入数据库',
+                'icon' => 'road',
+                'level' => 'primary',
+                'method' => 'post',
+                'params' => [
+                    'app',
+                    'key',
+                    'value'
+                ],
+                'value' => 'config/add-form'
+            ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function indexOperations()
     {
         return [
@@ -72,9 +93,13 @@ class ConfigController extends GeneralController
         return [
             'app' => [
                 'info',
-                'code'
+                'code',
+                'color' => 'primary'
             ],
-            'key' => 'code',
+            'key' => [
+                'code',
+                'color' => 'default'
+            ],
             'value' => [
                 'max-width' => '300px'
             ],
@@ -85,6 +110,29 @@ class ConfigController extends GeneralController
                 'code',
                 'color' => 'auto',
                 'info'
+            ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function fileAssist()
+    {
+        return [
+            'app' => [
+                'title' => '所属项目',
+                'info',
+                'code',
+                'color' => 'primary'
+            ],
+            'key' => [
+                'title' => '配置名称',
+                'code',
+                'color' => 'default'
+            ],
+            'value' => [
+                'title' => '配置值'
             ]
         ];
     }
@@ -146,7 +194,7 @@ class ConfigController extends GeneralController
 
             array_walk($_config, function (&$value, $key) use ($app, $model) {
                 $value = [
-                    'name' => $key,
+                    'key' => $key,
                     'app' => $app,
                     'app_info' => $model->_app[$app],
                     'value' => $value
@@ -162,17 +210,15 @@ class ConfigController extends GeneralController
         $frontendConfig = $handler($frontendConfig, 1);
 
         $config = array_merge($config, $frontendConfig);
-        $config = Helper::arraySort($config, 'name');
+        $config = Helper::arraySort($config, 'key');
 
         // 分页
         $pagination = new Pagination(['totalCount' => count($config)]);
         $pagination->setPageSize(Yii::$app->params['pagenum']);
 
         $config = array_slice($config, $pagination->offset, $pagination->limit);
+        $config = array_values($config);
 
-        return $this->display('file', [
-            'config' => $config,
-            'page' => $pagination
-        ]);
+        return $this->showListDiy($config, null, $pagination);
     }
 }

@@ -480,8 +480,9 @@ class ProducerProductController extends GeneralController
     public function actionEditMyForm()
     {
         if (!empty($this->listLog(self::$uid))) {
-            Yii::$app->session->setFlash('warning', '更改产品分佣策略前需确保无可结算分销订单');
-            $this->goReference($this->getControllerName('my'));
+            $this->goReference($this->getControllerName('my'), [
+                'warning' => '更改产品分佣策略前需确保无可结算分销订单'
+            ]);
         }
 
         $post = Yii::$app->request->post();
@@ -511,9 +512,10 @@ class ProducerProductController extends GeneralController
             ], $controller);
 
             if (empty($data['commission_data_' . ProductController::$type[$record['type']]])) {
-                Yii::$app->session->setFlash('warning', '该产品没有设置该分佣类型');
-                Yii::$app->session->setFlash('list', $record);
-                $this->goReference('producer-product/' . $action);
+                $this->goReference($this->getControllerName($action), [
+                    'warning' => '该产品没有设置该分佣类型',
+                    'list' => $record
+                ]);
             }
         }
 

@@ -29,6 +29,13 @@ class OrderSoldCodeController extends GeneralController
                 'button_info' => '编辑',
                 'action' => 'my-edit-form'
             ],
+            'sold-code' => [
+                'title_icon' => 'check',
+                'title_info' => '套餐核销',
+                'button_info' => '确认核销',
+                'action' => 'verify-sold-code',
+                'info_perfect' => true
+            ]
         ]);
     }
 
@@ -44,7 +51,7 @@ class OrderSoldCodeController extends GeneralController
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public static function myEditAssist()
     {
@@ -52,7 +59,20 @@ class OrderSoldCodeController extends GeneralController
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     */
+    public static function soldCodeAssist()
+    {
+        return [
+            'sold' => [
+                'title' => '核销码',
+                'class' => 'input-group-lg'
+            ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
      * @auth-same {ctrl}/edit
      */
     public function actionEditForm($reference = null, $action = 'edit', $post = null, $caller = null)
@@ -101,7 +121,7 @@ class OrderSoldCodeController extends GeneralController
     public function actionSoldCode()
     {
         $this->logReference('order-sold-code/sold-code');
-        return $this->display('sold-code');
+        return $this->showForm();
     }
 
     /**
@@ -116,12 +136,11 @@ class OrderSoldCodeController extends GeneralController
         ]);
 
         if (is_string($result)) {
-            Yii::$app->session->setFlash('danger', Yii::t('common', $result));
+            $flash['danger'] = Yii::t('common', $result);
         } else {
-            Yii::$app->session->setFlash('success', '套餐核销成功');
+            $flash['success'] = '套餐核销成功';
         }
 
-        $reference = $this->getControllerName('sold-code');
-        $this->goReference($reference);
+        $this->goReference($this->getControllerName('sold-code'), $flash);
     }
 }

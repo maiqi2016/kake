@@ -66,13 +66,14 @@ class WeChatController extends GeneralController
             },
 
             'event_subscribe' => function ($message) {
+                return '🙄 关注来源：' . $message->EventKey;
                 $name = $message->EventKey ?: '官方推广';
                 $groupId = $this->api->group($name);
                 $this->api->user_group->moveUser($message->FromUserName, $groupId);
             },
 
             'event_scan' => function ($message) {
-                return '🙄扫码来源：' . $message->EventKey;
+                return '🙄 扫码来源：' . $message->EventKey;
             }
         ]);
     }
@@ -258,10 +259,10 @@ class WeChatController extends GeneralController
      */
     private function drawLotteryImg($company, $code)
     {
-        $bg = self::getPathByUrl('img/activity/lottery-bg.jpg', 'frontend_source');
+        $bg = parent::getPathByUrl('img/activity/lottery-bg.jpg', 'frontend_source');
         $img = Image::make($bg);
 
-        $fonts = self::getPathByUrl('fonts/hanyi.ttf', 'frontend_source');
+        $fonts = parent::getPathByUrl('fonts/hanyi.ttf', 'frontend_source');
 
         // 添加文本
         $text = function ($text, $size, $y, $fonts, $width = 750) use ($img) {
