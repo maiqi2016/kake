@@ -188,15 +188,17 @@ class ProductProducerController extends GeneralController
             'edit'
         ])) {
             if (!empty($record['to_sales']) && $record['to_sales'] <= $record['from_sales']) {
-                Yii::$app->session->setFlash('warning', '结束销量必须大于开始销量');
-                Yii::$app->session->setFlash('list', $record);
-                $this->goReference('product-producer/' . $action);
+                $this->goReference($this->getControllerName($action), [
+                    'warning' => '结束销量必须大于开始销量',
+                    'list' => $record
+                ]);
             }
 
             if (!empty($record['type']) && ($record['commission'] <= 0 || $record['commission'] >= 100)) {
-                Yii::$app->session->setFlash('warning', '百分比分佣值请填写 0 ~ 100 之间的数');
-                Yii::$app->session->setFlash('list', $record);
-                $this->goReference('product-producer/' . $action);
+                $this->goReference($this->getControllerName($action), [
+                    'warning' => '百分比分佣值请填写 0 ~ 100 之间的数',
+                    'list' => $record
+                ]);
             }
         }
 

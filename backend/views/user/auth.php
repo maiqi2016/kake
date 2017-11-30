@@ -2,6 +2,7 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 ?>
 
@@ -10,10 +11,11 @@ use yii\helpers\Url;
 </div>
 
 <form class="form-horizontal" method="post" action="<?= Url::to(['/user/edit-auth-form']) ?>">
-    <input name="<?= Yii::$app->request->csrfParam ?>" type="hidden" value="<?= Yii::$app->request->csrfToken ?>">
-
-    <input name="old_auth" type="hidden" value="<?= implode(',', $record) ?>">
-    <input name="user_id" type="hidden" value="<?= $user_id ?>">
+    <?php
+    echo Html::input('hidden', Yii::$app->request->csrfParam, Yii::$app->request->csrfToken);
+    echo Html::input('hidden', 'old_auth', implode(',', $record));
+    echo Html::input('hidden', 'user_id', $user_id);
+    ?>
 
     <div class="form-group">
         <label class="col-sm-2 control-label"></label>

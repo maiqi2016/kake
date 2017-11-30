@@ -18,7 +18,7 @@ $params = \Yii::$app->params;
 
     <?php foreach ($list as $item): ?>
         <div class="product clearfix">
-            <?php $url = $item['link_url'] . '&channel=' . $item['channel'] ?>
+            <?php $url = $item['link_url_short'] ?>
             <div class="img" >
                 <a href="<?= $url ?>">
                     <img src="<?= current($item['cover_preview_url']) ?>"/>

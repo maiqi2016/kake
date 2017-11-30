@@ -122,7 +122,7 @@ class MainController extends Controller
                 $this->logReference('callback', $callback);
             }
         } else {
-            $this->goReference('callback', null, false);
+            $this->goReference('callback', null, null, false);
         }
 
         return parent::beforeAction($action);
@@ -896,12 +896,14 @@ class MainController extends Controller
      *
      * @access public
      *
-     * @param string $key
-     * @param array  $params
+     * @param string  $key
+     * @param array   $flash
+     * @param array   $params
+     * @param boolean $auto
      *
      * @return void
      */
-    public function goReference($key, $params = [], $auto = true)
+    public function goReference($key, $flash = [], $params = [], $auto = true)
     {
         if (Yii::$app->request->isAjax) {
             return;
@@ -916,11 +918,15 @@ class MainController extends Controller
         } else {
             $url = $reference[$key];
             if (!empty($params)) {
-                $url .= (strpos($url, '?') === false ? '?' : '&') . http_build_query($params);
+                $url .= (strpos($url, '?') === false ? '?' : '&') . http_build_query((array) $params);
             }
 
             unset($reference[$key]);
             Yii::$app->session->set(static::REFERENCE, $reference);
+        }
+
+        foreach ((array) $flash as $key => $msg) {
+            Yii::$app->session->setFlash($key, $msg);
         }
 
         header('Location: ' . $url);
@@ -1160,16 +1166,17 @@ class MainController extends Controller
      *
      * @param string $url
      * @param string $host
+     * @param string $name
      *
      * @return bool|string
      */
-    public static function getPathByUrl($url, $host = null)
+    public static function getPathByUrl($url, $host = null, $name = null)
     {
         if (strpos($url, 'http') !== 0 && !empty($host)) {
             $url = Yii::$app->params[$host] . '/' . $url;
         }
 
-        $file = Yii::$app->params['tmp_path'] . '/' . basename($url);
+        $file = Yii::$app->params['tmp_path'] . DS . ($name ?: basename($url));
 
         return Helper::saveRemoteFile($url, $file) ? $file : false;
     }
@@ -1192,6 +1199,7 @@ class MainController extends Controller
         $result = Yii::$app->oss->upload($file, $path['deep'] . '-' . $path['filename']);
         if (is_string($result)) {
             @unlink($file);
+
             return false;
         }
 
@@ -1211,7 +1219,7 @@ class MainController extends Controller
      */
     public function handleQrLogo(&$path)
     {
-        $logoBg = Image::make(self::getPathByUrl('img/qr-code-logo-bg.png', 'frontend_source'));
+        $logoBg = Image::make(parent::getPathByUrl('img/qr-code-logo-bg.png', 'frontend_source'));
         $logo = Image::make($path)->resize(94, 94);
         $logoBg->insert($logo, 'center');
 
@@ -1342,36 +1350,35 @@ class MainController extends Controller
     }
 
     /**
-     * 列表管理员
+     * 列表用户
      *
      * @access public
      *
-     * @param array  $user_ids
+     * @param array  $where
      * @param string $get_field
+     * @param array  $user_ids
      *
      * @return array
      */
-    public function listAdmin($user_ids = null, $get_field = 'username')
+    public function listUser($where = [], $get_field = 'username', $user_ids = null)
     {
-        $admin = $this->cache([
-            'list.admin',
+        $user = $this->cache([
+            'list.user',
             func_get_args()
-        ], function () use ($user_ids, $get_field) {
+        ], function () use ($where, $user_ids, $get_field) {
 
-            $where = [
-                ['manager' => 1],
-                ['role' => 1],
+            $where = array_merge((array) $where, [
                 ['state' => 1]
-            ];
+            ]);
 
             if ($user_ids) {
                 if (is_string($user_ids)) {
-                    $user_ids = explode(',', $user_ids);
+                    $user_ids = Helper::handleString($user_ids);
                 }
                 $where[] = ['id' => $user_ids];
             }
 
-            $admin = $this->service(static::$apiList, [
+            $user = $this->service(static::$apiList, [
                 'table' => 'user',
                 'select' => [
                     'id',
@@ -1381,10 +1388,10 @@ class MainController extends Controller
                 'where' => $where
             ], 'yes');
 
-            return Helper::arrayColumnSimple($admin, 'id', $get_field);
+            return array_column($user, $get_field, 'id');
         }, WEEK, null, Yii::$app->params['use_cache']);
 
-        return $admin;
+        return $user;
     }
 
     /**
@@ -1457,7 +1464,7 @@ class MainController extends Controller
     public function actionAjaxSaveBase64Png()
     {
         $base64 = Yii::$app->request->post('base64');
-        $file = Helper::saveBase64File($base64, Yii::$app->params['tmp_path'], 'png');
+        $file = Helper::base64ToImage($base64, Yii::$app->params['tmp_path'], 'png');
 
         $this->success([
             'url' => Yii::$app->params['upload_url'] . '/' . $file
@@ -1605,6 +1612,22 @@ class MainController extends Controller
         $html = Html::img($qr->writeDataUri(), compact('width', 'height'));
 
         $this->success($html);
+    }
+
+    /**
+     * 短连接
+     *
+     * @param mixed $url
+     *
+     * @return string
+     */
+    public function shortUrl($url)
+    {
+        if (is_array($url) || strpos($url, 'http') !== 0) {
+            $url = urldecode(Url::to((array) $url, true));
+        }
+
+        return Yii::$app->wx->url->shorten($url)['short_url'];
     }
 
     /**

@@ -543,35 +543,25 @@ class OrderController extends GeneralController
             $this->error(Yii::t('common', $result));
         }
 
-        $openidArr = $this->listAdmin($this->getRootUsers(), 'openid');
+        $openidArr = $this->listUser([
+            ['manager' => 1],
+            ['role' => 1]
+        ], 'openid', $this->getRootUsers());
         foreach ($openidArr as $uid => $openid) {
-            Yii::$app->wx->notice->send([
-                'touser' => $openid,
-                'template_id' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
-                'url' => null,
-                'data' => [
-                    'first' => "平台有新的订单产生\n",
-                    'keyword1' => [
-                        date('Y-m-d H:i:s'),
-                        '#999'
-                    ],
-                    'keyword2' => [
-                        (empty($channel) ? '平台流量' : '分销渠道') . ' (' . $this->user->username . ')',
-                        '#999'
-                    ],
-                    'keyword3' => [
-                        $orderNumber,
-                        '#999'
-                    ],
-                    'keyword4' => [
-                        Helper::money($price / 100),
-                        '#999'
-                    ],
-                    'remark' => [
-                        "\n订单管理与追踪请登录后台系统",
-                        '#fda443'
-                    ]
-                ],
+            if (empty($openid)) {
+                continue;
+            }
+
+            Yii::$app->wx->sendTplMsg([
+                'to' => $openid,
+                'tpl' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
+                'header' => '平台有新的订单产生',
+                'footer' => '订单管理与追踪请登录后台系统'
+            ], [
+                date('Y-m-d H:i:s'),
+                (empty($channel) ? '平台流量' : '分销渠道') . ' (' . $this->user->username . ')',
+                $orderNumber,
+                Helper::money($price / 100),
             ]);
         }
 
@@ -719,7 +709,7 @@ class OrderController extends GeneralController
 
                 return $result;
             }
-            $this->wxTplMessageForPayment($result);
+            $this->weChatTplMsgForPayment($result);
 
             return true;
         });
@@ -877,7 +867,7 @@ class OrderController extends GeneralController
             return null;
         }
 
-        $this->wxTplMessageForPayment($result);
+        $this->weChatTplMsgForPayment($result);
     }
 
     // --↓↓- Common -↓↓--
@@ -916,73 +906,36 @@ class OrderController extends GeneralController
      *
      * @return void
      */
-    public function wxTplMessageForPayment($result)
+    public function weChatTplMsgForPayment($result)
     {
-        $wx = Yii::$app->wx;
-
         if (!empty($result['user_openid'])) {
-            $wx->notice->send([
-                'touser' => $result['user_openid'],
-                'template_id' => 'sURDDDE9mymmFni3-zKEyPmPl4pid3Ttf42rrnR_8ZI',
+            Yii::$app->wx->sendTplMsg([
+                'to' => $result['user_openid'],
+                'tpl' => 'sURDDDE9mymmFni3-zKEyPmPl4pid3Ttf42rrnR_8ZI',
                 'url' => Url::to(['order/index'], true),
-                'data' => [
-                    'first' => "订单支付成功\n",
-                    'keyword1' => [
-                        $result['name'],
-                        '#999'
-                    ],
-                    'keyword2' => [
-                        '　' . $result['username'],
-                        '#999'
-                    ],
-                    'keyword3' => [
-                        '进入平台菜单>订单中心预约',
-                        '#999'
-                    ],
-                    'keyword4' => [
-                        $result['sub_total'],
-                        '#999'
-                    ],
-                    'keyword5' => [
-                        Helper::money($result['price'] / 100, '%s'),
-                        '#999'
-                    ],
-                    'remark' => [
-                        "\n如有疑问请联系客服 " . Yii::$app->params['company_tel'],
-                        '#fda443'
-                    ]
-                ],
+                'header' => '订单支付成功',
+                'footer' => "如有疑问请联系客服 " . Yii::$app->params['company_tel']
+            ], [
+                $result['name'],
+                $result['username'],
+                '进入平台菜单 > 订单中心预约',
+                $result['sub_total'],
+                Helper::money($result['price'] / 100, '%s'),
             ]);
         }
 
         if (!empty($result['producer_openid'])) {
-            $wx->notice->send([
-                'touser' => $result['producer_openid'],
-                'template_id' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
+            Yii::$app->wx->sendTplMsg([
+                'to' => $result['producer_openid'],
+                'tpl' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
                 'url' => Url::to(['producer/order-list'], true),
-                'data' => [
-                    'first' => "您有新的分销订单产生\n",
-                    'keyword1' => [
-                        date('Y-m-d H:i:s'),
-                        '#999'
-                    ],
-                    'keyword2' => [
-                        $result['payment_method'] ? '支付宝支付' : '微信支付',
-                        '#999'
-                    ],
-                    'keyword3' => [
-                        $result['order_number'],
-                        '#999'
-                    ],
-                    'keyword4' => [
-                        Helper::money($result['price'] / 100, '%s'),
-                        '#999'
-                    ],
-                    'remark' => [
-                        "\n如有疑问请联系客服 " . Yii::$app->params['company_tel'],
-                        '#fda443'
-                    ]
-                ],
+                'header' => '您有新的分销订单产生',
+                'footer' => "如有疑问请联系客服 " . Yii::$app->params['company_tel'],
+            ], [
+                date('Y-m-d H:i:s'),
+                $result['payment_method'] ? '支付宝支付' : '微信支付',
+                $result['order_number'],
+                Helper::money($result['price'] / 100, '%s'),
             ]);
         }
     }

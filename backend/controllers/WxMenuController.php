@@ -2,56 +2,100 @@
 
 namespace backend\controllers;
 
+use common\components\Helper;
 use Yii;
 
 /**
- * 服务号菜单管理
+ * 公众号菜单管理
  *
  * @auth-inherit-except add front sort
  */
 class WxMenuController extends GeneralController
 {
     /**
-     * 服务号菜单预览
+     * @inheritDoc
+     */
+    public static function indexOperation()
+    {
+        return [
+            [
+                'text' => 'JSON工具',
+                'value' => 'http://www.bejson.com/',
+                'level' => 'default',
+                'attrs' => [
+                    'target' => '_blank'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function indexAssist()
+    {
+        return [
+            'menu' => [
+                'title' => 'JSON代码',
+                'placeholder' => '以数组符合包围，不可留空',
+                'elem' => 'textarea',
+                'label' => 8,
+                'row' => 15,
+                'value' => Helper::formatPrintJson(Yii::$app->wx->getMenu())
+            ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function pageDocument()
+    {
+        return [
+            'index' => [
+                'title_icon' => 'cog',
+                'title_info' => '编辑菜单接口',
+                'button_info' => '提交修改',
+                'action' => 'update'
+            ]
+        ];
+    }
+
+    /**
+     * 公众号菜单预览
      *
      * @auth-same wx-menu/edit
      */
     public function actionIndex()
     {
-        $menu = Yii::$app->wx->menu->current();
-        $menu = empty($menu->selfmenu_info['button']) ? [] : $menu->selfmenu_info['button'];
-        foreach ($menu as &$item) {
-            if (!isset($item['sub_button'])) {
-                continue;
-            }
-            $item['sub_button'] = $item['sub_button']['list'];
-        }
-        $menu = json_encode($menu, JSON_UNESCAPED_UNICODE);
-
-        return $this->display('index', compact('menu'));
+        return $this->showForm();
     }
 
     /**
-     * 服务号菜单编辑
+     * 公众号菜单编辑
      */
-    public function actionEdit()
+    public function actionUpdate()
     {
         $wx = Yii::$app->wx;
+        $post = Yii::$app->request->post();
         $menu = json_decode(Yii::$app->request->post('menu'), true);
         if (empty($menu)) {
-            Yii::$app->session->setFlash('danger', '菜单JSON代码为空或非法');
-            return $this->redirect(['wx-menu/index']);
+            $this->goReference($this->getControllerName('index'), [
+                'danger' => '请规范编写菜单JSON代码',
+                'list' => $post
+            ]);
         }
 
         $wx->menu->destroy();
         $result = $wx->menu->add($menu);
 
         if ($result->errmsg == 'ok') {
-            Yii::$app->session->setFlash('success', '菜单编辑成功，等待5分钟或重新关注后可见');
+            $flash['success'] = '菜单编辑成功，5分钟后或重新关注后生效';
         } else {
-            Yii::$app->session->setFlash('danger', $result->errmsg);
+            $flash['danger'] = $result->errmsg;
+            $flash['list'] = $post;
         }
 
-        return $this->redirect(['wx-menu/index']);
+        $this->goReference($this->getControllerName('index'), $flash);
     }
 }

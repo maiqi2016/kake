@@ -173,7 +173,7 @@ class ProductController extends GeneralController
     {
         return [
             [
-                'text' => '选定',
+                'text' => '提交选择',
                 'type' => 'script',
                 'value' => '$.modalRadioValueToInput("radio", "product_id")',
                 'icon' => 'flag'
@@ -888,9 +888,10 @@ class ProductController extends GeneralController
     {
         if (!empty($record['sale_rate'])) {
             if ($record['sale_type'] == 2 && ($record['sale_rate'] < 1 || $record['sale_rate'] > 99)) {
-                Yii::$app->session->setFlash('warning', '百分比折扣时折扣率请填写 1 ~ 99 之间的数');
-                Yii::$app->session->setFlash('list', $record);
-                $this->goReference('product/' . $action);
+                $this->goReference($this->getControllerName($action), [
+                    'warning' => '百分比折扣时折扣率请填写 1 ~ 99 之间的数',
+                    'list' => $record
+                ]);
             }
         } else {
             $record['sale_rate'] = 0;
@@ -901,9 +902,10 @@ class ProductController extends GeneralController
                 'edit'
             ]) && empty($record['package_ids']) && empty($record['new_package_ids'])
         ) {
-            Yii::$app->session->setFlash('warning', '产品至少设定一个套餐');
-            Yii::$app->session->setFlash('list', $record);
-            $this->goReference('product/' . $action);
+            $this->goReference($this->getControllerName($action), [
+                'warning' => '产品至少设定一个套餐',
+                'list' => $record
+            ]);
         }
 
         // TODO

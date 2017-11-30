@@ -10,6 +10,30 @@ namespace backend\controllers;
 class EnvironmentController extends GeneralController
 {
     /**
+     * @inheritDoc
+     */
+    public static function indexOperation()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function indexAssist()
+    {
+        return [
+            'name' => [
+                'title' => '标题',
+                'min-width' => '100px'
+            ],
+            'value' => [
+                'title' => '内容'
+            ]
+        ];
+    }
+
+    /**
      * 项目环境预览
      *
      * @auth-pass-all
@@ -59,8 +83,6 @@ class EnvironmentController extends GeneralController
             ],
         ];
 
-        return $this->display('index', [
-            'env' => $env
-        ]);
+        return $this->showListDiy($env);
     }
 }

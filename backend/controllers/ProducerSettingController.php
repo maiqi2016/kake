@@ -25,6 +25,8 @@ class ProducerSettingController extends GeneralController
 
     public static $uid;
 
+    public static $spread;
+
     /**
      * @inheritDoc
      */
@@ -37,6 +39,10 @@ class ProducerSettingController extends GeneralController
                 'button_info' => '编辑',
                 'action' => 'setting'
             ],
+            'spread' => [
+                'title_icon' => 'fire',
+                'title_info' => '推广资料'
+            ]
         ]);
     }
 
@@ -61,7 +67,7 @@ class ProducerSettingController extends GeneralController
     {
         return [
             [
-                'text' => '选定',
+                'text' => '提交选择',
                 'type' => 'script',
                 'value' => '$.modalRadioValueToInput("radio", "producer_id")',
                 'icon' => 'flag'
@@ -80,7 +86,7 @@ class ProducerSettingController extends GeneralController
                 'value' => 'producer-product/index',
                 'level' => 'info',
                 'icon' => 'link',
-                'params' => function($record) {
+                'params' => function ($record) {
                     return ['producer_id' => $record['producer_id']];
                 }
             ],
@@ -89,7 +95,7 @@ class ProducerSettingController extends GeneralController
                 'value' => 'user/index',
                 'level' => 'info',
                 'icon' => 'link',
-                'params' => function($record) {
+                'params' => function ($record) {
                     return ['id' => $record['producer_id']];
                 }
             ]
@@ -197,6 +203,43 @@ class ProducerSettingController extends GeneralController
     /**
      * @inheritDoc
      */
+    public static function spreadAssist()
+    {
+        return [
+            'url_long' => [
+                'title' => '原链接',
+                'label' => 6,
+                'value' => self::$spread['url']
+            ],
+            'url_short' => [
+                'title' => '短连接',
+                'label' => 6,
+                'value' => self::$spread['url_short']
+            ],
+            'qr_code' => [
+                'title' => '二维码',
+                'elem' => 'img',
+                'readonly' => true,
+                'label' => 3,
+                'img_label' => 12,
+                'value' => [
+                    1 => self::$spread['img']
+                ],
+                'same_row' => true
+            ],
+            'tip' => [
+                'title' => false,
+                'elem' => 'text',
+                'class' => 'bg-info',
+                'label' => 3,
+                'value' => '下载二维码：右键 > 图片另存为...'
+            ],
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function ajaxModalListAssist()
     {
         return [
@@ -258,6 +301,7 @@ class ProducerSettingController extends GeneralController
                 'title' => '',
                 'label' => 4,
                 'elem' => 'text',
+                'class' => 'bg-info',
                 'value' => '不上传头像默认使用微信头像'
             ],
             'upload_logo' => [
@@ -518,16 +562,16 @@ class ProducerSettingController extends GeneralController
     public function actionSpread()
     {
         $spread = $this->spreadInfo($this->user->id);
-
         if (!isset($spread[1])) {
             Yii::$app->session->setFlash('warning', '请先完善个人设置');
 
-            return $this->redirect(['producer-setting/center']);
+            return $this->redirect([$this->getControllerName('center')]);
         }
 
-        list($link, $img) = $spread;
+        list(self::$spread['url'], self::$spread['img']) = $spread;
+        self::$spread['url_short'] = $this->shortUrl(self::$spread['url']);
 
-        return $this->display('spread', compact('link', 'img'));
+        return $this->showForm();
     }
 
     /**

@@ -99,7 +99,9 @@ return [
             'sub' => [
                 'ad.index' => '图片和广告',
                 'attachment.index' => '附件管理',
-                'wx-menu.index' => '服务号菜单'
+                'wx-menu.index' => '微信菜单',
+                'wx-notice.index' => '微信模板消息',
+                'wx-qr-code.index' => '微信二维码',
             ]
         ],
     ]

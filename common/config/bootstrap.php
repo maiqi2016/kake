@@ -13,6 +13,7 @@ Yii::setAlias('@script', dirname(dirname(__DIR__)) . '/mixed/script');
 
 define('TIME', $_SERVER['REQUEST_TIME']);
 define('DS', DIRECTORY_SEPARATOR);
+define('SPACE', '　');
 define('DOMAIN', 'kakehotels.com');
 define('PROJECT', 'kake');
 

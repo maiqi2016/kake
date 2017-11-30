@@ -318,8 +318,9 @@ class ProducerLogController extends GeneralController
     {
         $result = $this->settlement();
 
-        Yii::$app->session->setFlash('info', $result);
-        $this->goReference($this->getControllerName('my'));
+        $this->goReference($this->getControllerName('my'), [
+            'info' => $result
+        ]);
     }
 
     /**
@@ -330,9 +331,10 @@ class ProducerLogController extends GeneralController
      */
     public function settlement()
     {
-        $list = $this->showList('my', true, false, [
+        list($list) = $this->showList('my', true, false, [
             'size' => 0
-        ])[0];
+        ]);
+
         foreach ($list as $key => $item) {
             if (empty($item['sub_counter'])) {
                 unset($list[$key]);

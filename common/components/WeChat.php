@@ -16,6 +16,11 @@ use EasyWeChat\Payment\Order;
 class WeChat extends Object
 {
     /**
+     * @const space for zh-cn model
+     */
+    const SPACE = '　';
+
+    /**
      * @var object SDK instance
      */
     public $app;
@@ -262,6 +267,153 @@ class WeChat extends Object
         }
 
         return $result;
+    }
+
+    /**
+     * Get menu
+     *
+     * @access public
+     * @return array
+     */
+    public function getMenu()
+    {
+        $menu = Yii::$app->wx->menu->current();
+        $menu = empty($menu->selfmenu_info['button']) ? [] : $menu->selfmenu_info['button'];
+        foreach ($menu as &$item) {
+            if (!isset($item['sub_button'])) {
+                continue;
+            }
+            $item['sub_button'] = $item['sub_button']['list'];
+        }
+
+        return $menu;
+    }
+
+    /**
+     * Get message template
+     *
+     * @access public
+     * @return array
+     */
+    public function getMsgTpl()
+    {
+        static $tpl, $field, $space;
+
+        if (!$tpl) {
+
+            // 获取模板
+            $tpl = Yii::$app->wx->notice->getPrivateTemplates()->template_list;
+            array_shift($tpl);
+
+            // 解析字段
+            $space = $field = $this->parseTplMsgField($tpl);
+
+            // 计算字段要追加的空格数
+            foreach ($space as $key => &$value) {
+                $value = array_map('mb_strlen', $value);
+                $max = max($value);
+
+                foreach ($value as &$val) {
+                    $val = ($val < $max) ? intval($max - $val) : 0;
+                }
+            }
+        }
+
+        return [
+            $tpl,
+            $field,
+            $space
+        ];
+    }
+
+    /**
+     * Parse message to fields
+     *
+     * @access public
+     *
+     * @param mixed $tpl
+     *
+     * @return array
+     */
+    public function parseTplMsgField($tpl = null)
+    {
+        is_null($tpl) && list($tpl) = $this->getMsgTpl();
+
+        $json = array_column($tpl, 'content', 'template_id');
+        $parse = function ($item, $id) {
+
+            $split = '：';
+
+            if (empty($item)) {
+                return null;
+            }
+
+            if (strpos($item, $split) === false) {
+                $info = '无标字段';
+                $field = $item;
+            } else {
+                list($info, $field) = explode($split, $item);
+            }
+
+            $field = preg_replace('/.*\{\{([\w\d]+).DATA\}\}.*/i', "$1", $field);
+
+            return [$field => $info];
+        };
+
+        $_json = [];
+        foreach ($json as $id => $content) {
+            $field = explode(PHP_EOL, $content);
+            $field = array_slice($field, 1, -1);
+            $field = array_map($parse, $field, array_fill(0, count($field), $id));
+            $field = array_filter($field);
+
+            $_json[$id] = array_merge(...$field);
+        }
+
+        return $_json;
+    }
+
+    /**
+     * Send templates message
+     *
+     * @access public
+     *
+     * @param array $params
+     * @param array $keywords
+     *
+     * @return void
+     */
+    public function sendTplMsg($params, $keywords = [])
+    {
+        $message = [
+            'touser' => $params['to'],
+            'template_id' => $params['tpl'],
+            'url' => empty($params['url']) ? null : $params['url'],
+            'data' => [
+                'first' => [
+                    empty($params['header']) ? null : ($params['header'] . PHP_EOL),
+                    '#2d3e50'
+                ],
+                'remark' => [
+                    empty($params['footer']) ? null : (PHP_EOL . $params['footer']),
+                    '#fda443'
+                ]
+            ],
+        ];
+
+        list($tpl, $field, $space) = $this->getMsgTpl();
+
+        foreach ($keywords as $key => $value) {
+            if (is_numeric($key)) {
+                $key = 'keyword' . ($key + 1);
+            }
+            $message['data'][$key] = [
+                str_repeat(self::SPACE, intval($space[$params['tpl']][$key])) . $value,
+                '#999'
+            ];
+        }
+
+        $this->notice->send($message);
     }
 
     /**

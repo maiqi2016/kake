@@ -26,12 +26,30 @@ class ProducerQuotaController extends GeneralController
     // 用户id
     public static $uid;
 
+    public static $quota;
+
     /**
      * @inheritDoc
      */
     public static function indexOperation()
     {
         return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function pageDocument()
+    {
+        return [
+            'my' => [
+                'title_icon' => 'usd',
+                'title_info' => '申请提现',
+                'button_info' => '提交申请',
+                'action' => 'withdraw',
+                'info_perfect' => true
+            ]
+        ];
     }
 
     /**
@@ -72,6 +90,28 @@ class ProducerQuotaController extends GeneralController
             'state' => [
                 'code',
                 'info'
+            ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function myAssist()
+    {
+        return [
+            'quota_surplus' => [
+                'title' => '佣金余额',
+                'elem' => 'text',
+                'tag' => 'div',
+                'class' => 'page-header',
+                'label' => 6,
+                'html' => true,
+                'value' => '<h1>' . self::$quota . ' <small>提现金不能大于此余额</small></h1>'
+            ],
+            'quota' => [
+                'title' => '提现金额',
+                'class' => 'input-group-lg'
             ]
         ];
     }
@@ -129,11 +169,9 @@ class ProducerQuotaController extends GeneralController
             'state' => 1
         ], null, true);
 
-        $quota = empty($record) ? 0 : $record['quota'];
+        self::$quota = Helper::money(empty($record) ? 0 : $record['quota']);
 
-        return $this->display('my', [
-            'quota' => Helper::money($quota)
-        ]);
+        return $this->showForm();
     }
 
     /**
@@ -148,8 +186,9 @@ class ProducerQuotaController extends GeneralController
 
         $result = $this->applyWithdraw(self::$uid, $quota);
         if (is_string($result)) {
-            Yii::$app->session->setFlash('danger', $result);
-            $this->goReference($reference);
+            $this->goReference($reference, [
+                'danger' => $result
+            ]);
         }
 
         $controller = $this->controller('producer-withdraw');
@@ -163,7 +202,7 @@ class ProducerQuotaController extends GeneralController
      * 申请提现
      *
      * @param integer $userId
-     * @param float $quota
+     * @param float   $quota
      *
      * @return mixed
      */
@@ -197,6 +236,7 @@ class ProducerQuotaController extends GeneralController
         $have = empty($record) ? 0 : $record['quota'];
         if ($quota > $have) {
             $have = Helper::money($have);
+
             return "佣金余额不足，可提现余额为：${have}";
         }
 

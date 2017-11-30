@@ -130,7 +130,8 @@ class ProductPlateController extends GeneralController
             'preview_url' => [
                 'title' => '板块封面图',
                 'elem' => 'img',
-                'img_label' => 4,
+                'label' => 2,
+                'img_label' => 12,
                 'upload_name' => 'upload'
             ],
             'upload' => [

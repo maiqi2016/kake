@@ -24,6 +24,24 @@ class ActivityLotteryCodeController extends GeneralController
     }
 
     /**
+     * @inheritdoc
+     */
+    public static function indexOperationForm()
+    {
+        return [
+            [
+                'text' => '导出Excel',
+                'type' => 'attr',
+                'level' => 'success condition-global-event',
+                'params' => [
+                    'event' => 'export'
+                ],
+                'icon' => 'save'
+            ]
+        ];
+    }
+
+    /**
      * @inheritDoc
      */
     public static function indexFilter()
@@ -81,6 +99,22 @@ class ActivityLotteryCodeController extends GeneralController
     /**
      * @inheritDoc
      */
+    public static function indexExportAssist()
+    {
+        return [
+            'id',
+            'nickname',
+            'real_name',
+            'phone',
+            'company_info' => '公司名称',
+            'code' => '抽奖码',
+            'state_info' => '期号'
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function indexSorter()
     {
         return [
@@ -98,5 +132,13 @@ class ActivityLotteryCodeController extends GeneralController
                 'id DESC'
             ]
         ]);
+    }
+
+    /**
+     * 导出数据
+     */
+    public function actionIndexExport()
+    {
+        $this->exportList('抽奖码记录.' . date('Ymd'));
     }
 }

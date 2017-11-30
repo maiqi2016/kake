@@ -24,7 +24,7 @@ class ProductUpstreamController extends GeneralController
     {
         return [
             [
-                'text' => '选定',
+                'text' => '提交选择',
                 'type' => 'script',
                 'value' => '$.modalRadioValueToInput("radio", "product_upstream_id")',
                 'icon' => 'flag'

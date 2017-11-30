@@ -29,6 +29,24 @@ class UserController extends GeneralController
     }
 
     /**
+     * @inheritdoc
+     */
+    public static function indexOperationForm()
+    {
+        return [
+            [
+                'text' => '获取UID',
+                'type' => 'attr',
+                'level' => 'success condition-global-event',
+                'params' => [
+                    'event' => 'user-ids'
+                ],
+                'icon' => 'piggy-bank'
+            ]
+        ];
+    }
+
+    /**
      * @inheritDoc
      */
     public static function indexOperation()
@@ -62,7 +80,7 @@ class UserController extends GeneralController
 
         return [
             [
-                'text' => '选定',
+                'text' => '提交选择',
                 'type' => 'script',
                 'value' => '$.modalRadioValueToInput("radio", "' . $field . '")',
                 'icon' => 'flag'
@@ -265,7 +283,7 @@ class UserController extends GeneralController
             'province',
             'city',
             'head_img_url' => [
-                'label' => 4,
+                'label' => 6,
             ],
             'state' => [
                 'elem' => 'select',
@@ -308,7 +326,10 @@ class UserController extends GeneralController
 
         $authList = $this->getAuthList(true);
         $authRecord = array_keys($this->getAuthRecord($userId));
-        $admin = $this->listAdmin();
+        $admin = $this->listUser([
+            ['manager' => 1],
+            ['role' => 1]
+        ]);
 
         return $this->display('auth', [
             'user_id' => $userId,
@@ -347,8 +368,9 @@ class UserController extends GeneralController
 
         $result = Helper::getDiffWithAction($oldAuth, $nowAuth);
         if (!$result) {
-            Yii::$app->session->setFlash('warning', '权限配置未曾变化');
-            $this->goReference($this->getControllerName('index'));
+            $this->goReference($this->getControllerName('index'), [
+                'warning' => '权限配置未曾变化'
+            ]);
         }
 
         list($add, $del) = $result;
@@ -359,12 +381,12 @@ class UserController extends GeneralController
         ]);
 
         if (is_string($result)) {
-            Yii::$app->session->setFlash('danger', $result);
+            $flash['danger'] = $result;
         } else {
-            Yii::$app->session->setFlash('success', '权限配置成功');
+            $flash['success'] = '权限配置成功';
         }
 
-        $this->goReference($this->getControllerName('index'));
+        $this->goReference($this->getControllerName('index'), $flash);
     }
 
     /**
@@ -380,8 +402,9 @@ class UserController extends GeneralController
 
         $key = $this->getControllerName('index');
         if (!isset($user->nickname)) {
-            Yii::$app->session->setFlash('info', '该用户未关注公众号，无法同步');
-            $this->goReference($key);
+            $this->goReference($key, [
+                'info' => '该用户未关注公众号，无法同步'
+            ]);
         }
 
         $result = $this->service(self::$apiGeneralUpdate, [
@@ -396,12 +419,14 @@ class UserController extends GeneralController
         ]);
 
         if (is_string($result)) {
-            Yii::$app->session->setFlash('danger', Yii::t('common', $result));
-            $this->goReference($key);
+            $this->goReference($key, [
+                'danger' => Yii::t('common', $result)
+            ]);
         }
 
-        Yii::$app->session->setFlash('success', '同步用户信息成功');
-        $this->goReference($key);
+        $this->goReference($key, [
+            'success' => '同步用户信息成功'
+        ]);
     }
 
     /**
@@ -414,5 +439,28 @@ class UserController extends GeneralController
         }
 
         return parent::sufHandleField($record, $action);
+    }
+
+    /**
+     * 获取用户ID串
+     *
+     * @access public
+     * @return void
+     */
+    public function actionIndexUserIds()
+    {
+        list($list) = $this->showList('index', true, false, [
+            'size' => 0,
+            'select' => 'id'
+        ]);
+
+        $user = [];
+        foreach ($list as $item) {
+            $user[] = $item['id'];
+        }
+
+        $this->goReference($this->getControllerName('index'), [
+            'success' => implode(',', $user)
+        ]);
     }
 }

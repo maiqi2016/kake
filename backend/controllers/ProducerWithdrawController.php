@@ -159,8 +159,9 @@ class ProducerWithdrawController extends GeneralController
         $record = $this->service(parent::$apiDetail, $condition);
 
         if (empty($record)) {
-            Yii::$app->session->setFlash('danger', Yii::t('common', 'withdraw request not exists'));
-            $this->goReference($this->getControllerName('index'));
+            $this->goReference($this->getControllerName('index'), [
+                'danger' => Yii::t('common', 'withdraw request not exists')
+            ]);
         }
 
         if ($record['account_type'] == 0) {
@@ -174,20 +175,21 @@ class ProducerWithdrawController extends GeneralController
             ]);
 
             if (!empty($result->err_code_des)) {
-                Yii::$app->session->setFlash('danger', '<微信接口反馈> ' . $result->err_code_des);
-                $this->goReference($this->getControllerName('index'));
+                $this->goReference($this->getControllerName('index'), [
+                    'danger' => '<微信接口反馈> ' . $result->err_code_des
+                ]);
             }
         }
 
         $result = $this->service('producer.withdraw', ['id' => $id]);
         if (is_string($result)) {
-            Yii::$app->session->setFlash('danger', Yii::t('common', $result));
+            $flash['danger'] = Yii::t('common', $result);
         } else {
             $quota = Helper::money($result['quota'] / 100);
-            Yii::$app->session->setFlash('success', "提现申请处理完成，该分销商剩余佣金余额：{$quota}");
+            $flash['success'] = "提现申请处理完成，该分销商剩余佣金余额：{$quota}";
         }
 
-        $this->goReference($this->getControllerName('index'));
+        $this->goReference($this->getControllerName('index'), $flash);
     }
 
     /**

@@ -6,6 +6,7 @@ use common\components\SsoClient;
 use common\components\Helper;
 use common\controllers\MainController;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii;
 
 /**
