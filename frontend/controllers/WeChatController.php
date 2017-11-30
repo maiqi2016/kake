@@ -79,7 +79,7 @@ class WeChatController extends GeneralController
                 
                 if (!empty($type) && in_array($type, [1])) {
                     sleep(1);
-                    $url = Url::to(['producer/apply-distributor']);
+                    $url = Yii::$app->params['frontend_url'] . Url::toRoute(['producer/apply-distributor']);
                     $this->staffReplyText("欢迎加入喀客，<a href='{$url}'>点击这里注册分销商</a>", $message);
                 }
             },
@@ -221,7 +221,7 @@ class WeChatController extends GeneralController
         }
 
         $msg = base64_encode("您的抽奖码是：${result['code']}，请妥善保管");
-        $url = Url::to(['/site/index', 'popup' => 'lottery-code', 'msg' => $msg]);
+        $url = Yii::$app->params['frontend_url'] . Url::toRoute(['site/index', 'popup' => 'lottery-code', 'msg' => $msg]);
 
         return "抽奖码生成成功，<a href='{$url}'>点击这里查看</a>";
     }
