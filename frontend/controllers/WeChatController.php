@@ -7,6 +7,7 @@ use EasyWeChat\Message\Image as Img;
 use EasyWeChat\Message\Text;
 use Yii;
 use Intervention\Image\ImageManagerStatic as Image;
+use yii\helpers\Url;
 
 /**
  * WeChat reply controller
@@ -66,10 +67,21 @@ class WeChatController extends GeneralController
             },
 
             'event_subscribe' => function ($message) {
-                return '🙄 关注来源：' . $message->EventKey;
-                $name = $message->EventKey ?: '官方推广';
-                $groupId = $this->api->group($name);
+                
+                if (strpos($message->EventKey, '.') === false) {
+                    $message->EventKey = '.' . $message->EventKey;
+                }
+                
+                list($type, $group) = explode('.', $message->EventKey);
+                $group = $group ?: '官方推广';
+                $groupId = $this->api->group($group);
                 $this->api->user_group->moveUser($message->FromUserName, $groupId);
+                
+                if (!empty($type) && in_array($type, [1])) {
+                    sleep(1);
+                    $url = Url::to(['producer/apply-distributor']);
+                    $this->staffReplyText("欢迎加入喀客，<a href='{$url}'>点击这里注册分销商</a>", $message);
+                }
             },
 
             'event_scan' => function ($message) {
@@ -209,7 +221,10 @@ class WeChatController extends GeneralController
         }
 
         $msg = base64_encode("您的抽奖码是：${result['code']}，请妥善保管");
-        $url = Yii::$app->params['frontend_url'] . '?popup=lottery-code&msg=' . $msg;
+        $url = Url::to(['site/index'], [
+            'popup' => 'lottery-code',
+            'msg' => $msg
+        ]);
 
         return "抽奖码生成成功，<a href='{$url}'>点击这里查看</a>";
     }
