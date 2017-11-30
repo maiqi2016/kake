@@ -15,6 +15,11 @@ use yii\helpers\Url;
 class WeChatController extends GeneralController
 {
     /**
+     * @const scan key split
+     */
+    const SKS = '.';
+
+    /**
      * @var object
      */
     public $api = null;
@@ -44,6 +49,29 @@ class WeChatController extends GeneralController
     }
 
     /**
+     * 获取注册分销商的回复内容
+     */
+    private function getRegProducerMsg()
+    {
+        $url = Yii::$app->params['frontend_url'] . Url::toRoute(['producer/apply-distributor']);
+        $text = "欢迎加入喀客，<a href='{$url}'>点击这里注册</a>分销商";
+
+        return $text;
+    }
+
+    /**
+     * 将当前聊天用户移动到分组
+     *
+     * @param string $group
+     * @param object $message
+     */
+    private function moveToGroup($group, $message)
+    {
+        $groupId = $this->api->group($group);
+        $this->api->user_group->moveUser($message->FromUserName, $groupId);
+    }
+
+    /**
      * 监听消息
      */
     public function actionReply()
@@ -67,23 +95,34 @@ class WeChatController extends GeneralController
             },
 
             'event_subscribe' => function ($message) {
-                
-                if (strpos($message->EventKey, '.') === false) {
+
+                if (strpos($message->EventKey, self::SKS) === false) {
                     $message->EventKey = '.' . $message->EventKey;
                 }
-                
-                list($type, $group) = explode('.', $message->EventKey);
-                $group = $group ?: '官方推广';
-                $groupId = $this->api->group($group);
-                $this->api->user_group->moveUser($message->FromUserName, $groupId);
 
+                list($type, $group) = explode(self::SKS, $message->EventKey);
+
+                $this->moveToGroup($group ?: '官方推广', $message);
                 if (!empty($type) && in_array($type, [2])) {
-                    $url = Yii::$app->params['frontend_url'] . Url::toRoute(['producer/apply-distributor']);
-                    return "欢迎加入喀客，<a href='{$url}'>点击这里注册分销商</a>";
+                    return $this->getRegProducerMsg();
                 }
+
+                return '欢迎关注喀客酒店预订平台~';
             },
 
             'event_scan' => function ($message) {
+
+                if (strpos($message->EventKey, self::SKS) === false) {
+                    return null;
+                }
+
+                list($type, $group) = explode(self::SKS, $message->EventKey);
+                if (!empty($type) && in_array($type, [2])) {
+                    $this->moveToGroup($group, $message);
+
+                    return $this->getRegProducerMsg();
+                }
+
                 return '🙄 扫码来源：' . $message->EventKey;
             }
         ]);
@@ -220,7 +259,11 @@ class WeChatController extends GeneralController
         }
 
         $msg = base64_encode("您的抽奖码是：${result['code']}，请妥善保管");
-        $url = Yii::$app->params['frontend_url'] . Url::toRoute(['site/index', 'popup' => 'lottery-code', 'msg' => $msg]);
+        $url = Yii::$app->params['frontend_url'] . Url::toRoute([
+                'site/index',
+                'popup' => 'lottery-code',
+                'msg' => $msg
+            ]);
 
         return "抽奖码生成成功，<a href='{$url}'>点击这里查看</a>";
     }
