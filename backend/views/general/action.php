@@ -358,7 +358,8 @@ if (!empty($view['action'])) {
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <?php if (!empty($view['button_info'])): ?>
-                <button type="submit" class="btn btn-primary">
+                <button type="submit"
+                        class="btn btn-<?= empty($view['button_level']) ? 'primary' : $view['button_level'] ?>">
                     <?= $view['button_info'] ?><?= $modal ? null : $modelInfo ?>
                 </button>
             <?php endif; ?>

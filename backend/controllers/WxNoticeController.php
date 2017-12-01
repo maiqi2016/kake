@@ -12,14 +12,10 @@ use Yii;
  */
 class WxNoticeController extends GeneralController
 {
-    /**
-     * @var array
-     */
+    // 模板
     public static $tpl;
 
-    /**
-     * @var string
-     */
+    // 模板格式成 json 字符串
     public static $tplFieldJson;
 
     /**

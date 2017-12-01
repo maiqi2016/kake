@@ -94,12 +94,7 @@ class MainController extends Controller
      */
     public function actions()
     {
-        return [
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null
-            ]
-        ];
+        return [];
     }
 
     /**
@@ -170,94 +165,6 @@ class MainController extends Controller
         return Helper::singleton($model, function () use ($model, $config) {
             return new Main($model, Yii::$app->params['use_cache'], $config);
         });
-    }
-
-    /**
-     * Parse error message
-     *
-     * @access private
-     * @return array
-     */
-    protected function parseError()
-    {
-        if (null === ($exception = Yii::$app->getErrorHandler()->exception)) {
-            $exception = new yii\web\HttpException(400, Yii::t('yii', 'An internal server error occurred.'));
-        }
-
-        if ($exception instanceof yii\web\HttpException) {
-            $code = $exception->statusCode;
-        } else {
-            $code = $exception->getCode();
-        }
-
-        if ($exception instanceof yii\base\Exception) {
-            $name = $exception->getName();
-        } else {
-            $name = Yii::t('yii', 'Error');
-        }
-        if ($code) {
-            $name .= " (#$code)";
-        }
-
-        if ($exception instanceof yii\base\UserException) {
-            $message = $exception->getMessage();
-        } else {
-            $message = Yii::t('yii', 'An internal server error occurred.');
-        }
-
-        return [
-            'code' => $code,
-            'title' => $name,
-            'message' => $message,
-            'exception' => $exception
-        ];
-    }
-
-    /**
-     * 显示错误提示页面
-     *
-     * @access public
-     *
-     * @param string  $message
-     * @param integer $code
-     * @param string  $trace
-     *
-     * @return void
-     */
-    public function error($message, $code = null, $trace = null)
-    {
-        $this->sourceCss = [
-            'message/index'
-        ];
-
-        if (is_array($message)) {
-            $message = $this->messageParseLink($message);
-        }
-
-        switch ($code) {
-            case '404' :
-                $params = [
-                    'type' => '404',
-                    'message' => Yii::t('common', 'page not found'),
-                    'title' => '404'
-                ];
-                break;
-
-            default :
-                $params = [
-                    'type' => 'error',
-                    'message' => $message,
-                    'title' => 'Oops!'
-                ];
-                break;
-        }
-
-        Yii::error('catch error : ' . json_encode($params, JSON_UNESCAPED_UNICODE) . ' ' . $trace);
-
-        $content = $this->renderFile(Yii::$app->getViewPath() . DS . 'message.php', $params);
-        $content = $this->renderContent($content);
-
-        exit($content);
     }
 
     /**
@@ -455,7 +362,7 @@ class MainController extends Controller
             return true;
         }
 
-        $this->error(Yii::t('common', 'support ajax method only'));
+        $this->error(Yii::t('common', 'support ajax method only'), 403);
 
         return false;
     }
@@ -1431,20 +1338,13 @@ class MainController extends Controller
      */
     public function actionError($message = null, $code = 400, $title = 'Error')
     {
-        if (!$message) {
-            /**
-             * @var $code      integer
-             * @var $title     string
-             * @var $message   string
-             * @var $exception object
-             */
-            $error = $this->parseError();
+        $trace = null;
+        $message = $message ? urldecode($message) : 'Unknown error.';
 
-            extract($error);
+        if (null !== ($exception = Yii::$app->errorHandler->exception)) {
+            $code = $exception->getCode() ?: $exception->statusCode;
+            $message = $exception->getMessage();
             $trace = YII_DEBUG ? strval($exception->getPrevious()) : null;
-        } else {
-            $message = urldecode($message);
-            $trace = null;
         }
 
         if (Yii::$app->request->isAjax) {
@@ -1452,6 +1352,62 @@ class MainController extends Controller
         }
 
         $this->error($message, $code, $trace);
+    }
+
+    /**
+     * 显示错误提示页面
+     *
+     * @access public
+     *
+     * @param string  $message
+     * @param integer $code
+     * @param string  $trace
+     *
+     * @return void
+     */
+    public function error($message, $code = null, $trace = null)
+    {
+        $this->sourceCss = [
+            'message/index'
+        ];
+
+        if (is_array($message)) {
+            $message = $this->messageParseLink($message);
+        }
+
+        switch (intval($code)) {
+
+            case 403 :
+                $params = [
+                    'type' => $code,
+                    'message' => $message,
+                    'title' => '403 Forbidden'
+                ];
+                break;
+
+            case 404 :
+                $params = [
+                    'type' => $code,
+                    'message' => $message,
+                    'title' => '404 Not Found'
+                ];
+                break;
+
+            default :
+                $params = [
+                    'type' => 'error',
+                    'message' => $message,
+                    'title' => 'Internal Error'
+                ];
+                break;
+        }
+
+        Yii::error('catch error : ' . json_encode($params, JSON_UNESCAPED_UNICODE) . ' ' . $trace);
+
+        $content = $this->renderFile(Yii::$app->getViewPath() . DS . 'message.php', $params);
+        $content = $this->renderContent($content);
+
+        exit($content);
     }
 
     /**

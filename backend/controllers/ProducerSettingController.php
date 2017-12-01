@@ -19,12 +19,16 @@ class ProducerSettingController extends GeneralController
     // 模型描述
     public static $modelInfo = '分销商';
 
+    // 分销商列表弹窗标题
     public static $ajaxModalListTitle = '选择分销商';
 
+    // 分销商列表弹窗 radio 的 key
     public static $ajaxModalListRecordFilterValueName = 'producer_id';
 
+    // 当前用户ID
     public static $uid;
 
+    // 当前分销商信息
     public static $spread;
 
     /**

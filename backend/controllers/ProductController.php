@@ -15,7 +15,7 @@ use yii\helpers\Url;
 class ProductController extends GeneralController
 {
     /**
-     * @var string 所有操作对应的模型
+     * @var string 模型
      */
     public static $modelName = 'Product';
 
@@ -25,27 +25,35 @@ class ProductController extends GeneralController
     public static $modelInfo = '产品';
 
     /**
-     * @var string 添加操作使用到的 api
+     * @var string 添加操作个性化 api
      */
     public static $apiGeneralAdd = 'product.add-product';
 
     /**
-     * @var string 编辑操作使用到的 api
+     * @var string 编辑操作个性化 api
      */
     public static $apiGeneralUpdate = 'product.update-product';
 
+    /**
+     * @var string 产品列表弹窗标题
+     */
     public static $ajaxModalListTitle = '选择产品';
 
-    public static $ajaxModalListProducerTitle = '选择分销产品';
+    /**
+     * @var string 分销产品列表弹窗标题
+     */
+    public static $ajaxModalListProductTitle = '选择分销产品';
 
-    // 分销策略
+    /**
+     * @var array 分佣策略
+     */
     public static $type = [
         0 => 'fixed',
         1 => 'percent'
     ];
 
     /**
-     * @var array Hook
+     * @var array Ubb/Html 互转钩子
      */
     public static $hookUbbAndHtml = [
         'cost',
@@ -55,7 +63,7 @@ class ProductController extends GeneralController
     ];
 
     /**
-     * @var array Hook
+     * @var array 价格字段优化钩子
      */
     public static $hookPriceNumber = [
         'sale_rate',
@@ -63,17 +71,17 @@ class ProductController extends GeneralController
     ];
 
     /**
-     * @var array Hook
+     * @var array 双向时间选择钩子
      */
     public static $hookDateSectionDouble = ['sale'];
 
     /**
-     * @var array Hook
+     * @var array 自定义逻辑钩子
      */
     public static $hookLogic = ['sale'];
 
     /**
-     * @var array Field
+     * @var array 字段枚举
      */
     public static $_sale = [
         0 => '否',
@@ -149,7 +157,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 宏操作
+     * 产品列表页全局操作按钮
      *
      * @inheritDoc
      */
@@ -165,7 +173,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 宏操作
+     * 产品列表弹窗页全局操作按钮
      *
      * @inheritDoc
      */
@@ -182,17 +190,17 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 宏操作
+     * 分销产品列表弹窗页全局操作按钮
      *
      * @inheritDoc
      */
-    public static function ajaxModalListProducerOperations()
+    public static function ajaxModalListProductOperations()
     {
         return self::ajaxModalListOperations();
     }
 
     /**
-     * 微操作
+     * 产品列表页单记录操作按钮
      *
      * @inheritDoc
      */
@@ -253,11 +261,11 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 微操作
+     * 分销产品列表弹窗页单记录操作按钮
      *
      * @inheritDoc
      */
-    public static function ajaxModalListProducerOperation()
+    public static function ajaxModalListProductOperation()
     {
         return [
             [
@@ -280,7 +288,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 筛选器
+     * 产品列表页筛选器
      *
      * @inheritDoc
      */
@@ -333,6 +341,8 @@ class ProductController extends GeneralController
     }
 
     /**
+     * 产品列表弹窗页筛选器
+     *
      * @inheritDoc
      */
     public static function ajaxModalListFilter()
@@ -356,14 +366,18 @@ class ProductController extends GeneralController
     }
 
     /**
+     * 分销产品列表弹窗页筛选器
+     *
      * @inheritDoc
      */
-    public static function ajaxModalListProducerFilter()
+    public static function ajaxModalListProductFilter()
     {
         return self::ajaxModalListFilter();
     }
 
     /**
+     * 产品列表页排序器
+     *
      * @inheritDoc
      */
     public static function indexSorter()
@@ -378,6 +392,8 @@ class ProductController extends GeneralController
     }
 
     /**
+     * 产品列表弹窗页排序器
+     *
      * @inheritDoc
      */
     public static function ajaxModalListSorter()
@@ -386,7 +402,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 生成列表页的辅助数据
+     * 产品列表页的字段辅助数据
      *
      * @inheritDoc
      */
@@ -454,7 +470,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 生成列表页的辅助数据
+     * 产品列表弹窗页的字段辅助数据
      *
      * @inheritDoc
      */
@@ -483,18 +499,21 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 生成列表页的辅助数据
+     * 分销产品列表弹窗页的字段辅助数据
      *
      * @inheritDoc
      */
-    public static function ajaxModalListProducerAssist()
+    public static function ajaxModalListProductAssist()
     {
         return [
             'id' => 'code',
             'product_upstream_name' => [
-                'title' => '上游名称'
+                'title' => '上游名称',
+                'max-width' => '250px'
             ],
-            'title',
+            'title' => [
+                'max-width' => '300px'
+            ],
             'producer' => [
                 'hidden',
                 'table' => 'product_producer',
@@ -518,11 +537,27 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 生成列表页的辅助数据 (无页面)
+     * 分销产品列表页的字段辅助数据 - 辅助分销产品排序
      *
      * @inheritDoc
      */
-    public static function listProducerAssist()
+    public static function sortProductAssist()
+    {
+        return [
+            'id' => 'code',
+            'product_upstream_name' => [
+                'title' => '上游名称'
+            ],
+            'title'
+        ];
+    }
+
+    /**
+     * 分销产品列表页的字段辅助数据 - 辅助获取分销信息
+     *
+     * @inheritDoc
+     */
+    public static function listProductAssist()
     {
         return [
             'producer' => [
@@ -536,7 +571,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 生成编辑表单的辅助数据
+     * 产品编辑页字段辅助数据
      *
      * @inheritDoc
      */
@@ -757,7 +792,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 列表页面的查询构建器
+     * 产品列表页查询构建器
      *
      * @inheritDoc
      */
@@ -789,7 +824,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 列表页面的查询构建器
+     * 产品列表弹窗页查询构建器
      *
      * @inheritdoc
      */
@@ -799,11 +834,11 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 列表页面的查询构建器
+     * 分销产品列表弹窗页查询构建器
      *
      * @inheritDoc
      */
-    public function ajaxModalListProducerCondition()
+    public function ajaxModalListProductCondition()
     {
         $condition = $this->indexCondition();
         $condition['join'][] = [
@@ -830,7 +865,26 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 编辑页面的查询构建器
+     * 分销产品排序辅助构建器
+     *
+     * @inheritDoc
+     */
+    public function sortProductCondition()
+    {
+        $condition = self::ajaxModalListProductCondition();
+        unset($condition['join'][0]);
+        $condition['select'] = [
+            'product_upstream.name AS product_upstream_name',
+            'product.id',
+            'product.title'
+        ];
+        $condition['where'][] = ['product.state' => 1];
+
+        return $condition;
+    }
+
+    /**
+     * 产品编辑页查询构建器
      *
      * @inheritDoc
      */
@@ -874,13 +928,13 @@ class ProductController extends GeneralController
      *
      * @auth-pass-role 1
      */
-    public function actionAjaxModalListProducer()
+    public function actionAjaxModalListProduct()
     {
         return $this->showList();
     }
 
     /**
-     * 数据写入前的钩子
+     * 产品数据写入前钩子
      *
      * @inheritDoc
      */
@@ -915,7 +969,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * 数据展示前的钩子
+     * 产品数据展示前钩子
      *
      * @inheritDoc
      */
@@ -953,8 +1007,8 @@ class ProductController extends GeneralController
 
         // 生成产品分销数据
         if (in_array($action, [
-            'ajaxModalListProducer',
-            'listProducer'
+            'ajaxModalListProduct',
+            'listProduct'
         ])) {
             $record = $this->listForeignData($record, 'producer', null, $action);
 

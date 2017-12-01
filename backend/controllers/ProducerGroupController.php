@@ -18,8 +18,10 @@ class ProducerGroupController extends GeneralController
     // 模型描述
     public static $modelInfo = '分销商分组';
 
+    // 分销商分组列表弹窗标题
     public static $ajaxModalListTitle = '选择分销商分组';
 
+    // 分销商分组列表 radio 的 key
     public static $ajaxModalListRecordFilterValueName = 'id';
 
     /**

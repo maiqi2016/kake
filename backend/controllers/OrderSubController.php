@@ -19,16 +19,19 @@ class OrderSubController extends GeneralController
     // 模型描述
     public static $modelInfo = '子订单';
 
+    // 列表子订单弹窗标题
+    public static $ajaxModalListTitle = '选择子订单';
+
+    // 当前用户ID
+    public static $uid;
+
+    // 核销状态
+    public static $_sold_state;
+
     /**
      * @var array Hook
      */
     public static $hookPriceNumber = ['price'];
-
-    public static $ajaxModalListTitle = '选择子订单';
-
-    public static $uid;
-
-    public static $_sold_state;
 
     /**
      * @var array 已完成的子订单状态集

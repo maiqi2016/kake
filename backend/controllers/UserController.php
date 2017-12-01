@@ -18,6 +18,7 @@ class UserController extends GeneralController
     // 模型描述
     public static $modelInfo = '用户';
 
+    // 用户列表弹窗标题
     public static $ajaxModalListTitle = '选择用户';
 
     /**

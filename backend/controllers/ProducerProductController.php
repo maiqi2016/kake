@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\ViewHelper;
 use common\components\Helper;
 use Yii;
 
@@ -18,12 +19,24 @@ class ProducerProductController extends GeneralController
     // 模型描述
     public static $modelInfo = '分销产品';
 
+    // 当前用户ID
+    public static $uid;
+
+    // 统一排序列表
+    public static $unifySortList = null;
+
     /**
      * @var array Hook
      */
     public static $hookPriceNumber = ['min_price'];
 
-    public static $uid;
+    /**
+     * @inheritDoc
+     */
+    public function unifySortInitScript()
+    {
+        return ['$.sortable("#unify-sort", "input[name=unify_sort]", 0)'];
+    }
 
     /**
      * @inheritDoc
@@ -42,6 +55,22 @@ class ProducerProductController extends GeneralController
                 'title_info' => '编辑',
                 'button_info' => '编辑',
                 'action' => 'edit-my-form'
+            ],
+            'unify-sort' => [
+                'title_icon' => 'sort-by-attributes',
+                'title_info' => '分销商统一排序',
+                'button_info' => '清空原排序并提交',
+                'button_level' => 'warning',
+                'action' => 'update-unify-sort',
+                'info_perfect' => true
+            ],
+            'clone-sort' => [
+                'title_icon' => 'copy',
+                'title_info' => '分销商克隆排序',
+                'button_info' => '清空原排序并克隆',
+                'button_level' => 'warning',
+                'action' => 'update-clone-sort',
+                'info_perfect' => true
             ]
         ]);
     }
@@ -59,6 +88,16 @@ class ProducerProductController extends GeneralController
                     'producer_id' => Yii::$app->request->get('producer_id')
                 ],
                 'icon' => 'plus'
+            ],
+            [
+                'text' => '统一排序',
+                'value' => 'producer-product/unify-sort',
+                'icon' => 'sort-by-attributes'
+            ],
+            [
+                'text' => '克隆排序',
+                'value' => 'producer-product/clone-sort',
+                'icon' => 'copy'
             ]
         ];
     }
@@ -261,7 +300,7 @@ class ProducerProductController extends GeneralController
                 'title' => false,
                 'elem' => 'button',
                 'value' => '选择产品',
-                'script' => '$.showPage("product.list-producer", {state: 1})'
+                'script' => '$.showPage("product.list-product", {state: 1})'
             ],
             'type' => [
                 'elem' => 'select',
@@ -305,6 +344,88 @@ class ProducerProductController extends GeneralController
         ];
 
         return $assist;
+    }
+
+    /**
+     * 创建统一排序 html
+     *
+     * @access private
+     * @return string
+     */
+    private static function createSortHtml()
+    {
+        $colorArr = [
+            'success',
+            'info',
+            'warning',
+            'danger'
+        ];
+        $max = count($colorArr);
+
+        $html = '<div id="unify-sort">';
+        foreach (self::$unifySortList as $key => $item) {
+            $id = str_pad($item['id'], 3, 0, STR_PAD_LEFT);
+            $upstream = "title='{$item['product_upstream_name']}'";
+            $color = $colorArr[$key % $max];
+            $html .= "<p class='bg-{$color} sortable-box' id='{$item['id']}' {$upstream}><kbd>{$id}</kbd> {$item['title']}</p>";
+        }
+        $html .= '</div>';
+
+        return $html;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function unifySortAssist()
+    {
+        return [
+            'unify_sort' => [
+                'hidden' => true,
+                'value' => implode(',', array_column(self::$unifySortList, 'id'))
+            ],
+            'tip' => [
+                'title' => '',
+                'elem' => 'text',
+                'label' => 6,
+                'html' => true,
+                'value' => "<h3>拖拽产品列表进行排序</h3><i>提交后本列表的排序不会被改变，只是批量改变每一个分销商的排序</i>"
+            ],
+            'list' => [
+                'title' => '产品列表',
+                'elem' => 'text',
+                'html' => true,
+                'label' => 7,
+                'value' => self::createSortHtml()
+            ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function cloneSortAssist()
+    {
+        $elem = [
+            'elem' => 'select',
+            'list_table' => 'producer_setting',
+            'list_value' => 'name',
+            'list_key' => 'producer_id',
+            'list_where' => [
+                ['state' => 1]
+            ],
+            'label' => 3
+        ];
+
+        return [
+            'from' => array_merge($elem, ['title' => '克隆源']),
+            'arrow' => [
+                'title' => '',
+                'elem' => 'text',
+                'value' => str_repeat(SPACE, 7) . '↓ ↓ ↓ ↓ ↓'
+            ],
+            'to' => array_merge($elem, ['title' => '克隆给'])
+        ];
     }
 
     /**
@@ -380,6 +501,7 @@ class ProducerProductController extends GeneralController
     {
         $condition = $this->myCondition();
         unset($condition['where'][1]);
+        array_unshift($condition['order'], 'producer_product.producer_id ASC');
 
         return array_merge(parent::indexCondition(), $condition);
     }
@@ -495,6 +617,67 @@ class ProducerProductController extends GeneralController
     }
 
     /**
+     * 分销产品排序
+     *
+     * @return object
+     */
+    public function actionUnifySort()
+    {
+        $controller = $this->controller('product');
+        list(self::$unifySortList) = $controller->showList('sortProduct', true, false, ['size' => 0], false);
+
+        return $this->showForm();
+    }
+
+    /**
+     * @auth-same {ctrl}/unify-sort
+     */
+    public function actionUpdateUnifySort()
+    {
+        $this->service('producer.unify-sort', [
+            'sort' => Yii::$app->request->post('unify_sort')
+        ]);
+
+        $this->goReference($this->getControllerName('index'), [
+            'success' => '统一排序完成'
+        ]);
+    }
+
+    /**
+     * 克隆排序
+     *
+     * @return object
+     */
+    public function actionCloneSort()
+    {
+        return $this->showForm();
+    }
+
+    /**
+     * @auth-same {ctrl}/clone-sort
+     */
+    public function actionUpdateCloneSort()
+    {
+        $params = Yii::$app->request->post();
+        if ($params['from'] == $params['to']) {
+            $this->goReference($this->getControllerName('clone-sort'), [
+                'warning' => '克隆源和目标请选择不同的分销商',
+                'list' => $params
+            ]);
+        }
+
+        $this->service('producer.clone-sort', Helper::pullSome($params, [
+            'from',
+            'to'
+        ]));
+
+        $this->goReference($this->getControllerName('clone-sort'), [
+            'success' => '克隆排序完成',
+            'list' => $params
+        ]);
+    }
+
+    /**
      * @inheritDoc
      */
     public function preHandleField($record, $action = null)
@@ -508,7 +691,7 @@ class ProducerProductController extends GeneralController
             $controller = $this->controller('product');
             $data = $this->callMethod('sufHandleField', [], [
                 ['id' => $record['product_id']],
-                'ajaxModalListProducer'
+                'ajaxModalListProduct'
             ], $controller);
 
             if (empty($data['commission_data_' . ProductController::$type[$record['type']]])) {
@@ -543,7 +726,7 @@ class ProducerProductController extends GeneralController
             $controller = $this->controller('product');
             $data = $this->callMethod('sufHandleField', [], [
                 ['id' => $record['product_id']],
-                'ajaxModalListProducer'
+                'ajaxModalListProduct'
             ], $controller);
 
             $key = $record['type'] ? 'commission_table_percent' : 'commission_table_fixed';
@@ -575,6 +758,8 @@ class ProducerProductController extends GeneralController
             'my'
         ])) {
             $this->sourceJs = ['/node_modules/clipboard/dist/clipboard.min'];
+        } else if ($action->id == 'unify-sort') {
+            $this->sourceJs = ['/node_modules/sortablejs/Sortable.min'];
         }
 
         parent::beforeAction($action);

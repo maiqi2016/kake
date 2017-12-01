@@ -15,6 +15,7 @@ class ProductUpstreamController extends GeneralController
     // 模型描述
     public static $modelInfo = '产品上游';
 
+    // 上游列表弹窗标题
     public static $ajaxModalListTitle = '选择上游';
 
     /**
