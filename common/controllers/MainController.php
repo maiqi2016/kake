@@ -1126,7 +1126,7 @@ class MainController extends Controller
      */
     public function handleQrLogo(&$path)
     {
-        $logoBg = Image::make(parent::getPathByUrl('img/qr-code-logo-bg.png', 'frontend_source'));
+        $logoBg = Image::make(self::getPathByUrl('img/qr-code-logo-bg.png', 'frontend_source'));
         $logo = Image::make($path)->resize(94, 94);
         $logoBg->insert($logo, 'center');
 
