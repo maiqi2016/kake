@@ -18,15 +18,16 @@ class ProducerQuotaController extends GeneralController
     // 模型描述
     public static $modelInfo = '余额账目';
 
+    // 当前用户ID
+    public static $uid;
+
+    // 佣金余额
+    public static $quota;
+
     /**
      * @var array Hook
      */
     public static $hookPriceNumber = ['quota'];
-
-    // 用户id
-    public static $uid;
-
-    public static $quota;
 
     /**
      * @inheritDoc

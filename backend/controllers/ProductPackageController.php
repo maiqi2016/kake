@@ -18,16 +18,10 @@ class ProductPackageController extends GeneralController
     // 模型描述
     public static $modelInfo = '产品套餐';
 
-    /**
-     * @var array Hook
-     */
-    public static $hookPriceNumber = [
-        'base_price',
-        'price'
-    ];
-
+    // 状态描述
     public static $_status;
 
+    // 分销商辅助信息
     public static $supplierIdAssist = [
         'title' => '核销供应商',
         'list_table' => 'product_supplier',
@@ -35,6 +29,14 @@ class ProductPackageController extends GeneralController
         'list_except' => [
             0 => '无需核销'
         ]
+    ];
+    
+    /**
+     * @var array Hook
+     */
+    public static $hookPriceNumber = [
+        'base_price',
+        'price'
     ];
 
     /**

@@ -217,6 +217,9 @@ class ProductProducerController extends GeneralController
             'select' => [
                 'product_producer.*',
                 'product.title'
+            ],
+            'where' => [
+                ['product.state' => 1]
             ]
         ]);
     }

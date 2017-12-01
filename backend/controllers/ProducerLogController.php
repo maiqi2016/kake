@@ -19,6 +19,13 @@ class ProducerLogController extends GeneralController
     // 模型描述
     public static $modelInfo = '分销记录';
 
+    // 当前用户ID
+    public static $uid;
+
+    // 标记
+    public static $success = '<span class="text-success">Yes</span>';
+    public static $fail = '<span class="text-danger">No</span>';
+
     /**
      * @var array Hook
      */
@@ -26,13 +33,6 @@ class ProducerLogController extends GeneralController
         'log_amount_in',
         'log_amount_out'
     ];
-
-    // 用户id
-    public static $uid;
-
-    // 标记
-    public static $success = '<span class="text-success">Yes</span>';
-    public static $fail = '<span class="text-danger">No</span>';
 
     /**
      * @inheritDoc
@@ -566,7 +566,7 @@ class ProducerLogController extends GeneralController
             $productCtrl = $this->controller('product');
             $data = $this->callMethod('sufHandleField', [], [
                 ['id' => $record['product_id']],
-                'listProducer'
+                'listProduct'
             ], $productCtrl);
 
             $key = ProductController::$type[$record['type']];

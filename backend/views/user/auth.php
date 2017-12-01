@@ -29,7 +29,9 @@ use yii\helpers\Html;
                     <option value="<?= $uid ?>"><?= $name ?></option>
                 <?php endforeach; ?>
             </select>
-            <button type="button" class="btn btn-primary" onclick="cloneAdmin();">克隆权限</button>
+            <button type="button" class="btn btn-primary" onclick="cloneAdmin();"><span
+                        class="glyphicon glyphicon-copy"></span> 克隆权限
+            </button>
             <script>
                 var selectAll = function () {
                     $('input[name="new_auth[]"]').attr('checked', true);

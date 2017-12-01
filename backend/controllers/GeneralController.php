@@ -179,7 +179,7 @@ class GeneralController extends MainController
                     if (Yii::$app->request->isAjax) {
                         $this->fail($auth);
                     } else {
-                        $this->error($auth);
+                        $this->error($auth, 403);
                     }
                 }
             }
@@ -602,15 +602,29 @@ class GeneralController extends MainController
             $key = empty($item['list_key']) ? 'id' : $item['list_key'];
             $value = empty($item['list_value']) ? 'id' : $item['list_value'];
 
+            $valueCallback = empty($item['list_value_callback']) ? null : $item['list_value_callback'];
+            $callback = empty($item['list_callback']) ? null : $item['list_callback'];
+
+            $where = empty($item['list_where']) ? [] : $item['list_where'];
+
             $list = $this->service(self::$apiGeneralList, [
                 'table' => $table,
                 'select' => [
                     $key,
                     $value
                 ],
-                'size' => 0
+                'size' => 0,
+                'where' => $where
             ]);
-            $list = array_column($list, 'name', 'id');
+
+            $list = array_column($list, $value, $key);
+            if (is_callable($valueCallback)) {
+                $list = array_map($valueCallback, $list, array_keys($list));
+            }
+
+            if (is_callable($callback)) {
+                $list = call_user_func($callback, $list);
+            }
 
             if (!empty($item['list_except'])) {
                 $list = $list + $item['list_except']; // + 运算，同名键左测优先
@@ -1770,10 +1784,11 @@ class GeneralController extends MainController
      * @param array   $filter
      * @param boolean $returnList
      * @param array   $get
+     * @param boolean $handle
      *
      * @return mixed
      */
-    public function showListDiy($list, $caller = null, $page = false, $sorter = null, $filter = null, $returnList = false, $get = [])
+    public function showListDiy($list, $caller = null, $page = false, $sorter = null, $filter = null, $returnList = false, $get = [], $handle = true)
     {
         $caller = $caller ?: $this->getCaller(2);
 
@@ -1791,7 +1806,7 @@ class GeneralController extends MainController
 
         $assist = $this->getListAssist($this->callStatic($caller . 'Assist', []));
 
-        if (!empty($list)) {
+        if (!empty($list) && $handle) {
             $list = $this->callMethod('sufHandleListBeforeField', $list, [
                 $list,
                 $caller
@@ -1887,10 +1902,11 @@ class GeneralController extends MainController
      * @param boolean $returnList
      * @param boolean $logReference
      * @param array   $defCondition
+     * @param boolean $handle
      *
      * @return mixed
      */
-    public function showList($caller = null, $returnList = false, $logReference = true, $defCondition = [])
+    public function showList($caller = null, $returnList = false, $logReference = true, $defCondition = [], $handle = true)
     {
         $caller = $caller ?: $this->getCaller(2);
         if ($logReference) {
@@ -1944,7 +1960,7 @@ class GeneralController extends MainController
             $page = null;
         }
 
-        return $this->showListDiy($list, $caller, $page, $sorter, $filter, $returnList, $get);
+        return $this->showListDiy($list, $caller, $page, $sorter, $filter, $returnList, $get, $handle);
     }
 
     /**
