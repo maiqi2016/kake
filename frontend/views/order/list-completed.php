@@ -83,6 +83,10 @@ $params = \Yii::$app->params;
                             <p>公司名称:</p>
                             <input type="text" ng-model="<?= $sub ?>.company_name" placeholder="请填写公司名称"/>
                         </div>
+                        <div class="invoice-address" ng-show="<?= $company ?>">
+                            <p>公司税号:</p>
+                            <input type="text" ng-model="<?= $sub ?>.tax_number" placeholder="请填写公司税号"/>
+                        </div>
                         <div class="invoice-address">
                             <p>快递地址:</p>
                             <input type="text" ng-model="<?= $sub ?>.address" placeholder="请填写快递地址"/>

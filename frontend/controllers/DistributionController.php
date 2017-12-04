@@ -118,4 +118,13 @@ class DistributionController extends GeneralController
 
         return $this->render('items', compact(...$params));
     }
+
+    public function actionAjaxFocus()
+    {
+        $this->success([
+            'http://kake-file.oss-cn-shanghai.aliyuncs.com/0970-0607-5a138dfa94513.jpg',
+            'http://kake-file.oss-cn-shanghai.aliyuncs.com/1219-1713-5a138ef3ae1de.jpg',
+            'http://kake-file.oss-cn-shanghai.aliyuncs.com/1527-1893-59fbe1a7da105.png'
+        ]);
+    }
 }
