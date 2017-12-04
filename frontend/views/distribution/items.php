@@ -6,8 +6,10 @@ use yii\helpers\Url;
 $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'distribution';
 ?>
-
-<div class="opening" ng-show="showAnimate" ng-init="autoHide()" kk-tap="hidden()">
+<?php if (!$animate): ?>
+    <i ng-init="showAnimate=false; autoHide(0)">
+<?php endif; ?>
+<div class="opening" ng-show="showAnimate" ng-init="autoHide(7000)" kk-tap="hidden()">
     <div class="opening_bj"></div>
     <div class="small_bj">
         <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
