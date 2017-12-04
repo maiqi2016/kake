@@ -413,11 +413,14 @@ class OrderController extends GeneralController
      */
     public function actionAjaxApplyBill()
     {
+        $params = Yii::$app->request->post();
+
         $result = $this->service('order.apply-bill', [
             'user_id' => $this->user->id,
-            'order_sub_id' => Yii::$app->request->post('id'),
-            'invoice_title' => Yii::$app->request->post('company') ? Yii::$app->request->post('company_name') : null,
-            'address' => Yii::$app->request->post('address')
+            'order_sub_id' => $params['id'],
+            'invoice_title' => $params['company'] ? $params['company_name'] : null,
+            'tax_number' => $params['company'] ? $params['tax_number'] : null,
+            'address' => $params['address']
         ]);
 
         if (is_string($result)) {
