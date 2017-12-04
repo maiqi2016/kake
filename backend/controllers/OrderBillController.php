@@ -86,7 +86,7 @@ class OrderBillController extends GeneralController
         return [
             [
                 'text' => '新增订单发票',
-                'value' => 'order_bill/add',
+                'value' => 'order-bill/add',
                 'icon' => 'plus'
             ]
         ];
@@ -106,6 +106,10 @@ class OrderBillController extends GeneralController
             'courier_number' => 'input',
             'courier_company' => 'input',
             'invoice_title' => 'input',
+            'tax_number' => [
+                'elem' => 'input',
+                'equal' => true
+            ],
             'address' => 'input',
             'handle' => [
                 'title' => '状况',
@@ -128,13 +132,21 @@ class OrderBillController extends GeneralController
                 'code',
                 'table' => 'order'
             ],
-            'courier_number' => 'empty',
-            'courier_company' => 'empty',
+            'courier_number' => [
+                'code',
+                'empty',
+                'tip'
+            ],
+            'courier_company' => [
+                'empty',
+                'tip'
+            ],
             'price' => [
                 'code',
                 'title' => '票据金额'
             ],
             'invoice_title',
+            'tax_number' => 'code',
             'address',
             'handle' => [
                 'title' => '状况',
@@ -170,12 +182,19 @@ class OrderBillController extends GeneralController
             ],
             'courier_number',
             'courier_company',
-            'invoice_title',
+            'invoice_title' => [
+                'placeholder' => '个人或公司名全称'
+            ],
+            'tax_number' => [
+                'placeholder' => '可不填'
+            ],
             'address' => [
-                'label' => 5
+                'label' => 5,
+                'placeholder' => '发票寄送地址'
             ],
             'state' => [
-                'elem' => 'select'
+                'elem' => 'select',
+                'value' => 1
             ]
         ];
     }
