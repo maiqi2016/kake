@@ -7,7 +7,7 @@ use yii\helpers\Url;
 <?php if (!empty($list)): ?>
     <?php foreach ($list as $item): ?>
         <li>
-            <a href="<?= Url::to(['detail/index', 'id' => $item['id']]) ?>">
+            <a href="<?= Url::toRoute(['detail/index', 'id' => $item['id']]) ?>">
                 <div class="photo">
                     <div class="outImg"><img src="<?= current($item['cover_preview_url']) ?>"></div>
                     <span class="price">￥<?= $item['min_price'] ?> </span>

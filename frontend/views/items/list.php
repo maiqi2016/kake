@@ -8,7 +8,7 @@ use yii\helpers\Url;
     <?php foreach ($list as $item): ?>
         <div class="recommend3">
             <div class="recommend3-1">
-                <a href="<?= Url::to(['detail/index', 'id' => $item['id']]) ?>">
+                <a href="<?= Url::toRoute(['detail/index', 'id' => $item['id']]) ?>">
                     <img class="img-responsive" src="<?= current($item['cover_preview_url']) ?>"/>
                 </a>
                 <div class="recommend3-1-1"><span>￥<?= $item['min_price'] ?></span></div>

@@ -42,17 +42,13 @@ $shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img
     <title><?= $title ?></title>
     <?php $this->head() ?>
 </head>
-<script type="text/javascript">
-    function setRem() {
-        // 设置rem
-        document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + 'px';
-    }
-    setRem();
-</script>
 
 <script type="text/javascript">
+    (function setRem() {
+        document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + 'px';
+    })();
     var baseUrl = '<?= $params["frontend_url"];?>';
-    var requestUrl = '<?= $params["frontend_url"];?>/?r=';
+    var requestUrl = '<?= $params["frontend_url"] . Url::toRoute(['/']); ?>';
 </script>
 
 <body<?= $ngCtl ?>>
@@ -136,16 +132,16 @@ foreach ($items as $item) {
         <input type="hidden" name="r" value="items/index">
         <input type="search" name="keyword" placeholder="目的地">
     </form>
-    <a href="<?= Url::to(['site/index']) ?>">
+    <a href="<?= Url::toRoute(['site/index']) ?>">
         <img src="<?= $params['frontend_source'] ?>/img/site.svg"/>
         首页
     </a>
-    <a href="<?= Url::to(['order/index']) ?>" class="hr">
+    <a href="<?= Url::toRoute(['order/index']) ?>" class="hr">
         <img class="order-center" src="<?= $params['frontend_source'] ?>/img/order-center.svg"/>
         订单中心
     </a>
     <?php if (!empty($this->params['user_info']->role) && $this->params['user_info']->role <= 10): ?>
-        <a href="<?= Url::to(['producer/index']) ?>" class="hr">
+        <a href="<?= Url::toRoute(['producer/index']) ?>" class="hr">
             <img src="<?= $params['frontend_source'] ?>/img/producer.svg"/>
             分销管理
         </a>
@@ -154,7 +150,10 @@ foreach ($items as $item) {
         <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
         咨询客服
     </a>
-    <a href="<?= rtrim(SsoClient::$ssoHost, '/') ?><?= Url::toRoute(['auth/logout', 'callback' => $params['frontend_url']]) ?>" class="hr">
+    <a href="<?= rtrim(SsoClient::$ssoHost, '/') ?><?= Url::toRoute([
+        'auth/logout',
+        'callback' => $params['frontend_url']
+    ]) ?>" class="hr">
         <img src="<?= $params['frontend_source'] ?>/img/exit.svg"/>
         退出登录
     </a>

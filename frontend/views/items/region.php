@@ -17,7 +17,7 @@ $params = \Yii::$app->params;
 <div class="body clearfix">
 	<ul>
     	<?php foreach ($region as $item): ?>
-    	    <a href="<?= Url::to(['items/index', 'region' => $item['id']]) ?>">
+    	    <a href="<?= Url::toRoute(['items/index', 'region' => $item['id']]) ?>">
     			<li>
     				<img src="<?= current($item['preview_url']) ?>"/>
     			</li>

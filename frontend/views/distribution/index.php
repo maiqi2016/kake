@@ -45,7 +45,7 @@ $params = \Yii::$app->params;
                     $desCls = ($i % 2 == 0) ? 'descriptionleft' : 'descriptionright';
                     ?>
                     <li style="margin-top:<?= $topMap[$i] ?>">
-                        <a href="<?= Url::to([
+                        <a href="<?= Url::toRoute([
                             'detail/index',
                             'id' => $item['id']
                         ]) ?>">

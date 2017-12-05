@@ -96,7 +96,7 @@ class MainController extends Controller
     {
         return [];
     }
-
+    
     /**
      * @inheritdoc
      */
@@ -623,7 +623,7 @@ class MainController extends Controller
             return Yii::$app->params[$param] . Url::toRoute($item);
         }
 
-        return Url::to($item);
+        return Url::toRoute($item);
     }
 
     /**
@@ -946,7 +946,7 @@ class MainController extends Controller
         }
 
         $api = str_replace('.', '/', $api);
-        $url = Yii::$app->params[$appName . '_url'] . '?r=' . $api;
+        $url = Yii::$app->params[$appName . '_url'] . Url::toRoute([$api]);
 
         $params = array_merge($params, [
             'api_token' => strrev(md5(Yii::$app->params['api_token_' . $appName])),
@@ -1580,7 +1580,7 @@ class MainController extends Controller
     public function shortUrl($url)
     {
         if (is_array($url) || strpos($url, 'http') !== 0) {
-            $url = urldecode(Url::to((array) $url, true));
+            $url = urldecode(Url::toRoute((array) $url, true));
         }
 
         return Yii::$app->wx->url->shorten($url)['short_url'];

@@ -32,7 +32,7 @@ $params = \Yii::$app->params;
                 <input type="hidden" name="r" value="items/index">
                 <input id="search-info" type="search" name="keyword" ng-model="search" placeholder="酒店名称">
                 <ul ng-show="search">
-                    <a href="<?= Url::to([
+                    <a href="<?= Url::toRoute([
                         'items/index',
                         'upstream' => ''
                     ]) ?>{{item.id}}" ng-repeat="item in upstream | filter:search">
@@ -60,7 +60,7 @@ $params = \Yii::$app->params;
                     ?>
                     <ul class="right region_<?= $index ?>">
                         <?php foreach ($items as $id => $name): ?>
-                            <a href="<?= Url::to([
+                            <a href="<?= Url::toRoute([
                                 'items/index',
                                 'region' => $id
                             ]) ?>">
@@ -144,7 +144,7 @@ $params = \Yii::$app->params;
         <?php endif; ?>
 
         <footer>
-            <a href="<?= Url::to(['order/index']) ?>">
+            <a href="<?= Url::toRoute(['order/index']) ?>">
                 <img src="<?= $params['frontend_source'] ?>/img/producer/order.png">
             </a>
         </footer>

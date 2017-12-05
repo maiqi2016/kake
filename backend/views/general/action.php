@@ -27,7 +27,7 @@ if (!empty($view['action'])) {
         $script = empty($view['action']) ? 'false' : ViewHelper::escapeScript($view['action']);
         $action = 'onsubmit="return ' . $script . '"';
     } else {
-        $action = 'method="post" action="' . Url::to(['/' . $controller . '/' . $view['action']]) . '"';
+        $action = 'method="post" action="' . Url::toRoute([$controller . '/' . $view['action']]) . '"';
     }
 }
 ?>
@@ -144,7 +144,7 @@ if (!empty($view['action'])) {
     $previewRule = Helper::emptyDefault($list, $empty('preview_name'), []);
     $json = [
         'triggerTarget' => "#{$av_name}",
-        'action' => Url::to(['general/ajax-upload']),
+        'action' => Url::toRoute(['general/ajax-upload']),
         'data' => [
             'tag' => $empty('tag'),
             'controller' => Yii::$app->controller->id,

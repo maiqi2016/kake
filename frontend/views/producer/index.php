@@ -17,7 +17,7 @@ $params = \Yii::$app->params;
     
     <div class="blank"></div>
 
-    <a class="kake-travel" href="<?= Url::to(['producer/setting']) ?>">
+    <a class="kake-travel" href="<?= Url::toRoute(['producer/setting']) ?>">
         <img class="photo" src="<?= current($producer['logo_preview_url']) ?>">
         <div class="txt">
             <p class="info"><?= $producer['name'] ?></p>
@@ -30,12 +30,12 @@ $params = \Yii::$app->params;
     <div class="blank"></div>
 
     <div class="link-info">
-        <a class="two-code common" href="<?= Url::to(['producer/qr-code']) ?>">
+        <a class="two-code common" href="<?= Url::toRoute(['producer/qr-code']) ?>">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/two-code.svg">
             我的二维码
         </a>
 
-        <a class="popularize-link common" href="<?= Url::to(['producer/link']) ?>">
+        <a class="popularize-link common" href="<?= Url::toRoute(['producer/link']) ?>">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/popularize-link.svg">
             我的推广链接
         </a>
@@ -44,17 +44,17 @@ $params = \Yii::$app->params;
     <div class="blank"></div>
 
     <div class="distribution">
-        <a class="product-list common" href="<?= Url::to(['producer/product-list']) ?>">
+        <a class="product-list common" href="<?= Url::toRoute(['producer/product-list']) ?>">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/product-list.svg">
             分销产品列表
         </a>
 
-        <a class="record common" href="<?= Url::to(['producer/order-list']) ?>">
+        <a class="record common" href="<?= Url::toRoute(['producer/order-list']) ?>">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/record.svg">
             分销记录
         </a>
 
-        <a class="get-money common" href="<?= Url::to(['producer/withdraw']) ?>">
+        <a class="get-money common" href="<?= Url::toRoute(['producer/withdraw']) ?>">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/get-money.svg">
             分佣提现
         </a>

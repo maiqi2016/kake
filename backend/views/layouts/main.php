@@ -5,7 +5,6 @@
 
 use yii\helpers\Html;
 use backend\assets\AppAsset;
-use common\widgets\Alert;
 use yii\helpers\Url;
 
 AppAsset::register($this);
@@ -27,7 +26,7 @@ $params = \Yii::$app->params;
 
 <script type="text/javascript">
     var baseUrl = '<?= $params["backend_url"];?>';
-    var requestUrl = '<?= $params["backend_url"];?>/?r=';
+    var requestUrl = '<?= $params["backend_url"] . Url::toRoute(['/']); ?>';
 </script>
 
 <body>
@@ -70,7 +69,7 @@ foreach ($item as $type): ?>
                             <a class="btn btn-link mission-button" data-action-tag="clear-all-cache">清除缓存</a>
                         </li>
                     <?php endif; ?>
-                    <li><a class="confirm-button" href="<?= Url::to(['login/logout']) ?>">退出登录</a></li>
+                    <li><a class="confirm-button" href="<?= Url::toRoute(['login/logout']) ?>">退出登录</a></li>
                 </ul>
             </div>
         <?php endif; ?>
@@ -101,9 +100,9 @@ foreach ($item as $type): ?>
                                     $_class = 'class="active"';
                                 }
 
-                                $routerArr = ['/' . $slave['controller'] . '/' . $slave['action']];
+                                $routerArr = [$slave['controller'] . '/' . $slave['action']];
                                 ?>
-                                <li <?= $_class ?>><a href="<?= Url::to($routerArr) ?>"><?= $slave['title'] ?></a>
+                                <li <?= $_class ?>><a href="<?= Url::toRoute($routerArr) ?>"><?= $slave['title'] ?></a>
                                 </li>
                             <?php } ?>
                         </ul>

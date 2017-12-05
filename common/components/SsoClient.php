@@ -5,6 +5,7 @@ namespace common\components;
 use common\components\Helper;
 use yii\base\Object;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * Sso Client components
@@ -34,8 +35,8 @@ class SsoClient extends Object
      */
     public static function getUrl($api, $params = [])
     {
-        $api = str_replace('.', '/', $api);
-        $url = self::$ssoHost . '?r=' . $api . '&' . http_build_query($params);
+        $api = '/' . str_replace('.', '/', $api);
+        $url = self::$ssoHost . Url::toRoute(array_merge([$api], $params));
 
         return rtrim($url, '&');
     }
