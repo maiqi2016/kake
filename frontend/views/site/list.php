@@ -8,7 +8,7 @@ use yii\helpers\Url;
     <?php $last = count($list); ?>
     <?php foreach ($list as $i => $standard): ?>
         <li>
-            <a href="<?= Url::to([
+            <a href="<?= Url::toRoute([
                 'detail/index',
                 'id' => $standard['id']
             ]) ?>">

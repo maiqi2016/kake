@@ -116,7 +116,7 @@ class ViewHelper extends Object
             } else {
                 $url = strpos($value['value'], '/') ? $value['value'] : ($controller . '/' . $value['value']);
                 !$isPost && $url = array_merge([$url], $params);
-                $url = Url::to((array) $url);
+                $url = Url::toRoute((array) $url);
             }
 
             if ($isPost) {

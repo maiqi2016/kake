@@ -246,7 +246,7 @@ class OrderController extends GeneralController
             ]
         ]);
 
-        $url = Url::to([
+        $url = Url::toRoute([
             'order/verify-sold',
             'sold' => $code['code']
         ], true);
@@ -828,7 +828,7 @@ class OrderController extends GeneralController
             if ($channel = $this->params('channel')) {
                 $router['channel'] = $channel;
             }
-            $this->success(Url::to($router));
+            $this->success(Url::toRoute($router));
         }
         $this->fail('order non-exists');
     }
@@ -893,7 +893,7 @@ class OrderController extends GeneralController
         $this->sourceJs = ['order/index'];
 
         return $this->render('pay-result', [
-            'link_first' => Url::to(['order/index']),
+            'link_first' => Url::toRoute(['order/index']),
             'link_second' => $this->createSafeLink([
                 'order_number' => $order_number
             ], 'order/' . $payment_method . '-pay/', $payment_method == 'wx' ? true : false)
@@ -915,7 +915,7 @@ class OrderController extends GeneralController
             Yii::$app->wx->sendTplMsg([
                 'to' => $result['user_openid'],
                 'tpl' => 'sURDDDE9mymmFni3-zKEyPmPl4pid3Ttf42rrnR_8ZI',
-                'url' => Url::to(['order/index'], true),
+                'url' => Url::toRoute(['order/index'], true),
                 'header' => '订单支付成功',
                 'footer' => "如有疑问请联系客服 " . Yii::$app->params['company_tel']
             ], [
@@ -931,7 +931,7 @@ class OrderController extends GeneralController
             Yii::$app->wx->sendTplMsg([
                 'to' => $result['producer_openid'],
                 'tpl' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
-                'url' => Url::to(['producer/order-list'], true),
+                'url' => Url::toRoute(['producer/order-list'], true),
                 'header' => '您有新的分销订单产生',
                 'footer' => "如有疑问请联系客服 " . Yii::$app->params['company_tel'],
             ], [

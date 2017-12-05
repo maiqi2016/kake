@@ -41,7 +41,7 @@ class DistributionController extends GeneralController
             'share_cover' => current($producer['logo_preview_url'])
         ]);
 
-        return $this->render('index', compact('producer', 'product'));
+        return $this->render('index', compact('producer', 'product'), true);
     }
 
     /**
@@ -116,15 +116,6 @@ class DistributionController extends GeneralController
             'animate'
         ];
 
-        return $this->render('items', compact(...$params));
-    }
-
-    public function actionAjaxFocus()
-    {
-        $this->success([
-            'http://kake-file.oss-cn-shanghai.aliyuncs.com/0970-0607-5a138dfa94513.jpg',
-            'http://kake-file.oss-cn-shanghai.aliyuncs.com/1219-1713-5a138ef3ae1de.jpg',
-            'http://kake-file.oss-cn-shanghai.aliyuncs.com/1527-1893-59fbe1a7da105.png'
-        ]);
+        return $this->render('items', compact(...$params), true);
     }
 }

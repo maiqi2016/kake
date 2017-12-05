@@ -69,7 +69,8 @@ class ProductPackageController extends GeneralController
                 'icon' => 'link',
                 'params' => function ($record) {
                     return ['id' => $record['product_id']];
-                }
+                },
+                'br' => true
             ],
             [
                 'alt' => '排序',
@@ -84,6 +85,7 @@ class ProductPackageController extends GeneralController
                         $record['sort']
                     ];
                 },
+                'br' => true
             ]
         ]);
     }
@@ -209,8 +211,8 @@ EOF
                 'tip'
             ],
             'info' => [
-                'max-width' => '300px',
-                'tpl' => '<pre>%s</pre>'
+                'width' => '400px',
+                'tpl' => '<pre class="bg-info">%s</pre>'
             ],
             'product_supplier_id' => array_merge(self::$supplierIdAssist, [
                 'code',
@@ -276,7 +278,7 @@ EOF
             'purchase_limit' => [
                 'placeholder' => '0表示不限制',
                 'tip' => '以用户为单位进行限购',
-                'value' => \Yii::$app->params['default_purchase_limit']
+                'value' => Yii::$app->params['default_purchase_limit']
             ],
             'info' => [
                 'elem' => 'textarea',
@@ -326,7 +328,7 @@ EOF
             'purchase_limit' => [
                 'placeholder' => '0表示不限制',
                 'tip' => '以用户为单位进行限购',
-                'value' => \Yii::$app->params['default_purchase_limit']
+                'value' => Yii::$app->params['default_purchase_limit']
             ],
             'info' => [
                 'elem' => 'textarea',

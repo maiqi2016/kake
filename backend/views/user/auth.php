@@ -10,7 +10,7 @@ use yii\helpers\Html;
     <span class="glyphicon glyphicon-cog"></span> 配置用户权限
 </div>
 
-<form class="form-horizontal" method="post" action="<?= Url::to(['/user/edit-auth-form']) ?>">
+<form class="form-horizontal" method="post" action="<?= Url::toRoute(['user/edit-auth-form']) ?>">
     <?php
     echo Html::input('hidden', Yii::$app->request->csrfParam, Yii::$app->request->csrfToken);
     echo Html::input('hidden', 'old_auth', implode(',', $record));

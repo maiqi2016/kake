@@ -5,7 +5,7 @@
 
 use yii\helpers\Html;
 use backend\assets\AppAsset;
-use common\widgets\Alert;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 ?>
@@ -22,7 +22,7 @@ AppAsset::register($this);
 
 <script type="text/javascript">
     var baseUrl = '<?= \Yii::$app->params["backend_url"];?>';
-    var requestUrl = '<?= \Yii::$app->params["backend_url"];?>/?r=';
+    var requestUrl = '<?= \Yii::$app->params["backend_url"] . Url::toRoute(['/']); ?>';
 </script>
 
 <body>

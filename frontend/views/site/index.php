@@ -31,7 +31,7 @@ $params = \Yii::$app->params;
                 <?php foreach ($focusList as $focus): ?>
                     <?php
                     $ad = !empty($focus['preview_url']);
-                    $url = $ad ? $focus['link_url'] : Url::to([
+                    $url = $ad ? $focus['link_url'] : Url::toRoute([
                         'detail/index',
                         'id' => $focus['id']
                     ]);
@@ -50,18 +50,18 @@ $params = \Yii::$app->params;
     <!-- Hot-aim -->
     <div class="kake-box hot-aim" ng-init="initEffect()">
         <div class="kake-title">
-            <h3 kk-link="<?= Url::to(['items/region']) ?>">
+            <h3 kk-link="<?= Url::toRoute(['items/region']) ?>">
                 <img src="<?= $params['frontend_source'] ?>/img/index-icon-aim.svg"/>
                 热门目的地
             </h3>
-            <a href="<?= Url::to(['items/region']) ?>">更多<img
+            <a href="<?= Url::toRoute(['items/region']) ?>">更多<img
                         src="<?= $params['frontend_source'] ?>/img/index-icon-more.svg"/></a>
         </div>
         <div class="carousel kake-theme" id="carousel-scroller-aim" kk-scroll data-callback-change="effect">
             <div class="carousel-scroller scroll">
                 <?php foreach ($plateList as $i => $item): ?>
                     <div>
-                        <a href="<?= Url::to([
+                        <a href="<?= Url::toRoute([
                             'items/index',
                             'plate' => $item['id']
                         ]) ?>">
@@ -76,11 +76,11 @@ $params = \Yii::$app->params;
     <!-- Flash-shopping-zone -->
     <div class="kake-box flash-shopping-zone">
         <div class="kake-title">
-            <h3 kk-link="<?= Url::to(['items/index']) ?>">
+            <h3 kk-link="<?= Url::toRoute(['items/index']) ?>">
                 <img src="<?= $params['frontend_source'] ?>/img/index-icon-sales.svg"/>
                 闪购专区
             </h3>
-            <a href="<?= Url::to(['items/index']) ?>">更多<img
+            <a href="<?= Url::toRoute(['items/index']) ?>">更多<img
                         src="<?= $params['frontend_source'] ?>/img/index-icon-more.svg"/></a>
         </div>
         <div class="carousel kake-theme" id="carousel-scroller-flash" kk-focus-camel>
@@ -88,7 +88,7 @@ $params = \Yii::$app->params;
                 <div class="product_image"></div>
                 <?php foreach ($flashSalesList as $flashSales): ?>
                     <div class="product_image">
-                        <a href="<?= Url::to([
+                        <a href="<?= Url::toRoute([
                             'detail/index',
                             'id' => $flashSales['id']
                         ]) ?>">
@@ -128,7 +128,7 @@ $params = \Yii::$app->params;
                     <?= $standardHtml ?>
                 <?php endif; ?>
             </ul>
-            <a href="<?= Url::to(['items/index']) ?>" class="more" kk-pull-up="100">查看更多</a>
+            <a href="<?= Url::toRoute(['items/index']) ?>" class="more" kk-pull-up="100">查看更多</a>
         </div>
     </div>
 </div>

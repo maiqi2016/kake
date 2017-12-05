@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\components\Helper;
 use Yii;
 
 /**
@@ -31,6 +32,10 @@ class MissionController extends GeneralController
         $info .= '<br>';
         $result = $this->api('frontend', 'general.clear-cache');
         $info .= ($result['state'] < 1) ? ('前台缓存清除失败: ' . $result['info']) : '前台缓存清除成功';
+
+        $info .= '<br>';
+        Helper::removeDirectory(Yii::getAlias('@frontend/runtime/static'), false);
+        $info .= '清除前台静态文件成功';
 
         if (in_array($this->user->id, $this->getRootUsers())) {
             $info .= '<br>';

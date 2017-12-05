@@ -92,7 +92,7 @@ class ProducerController extends GeneralController
             $this->fail($result);
         }
 
-        $this->success(Url::to(['producer/index']));
+        $this->success(Url::toRoute(['producer/index']));
     }
 
     /**
@@ -246,7 +246,7 @@ class ProducerController extends GeneralController
             $this->fail($result);
         }
 
-        $this->success(Url::to(['producer/index']));
+        $this->success(Url::toRoute(['producer/index']));
     }
 
     /**
@@ -323,6 +323,6 @@ class ProducerController extends GeneralController
             $this->fail($result);
         }
 
-        $this->success(Url::to(['site/index']));
+        $this->success(Url::toRoute(['site/index']));
     }
 }

@@ -76,11 +76,64 @@ class GeneralController extends MainController
     }
 
     /**
+     * 静态化文件
+     *
+     * @access public
+     *
+     * @param string $action
+     *
+     * @return array
+     */
+    public function htmlFile($action = null)
+    {
+        $params = array_merge(Yii::$app->request->post(), Yii::$app->request->get());
+        unset($params['r'], $params[Yii::$app->request->csrfParam]);
+
+        $controller = $this->id;
+        $action = $action ?: $this->action->id;
+        $key = empty($params) ? null : '.' . md5(json_encode($params));
+
+        return [
+            Yii::getAlias("@runtime/static/{$controller}.{$action}{$key}.html"),
+            $controller,
+            $action,
+            $key
+        ];
+    }
+
+    /**
+     * 生成静态文件
+     *
+     * @access public
+     *
+     * @param string $content
+     * @param array $file
+     *
+     * @return bool
+     */
+    public function createHtmlFile($content, $file = null)
+    {
+        list($file, $ctl, $act) = $file ?: $this->htmlFile();
+        $path = dirname($file);
+
+        !is_dir($path) && Helper::createDirectory($path);
+
+        $result = Helper::writeFile($file, Helper::compressHtml($content));
+
+        return $result;
+    }
+
+    /**
      * @inheritdoc
      */
     public function runAction($id, $params = [])
     {
         unset($_GET['table'], $_GET['from']);
+
+        list($static) = $this->htmlFile($id ?: $this->defaultAction);
+        if (Yii::$app->params['html_static'] && file_exists($static)) {
+            exit(file_get_contents($static));
+        }
 
         return parent::runAction($id, $params);
     }
@@ -939,6 +992,19 @@ class GeneralController extends MainController
         $this->ipa(function () {
             return Yii::$app->cache->flush();
         });
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function render($view, $params = [], $static = false)
+    {
+        $html = parent::render($view, $params);
+        if ($static && Yii::$app->params['html_static']) {
+            $this->createHtmlFile($html);
+        }
+
+        return $html;
     }
 
     /**

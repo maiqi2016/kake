@@ -5,6 +5,7 @@ namespace backend\controllers;
 use common\components\Helper;
 use Yii;
 use Intervention\Image\ImageManagerStatic as Image;
+use yii\helpers\Url;
 
 /**
  * 分销商设置
@@ -492,7 +493,10 @@ class ProducerSettingController extends GeneralController
         }
 
         $channel = Helper::integerEncode($userId);
-        $link = Yii::$app->params['frontend_url'] . '/?r=distribution/items&channel=' . $channel;
+        $link = Yii::$app->params['frontend_url'] . Url::toRoute([
+                'distribution/items',
+                'channel' => $channel
+            ]);
 
         $logoPath = parent::getPathByUrl(current($producer['logo_preview_url']));
         if (!$logoPath) {

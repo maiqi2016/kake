@@ -85,7 +85,7 @@ $params = \Yii::$app->params;
         $night = empty($detail['night_times']) ? '' : " / {$detail['night_times']}晚";
         ?>
         <div class="buy">
-        		<a href="<?= Url::to([
+        		<a href="<?= Url::toRoute([
                 'detail/choose-package',
                 'id' => $detail['id']
             ]) ?>">

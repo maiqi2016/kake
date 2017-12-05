@@ -2375,7 +2375,7 @@ class GeneralController extends MainController
             $this->fail('login first');
         } else {
             $url = Helper::unsetParamsForUrl('callback', $this->currentUrl());
-            header('Location: ' . Url::to([
+            header('Location: ' . Url::toRoute([
                     '/login/index',
                     'callback' => $url
                 ]));

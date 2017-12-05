@@ -46,7 +46,9 @@ class SiteController extends GeneralController
             'share_description' => Yii::$app->params['app_description'],
         ]);
 
-        return $this->render('index', compact('focusList', 'plateList', 'flashSalesList', 'bannerList', 'standardHtml', 'over'));
+        $params = compact('focusList', 'plateList', 'flashSalesList', 'bannerList', 'standardHtml', 'over');
+
+        return $this->render('index', $params, true);
     }
 
     /**

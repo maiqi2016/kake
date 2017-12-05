@@ -9,6 +9,6 @@ $params = \Yii::$app->params;
 
 <div class="result">
     <span>套餐核销成功<span>
-    <a href="<?= Url::to(['order/verify-sold']) ?>" class="b1 active">继续核销</a>
-    <a href="<?= Url::to(['site/index']) ?>" class="b2">返回首页</a>
+    <a href="<?= Url::toRoute(['order/verify-sold']) ?>" class="b1 active">继续核销</a>
+    <a href="<?= Url::toRoute(['site/index']) ?>" class="b2">返回首页</a>
 </div>
