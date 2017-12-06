@@ -64,10 +64,12 @@ class ProductPackageBindController extends GeneralController
         return [
             'product_id' => 'code',
             'min_package_name' => [
-                'title' => '左套餐'
+                'title' => '左套餐',
+                'html' => true
             ],
             'max_package_name' => [
-                'title' => '右套餐'
+                'title' => '右套餐',
+                'html' => true
             ],
             'base_price' => [
                 'table' => 'product_package',
@@ -165,6 +167,15 @@ class ProductPackageBindController extends GeneralController
         if (!empty($record['id'])) {
             $record['left'] = $record['product_id'] . ':' . $record['min'];
             $record['right'] = $record['product_id'] . ':' . $record['max'];
+
+            $pad = function ($key) use ($record) {
+                $str = str_pad($record[$key], 3, 0, STR_PAD_LEFT);
+
+                return "<strong class='text-danger'>({$str}) </strong>";
+            };
+
+            $record['min_package_name'] = $pad('min') . $record['min_package_name'];
+            $record['max_package_name'] = $pad('max') . $record['max_package_name'];
         }
 
         return parent::sufHandleField($record, $action, $callback);
