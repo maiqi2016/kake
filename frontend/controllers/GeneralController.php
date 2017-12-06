@@ -879,38 +879,27 @@ class GeneralController extends MainController
      */
     public function listProductPackageBind($product_id)
     {
-        $handler = function ($list) use (&$handler) {
-            $list = array_values(array_map('array_values', $list));
-            $length = count($list);
-
-            $_list = [];
-            for ($i = 0; $i < $length; $i++) {
-                $del = 0;
-                for ($j = $i + 1; $j < $length; $j++) {
-                    if (!isset($list[$i]) || !isset($list[$j])) {
-                        continue;
-                    }
-
-                    if (array_intersect($list[$i], $list[$j])) {
-                        $_list[$i] = array_unique(array_merge($list[$i], $list[$j]));
-                        $del += 1;
-                        unset($list[$j]);
-                    }
-                }
-
-                if ($del) {
-                    unset($list[$i]);
-                }
-            }
-
-            if (empty($_list)) {
-                return $list;
-            }
-
-            return $handler(array_merge($_list, $list));
-        };
-
         $list = $this->service('product.package-bind-list', ['product_id' => $product_id]);
+        $handler = function ($list) use (&$handler) {
+
+            $list = $old = array_values(array_map('array_values', $list));
+            $focus = array_shift($list);
+
+            $over = true;
+            foreach ($list as $key => $item) {
+                if (array_intersect($focus, $item)) {
+                    $focus = array_unique(array_merge($focus, $item));
+                    unset($list[$key]);
+                    $over = false;
+                }
+            }
+
+            if ($over) {
+                return array_merge([$focus], $list);
+            }
+
+            return $handler(array_merge([$focus], $list));
+        };
 
         return $handler($list);
     }
