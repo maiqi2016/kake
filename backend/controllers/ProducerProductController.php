@@ -389,7 +389,7 @@ class ProducerProductController extends GeneralController
                 'elem' => 'text',
                 'label' => 6,
                 'html' => true,
-                'value' => "<h3>拖拽产品列表进行排序</h3><i>提交后本列表的排序不会被改变，只是批量改变每一个分销商的排序</i>"
+                'value' => "<h3>拖拽产品列表进行排序</h3><i>提交后将按此顺序改变每一个分销商分销产品的排序，本列表顺序也将更新</i>"
             ],
             'list' => [
                 'title' => '产品列表',
@@ -624,7 +624,14 @@ class ProducerProductController extends GeneralController
     public function actionUnifySort()
     {
         $controller = $this->controller('product');
-        list(self::$unifySortList) = $controller->showList('sortProduct', true, false, ['size' => 0], false);
+        list(self::$unifySortList) = $controller->showList('sortProduct', true, false, [
+            'size' => 0,
+            'order' => [
+                'producer.state DESC',
+                'ISNULL(producer.sort), producer.sort ASC',
+                'producer.update_time DESC',
+            ]
+        ], false);
 
         return $this->showForm();
     }

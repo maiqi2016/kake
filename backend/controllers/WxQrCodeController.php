@@ -68,7 +68,7 @@ class WxQrCodeController extends GeneralController
     /**
      * 公众号二维码生成器
      *
-     * @auth-same wx-qr-code/create
+     * @auth-same {ctrl}/create
      */
     public function actionIndex()
     {

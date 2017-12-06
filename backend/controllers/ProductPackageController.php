@@ -21,6 +21,12 @@ class ProductPackageController extends GeneralController
     // 状态描述
     public static $_status;
 
+    // 产品套餐列表弹窗标题
+    public static $ajaxModalListTitle = '选择套餐';
+
+    // 产品套餐列表弹窗 radio 的 key
+    public static $ajaxModalListRecordFilterValueName = 'tag';
+
     // 分销商辅助信息
     public static $supplierIdAssist = [
         'title' => '核销供应商',
@@ -30,7 +36,7 @@ class ProductPackageController extends GeneralController
             0 => '无需核销'
         ]
     ];
-    
+
     /**
      * @var array Hook
      */
@@ -88,6 +94,23 @@ class ProductPackageController extends GeneralController
                 'br' => true
             ]
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function ajaxModalListOperations()
+    {
+        $field = Yii::$app->request->get('field_name') ?: Yii::$app->request->post('field_name', 'product_package_id');
+
+        return [
+            [
+                'text' => '提交选择',
+                'type' => 'script',
+                'value' => '$.modalRadioValueToInput("radio", "' . $field . '")',
+                'icon' => 'flag'
+            ]
+        ];
     }
 
     /**
@@ -151,6 +174,22 @@ EOF
                 'title' => '产品状态',
                 'table' => 'product',
                 'field' => 'state',
+                'value' => 1
+            ],
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function ajaxModalListFilter()
+    {
+        return [
+            'product_id' => [
+                'elem' => 'input',
+                'equal' => true
+            ],
+            'state' => [
                 'value' => 1
             ],
         ];
@@ -238,6 +277,40 @@ EOF
                 'tip',
                 'info'
             ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function ajaxModalListAssist()
+    {
+        return [
+            'tag' => [
+                'title' => '产品:套餐',
+                'code'
+            ],
+            'name' => [
+                'max-width' => '250px'
+            ],
+            'base_price' => [
+                'code',
+                'tip'
+            ],
+            'price' => [
+                'code',
+                'tip'
+            ],
+            'sale_price' => [
+                'title' => '折后价格',
+                'tip',
+                'code'
+            ],
+            'state' => [
+                'code',
+                'color' => 'auto',
+                'info'
+            ],
         ];
     }
 
@@ -347,6 +420,15 @@ EOF
     }
 
     /**
+     * 产品套餐列表弹窗 - 产品套餐打包编辑
+     * @auth-same {ctrl}/index
+     */
+    public function actionAjaxModalList()
+    {
+        return $this->showList();
+    }
+
+    /**
      * @inheritDoc
      */
     public function preHandleField($record, $action = null)
@@ -368,7 +450,7 @@ EOF
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {
-        return parent::sufHandleField($record, $action, function ($record) {
+        return parent::sufHandleField($record, $action, function ($record) use ($action) {
 
             if (empty($record['id'])) {
                 return $record;
@@ -408,14 +490,17 @@ EOF
                 }
             }
 
+            if ($action === 'ajaxModalList') {
+                $record['tag'] = $record['product_id'] . ':' . $record['id'];
+            }
+
             return $record;
         });
     }
 
     /**
      * 填写套餐 - 编辑产品时弹出层
-     *
-     * @auth-pass-role 1
+     * @auth-same {ctrl}/edit
      */
     public function actionAjaxModalPackage()
     {
@@ -451,5 +536,16 @@ EOF
                 'product_package.update_time DESC'
             ]
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function ajaxModalListCondition($as = null)
+    {
+        $condition = self::indexCondition($as);
+        $condition['size'] = 6;
+
+        return $condition;
     }
 }

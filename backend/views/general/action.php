@@ -302,6 +302,7 @@ if (!empty($view['action'])) {
         </div>
     <?php endif; ?>
 
+    <?php if (!empty($show_condition) || !empty($value_change)): ?>
         <script type="text/javascript">
             $(function () {
                 var son = 'input, select, textarea';
@@ -336,23 +337,36 @@ if (!empty($view['action'])) {
                 <?php if (!empty($value_change)): ?>
                 $('.box_<?= $av_name ?>').find(son).change(function () {
                     try {
-                        eval('<?= $value_change ?>');
+                        var fn = '<?= $value_change ?>';
+                        if (fn.indexOf('(') !== -1 || fn.indexOf(')') !== -1) {
+                            eval(fn);
+                        } else {
+                            var val = eval('(' + $(this).val() + ')');
+                            if ($._isString(val)) {
+                                eval(fn + '("' + $(this).val() + '", ".box_<?= $av_name ?>")');
+                            } else {
+                                eval(fn + '(' + $(this).val() + ', ".box_<?= $av_name ?>")');
+                            }
+                        }
                     } catch (e) {
-                        $.alert('`change` 表达式或表达式内容报错', 'danger');
+                        $.alert('`change` 表达式或表达式内容报错<br><br>' + e.message, 'danger');
                     }
                 });
                 <?php endif; ?>
             });
         </script>
+    <?php endif; ?>
         <?= $html_end_div ?>
     <?php endforeach; ?>
 
-    <script type="text/javascript">
-        $(function () {
-            // 页面初始化执行
-            <?= implode(';', $initScript) ?>
-        });
-    </script>
+    <?php if (!empty($initScript)): ?>
+        <script type="text/javascript">
+            $(function () {
+                // 页面初始化执行
+                <?= implode(';', $initScript) ?>
+            });
+        </script>
+    <?php endif; ?>
 
     <br>
     <div class="form-group">

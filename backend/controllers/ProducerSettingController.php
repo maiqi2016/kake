@@ -380,7 +380,7 @@ class ProducerSettingController extends GeneralController
     /**
      * 分销商列表 - 弹出
      *
-     * @auth-same producer-setting/index
+     * @auth-same {ctrl}/index
      */
     public function actionAjaxModalList()
     {

@@ -546,10 +546,11 @@ class OrderController extends GeneralController
             $this->error(Yii::t('common', $result));
         }
 
+        $ids = array_merge($this->getRootUsers(), Helper::handleString(Yii::$app->params['order_notice_user_ids']));
         $openidArr = $this->listUser([
             ['manager' => 1],
             ['role' => 1]
-        ], 'openid', $this->getRootUsers());
+        ], 'openid', $ids);
         foreach ($openidArr as $uid => $openid) {
             if (empty($openid)) {
                 continue;

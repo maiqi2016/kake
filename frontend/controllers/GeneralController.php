@@ -107,7 +107,7 @@ class GeneralController extends MainController
      * @access public
      *
      * @param string $content
-     * @param array $file
+     * @param array  $file
      *
      * @return bool
      */
@@ -866,6 +866,53 @@ class GeneralController extends MainController
         list($list) = Helper::valueToKey($list, 'id');
 
         return $list;
+    }
+
+    /**
+     * 列表产品套餐打包
+     *
+     * @access public
+     *
+     * @param integer $product_id
+     *
+     * @return array
+     */
+    public function listProductPackageBind($product_id)
+    {
+        $handler = function ($list) use (&$handler) {
+            $list = array_values(array_map('array_values', $list));
+            $length = count($list);
+
+            $_list = [];
+            for ($i = 0; $i < $length; $i++) {
+                $del = 0;
+                for ($j = $i + 1; $j < $length; $j++) {
+                    if (!isset($list[$i]) || !isset($list[$j])) {
+                        continue;
+                    }
+
+                    if (array_intersect($list[$i], $list[$j])) {
+                        $_list[$i] = array_unique(array_merge($list[$i], $list[$j]));
+                        $del += 1;
+                        unset($list[$j]);
+                    }
+                }
+
+                if ($del) {
+                    unset($list[$i]);
+                }
+            }
+
+            if (empty($_list)) {
+                return $list;
+            }
+
+            return $handler(array_merge($_list, $list));
+        };
+
+        $list = $this->service('product.package-bind-list', ['product_id' => $product_id]);
+
+        return $handler($list);
     }
 
     /**

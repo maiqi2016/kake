@@ -846,7 +846,10 @@ class ProductController extends GeneralController
             'sub' => [
                 'select' => [
                     'id',
-                    'product_id'
+                    'product_id',
+                    'sort',
+                    'update_time',
+                    'state'
                 ],
                 'group' => 'product_id'
             ],
@@ -916,7 +919,7 @@ class ProductController extends GeneralController
     /**
      * 选择上游 - 套餐/产品分销选择时弹出层
      *
-     * @auth-pass-role 1
+     * @auth-same product-upstream/index
      */
     public function actionAjaxModalList()
     {
@@ -926,7 +929,7 @@ class ProductController extends GeneralController
     /**
      * 选择上游 - 分销产品选择时弹出层
      *
-     * @auth-pass-role 1
+     * @auth-same product-upstream/index
      */
     public function actionAjaxModalListProduct()
     {
