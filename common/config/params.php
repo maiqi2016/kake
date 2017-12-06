@@ -41,6 +41,7 @@ return [
 
     'product_page_size' => 8,
     'order_page_size' => 8,
+    'order_notice_user_ids' => '',
 
     'upgrade' => false,
     'upgrade_title' => 'System upgrade',

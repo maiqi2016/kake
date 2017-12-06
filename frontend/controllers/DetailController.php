@@ -110,11 +110,12 @@ class DetailController extends GeneralController
 
         $productId = Yii::$app->request->get('id');
         $packageList = $this->listProductPackage($productId);
+        $packageBind = $this->listProductPackageBind($productId);
         $contact = $this->service('order.get-last-order-contact', ['user_id' => $this->user->id]);
 
         $this->seo(['title' => '商品支付']);
 
-        return $this->render('choose-package', compact('packageList', 'productId', 'contact'));
+        return $this->render('choose-package', compact('packageList', 'packageBind', 'productId', 'contact'));
     }
 
     /**
@@ -122,8 +123,19 @@ class DetailController extends GeneralController
      */
     public function actionPrefixPayment()
     {
+        $params = Yii::$app->request->get();
+
+        // 套餐打包
+        $packageBind = $this->listProductPackageBind($params['product_id']);
+        foreach ($packageBind as $bind) {
+            $same = array_intersect($bind, array_keys($params['package']));
+            if (!empty($same) && count($same) != count($bind)) {
+                $this->error(Yii::t('common', 'illegal bundled sales package'));
+            }
+        }
+
         // 联系人信息
-        $contacts = Yii::$app->request->get('user_info');
+        $contacts = $params['user_info'];
         if (!is_numeric($contacts)) {
             $contacts = $this->service('order.add-contacts', [
                 'real_name' => $contacts['name'],
@@ -137,14 +149,14 @@ class DetailController extends GeneralController
         }
 
         // 支付方式
-        $paymentMethod = Yii::$app->request->get('payment_method');
+        $paymentMethod = $params['payment_method'];
         if (!in_array($paymentMethod, OrderController::$paymentMethod)) {
             $this->error(Yii::t('common', 'payment link illegal'));
         }
 
         $url = $this->createSafeLink([
-            'product_id' => Yii::$app->request->get('product_id'),
-            'package' => Yii::$app->request->get('package'),
+            'product_id' => $params['product_id'],
+            'package' => $params['package'],
             'order_contacts_id' => $contacts
         ], 'order/' . $paymentMethod, $paymentMethod == 'ali' ? false : true);
 

@@ -294,7 +294,9 @@ class UserController extends GeneralController
     }
 
     /**
-     * @auth-pass-role 1
+     * 用户列表弹窗 - 分销商编辑、分销商申请、编辑供应商用户
+     *
+     * @auth-same {ctrl}/index
      */
     public function actionAjaxModalList()
     {
@@ -344,7 +346,7 @@ class UserController extends GeneralController
      * 获取管理员的权限列表
      *
      * @access    public
-     * @auth-same user/edit-auth
+     * @auth-same {ctrl}/edit-auth
      *
      * @param integer $id
      *
@@ -359,7 +361,7 @@ class UserController extends GeneralController
      * 权限编辑动作
      *
      * @access    public
-     * @auth-same user/edit-auth
+     * @auth-same {ctrl}/edit-auth
      */
     public function actionEditAuthForm()
     {

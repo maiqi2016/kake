@@ -158,7 +158,7 @@ class OrderInstructionsLogController extends GeneralController
     /**
      * 拒绝退款 - 弹出层
      *
-     * @auth-pass-role 1
+     * @auth-same order-sub/index
      */
     public function actionAjaxModalRefuse()
     {

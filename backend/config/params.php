@@ -43,7 +43,8 @@ return [
             'sub' => [
                 'product-upstream.index' => '产品上游',
                 'product.index' => '产品',
-                'product-package.index' => '产品套餐'
+                'product-package.index' => '产品套餐',
+                'product-package-bind.index' => '套餐打包'
             ]
         ],
         'f' => [

@@ -146,7 +146,7 @@ class ProducerGroupController extends GeneralController
     /**
      * 分销商分组列表 - 弹出
      *
-     * @auth-same producer-group/index
+     * @auth-same {ctrl}/index
      */
     public function actionAjaxModalList()
     {

@@ -1849,25 +1849,21 @@ class GeneralController extends MainController
         };
 
         // 针对记录展示单选框/复选框/无
-        $recordFilter = $caller . 'RecordFilter';
-        $recordFilter = $isset($recordFilter, $modal ? 'radio' : false);
+        $recordFilter = $isset($caller . 'RecordFilter', $modal ? 'radio' : false);
         $recordFilter = in_array($recordFilter, [
             'checkbox',
             'radio'
         ]) ? $recordFilter : false;
 
-        $recordFilterName = $caller . 'RecordFilterName';
-        $recordFilterName = $isset($recordFilterName, $recordFilter);
+        $recordFilterName = $isset($caller . 'RecordFilterName', $recordFilter);
 
-        $recordFilterValueName = $caller . 'RecordFilterValueName';
-        $recordFilterValueName = $isset($recordFilterValueName, 'id');
+        $recordFilterValueName = $isset($caller . 'RecordFilterValueName', 'id');
 
         // 是否 ajax 分页、ajax 筛选
         $ajaxPage = $ajaxFilter = $modal;
 
         // 宏操作显示的方位
-        $operationsPosition = $caller . 'OperationsPosition';
-        $operationsPosition = $isset($operationsPosition, $modal ? 'bottom' : false);
+        $operationsPosition = $isset($caller . 'OperationsPosition', $modal ? 'bottom' : false);
         $operationsPosition = in_array($operationsPosition, [
             'top',
             'bottom'
@@ -1942,7 +1938,15 @@ class GeneralController extends MainController
                 'db' => static::$modelDb
             ];
 
-            $params = array_merge($params, $condition, $get, (array) $defCondition);
+            $params = array_merge($params, $condition, $get);
+            $defCondition = (array) $defCondition;
+            foreach ($defCondition as $key => &$value) {
+                if (isset($params[$key]) && is_callable($value)) {
+                    $value = call_user_func($value, $params[$key]);
+                }
+            }
+            $params = array_merge($params, $defCondition);
+
             $result = $this->service(static::$apiGeneralList, $params);
         }
         if (is_string($result)) {

@@ -130,7 +130,7 @@ class WxNoticeController extends GeneralController
     /**
      * 公众号消息模板预览
      *
-     * @auth-same wx-menu/send
+     * @auth-same {ctrl}/send
      */
     public function actionIndex()
     {

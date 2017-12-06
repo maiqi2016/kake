@@ -660,7 +660,7 @@ class OrderSubController extends GeneralController
     /**
      * 选择订单 - 编辑发票时弹出层
      *
-     * @auth-pass-role 1
+     * @auth-same {ctrl}/index
      */
     public function actionAjaxModalList()
     {

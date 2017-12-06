@@ -45,6 +45,7 @@ return [
     'we chat auth fail' => '微信授权失败, 请联系客服',
 
     // logic order
+    'illegal bundled sales package' => '相关捆绑套餐必须打包出售',
     'payment with wechat must on the client' => '该支付方式必须在微信客户端',
     'payment link illegal' => '支付链接异常',
     'product id required' => '产品ID参数未指定',

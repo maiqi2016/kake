@@ -7,7 +7,7 @@ use Yii;
 /**
  * 产品分销管理
  *
- * @auth-inherit-except front sort
+ * @auth-inherit-except front
  */
 class ProductProducerController extends GeneralController
 {
@@ -50,6 +50,20 @@ class ProductProducerController extends GeneralController
                 'params' => function ($record) {
                     return ['id' => $record['product_id']];
                 }
+            ],
+            [
+                'alt' => '排序',
+                'level' => 'default',
+                'icon' => 'sort-by-attributes',
+                'type' => 'script',
+                'value' => '$.sortField',
+                'params' => function ($record) {
+                    return [
+                        'product-producer.sort',
+                        $record['id'],
+                        $record['sort']
+                    ];
+                },
             ]
         ]);
     }
@@ -123,6 +137,7 @@ class ProductProducerController extends GeneralController
                     return !$item['type'] ? '￥%s' : '%s%%';
                 }
             ],
+            'sort' => 'code',
             'add_time' => 'tip',
             'update_time' => 'tip',
             'state' => [
@@ -134,6 +149,19 @@ class ProductProducerController extends GeneralController
                     2 => 'default'
                 ]
             ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function indexSorter()
+    {
+        return [
+            'from_sales',
+            'to_sales',
+            'commission',
+            'sort'
         ];
     }
 
@@ -170,6 +198,9 @@ class ProductProducerController extends GeneralController
             ],
             'commission' => [
                 'placeholder' => '保留到小数点后两位'
+            ],
+            'sort' => [
+                'placeholder' => '大于零的整数，越小越靠前'
             ],
             'state' => [
                 'elem' => 'select',
@@ -210,7 +241,7 @@ class ProductProducerController extends GeneralController
      */
     public function indexCondition($as = null)
     {
-        return array_merge(parent::indexCondition(), [
+        return [
             'join' => [
                 ['table' => 'product']
             ],
@@ -220,8 +251,13 @@ class ProductProducerController extends GeneralController
             ],
             'where' => [
                 ['product.state' => 1]
+            ],
+            'order' => [
+                'product_producer.state DESC',
+                'ISNULL(product_producer.sort), product_producer.sort ASC',
+                'product_producer.update_time DESC'
             ]
-        ]);
+        ];
     }
 
     /**
