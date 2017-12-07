@@ -3,6 +3,7 @@
 namespace common\controllers;
 
 use common\models\Main;
+use Symfony\Component\HttpFoundation\Response;
 use yii;
 use yii\web\Controller;
 use common\components\Helper;
@@ -96,7 +97,7 @@ class MainController extends Controller
     {
         return [];
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -136,18 +137,25 @@ class MainController extends Controller
      */
     public function controller($controller, $namespace = 'backend', $new = true)
     {
+        static $pool = [];
+
         if (!strpos($controller, 'Controller')) {
             $controller = Helper::underToCamel($controller, false, '-') . 'Controller';
         }
-        $class = '\\' . $namespace . '\controllers\\' . $controller;
 
-        if (!$new) {
-            return $class;
+        $key = md5($controller);
+        if (!isset($pool[$key])) {
+            $class = '\\' . $namespace . '\controllers\\' . $controller;
+            if (!$new) {
+                $pool[$key] = $class;
+            } else {
+                $pool[$key] = Helper::singleton($class, function () use ($class) {
+                    return new $class($this->id, $this->module);
+                });
+            }
         }
 
-        return Helper::singleton($class, function () use ($class) {
-            return new $class($this->id, $this->module);
-        });
+        return $pool[$key];
     }
 
     /**
@@ -162,9 +170,16 @@ class MainController extends Controller
      */
     public static function model($model = null, $config = [])
     {
-        return Helper::singleton($model, function () use ($model, $config) {
-            return new Main($model, Yii::$app->params['use_cache'], $config);
-        });
+        static $pool = [];
+
+        $key = md5($model);
+        if (!isset($pool[$key])) {
+            $pool[$key] = Helper::singleton($model, function () use ($model, $config) {
+                return new Main($model, Yii::$app->params['use_cache'], $config);
+            });
+        }
+
+        return $pool[$key];
     }
 
     /**
@@ -1402,6 +1417,7 @@ class MainController extends Controller
                 break;
         }
 
+        header("HTTP/1.1 {$code} " . Response::$statusTexts[$code]);
         Yii::error('catch error : ' . json_encode($params, JSON_UNESCAPED_UNICODE) . ' ' . $trace);
 
         $content = $this->renderFile(Yii::$app->getViewPath() . DS . 'message.php', $params);
