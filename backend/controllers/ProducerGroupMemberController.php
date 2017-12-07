@@ -19,7 +19,7 @@ class ProducerGroupMemberController extends GeneralController
     public static $modelInfo = '分销商分组成员';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -33,7 +33,7 @@ class ProducerGroupMemberController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -55,7 +55,7 @@ class ProducerGroupMemberController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -79,7 +79,7 @@ class ProducerGroupMemberController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -114,7 +114,7 @@ class ProducerGroupMemberController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {

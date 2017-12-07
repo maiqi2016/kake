@@ -24,7 +24,7 @@ class AppLogController extends GeneralController
     public static $hookDateSection = ['log_time' => 'stamp'];
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -32,7 +32,7 @@ class AppLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -50,7 +50,7 @@ class AppLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -60,7 +60,7 @@ class AppLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -82,7 +82,7 @@ class AppLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -120,7 +120,7 @@ class AppLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {

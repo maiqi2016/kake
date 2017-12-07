@@ -21,7 +21,7 @@ class ConfigController extends GeneralController
     public static $modelInfo = '配置';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function fileOperation()
     {
@@ -42,7 +42,7 @@ class ConfigController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -56,7 +56,7 @@ class ConfigController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -74,7 +74,7 @@ class ConfigController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -86,7 +86,7 @@ class ConfigController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -115,7 +115,7 @@ class ConfigController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function fileAssist()
     {
@@ -138,7 +138,7 @@ class ConfigController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -161,7 +161,7 @@ class ConfigController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {

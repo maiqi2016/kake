@@ -26,7 +26,7 @@ class AdController extends GeneralController
     public static $hookDateSectionDouble = [''];
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -40,7 +40,7 @@ class AdController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -71,7 +71,7 @@ class AdController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -89,7 +89,7 @@ class AdController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -102,7 +102,7 @@ class AdController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -134,7 +134,7 @@ class AdController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -222,7 +222,7 @@ class AdController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -244,7 +244,7 @@ class AdController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function editCondition()
     {
@@ -255,7 +255,7 @@ class AdController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {
@@ -266,7 +266,7 @@ class AdController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function beforeAction($action)
     {

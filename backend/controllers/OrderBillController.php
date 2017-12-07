@@ -79,7 +79,7 @@ class OrderBillController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -93,7 +93,7 @@ class OrderBillController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -122,7 +122,7 @@ class OrderBillController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -165,7 +165,7 @@ class OrderBillController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -200,7 +200,7 @@ class OrderBillController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {

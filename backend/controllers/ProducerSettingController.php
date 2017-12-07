@@ -33,7 +33,7 @@ class ProducerSettingController extends GeneralController
     public static $spread;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function pageDocument()
     {
@@ -52,7 +52,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -66,7 +66,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListOperations()
     {
@@ -81,7 +81,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -108,7 +108,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -133,7 +133,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListFilter()
     {
@@ -152,7 +152,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -206,7 +206,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function spreadAssist()
     {
@@ -243,7 +243,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListAssist()
     {
@@ -266,7 +266,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -349,7 +349,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function addAssist()
     {
@@ -421,7 +421,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -449,7 +449,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function ajaxModalListCondition()
     {
@@ -457,7 +457,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function editCondition()
     {
@@ -535,7 +535,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {
@@ -583,7 +583,7 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function beforeAction($action)
     {

@@ -19,7 +19,7 @@ class ProductUpstreamController extends GeneralController
     public static $ajaxModalListTitle = '选择上游';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListOperations()
     {
@@ -34,7 +34,7 @@ class ProductUpstreamController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -48,7 +48,7 @@ class ProductUpstreamController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -75,7 +75,7 @@ class ProductUpstreamController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListFilter()
     {
@@ -98,7 +98,7 @@ class ProductUpstreamController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -110,7 +110,7 @@ class ProductUpstreamController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -155,7 +155,7 @@ class ProductUpstreamController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListAssist()
     {
@@ -189,7 +189,7 @@ class ProductUpstreamController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {

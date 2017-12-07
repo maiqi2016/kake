@@ -13,7 +13,7 @@ use Yii;
 class WxMenuController extends GeneralController
 {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -30,7 +30,7 @@ class WxMenuController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -47,7 +47,7 @@ class WxMenuController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function pageDocument()
     {

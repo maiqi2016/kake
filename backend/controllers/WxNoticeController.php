@@ -19,7 +19,7 @@ class WxNoticeController extends GeneralController
     public static $tplFieldJson;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexInitScript()
     {
@@ -27,7 +27,7 @@ class WxNoticeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -35,7 +35,7 @@ class WxNoticeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -102,7 +102,7 @@ class WxNoticeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function pageDocument()
     {
@@ -117,7 +117,7 @@ class WxNoticeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function init()
     {

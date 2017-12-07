@@ -16,7 +16,7 @@ class ActivityStoryController extends GeneralController
     public static $modelInfo = '活动故事';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -24,7 +24,7 @@ class ActivityStoryController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -45,7 +45,7 @@ class ActivityStoryController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -74,7 +74,7 @@ class ActivityStoryController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -84,7 +84,7 @@ class ActivityStoryController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -107,7 +107,7 @@ class ActivityStoryController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {

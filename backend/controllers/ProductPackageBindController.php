@@ -19,7 +19,7 @@ class ProductPackageBindController extends GeneralController
     public static $modelInfo = '套餐打包';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -33,7 +33,7 @@ class ProductPackageBindController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -57,7 +57,7 @@ class ProductPackageBindController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -87,7 +87,7 @@ class ProductPackageBindController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -126,7 +126,7 @@ class ProductPackageBindController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function preHandleField($record, $action = null)
     {
@@ -160,7 +160,7 @@ class ProductPackageBindController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {
@@ -182,7 +182,7 @@ class ProductPackageBindController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {

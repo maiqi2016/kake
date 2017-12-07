@@ -31,7 +31,7 @@ class ProducerProductController extends GeneralController
     public static $hookPriceNumber = ['min_price'];
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function unifySortInitScript()
     {
@@ -39,7 +39,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function pageDocument()
     {
@@ -76,7 +76,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -103,7 +103,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function myOperations()
     {
@@ -114,7 +114,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -156,7 +156,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function myOperation()
     {
@@ -167,7 +167,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function myFilter()
     {
@@ -200,7 +200,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -215,7 +215,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -225,7 +225,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function myAssist()
     {
@@ -273,7 +273,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -286,7 +286,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editMyAssist()
     {
@@ -317,7 +317,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function addMyAssist()
     {
@@ -325,7 +325,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -375,7 +375,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function unifySortAssist()
     {
@@ -402,7 +402,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function cloneSortAssist()
     {
@@ -429,7 +429,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function myCondition()
     {
@@ -495,7 +495,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -685,7 +685,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function preHandleField($record, $action = null)
     {
@@ -713,7 +713,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {
@@ -756,7 +756,7 @@ class ProducerProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function beforeAction($action)
     {

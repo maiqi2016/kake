@@ -23,7 +23,7 @@ class ProductProducerController extends GeneralController
     public static $hookPriceNumber = ['commission'];
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -37,7 +37,7 @@ class ProductProducerController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -69,7 +69,7 @@ class ProductProducerController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -100,7 +100,7 @@ class ProductProducerController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -153,7 +153,7 @@ class ProductProducerController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -166,7 +166,7 @@ class ProductProducerController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -210,7 +210,7 @@ class ProductProducerController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function preHandleField($record, $action = null)
     {
@@ -237,7 +237,7 @@ class ProductProducerController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {

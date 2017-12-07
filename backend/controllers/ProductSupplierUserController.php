@@ -16,7 +16,7 @@ class ProductSupplierUserController extends GeneralController
     public static $modelInfo = '核销用户';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -30,7 +30,7 @@ class ProductSupplierUserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -52,7 +52,7 @@ class ProductSupplierUserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -60,7 +60,7 @@ class ProductSupplierUserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -84,7 +84,7 @@ class ProductSupplierUserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -114,7 +114,7 @@ class ProductSupplierUserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -130,7 +130,7 @@ class ProductSupplierUserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function editCondition()
     {

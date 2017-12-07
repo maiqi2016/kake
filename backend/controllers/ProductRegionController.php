@@ -16,7 +16,7 @@ class ProductRegionController extends GeneralController
     public static $modelInfo = '产品地区';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -32,7 +32,7 @@ class ProductRegionController extends GeneralController
     /**
      * 微操作
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -55,7 +55,7 @@ class ProductRegionController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -77,7 +77,7 @@ class ProductRegionController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -89,7 +89,7 @@ class ProductRegionController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -121,7 +121,7 @@ class ProductRegionController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -171,7 +171,7 @@ class ProductRegionController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -193,7 +193,7 @@ class ProductRegionController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function editCondition()
     {
@@ -201,7 +201,7 @@ class ProductRegionController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {
@@ -212,7 +212,7 @@ class ProductRegionController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function beforeAction($action)
     {

@@ -16,7 +16,7 @@ class ProductPlateController extends GeneralController
     public static $modelInfo = '产品板块';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -32,7 +32,7 @@ class ProductPlateController extends GeneralController
     /**
      * 微操作
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -55,7 +55,7 @@ class ProductPlateController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -72,7 +72,7 @@ class ProductPlateController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -84,7 +84,7 @@ class ProductPlateController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -111,7 +111,7 @@ class ProductPlateController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -157,7 +157,7 @@ class ProductPlateController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -179,7 +179,7 @@ class ProductPlateController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function editCondition()
     {
@@ -187,7 +187,7 @@ class ProductPlateController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {
@@ -198,7 +198,7 @@ class ProductPlateController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function beforeAction($action)
     {

@@ -70,7 +70,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -181,7 +181,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editOperation()
     {
@@ -200,7 +200,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListOperations()
     {
@@ -215,7 +215,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -252,7 +252,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function soldFilter()
     {
@@ -290,7 +290,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function mySoldFilter()
     {
@@ -298,7 +298,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListFilter()
     {
@@ -316,7 +316,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -337,7 +337,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function soldSorter()
     {
@@ -348,7 +348,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function mySoldSorter()
     {
@@ -356,7 +356,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -419,7 +419,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function soldAssist()
     {
@@ -469,7 +469,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function soldExportAssist()
     {
@@ -487,7 +487,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function mySoldExportAssist()
     {
@@ -495,7 +495,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function mySoldAssist()
     {
@@ -503,7 +503,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListAssist()
     {
@@ -528,7 +528,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -546,7 +546,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function ajaxModalListCondition()
     {
@@ -554,7 +554,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -586,7 +586,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function soldCondition()
     {
@@ -629,7 +629,7 @@ class OrderSubController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function mySoldCondition()
     {

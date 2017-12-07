@@ -16,7 +16,7 @@ class ActivityLotteryCodeController extends GeneralController
     public static $modelInfo = '活动抽奖码';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -42,7 +42,7 @@ class ActivityLotteryCodeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -68,7 +68,7 @@ class ActivityLotteryCodeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -97,7 +97,7 @@ class ActivityLotteryCodeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexExportAssist()
     {
@@ -113,7 +113,7 @@ class ActivityLotteryCodeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -123,7 +123,7 @@ class ActivityLotteryCodeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {

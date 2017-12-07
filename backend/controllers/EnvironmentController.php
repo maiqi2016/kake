@@ -12,7 +12,7 @@ use yii\helpers\Url;
 class EnvironmentController extends GeneralController
 {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -20,7 +20,7 @@ class EnvironmentController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
