@@ -1417,7 +1417,9 @@ class MainController extends Controller
                 break;
         }
 
-        header("HTTP/1.1 {$code} " . Response::$statusTexts[$code]);
+        if (isset(Response::$statusTexts[$code])) {
+            header("HTTP/1.1 {$code} " . Response::$statusTexts[$code]);
+        }
         Yii::error('catch error : ' . json_encode($params, JSON_UNESCAPED_UNICODE) . ' ' . $trace);
 
         $content = $this->renderFile(Yii::$app->getViewPath() . DS . 'message.php', $params);
