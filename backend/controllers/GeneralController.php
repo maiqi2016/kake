@@ -131,7 +131,7 @@ class GeneralController extends MainController
     private static $varInfo = '{info}';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function init()
     {
@@ -2411,7 +2411,7 @@ class GeneralController extends MainController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function error($message, $code = null, $trace = null)
     {

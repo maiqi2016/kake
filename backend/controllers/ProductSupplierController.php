@@ -16,7 +16,7 @@ class ProductSupplierController extends GeneralController
     public static $modelInfo = '产品供应商';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -30,7 +30,7 @@ class ProductSupplierController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -47,7 +47,7 @@ class ProductSupplierController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -58,7 +58,7 @@ class ProductSupplierController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -81,7 +81,7 @@ class ProductSupplierController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {

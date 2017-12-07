@@ -30,7 +30,7 @@ class ProducerQuotaController extends GeneralController
     public static $hookPriceNumber = ['quota'];
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -38,7 +38,7 @@ class ProducerQuotaController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function pageDocument()
     {
@@ -54,7 +54,7 @@ class ProducerQuotaController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -72,7 +72,7 @@ class ProducerQuotaController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -96,7 +96,7 @@ class ProducerQuotaController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function myAssist()
     {
@@ -118,7 +118,7 @@ class ProducerQuotaController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -149,7 +149,7 @@ class ProducerQuotaController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function myCondition()
     {
@@ -245,7 +245,7 @@ class ProducerQuotaController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function beforeAction($action)
     {

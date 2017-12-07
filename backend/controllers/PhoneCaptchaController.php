@@ -16,7 +16,7 @@ class PhoneCaptchaController extends GeneralController
     public static $modelInfo = '短信验证码';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -24,7 +24,7 @@ class PhoneCaptchaController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -45,7 +45,7 @@ class PhoneCaptchaController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -55,7 +55,7 @@ class PhoneCaptchaController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {

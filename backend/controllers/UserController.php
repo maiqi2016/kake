@@ -22,7 +22,7 @@ class UserController extends GeneralController
     public static $ajaxModalListTitle = '选择用户';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -48,7 +48,7 @@ class UserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -73,7 +73,7 @@ class UserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListOperations()
     {
@@ -90,7 +90,7 @@ class UserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -125,7 +125,7 @@ class UserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -140,7 +140,7 @@ class UserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListFilter()
     {
@@ -163,7 +163,7 @@ class UserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -214,7 +214,7 @@ class UserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListAssist()
     {
@@ -255,7 +255,7 @@ class UserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -306,7 +306,7 @@ class UserController extends GeneralController
     /**
      * 编辑 (危险)
      *
-     * @inheritDoc
+     * @inheritdoc
      * @auth-info-style <span class="text-danger">{info}</span>
      */
     public function actionEdit()
@@ -433,7 +433,7 @@ class UserController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {

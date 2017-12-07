@@ -25,7 +25,7 @@ class ProducerGroupController extends GeneralController
     public static $ajaxModalListRecordFilterValueName = 'id';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -39,7 +39,7 @@ class ProducerGroupController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListOperations()
     {
@@ -54,7 +54,7 @@ class ProducerGroupController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -77,7 +77,7 @@ class ProducerGroupController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -90,7 +90,7 @@ class ProducerGroupController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListFilter()
     {
@@ -98,7 +98,7 @@ class ProducerGroupController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -116,7 +116,7 @@ class ProducerGroupController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListAssist()
     {
@@ -124,7 +124,7 @@ class ProducerGroupController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {

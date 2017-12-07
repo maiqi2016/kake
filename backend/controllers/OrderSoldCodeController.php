@@ -18,7 +18,7 @@ class OrderSoldCodeController extends GeneralController
     public static $modelInfo = '订单核销码';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function pageDocument()
     {
@@ -40,7 +40,7 @@ class OrderSoldCodeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -51,7 +51,7 @@ class OrderSoldCodeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function myEditAssist()
     {
@@ -59,7 +59,7 @@ class OrderSoldCodeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function soldCodeAssist()
     {
@@ -72,7 +72,7 @@ class OrderSoldCodeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      * @auth-same {ctrl}/edit
      */
     public function actionEditForm($reference = null, $action = 'edit', $post = null, $caller = null)

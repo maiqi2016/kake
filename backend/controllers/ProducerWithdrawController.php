@@ -24,7 +24,7 @@ class ProducerWithdrawController extends GeneralController
     public static $hookPriceNumber = ['withdraw'];
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -51,7 +51,7 @@ class ProducerWithdrawController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -69,7 +69,7 @@ class ProducerWithdrawController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -113,7 +113,7 @@ class ProducerWithdrawController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {

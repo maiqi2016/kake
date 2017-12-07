@@ -35,7 +35,7 @@ class ProducerLogController extends GeneralController
     ];
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function myOperations()
     {
@@ -57,7 +57,7 @@ class ProducerLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -65,7 +65,7 @@ class ProducerLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function myOperation()
     {
@@ -73,7 +73,7 @@ class ProducerLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -102,7 +102,7 @@ class ProducerLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -178,7 +178,7 @@ class ProducerLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function myAssist()
     {
@@ -198,7 +198,7 @@ class ProducerLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -260,7 +260,7 @@ class ProducerLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function myCondition()
     {
@@ -552,7 +552,7 @@ class ProducerLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {
@@ -685,7 +685,7 @@ class ProducerLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function beforeAction($action)
     {

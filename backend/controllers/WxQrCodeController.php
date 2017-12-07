@@ -21,7 +21,7 @@ class WxQrCodeController extends GeneralController
     ];
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -29,7 +29,7 @@ class WxQrCodeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -51,7 +51,7 @@ class WxQrCodeController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function pageDocument()
     {

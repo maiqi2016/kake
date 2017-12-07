@@ -159,7 +159,7 @@ class ProductController extends GeneralController
     /**
      * 产品列表页全局操作按钮
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -175,7 +175,7 @@ class ProductController extends GeneralController
     /**
      * 产品列表弹窗页全局操作按钮
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListOperations()
     {
@@ -192,7 +192,7 @@ class ProductController extends GeneralController
     /**
      * 分销产品列表弹窗页全局操作按钮
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListProductOperations()
     {
@@ -202,7 +202,7 @@ class ProductController extends GeneralController
     /**
      * 产品列表页单记录操作按钮
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -263,7 +263,7 @@ class ProductController extends GeneralController
     /**
      * 分销产品列表弹窗页单记录操作按钮
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListProductOperation()
     {
@@ -290,7 +290,7 @@ class ProductController extends GeneralController
     /**
      * 产品列表页筛选器
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -343,7 +343,7 @@ class ProductController extends GeneralController
     /**
      * 产品列表弹窗页筛选器
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListFilter()
     {
@@ -368,7 +368,7 @@ class ProductController extends GeneralController
     /**
      * 分销产品列表弹窗页筛选器
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListProductFilter()
     {
@@ -378,7 +378,7 @@ class ProductController extends GeneralController
     /**
      * 产品列表页排序器
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -394,7 +394,7 @@ class ProductController extends GeneralController
     /**
      * 产品列表弹窗页排序器
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListSorter()
     {
@@ -404,7 +404,7 @@ class ProductController extends GeneralController
     /**
      * 产品列表页的字段辅助数据
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -472,7 +472,7 @@ class ProductController extends GeneralController
     /**
      * 产品列表弹窗页的字段辅助数据
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListAssist()
     {
@@ -501,7 +501,7 @@ class ProductController extends GeneralController
     /**
      * 分销产品列表弹窗页的字段辅助数据
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListProductAssist()
     {
@@ -539,7 +539,7 @@ class ProductController extends GeneralController
     /**
      * 分销产品列表页的字段辅助数据 - 辅助分销产品排序
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function sortProductAssist()
     {
@@ -555,7 +555,7 @@ class ProductController extends GeneralController
     /**
      * 分销产品列表页的字段辅助数据 - 辅助获取分销信息
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function listProductAssist()
     {
@@ -573,7 +573,7 @@ class ProductController extends GeneralController
     /**
      * 产品编辑页字段辅助数据
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -794,7 +794,7 @@ class ProductController extends GeneralController
     /**
      * 产品列表页查询构建器
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -836,7 +836,7 @@ class ProductController extends GeneralController
     /**
      * 分销产品列表弹窗页查询构建器
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public function ajaxModalListProductCondition()
     {
@@ -870,7 +870,7 @@ class ProductController extends GeneralController
     /**
      * 分销产品排序辅助构建器
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sortProductCondition()
     {
@@ -889,7 +889,7 @@ class ProductController extends GeneralController
     /**
      * 产品编辑页查询构建器
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public function editCondition()
     {
@@ -939,7 +939,7 @@ class ProductController extends GeneralController
     /**
      * 产品数据写入前钩子
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public function preHandleField($record, $action = null)
     {
@@ -974,7 +974,7 @@ class ProductController extends GeneralController
     /**
      * 产品数据展示前钩子
      *
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {
@@ -1055,7 +1055,7 @@ class ProductController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function beforeAction($action)
     {

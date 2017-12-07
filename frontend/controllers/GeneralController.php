@@ -25,7 +25,7 @@ class GeneralController extends MainController
     const REFERENCE = 'frontend_reference';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function init()
     {
@@ -1031,7 +1031,7 @@ class GeneralController extends MainController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function render($view, $params = [], $static = false)
     {

@@ -18,7 +18,7 @@ class OrderInstructionsLogController extends GeneralController
     public static $modelInfo = '订单操作记录';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function pageDocument()
     {
@@ -33,7 +33,7 @@ class OrderInstructionsLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -49,7 +49,7 @@ class OrderInstructionsLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -76,7 +76,7 @@ class OrderInstructionsLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -131,7 +131,7 @@ class OrderInstructionsLogController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {

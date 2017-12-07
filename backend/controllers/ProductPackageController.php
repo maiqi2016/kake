@@ -46,7 +46,7 @@ class ProductPackageController extends GeneralController
     ];
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperations()
     {
@@ -63,7 +63,7 @@ class ProductPackageController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexOperation()
     {
@@ -97,7 +97,7 @@ class ProductPackageController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListOperations()
     {
@@ -114,7 +114,7 @@ class ProductPackageController extends GeneralController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function pageDocument()
     {
@@ -138,7 +138,7 @@ EOF
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexFilter()
     {
@@ -180,7 +180,7 @@ EOF
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListFilter()
     {
@@ -196,7 +196,7 @@ EOF
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexSorter()
     {
@@ -208,7 +208,7 @@ EOF
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function indexAssist()
     {
@@ -281,7 +281,7 @@ EOF
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function ajaxModalListAssist()
     {
@@ -315,7 +315,7 @@ EOF
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public static function editAssist($action = null)
     {
@@ -429,7 +429,7 @@ EOF
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function preHandleField($record, $action = null)
     {
@@ -446,7 +446,7 @@ EOF
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {
@@ -508,7 +508,7 @@ EOF
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function indexCondition($as = null)
     {
@@ -539,7 +539,7 @@ EOF
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function ajaxModalListCondition($as = null)
     {
