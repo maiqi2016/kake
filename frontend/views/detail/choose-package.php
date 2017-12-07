@@ -14,7 +14,7 @@ $params = \Yii::$app->params;
     </div>
 </header>
 <div class="body" product-id="<?= $productId ?>">
-    <div class="blank"></div>
+    <div class="blank" ng-init='init(<?= json_encode($packageList) ?>, <?= json_encode($packageBind) ?>)'></div>
     <div class="combo">
         <div class=" detail-hotel-1">
             <span> <img src="<?= $params['frontend_source'] ?>/img/classify.svg"/></span>
@@ -22,21 +22,26 @@ $params = \Yii::$app->params;
         </div>
         <ul>
             <?php if (!empty($packageList)): ?>
-                <?php foreach ($packageList as $item): ?>
+                 <?php foreach ($packageList as $item): ?>
 
-                    <?php $id = $item['id']; ?>
+                    <?php
+                    $id = $item['id'];
+                    $number = "buy.package['limit_" . $id . "'].number";
 
-                    <?php $package = "buy.package['limit_" . $id . "']"; ?>
-                    <?php $number = $package . ".number"; ?>
+                    $showP = 1;
+                    foreach($packageBind as $k => $bind) {
+                        if (in_array($id, $bind) && current($bind) != $id) {
+                            $showP = 0;
+                        }
+                    }
+                    ?>
 
                     <?php if ($item['min_purchase_limit'] != 0): ?>
                         <li class="combo_1">
-                            <?php $_item = '{id: ' . $item['id'] . ', number: 1, price: ' . $item['min_price'] . '}'; ?>
                             <div class="combo-1">
 	                            	<div class="lable">
-	                            		<div class="click-b" 
-                                            kk-tap="<?= $package ?> = (<?= $number ?> ? null : <?= $_item ?>); calPrice()">
-                                            <b  ng-class="{'current': <?= $number ?>}">
+	                            		<div class="click-b" kk-tap="packageTap(<?= $id ?>, <?= $showP ?>)">
+                                            <b ng-if="<?= $showP ?>" ng-class="{'current': <?= $number ?>}">
                                             </b>
                                         </div>
 	                               	<span class="title"><?= $item['name'] ?></span>

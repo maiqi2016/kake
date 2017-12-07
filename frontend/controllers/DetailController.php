@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use Yii;
+use common\components\Helper;
 
 /**
  * Detail controller
@@ -111,8 +112,14 @@ class DetailController extends GeneralController
         $productId = Yii::$app->request->get('id');
         $packageList = $this->listProductPackage($productId);
         $packageBind = $this->listProductPackageBind($productId);
-        $contact = $this->service('order.get-last-order-contact', ['user_id' => $this->user->id]);
 
+        $newPackageList = [];
+        foreach ($packageBind as $item) {
+            $newPackageList = $newPackageList + Helper::popSome($packageList, $item);
+        }
+        $packageList = $packageList + $newPackageList;
+
+        $contact = $this->service('order.get-last-order-contact', ['user_id' => $this->user->id]);
         $this->seo(['title' => '商品支付']);
 
         return $this->render('choose-package', compact('packageList', 'packageBind', 'productId', 'contact'));
