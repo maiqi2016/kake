@@ -882,6 +882,10 @@ class GeneralController extends MainController
         $list = $this->service('product.package-bind-list', ['product_id' => $product_id]);
         $handler = function ($list) use (&$handler) {
 
+            if (empty($list)) {
+                return [];
+            }
+            
             $list = $old = array_values(array_map('array_values', $list));
             $focus = array_shift($list);
 
