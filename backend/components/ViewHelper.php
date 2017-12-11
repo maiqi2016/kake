@@ -2,7 +2,7 @@
 
 namespace backend\components;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use yii\base\Object;
 use yii\helpers\Html;
 use yii\helpers\Url;

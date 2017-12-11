@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 
 /**
@@ -41,7 +41,7 @@ class WxMenuController extends GeneralController
                 'elem' => 'textarea',
                 'label' => 8,
                 'row' => 15,
-                'value' => Helper::formatPrintJson(Yii::$app->wx->getMenu())
+                'value' => Helper::formatPrintJson(Yii::$app->oil->wx->getMenu())
             ]
         ];
     }
@@ -76,7 +76,7 @@ class WxMenuController extends GeneralController
      */
     public function actionUpdate()
     {
-        $wx = Yii::$app->wx;
+        $wx = Yii::$app->oil->wx;
         $post = Yii::$app->request->post();
         $menu = json_decode(Yii::$app->request->post('menu'), true);
         if (empty($menu)) {

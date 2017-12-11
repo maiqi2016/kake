@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 
 /**
@@ -94,7 +94,7 @@ class WxQrCodeController extends GeneralController
         Helper::removeDirectory($path, false);
 
         $names = explode(PHP_EOL, $params['name']);
-        $qrCode = Yii::$app->wx->qrcode;
+        $qrCode = Yii::$app->oil->wx->qrcode;
 
         // 批量
         if (count($names) > 1) {
@@ -107,7 +107,7 @@ class WxQrCodeController extends GeneralController
             }
 
             Helper::archiveDirectory(Yii::$app->params['tmp_path'] . DS . $directoryName);
-            Yii::$app->download->download($path . '.zip', '批量生成的二维码.zip');
+            Yii::$app->oil->download->download($path . '.zip', '批量生成的二维码.zip');
 
             @unlink($path . '.zip');
 
@@ -117,7 +117,7 @@ class WxQrCodeController extends GeneralController
             $url = $qrCode->url($qrCode->forever($params['type'] . '.' . $name)->ticket);
             $filename = self::$type[$params['type']] . '_' . $name . '.png';
 
-            Yii::$app->download->remoteDownload($url, $filename);
+            Yii::$app->oil->download->remoteDownload($url, $filename);
         }
     }
 }

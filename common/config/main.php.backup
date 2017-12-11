@@ -54,74 +54,80 @@ return [
                 ]
             ],
         ],
-        // Custom components
-        'reflection' => [
-            'class' => 'common\components\Reflection'
-        ],
-        'rsa' => [
-            'class' => 'common\components\Rsa',
-            'publicKey' => '@rsa/rsa_public.pem',
-            'privateKey' => '@rsa/rsa_private.pem',
-        ],
-        'api' => [
-            'class' => 'common\components\Service'
-        ],
-        'ubb' => [
-            'class' => 'common\components\Ubb'
-        ],
-        'download' => [
-            'class' => 'common\components\Download'
-        ],
-        'upload' => [
-            'class' => 'common\components\Upload',
-        ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
             'useFileTransport' => true,
         ],
-        // https://easywechat.org/zh-cn/docs/configuration.html
-        'wx' => [
-            'class' => 'common\components\WeChat',
-            // 基本
-            'debug' => false,
-            'app_id' => '[SECRET:wx_id]',
-            'secret' => '[SECRET:wx_secret]',
-            'token' => '[SECRET:wx_token]',
-            'aes_key' => '[SECRET:wx_aes]',
-            // 授权
-            'oauth' => [
-                'scopes' => ['snsapi_userinfo'],
-                'callback' => null,
+
+        'oil' => [
+            'class' => 'common\components\Oil',
+            'reflection' => 'Oil\src\Reflection',
+            'rsa' => [
+                'class' => 'Oil\src\Rsa',
+                'config' => [
+                    'public_key' => Yii::getAlias('@rsa/rsa_public.pem'),
+                    'private_key' => Yii::getAlias('@rsa/rsa_private.pem'),
+                ]
             ],
-            // 支付
-            'payment' => [
-                'merchant_id' => '[SECRET:wx_pay_id]',
-                'key' => '[SECRET:wx_pay_key]',
-                'cert_path' => '@wechat/cert/apiclient_cert.pem',
-                'key_path' => '@wechat/cert/apiclient_key.pem',
+            'api' => 'Oil\src\Service',
+            'ubb' => 'Oil\src\Ubb',
+            'download' => 'Oil\src\Download',
+            'upload' => [
+                'class' => 'Oil\src\Upload',
+                'config' => ['root_path' => null]
             ],
-            // Guzzle
-            'guzzle' => [
-                'timeout' => 6.0,
+            // https://easywechat.org/zh-cn/docs/configuration.html
+            'wx' => [
+                'class' => 'Oil\src\WeChat',
+                'config' => [
+                    // 基本
+                    'debug' => false,
+                    'app_id' => '[SECRET:wx_id]',
+                    'secret' => '[SECRET:wx_secret]',
+                    'token' => '[SECRET:wx_token]',
+                    'aes_key' => '[SECRET:wx_aes]',
+                    // 授权
+                    'oauth' => [
+                        'scopes' => ['snsapi_userinfo'],
+                        'callback' => null,
+                    ],
+                    // 支付
+                    'payment' => [
+                        'merchant_id' => '[SECRET:wx_pay_id]',
+                        'key' => '[SECRET:wx_pay_key]',
+                        'cert_path' => '@wechat/cert/apiclient_cert.pem',
+                        'key_path' => '@wechat/cert/apiclient_key.pem',
+                    ],
+                    // Guzzle
+                    'guzzle' => [
+                        'timeout' => 6.0,
+                    ],
+                ]
             ],
-        ],
-        'ali' => [
-            'class' => 'common\components\AliPay',
-            'options' => [
-                'rsa_private_key' => '@alipay/key/rsa_app.private',
-                'pay_public_key' => '@alipay/key/rsa_alipay.public',
+            'ali' => [
+                'class' => 'Oil\src\AliPay',
+                'config' => [
+                    'options' => [
+                        'rsa_private_key' => Yii::getAlias('@alipay/key/rsa_app.private'),
+                        'pay_public_key' => Yii::getAlias('@alipay/key/rsa_alipay.public'),
+                        'callback' => null
+                    ],
+                    'config' => [
+                        'app_id' => '[SECRET:ali_id]'
+                    ],
+                ]
             ],
-            'params' => [
-                'app_id' => '[SECRET:ali_id]',
+            'oss' => [
+                'class' => 'Oil\src\AliOSS',
+                'config' => [
+                    'id' => '[SECRET:oss_id]',
+                    'secret' => '[SECRET:oss_secret]',
+                    'endpoint' => '[SECRET:oss_point]',
+                    'default_bucket' => '[SECRET:oss_bucket]',
+                    'host' => null,
+                ]
             ],
-        ],
-        'oss' => [
-            'class' => 'common\components\AliOSS',
-            'id' => 'LTAI1lN9YV5Y8vib',
-            'secret' => 'SDzB4EJE9UkcAufEn7MAX3bFL2GDcb',
-            'endpoint' =>'oss-cn-shanghai.aliyuncs.com',
-            'default_bucket' => 'kake-file'
         ],
     ],
 ];

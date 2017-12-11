@@ -2,7 +2,7 @@
 
 namespace frontend\assets;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use yii\web\AssetBundle;
 use yii;
 use yii\web\View;

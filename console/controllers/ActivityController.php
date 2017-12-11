@@ -2,7 +2,7 @@
 
 namespace console\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use console\models\ActivityLotteryCode;
 use Yii;
 use yii\helpers\Console;
@@ -64,7 +64,7 @@ class ActivityController extends GeneralController
         $this->missionProgressForTable(function ($record) use ($model) {
 
             $record = array_values(array_column($record, 'openid'));
-            $data = Yii::$app->wx->user->batchGet($record);
+            $data = Yii::$app->oil->wx->user->batchGet($record);
 
             if (!empty($data->user_info_list)) {
                 foreach ($data->user_info_list as $user) {

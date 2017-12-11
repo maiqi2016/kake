@@ -2,8 +2,8 @@
 
 namespace frontend\controllers;
 
-use common\components\SsoClient;
-use common\components\Helper;
+use Oil\src\SsoClient;
+use Oil\src\Helper;
 use common\controllers\MainController;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -174,7 +174,7 @@ class GeneralController extends MainController
 
             // 授权请求
             if (Yii::$app->request->get('code')) {
-                $result = Yii::$app->wx->user();
+                $result = Yii::$app->oil->wx->user();
                 $result['nickname'] = Helper::filterEmjoy($result['nickname']);
                 $result = $this->service('user.get-with-we-chat', $result);
                 if (is_string($result)) {
@@ -186,8 +186,8 @@ class GeneralController extends MainController
                     $loginUser($result, isset($result['state']) ? 'we-chat-login' : 'we-chat-bind');
                 }
             } else {
-                Yii::$app->wx->config('oauth.callback', $this->currentUrl());
-                Yii::$app->wx->auth();
+                Yii::$app->oil->wx->config('oauth.callback', $this->currentUrl());
+                Yii::$app->oil->wx->auth();
             }
         } else {
             $result = SsoClient::auth($this->currentUrl());
@@ -250,7 +250,7 @@ class GeneralController extends MainController
         }
 
         $item = Helper::createSign($item, 'sign');
-        $item = base64_encode(Yii::$app->rsa->encryptByPublicKey(json_encode($item)));
+        $item = base64_encode(Yii::$app->oil->rsa->encryptByPublicKey(json_encode($item)));
 
         $url = Helper::joinString('/', Yii::$app->params['frontend_url'], $router) . '/';
 
@@ -272,7 +272,7 @@ class GeneralController extends MainController
     protected function validateSafeLink($checkUser = true)
     {
         $item = base64_decode(Yii::$app->request->get('safe'));
-        $item = json_decode(Yii::$app->rsa->decryptByPrivateKey($item), true);
+        $item = json_decode(Yii::$app->oil->rsa->decryptByPrivateKey($item), true);
 
         $error = false;
         if (!$error && !$item) {

@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 use Intervention\Image\ImageManagerStatic as Image;
 use yii\helpers\Url;

@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use backend\components\ViewHelper;
-use common\components\Helper;
+use Oil\src\Helper;
 
 /**
  * 分销商分组成员

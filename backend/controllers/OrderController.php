@@ -329,7 +329,7 @@ class OrderController extends GeneralController
                 'TRADE_FINISHED' => '订单已经完成(不可退款)',
             ];
 
-            $result = Yii::$app->ali->alipayTradeQuery($order_number);
+            $result = Yii::$app->oil->ali->alipayTradeQuery($order_number);
             if (is_string($result)) {
                 $info = $result;
             } else {
@@ -344,7 +344,7 @@ class OrderController extends GeneralController
                 'USERPAYING' => '订单等待支付中',
                 'PAYERROR' => '订单支付失败',
             ];
-            $result = Yii::$app->wx->payment->query($order_number);
+            $result = Yii::$app->oil->wx->payment->query($order_number);
 
             if (isset($result->trade_state)) {
                 $info = $paymentState[$result->trade_state];

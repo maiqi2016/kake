@@ -6,7 +6,7 @@
 use yii\helpers\Html;
 use frontend\assets\AppAsset;
 use yii\helpers\Url;
-use common\components\SsoClient;
+use Oil\src\SsoClient;
 
 AppAsset::register($this);
 
@@ -117,7 +117,7 @@ foreach ($items as $item) {
 <!-- Footer -->
 <div class="hidden">
     <span ng-init="common({message: '<?= $app->session->getFlash("message") ?>'})"></span>
-    <span ng-init='wxSDK(<?= $app->wx->js->config([
+    <span ng-init='wxSDK(<?= $app->oil->wx->js->config([
         'hideMenuItems',
         'onMenuShareTimeline',
         'onMenuShareAppMessage',
