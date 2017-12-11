@@ -3,7 +3,7 @@
 namespace frontend\controllers;
 
 use Yii;
-use common\components\Helper;
+use Oil\src\Helper;
 
 /**
  * Detail controller

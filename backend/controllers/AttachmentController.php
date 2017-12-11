@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 
 /**
@@ -121,6 +121,6 @@ class AttachmentController extends GeneralController
     public function actionDownload($file)
     {
         $file = base64_decode($file);
-        Yii::$app->download->remoteDownload($file);
+        Yii::$app->oil->download->remoteDownload($file);
     }
 }

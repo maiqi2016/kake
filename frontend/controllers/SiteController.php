@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 use yii\helpers\Url;
 
@@ -93,11 +93,13 @@ class SiteController extends GeneralController
      */
     public function actionDebug()
     {
-        $wx = Yii::$app->wx;
+        $oil = Yii::$app->oil;
 
         // 获取图文 ID
         /*
-        $this->dump($wx->material->lists('news'));
+        Helper::dump($oil->oil,1 );
+
+        $this->dump($oil->wx->material->lists('news'));
         //*/
     }
 }

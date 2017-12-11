@@ -2,8 +2,8 @@
 
 namespace frontend\controllers;
 
-use common\components\Helper;
-use common\components\SsoClient;
+use Oil\src\Helper;
+use Oil\src\SsoClient;
 use Yii;
 
 /**

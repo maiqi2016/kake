@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 use yii\helpers\Url;
 
@@ -725,7 +725,7 @@ class OrderSubController extends GeneralController
             $flash['danger'] = Yii::t('common', $result);
         } else {
             if (!empty($result['openid'])) {
-                Yii::$app->wx->sendTplMsg([
+                Yii::$app->oil->wx->sendTplMsg([
                     'to' => $result['openid'],
                     'tpl' => 'f4MEfyNJQafoJl70GYAlblo_L0dBhf-E1cwUjGme16U',
                     'header' => '您的预约入住已被通过',
@@ -763,7 +763,7 @@ class OrderSubController extends GeneralController
             $flash['danger'] = Yii::t('common', $result);
         } else {
             if (!empty($result['openid'])) {
-                Yii::$app->wx->sendTplMsg([
+                Yii::$app->oil->wx->sendTplMsg([
                     'to' => $result['openid'],
                     'tpl' => 'f4MEfyNJQafoJl70GYAlblo_L0dBhf-E1cwUjGme16U',
                     'header' => '您的预约入住已被拒绝',
@@ -821,7 +821,7 @@ class OrderSubController extends GeneralController
         $payment = OrderController::$payment[$order['payment_method']];
         if ($payment == 'AliPay') {
             $price = intval($order['price']) / 100;
-            $result = Yii::$app->ali->alipayTradeRefund($orderNo, $refundNo, $price);
+            $result = Yii::$app->oil->ali->alipayTradeRefund($orderNo, $refundNo, $price);
             if (is_string($result)) {
                 $success = false;
                 $info = $result;
@@ -830,7 +830,7 @@ class OrderSubController extends GeneralController
             }
         } else {
             try {
-                $result = Yii::$app->wx->payment->refund($orderNo, $refundNo, $order['total_price'], $order['price']);
+                $result = Yii::$app->oil->wx->payment->refund($orderNo, $refundNo, $order['total_price'], $order['price']);
             } catch (\Exception $e) {
                 $this->goReference($this->getControllerName('index'), [
                     'danger' => $e->getMessage()
@@ -850,7 +850,7 @@ class OrderSubController extends GeneralController
 
         if ($success) {
             if (!empty($order['openid'])) {
-                Yii::$app->wx->sendTplMsg([
+                Yii::$app->oil->wx->sendTplMsg([
                     'to' => $order['openid'],
                     'tpl' => 'X3ZhVd77-4eddoTx2PJzkWAk7Cu0vSqGNXX5sUYbHcg',
                     'header' => '您的退款申请已被通过',
@@ -899,7 +899,7 @@ class OrderSubController extends GeneralController
             $flash['danger'] = Yii::t('common', $result);
         } else {
             if (!empty($result['openid'])) {
-                Yii::$app->wx->sendTplMsg([
+                Yii::$app->oil->wx->sendTplMsg([
                     'to' => $result['openid'],
                     'tpl' => 'X3ZhVd77-4eddoTx2PJzkWAk7Cu0vSqGNXX5sUYbHcg',
                     'header' => '您的退款申请已被拒绝',

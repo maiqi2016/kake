@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 
 /**
@@ -123,7 +123,7 @@ class WxNoticeController extends GeneralController
     {
         parent::init();
 
-        list(self::$tpl, $field) = Yii::$app->wx->getMsgTpl();
+        list(self::$tpl, $field) = Yii::$app->oil->wx->getMsgTpl();
         self::$tplFieldJson = json_encode($field, JSON_UNESCAPED_UNICODE);
     }
 
@@ -186,7 +186,7 @@ class WxNoticeController extends GeneralController
         foreach ((array) $user as $to) {
             $params['to'] = $to;
             try {
-                Yii::$app->wx->sendTplMsg($params, $field);
+                Yii::$app->oil->wx->sendTplMsg($params, $field);
             } catch (\Exception $e) {
                 continue;
             }

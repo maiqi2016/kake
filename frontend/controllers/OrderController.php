@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -556,7 +556,7 @@ class OrderController extends GeneralController
                 continue;
             }
 
-            Yii::$app->wx->sendTplMsg([
+            Yii::$app->oil->wx->sendTplMsg([
                 'to' => $openid,
                 'tpl' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
                 'header' => '平台有新的订单产生',
@@ -613,7 +613,7 @@ class OrderController extends GeneralController
         $order = $this->getOrder($params['order_number'], 'order_number');
 
         // 查询订单
-        $result = Yii::$app->wx->payment->query($order['order_number']);
+        $result = Yii::$app->oil->wx->payment->query($order['order_number']);
 
         $stateInfo = [
             'SUCCESS' => '支付成功',
@@ -647,7 +647,7 @@ class OrderController extends GeneralController
         }
 
         // 关闭旧订单
-        Yii::$app->wx->payment->close($order['order_number']);
+        Yii::$app->oil->wx->payment->close($order['order_number']);
 
         return $this->wxPay($orderNumber, $order['title'], $order['price']);
     }
@@ -664,7 +664,7 @@ class OrderController extends GeneralController
     private function wxPay($outTradeNo, $body, $price)
     {
         try {
-            $prepayId = Yii::$app->wx->order([
+            $prepayId = Yii::$app->oil->wx->order([
                 'body' => $body,
                 'out_trade_no' => $outTradeNo,
                 'total_fee' => $price,
@@ -682,7 +682,7 @@ class OrderController extends GeneralController
             $this->error(json_encode($prepayId, JSON_UNESCAPED_UNICODE));
         }
 
-        $json = Yii::$app->wx->payment->configForPayment($prepayId);
+        $json = Yii::$app->oil->wx->payment->configForPayment($prepayId);
         $this->sourceJs = [
             'order/index'
         ];
@@ -700,7 +700,7 @@ class OrderController extends GeneralController
     public function actionWxPaid()
     {
         Yii::info('微信支付回调修改订单状态');
-        $payment = Yii::$app->wx->payment;
+        $payment = Yii::$app->oil->wx->payment;
         $response = $payment->handleNotify(function ($notify, $successful) {
 
             $result = $this->service('order.pay-handler', [
@@ -771,7 +771,7 @@ class OrderController extends GeneralController
         $order = $this->getOrder($params['order_number'], 'order_number');
 
         // 查询订单
-        $result = Yii::$app->ali->alipayTradeQuery($order['order_number']);
+        $result = Yii::$app->oil->ali->alipayTradeQuery($order['order_number']);
         if (is_array($result)) {
 
             $stateInfo = [
@@ -799,11 +799,11 @@ class OrderController extends GeneralController
             }
 
             // 关闭旧订单
-            Yii::$app->ali->alipayTradeClose($order['order_number']);
+            Yii::$app->oil->ali->alipayTradeClose($order['order_number']);
         }
 
         $notifyUrl = Yii::$app->params['frontend_url'] . '/order/ali-paid/';
-        Yii::$app->ali->alipayTradeWapPay([
+        Yii::$app->oil->ali->alipayTradeWapPay([
             'subject' => $order['title'],
             'out_trade_no' => isset($orderNumber) ? $orderNumber : $order['order_number'],
             'total_amount' => intval($order['price']) / 100,
@@ -847,7 +847,7 @@ class OrderController extends GeneralController
             return null;
         }
 
-        if (!Yii::$app->ali->validateSignAsync($params)) {
+        if (!Yii::$app->oil->ali->validateSignAsync($params)) {
             Yii::error('支付宝异步回调, 签名验证失败: ' . json_encode($params, JSON_UNESCAPED_UNICODE));
         }
 
@@ -913,7 +913,7 @@ class OrderController extends GeneralController
     public function weChatTplMsgForPayment($result)
     {
         if (!empty($result['user_openid'])) {
-            Yii::$app->wx->sendTplMsg([
+            Yii::$app->oil->wx->sendTplMsg([
                 'to' => $result['user_openid'],
                 'tpl' => 'sURDDDE9mymmFni3-zKEyPmPl4pid3Ttf42rrnR_8ZI',
                 'url' => Url::toRoute(['order/index'], true),
@@ -929,7 +929,7 @@ class OrderController extends GeneralController
         }
 
         if (!empty($result['producer_openid'])) {
-            Yii::$app->wx->sendTplMsg([
+            Yii::$app->oil->wx->sendTplMsg([
                 'to' => $result['producer_openid'],
                 'tpl' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
                 'url' => Url::toRoute(['producer/order-list'], true),

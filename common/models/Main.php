@@ -4,7 +4,7 @@ namespace common\models;
 
 use yii\db\ActiveRecord;
 use yii;
-use common\components\Helper;
+use Oil\src\Helper;
 
 /**
  * Main model

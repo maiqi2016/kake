@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 
 /**
@@ -165,7 +165,7 @@ class ProducerWithdrawController extends GeneralController
         }
 
         if ($record['account_type'] == 0) {
-            $result = Yii::$app->wx->merchant_pay->send([
+            $result = Yii::$app->oil->wx->merchant_pay->send([
                 'partner_trade_no' => 'fx' . Helper::createOrderNumber('a', $record['producer_id']),
                 'openid' => $record['openid'],
                 'check_name' => 'NO_CHECK',

@@ -1,7 +1,7 @@
 <?php
 /* @var $this yii\web\View */
 
-use common\components\Helper;
+use Oil\src\Helper;
 
 $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'producer';

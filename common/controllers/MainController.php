@@ -6,14 +6,14 @@ use common\models\Main;
 use Symfony\Component\HttpFoundation\Response;
 use yii;
 use yii\web\Controller;
-use common\components\Helper;
-use common\components\Upload;
+use Oil\src\Helper;
 use yii\base\DynamicModel;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Intervention\Image\ImageManagerStatic as Image;
+use yii\helpers\ArrayHelper;
 
 /**
  * Main controller
@@ -84,6 +84,8 @@ class MainController extends Controller
             }, DAY, null, Yii::$app->params['use_cache']);
 
             Yii::$app->params = array_merge($config['file'], Yii::$app->params, $config['db']);
+
+            $this->oilExtendParams();
         });
     }
 
@@ -122,6 +124,26 @@ class MainController extends Controller
         }
 
         return parent::beforeAction($action);
+    }
+
+    /**
+     * 完全自定义组件扩展参数
+     *
+     * @access public
+     * @return void
+     */
+    public function oilExtendParams()
+    {
+        $oil = Yii::$app->oil;
+
+        $extendParams = [
+            'upload' => ['config' => ['root_path' => Yii::$app->params['tmp_path']]],
+            'wx' => ['config' => ['oauth' => ['callback' => Yii::$app->params['wechat_callback']]]],
+            'ali' => ['config' => ['options' => ['callback' => Yii::$app->params['alipay_callback']]]],
+            'oss' => ['config' => ['host' => Yii::$app->params['upload_url']]]
+        ];
+
+        $oil->oil = ArrayHelper::merge($oil->oil, $extendParams);
     }
 
     /**
@@ -428,10 +450,8 @@ class MainController extends Controller
      */
     protected function uploader($config = [], $cropData = null, $ajaxMode = true)
     {
-        $uploader = Yii::createObject([
-            'class' => Upload::className(),
-            'config' => $config
-        ]);
+        Yii::$app->oil->register('upload', ['config' => $config]);
+        $uploader = Yii::$app->oil->upload;
 
         // 上传到本地服务器
         $result = $uploader->upload($_FILES);
@@ -462,7 +482,7 @@ class MainController extends Controller
         }
 
         // 上传到阿里云 OSS
-        $result = Yii::$app->oss->upload($file['file']);
+        $result = Yii::$app->oil->oss->upload($file['file']);
         if (is_string($result)) {
             if (!$ajaxMode) {
                 return $result;
@@ -1118,7 +1138,7 @@ class MainController extends Controller
     public static function getUrlByPath($file, $ext = 'jpg', $separator = '-', $prefix = null)
     {
         $path = Helper::createFilePath(Yii::$app->params['tmp_path'], $ext, $separator, $prefix);
-        $result = Yii::$app->oss->upload($file, $path['deep'] . '-' . $path['filename']);
+        $result = Yii::$app->oil->oss->upload($file, $path['deep'] . '-' . $path['filename']);
         if (is_string($result)) {
             @unlink($file);
 
@@ -1601,7 +1621,7 @@ class MainController extends Controller
             $url = urldecode(Url::toRoute((array) $url, true));
         }
 
-        return Yii::$app->wx->url->shorten($url)['short_url'];
+        return Yii::$app->oil->wx->url->shorten($url)['short_url'];
     }
 
     /**

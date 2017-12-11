@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 
 /**
@@ -401,7 +401,7 @@ class UserController extends GeneralController
      */
     public function actionSyncUser($openid)
     {
-        $user = Yii::$app->wx->user->get($openid);
+        $user = Yii::$app->oil->wx->user->get($openid);
 
         $key = $this->getControllerName('index');
         if (!isset($user->nickname)) {

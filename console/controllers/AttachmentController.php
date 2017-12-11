@@ -2,7 +2,7 @@
 
 namespace console\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use console\models\Attachment;
 use console\models\ProductDescription;
 use Yii;
@@ -69,7 +69,7 @@ class AttachmentController extends GeneralController
 
                 $file = $item['deep_path'] . '-' . $item['filename'];
 
-                Yii::$app->oss->upload($path, $file);
+                Yii::$app->oil->oss->upload($path, $file);
             }
         }, $model, [], [
             'deep_path',

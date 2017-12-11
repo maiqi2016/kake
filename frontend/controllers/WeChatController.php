@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use EasyWeChat\Message\Image as Img;
 use EasyWeChat\Message\Text;
 use Yii;
@@ -43,7 +43,7 @@ class WeChatController extends GeneralController
             $action->controller->enableCsrfValidation = false;
         }
 
-        !$this->api && $this->api = Yii::$app->wx;
+        !$this->api && $this->api = Yii::$app->oil->wx;
 
         return parent::beforeAction($action);
     }

@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 use yii\helpers\Url;
 
@@ -237,7 +237,7 @@ class ProducerApplyController extends GeneralController
             }
 
             if (!empty($result['openid'])) {
-                Yii::$app->wx->sendTplMsg([
+                Yii::$app->oil->wx->sendTplMsg([
                     'to' => $result['openid'],
                     'tpl' => 'NuIJGBNJTRsFArlK5ZfAWweTbUW1teHcEFk4pL4XEfY',
                     'url' => Yii::$app->params['frontend_url'] . Url::toRoute(['producer/index']),

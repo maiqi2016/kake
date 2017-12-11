@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use backend\components\ViewHelper;
-use common\components\Helper;
+use Oil\src\Helper;
 use Yii;
 use yii\helpers\Url;
 
@@ -727,8 +727,8 @@ class ProductController extends GeneralController
                 'upload_name' => 'upload_slave'
             ],
             // < 上传附件 item >
-            // tag              标记 (用于 common\components\Upload 组件寻找 rules 所设定), 单控制器不重复出现
-            // rules            标示上传附件的规范 (实为 common\components\Upload 组件的参数)
+            // tag              标记 (用于在控制器中寻找 rules 在后), 单控制器不重复出现
+            // rules            标示上传附件的规范 (实为 Oil\src\Upload 组件的参数)
             // preview_name     < 附件预览 item > 的 name 值
             // field_name       < 存储当前附件 item > 的 name 值
             // multiple         是否支持多附件

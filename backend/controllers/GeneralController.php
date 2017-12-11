@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use common\components\Helper;
+use Oil\src\Helper;
 use common\controllers\MainController;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -385,8 +385,8 @@ class GeneralController extends MainController
 
             // 获取注释
             $class = $this->controller($ctrl);
-            $classDoc = Yii::$app->reflection->getClassDocument($class);
-            $comment = Yii::$app->reflection->getMethodsDocument($class, null);
+            $classDoc = Yii::$app->oil->reflection->getClassDocument($class);
+            $comment = Yii::$app->oil->reflection->getMethodsDocument($class, null);
 
             $self = [];
 
@@ -1513,7 +1513,7 @@ class GeneralController extends MainController
             if (empty($record[$hook])) {
                 continue;
             }
-            $record[$hook] = Yii::$app->ubb->htmlToUbb($record[$hook], true);
+            $record[$hook] = Yii::$app->oil->ubb->htmlToUbb($record[$hook], true);
         }
 
         return $record;
@@ -1726,7 +1726,7 @@ class GeneralController extends MainController
             if (empty($record[$hook])) {
                 continue;
             }
-            $record[$hook] = Yii::$app->ubb->ubbToHtml($record[$hook]);
+            $record[$hook] = Yii::$app->oil->ubb->ubbToHtml($record[$hook]);
         }
 
         return $record;
@@ -2338,7 +2338,7 @@ class GeneralController extends MainController
 
         Helper::base64ToImage($base64, $file);
 
-        $result = Yii::$app->oss->upload($file);
+        $result = Yii::$app->oil->oss->upload($file);
         if (is_string($result)) {
             @unlink($file);
             $this->fail($result);
