@@ -6,7 +6,6 @@
 use yii\helpers\Html;
 use frontend\assets\AppAsset;
 use yii\helpers\Url;
-use Oil\src\SsoClient;
 
 AppAsset::register($this);
 
@@ -150,7 +149,7 @@ foreach ($items as $item) {
         <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
         咨询客服
     </a>
-    <a href="<?= rtrim(SsoClient::$ssoHost, '/') ?><?= Url::toRoute([
+    <a href="<?= rtrim($params['passport_url'], '/') ?><?= Url::toRoute([
         'auth/logout',
         'callback' => $params['frontend_url']
     ]) ?>" class="hr">

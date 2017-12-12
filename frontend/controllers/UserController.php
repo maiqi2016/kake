@@ -2,8 +2,6 @@
 
 namespace frontend\controllers;
 
-use Oil\src\Helper;
-use Oil\src\SsoClient;
 use Yii;
 
 /**
@@ -20,6 +18,6 @@ class UserController extends GeneralController
     public function actionLogout()
     {
         $p = Yii::$app->session->cookieParams;
-        SsoClient::logout('KK_SESS', $p['path'], $p['domain']);
+        Yii::$app->oil->sso->logout('KK_SESS', $p['path'], $p['domain']);
     }
 }

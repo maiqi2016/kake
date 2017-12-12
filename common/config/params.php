@@ -3,6 +3,7 @@ $secondSite = 'www';
 $secondBackend = 'backend';
 $secondSource = 'source';
 $secondPic = 'pic';
+$secondPassport = 'passport';
 $domain = DOMAIN;
 
 return [
@@ -23,6 +24,7 @@ return [
 
     'tmp_path' => '/tmp/kake',
     'upload_url' => "http://{$secondPic}.{$domain}",
+    'passport_url' => "http://{$secondPassport}.{$domain}",
 
     'wechat_callback' => "http://{$secondSite}.${domain}/",
     'alipay_callback' => "http://{$secondSite}.${domain}/",

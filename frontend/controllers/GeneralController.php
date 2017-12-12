@@ -2,11 +2,9 @@
 
 namespace frontend\controllers;
 
-use Oil\src\SsoClient;
 use Oil\src\Helper;
 use common\controllers\MainController;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
 use yii;
 
 /**
@@ -190,7 +188,7 @@ class GeneralController extends MainController
                 Yii::$app->oil->wx->auth();
             }
         } else {
-            $result = SsoClient::auth($this->currentUrl());
+            $result = Yii::$app->oil->sso->auth($this->currentUrl());
             if (is_string($result)) {
                 $this->redirect([
                     '/general/error',
