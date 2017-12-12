@@ -140,7 +140,8 @@ class MainController extends Controller
             'upload' => ['config' => ['root_path' => Yii::$app->params['tmp_path']]],
             'wx' => ['config' => ['oauth' => ['callback' => Yii::$app->params['wechat_callback']]]],
             'ali' => ['config' => ['options' => ['callback' => Yii::$app->params['alipay_callback']]]],
-            'oss' => ['config' => ['host' => Yii::$app->params['upload_url']]]
+            'oss' => ['config' => ['host' => Yii::$app->params['upload_url']]],
+            'sso' => ['ssoHost' => Yii::$app->params['passport_url']],
         ];
 
         $oil->oil = ArrayHelper::merge($oil->oil, $extendParams);

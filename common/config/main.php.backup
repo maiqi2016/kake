@@ -73,6 +73,10 @@ return [
             'api' => 'Oil\src\Service',
             'ubb' => 'Oil\src\Ubb',
             'download' => 'Oil\src\Download',
+            'sso' => [
+                'class' => 'Oil\src\SsoClient',
+                'ssoHost' => null
+            ],
             'upload' => [
                 'class' => 'Oil\src\Upload',
                 'config' => ['root_path' => null]
