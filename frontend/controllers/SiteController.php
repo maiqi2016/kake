@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use Oil\src\Helper;
+use Oil\src\Log;
 use Yii;
 use yii\helpers\Url;
 
@@ -97,8 +98,6 @@ class SiteController extends GeneralController
 
         // 获取图文 ID
         /*
-        Helper::dump($oil->oil,1 );
-
         $this->dump($oil->wx->material->lists('news'));
         //*/
     }
