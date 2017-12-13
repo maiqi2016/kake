@@ -168,14 +168,22 @@ class ProductPackageBindController extends GeneralController
             $record['left'] = $record['product_id'] . ':' . $record['min'];
             $record['right'] = $record['product_id'] . ':' . $record['max'];
 
-            $pad = function ($key) use ($record) {
-                $str = str_pad($record[$key], 3, 0, STR_PAD_LEFT);
+            if ($action == 'index') {
+                $id = function ($key) use ($record) {
+                    $str = str_pad($record[$key], 3, 0, STR_PAD_LEFT);
 
-                return "<strong class='text-danger'>({$str}) </strong>";
-            };
+                    return "<strong class='text-danger'>({$str}) </strong>";
+                };
 
-            $record['min_package_name'] = $pad('min') . $record['min_package_name'];
-            $record['max_package_name'] = $pad('max') . $record['max_package_name'];
+                $price = function ($key) use ($record) {
+                    $price = Helper::money($record["{$key}_package_price"] / 100);
+
+                    return "<strong class='text-success'> {$price}</strong>";
+                };
+
+                $record['min_package_name'] = $id('min') . $record['min_package_name'] . $price('min');
+                $record['max_package_name'] = $id('max') . $record['max_package_name'] . $price('max');
+            }
         }
 
         return parent::sufHandleField($record, $action, $callback);
@@ -201,7 +209,9 @@ class ProductPackageBindController extends GeneralController
             ],
             'select' => [
                 'min_table.name AS min_package_name',
+                'min_table.price AS min_package_price',
                 'max_table.name AS max_package_name',
+                'max_table.price AS max_package_price',
                 'product_package_bind.*'
             ],
         ]);

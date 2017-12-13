@@ -75,7 +75,11 @@ return [
             'download' => 'Oil\src\Download',
             'sso' => [
                 'class' => 'Oil\src\SsoClient',
-                'ssoHost' => null
+                'config' => [
+                    'host' => null,
+                    'code_key' => 'ticket',
+                    'url_tpl' => '{HOST}?r={API}&{PARAMS}'
+                ]
             ],
             'upload' => [
                 'class' => 'Oil\src\Upload',
