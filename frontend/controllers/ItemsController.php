@@ -20,7 +20,7 @@ class ItemsController extends GeneralController
         list($html, $over) = $this->renderListPage(Yii::$app->request->get());
         $this->seo(['title' => '商品列表']);
 
-        return $this->render('index', compact('html', 'over'), true);
+        return $this->render('index', compact('html', 'over'));
     }
 
     /**
@@ -71,6 +71,6 @@ class ItemsController extends GeneralController
         $region = $this->listRegion($plate);
         $this->seo(['title' => '地区列表']);
 
-        return $this->render('region', compact('region'), true);
+        return $this->render('region', compact('region'));
     }
 }

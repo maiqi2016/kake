@@ -883,7 +883,7 @@ class GeneralController extends MainController
             if (empty($list)) {
                 return [];
             }
-            
+
             $list = $old = array_values(array_map('array_values', $list));
             $focus = array_shift($list);
 
@@ -970,7 +970,7 @@ class GeneralController extends MainController
             func_get_args()
         ], function () use ($type, $limit) {
             $controller = $this->controller('ad');
-            $condition = $this->callMethod('editCondition', [], null, $controller);
+            $condition = $this->callMethod('indexCondition', [], null, $controller);
 
             $condition = ArrayHelper::merge($condition, [
                 'where' => [

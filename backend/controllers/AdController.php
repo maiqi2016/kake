@@ -154,7 +154,7 @@ class AdController extends GeneralController
             'url' => [
                 'label' => 4,
                 'tip' => [
-                    '格式1' => 'site/index 表示网站域名 + ' . Yii::$app->params['frontend_url']. Url::toRoute(['site/index']),
+                    '格式1' => 'site/index 表示网站域名 + ' . Yii::$app->params['frontend_url'] . Url::toRoute(['site/index']),
                     '格式2' => '以 http(s):// 开头的完整地址串',
                     '格式3' => '脚本代码，如：javascript:void(null)'
                 ],
@@ -212,6 +212,7 @@ class AdController extends GeneralController
             ],
 
             'sort' => [
+                'tip' => '业务需要，此处不能为零或为空',
                 'placeholder' => '大于零的整数，越小越靠前'
             ],
             'state' => [
@@ -252,6 +253,25 @@ class AdController extends GeneralController
         unset($condition['order']);
 
         return $condition;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function preHandleField($record, $action = null)
+    {
+        if (in_array($action, [
+                'edit',
+                'add'
+            ]) && empty($record['sort'])
+        ) {
+            $this->goReference($this->getControllerName($action), [
+                'warning' => '此处排序必须填写',
+                'list' => $record
+            ]);
+        }
+
+        return parent::preHandleField($record, $action);
     }
 
     /**
