@@ -49,7 +49,7 @@ class SiteController extends GeneralController
 
         $params = compact('focusList', 'plateList', 'flashSalesList', 'bannerList', 'standardHtml', 'over');
 
-        return $this->render('index', $params, true);
+        return $this->render('index', $params);
     }
 
     /**

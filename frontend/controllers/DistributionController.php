@@ -41,7 +41,7 @@ class DistributionController extends GeneralController
             'share_cover' => current($producer['logo_preview_url'])
         ]);
 
-        return $this->render('index', compact('producer', 'product'), true);
+        return $this->render('index', compact('producer', 'product'));
     }
 
     /**
@@ -116,6 +116,6 @@ class DistributionController extends GeneralController
             'animate'
         ];
 
-        return $this->render('items', compact(...$params), true);
+        return $this->render('items', compact(...$params));
     }
 }
