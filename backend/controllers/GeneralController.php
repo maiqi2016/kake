@@ -140,7 +140,7 @@ class GeneralController extends MainController
 
             $this->enableCsrfValidation = true;
 
-            Yii::trace('获取用户信息');
+            Yii::info('获取用户信息');
             if (!$this->user && Yii::$app->session->has(self::USER)) {
                 $this->user = (object) Yii::$app->session->get(self::USER);
             }
@@ -192,7 +192,7 @@ class GeneralController extends MainController
                     '  User: ' . $this->user->username . ' (ID: ' . $this->user->id . ')',
                     'Params: ' . json_encode(array_merge(Yii::$app->request->get(), Yii::$app->request->post()), JSON_UNESCAPED_UNICODE)
                 ];
-                Yii::trace(implode(PHP_EOL, $log), 'admin-action-log');
+                Yii::info(implode(PHP_EOL, $log), 'admin-action-log');
             }
         }
 
@@ -229,7 +229,7 @@ class GeneralController extends MainController
             return '[' . $router . '] 未被纳入权限控制系统内';
         }
 
-        Yii::trace('操作权限鉴定失败: ' . $router . ' (' . $_authListDec[$router] . ')');
+        Yii::info('操作权限鉴定失败: ' . $router . ' (' . $_authListDec[$router] . ')');
         $info = Helper::deleteHtml('"' . $_authListDec[$router] . '" 操作权限不足');
 
         return $info;

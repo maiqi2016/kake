@@ -33,12 +33,12 @@ class GeneralController extends MainController
             return $this->redirect(['/general/upgrade']);
         }
 
-        Yii::trace('设置语言包');
+        Yii::info('设置语言包');
         if (Yii::$app->session->has(self::LANGUAGE)) {
             Yii::$app->language = Yii::$app->session->get(self::LANGUAGE);
         }
 
-        Yii::trace('获取用户信息');
+        Yii::info('获取用户信息');
         if (!$this->user && Yii::$app->session->has(self::USER)) {
             $this->user = (object) Yii::$app->session->get(self::USER);
         }
@@ -155,7 +155,7 @@ class GeneralController extends MainController
         }
 
         $loginUser = function ($user, $type, $system = 'kake') {
-            Yii::trace("将用户信息设置到 Session 中 - 来自 <{$system}> 系统的 <{$type}> 类型登录");
+            Yii::info("将用户信息设置到 Session 中 - 来自 <{$system}> 系统的 <{$type}> 类型登录");
 
             Yii::$app->session->set(self::USER, $user);
             $this->user = (object) array_merge((array) $this->user, $user);
