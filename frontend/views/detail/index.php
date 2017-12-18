@@ -7,7 +7,7 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'detail';
 ?>
 
-<div class="body" ng-init="service.goToTop('.back-top')">
+<div class="body" ng-init="service.goToTop('.back-top');run()">
     <div class="banner">
 	    <div class="menu-box"  kk-menu-lm data-pos-x="-15" data-pos-y="-15">
 	    		<div class="menu">
@@ -36,7 +36,7 @@ $params = \Yii::$app->params;
         </div>
     </div>
     <div class="classify">
-        <div class="classify-1" kk-tab-card="cur-1" data-element="div">
+        <div class="classify-1" kk-tab-card="cur-1" data-element="div" data-bind-click="true">
             <div class="classify-1-1 cur-1" data-card=".card_first">
                 <span>详情介绍</span>
             </div>
