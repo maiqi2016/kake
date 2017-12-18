@@ -184,14 +184,17 @@ class Main extends ActiveRecord
             $key = strtolower(static::className()) . '_' . md5(json_encode($key));
         }
 
+        $cache = Yii::$app->cache;
         $key = strtolower(Yii::$app->id) . '_' . $key;
-        $data = Yii::$app->cache->get($key);
+
+        Yii::info('开始从 ' . $cache::className() . ' 中获取缓存');
+        $data = $cache->get($key);
 
         if (false === $data) {
             Yii::info('缓存命中失败并重新获取写入: ' . $key);
             $data = call_user_func($fetchFn);
             $time = isset($time) ? $time : DAY;
-            $result = Yii::$app->cache->set($key, $data, $time, $dependent);
+            $result = $cache->set($key, $data, $time, $dependent);
 
             if ($result === false) {
                 Yii::error('写入缓存失败: ' . $key);
