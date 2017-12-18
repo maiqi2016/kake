@@ -8,13 +8,7 @@ return [
     'modules' => [
         'debug' => [
             'class' => 'yii\debug\Module',
-            'allowedIPs' => [
-                '127.0.0.1',
-                '::1',
-                '[SECRET:master_ip]',
-                '[SECRET:slave1_ip]',
-                '[SECRET:slb_ip]',
-            ]
+            'allowedIPs' => ['*.*.*.*']
         ],
     ],
     'components' => [
