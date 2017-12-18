@@ -1,6 +1,6 @@
 <?php
 return [
-    'bootstrap' => [],
+    'bootstrap' => (isset($_GET['debug']) && $_GET['debug'] === 'mq2016') ? ['debug'] : [],
     'modules' => [
         'debug' => [
             'class' => 'yii\debug\Module',

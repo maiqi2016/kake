@@ -4,7 +4,19 @@ return [
     'basePath' => dirname(__DIR__),
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'controllerNamespace' => 'common\controllers',
-    'bootstrap' => null,
+    'bootstrap' => (isset($_GET['debug']) && $_GET['debug'] === '[SECRET:debug_pass]') ? ['debug'] : [],
+    'modules' => [
+        'debug' => [
+            'class' => 'yii\debug\Module',
+            'allowedIPs' => [
+                '127.0.0.1',
+                '::1',
+                '[SECRET:master_ip]',
+                '[SECRET:slave1_ip]',
+                '[SECRET:slb_ip]',
+            ]
+        ],
+    ],
     'components' => [
         'request' => [
             'cookieValidationKey' => '[SECRET:cookie]',
