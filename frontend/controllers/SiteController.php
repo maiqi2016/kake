@@ -3,7 +3,6 @@
 namespace frontend\controllers;
 
 use Oil\src\Helper;
-use Oil\src\Log;
 use Yii;
 use yii\helpers\Url;
 
