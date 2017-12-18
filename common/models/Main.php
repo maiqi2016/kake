@@ -53,7 +53,7 @@ class Main extends ActiveRecord
         parent::__construct($config ?: []);
 
         $model = ($this->tableName ? Helper::underToCamel($this->tableName, false) : 'Main');
-        Yii::trace('实例化模型: ' . $model . 'Model');
+        Yii::info('实例化模型: ' . $model . 'Model');
     }
 
     /**
@@ -124,10 +124,10 @@ class Main extends ActiveRecord
 
         // call client
         $client = realpath(Yii::getAlias('@thrift/client.php'));
-        Yii::trace('服务请求开始: ' . $api . ' with ' . json_encode($params));
+        Yii::info('服务请求开始: ' . $api . ' with ' . json_encode($params));
         $cmd = Helper::joinString(' ', 'php', $client, $params, $conf['thrift_ip'], $conf['thrift_port']);
         exec($cmd, $result);
-        Yii::trace('服务请求结束');
+        Yii::info('服务请求结束');
 
         $result = Helper::handleCliResult($result);
 
@@ -188,7 +188,7 @@ class Main extends ActiveRecord
         $data = Yii::$app->cache->get($key);
 
         if (false === $data) {
-            Yii::trace('缓存命中失败并重新获取写入: ' . $key);
+            Yii::info('缓存命中失败并重新获取写入: ' . $key);
             $data = call_user_func($fetchFn);
             $time = isset($time) ? $time : DAY;
             $result = Yii::$app->cache->set($key, $data, $time, $dependent);
@@ -197,7 +197,7 @@ class Main extends ActiveRecord
                 Yii::error('写入缓存失败: ' . $key);
             }
         } else {
-            Yii::trace('缓存命中成功: ' . $key);
+            Yii::info('缓存命中成功: ' . $key);
         }
 
         return $data;
@@ -223,7 +223,7 @@ class Main extends ActiveRecord
         }
 
         self::$model[$this->tableName] = $this->cache('general.' . $this->tableName . '.model.meta.', function () {
-            Yii::trace('获取模型表原数据: ' . $this->tableName);
+            Yii::info('获取模型表原数据: ' . $this->tableName);
 
             return $this->service('general.model-meta', [
                 'table' => $this->tableName

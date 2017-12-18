@@ -78,7 +78,7 @@ class MainController extends Controller
         Helper::executeOnce(function () {
             parent::init();
 
-            Yii::trace('开始读取配置表中的配置');
+            Yii::info('开始读取配置表中的配置');
             $config = $this->cache('list.app.config.kvp', function () {
                 return $this->service('general.config-kvp');
             }, DAY, null, Yii::$app->params['use_cache']);
@@ -365,7 +365,7 @@ class MainController extends Controller
     public function success($data = [], $lang = null, $package = 'common')
     {
         $info = $this->lang($lang, $package);
-        Yii::trace($info);
+        Yii::info($info);
 
         $this->json(1, $info, $data);
     }

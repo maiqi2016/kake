@@ -1,14 +1,10 @@
 <?php
 return [
-    'bootstrap' => (isset($_GET['debug']) && $_GET['debug'] === 'mq2016') ? ['debug'] : [],
+    'bootstrap' => isset($_GET['debug']) ? ['debug'] : [],
     'modules' => [
         'debug' => [
             'class' => 'yii\debug\Module',
-            'allowedIPs' => [
-                '127.0.0.1',
-                '::1',
-                '192.168.0.*',
-            ]
+            'allowedIPs' => ['*.*.*.*']
         ],
     ],
     'components' => [
