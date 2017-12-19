@@ -1433,7 +1433,7 @@ class MainController extends Controller
                 $params = [
                     'type' => 'error',
                     'message' => $message,
-                    'title' => 'Internal Error'
+                    'title' => 'Notice'
                 ];
                 break;
         }

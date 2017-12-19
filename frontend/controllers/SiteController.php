@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\components\Fn;
 use Oil\src\Helper;
 use Yii;
 use yii\helpers\Url;
@@ -99,5 +100,18 @@ class SiteController extends GeneralController
         /*
         $this->dump($oil->wx->material->lists('news'));
         //*/
+
+        $key = 'test';
+        $cache = Yii::$app->cache;
+
+        echo Fn::date() . ' begin set cache.<br>';
+        $cache->set($key, 'the contents for test redis.');
+        echo Fn::date() . ' end set cache.<br>';
+
+        echo Fn::date() . ' begin fetch cache.<br>';
+        $data = $cache->get($key);
+        echo Fn::date() . ' end fetch cache.<br>';
+
+        $this->dump($data, 1, false);
     }
 }

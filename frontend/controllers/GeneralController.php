@@ -54,9 +54,6 @@ class GeneralController extends MainController
             'general/clear-cache',
             // 退出
             'user/logout',
-            // 分销商首页
-            'distribution/items',
-            'distribution/ajax-items',
             // 分销商小车引导页
             'distribution/index',
             // 微信自动回复

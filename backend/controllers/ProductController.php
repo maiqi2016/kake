@@ -762,7 +762,6 @@ class ProductController extends GeneralController
             ],
             'use' => [
                 'elem' => 'ckeditor',
-                'row' => 6,
                 'title' => $description['use'],
                 'tip' => '必须填写',
                 'pos' => 'left',
@@ -770,7 +769,6 @@ class ProductController extends GeneralController
             ],
             'back' => [
                 'elem' => 'ckeditor',
-                'row' => 6,
                 'title' => $description['back'],
                 'tip' => '必须填写',
                 'pos' => 'left',

@@ -96,6 +96,14 @@ return [
             ]
         ],
         'k' => [
+            'name' => '分销商活动',
+            'sub' => [
+                'activity-producer-prize.index' => '奖品管理',
+                'activity-producer-sign.index' => '签到管理',
+                'activity-producer-code.index' => '抽奖码管理',
+            ]
+        ],
+        'l'  => [
             'name' => '其他',
             'sub' => [
                 'ad.index' => '图片和广告',

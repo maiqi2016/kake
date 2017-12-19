@@ -108,7 +108,8 @@ class GeneralController extends MainController
     // 权限控制 - 只用于继承的控制器，不纳入权限控制列表
     private static $inheritControllers = [
         'MainController',
-        'GeneralController'
+        'GeneralController',
+        'DemoController'
     ];
 
     // 权限控制 - 手动排除
