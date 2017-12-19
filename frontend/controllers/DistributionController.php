@@ -142,6 +142,8 @@ class DistributionController extends GeneralController
             $this->error('今日暂无活动');
         }
 
+        $this->seo(['title' => '分销商活动详情']);
+
         return $this->render('activity-boot', compact('channel', 'prize'));
     }
 
@@ -152,10 +154,11 @@ class DistributionController extends GeneralController
      *
      * @param string $channel
      * @param string $date
+     * @param integer $from
      *
      * @return string
      */
-    public function actionActivity($channel, $date = null)
+    public function actionActivity($channel, $date = null, $from = null)
     {
         $this->sourceCss = ['distribution/activity'];
         $this->sourceJs = ['distribution/activity'];
@@ -176,10 +179,52 @@ class DistributionController extends GeneralController
             $this->error($date . ' 无相关活动');
         }
 
-        $code = $this->getCode($prize['prize_id'], $channel);
+        $code = $this->getCode($prize['prize_id']);
         $channelInfo = $this->getProducerByChannel($channel)[0];
 
-        return $this->render('activity', compact('channel', 'prize', 'code', 'channelInfo'));
+        $this->seo([
+            'title' => '我的抽奖码',
+            'share_title' => '我要带你去开房~',
+            'share_description' => $channelInfo['name'] . '邀你领取今日福利，活动天天有，惊喜无上限~',
+            'share_cover' => current($channelInfo['logo_preview_url']),
+            'share_url' => $this->currentUrl() . '&from=' . $this->user->id
+        ]);
+
+        return $this->render('activity', compact('channel', 'prize', 'code', 'channelInfo', 'from'));
+    }
+
+    /**
+     * 输入手机号码获取抽奖码
+     */
+    public function actionAjaxCode()
+    {
+        $phone = Yii::$app->request->post('phone');
+        $captcha = Yii::$app->request->post('captcha');
+        $channel = Yii::$app->request->post('channel');
+
+        if (empty($phone) || empty($captcha)) {
+            $this->fail('手机号码或验证码参数缺失');
+        }
+
+        $prize = $this->getActivityPrize();
+        if (empty($prize)) {
+            $this->fail('非法操作，无可参加的活动');
+        }
+
+        $result = $this->service('activity.add-producer-code', [
+            'phone' => $phone,
+            'captcha' => $captcha,
+            'prize' => $prize['prize_id'],
+            'user' => $this->user->id,
+            'from_user' => Yii::$app->request->post('from'),
+            'channel' => $channel ? Helper::integerDecode($channel) : null,
+        ]);
+
+        if (is_string($result)) {
+            $this->fail(Yii::t('common', $result));
+        }
+
+        $this->success();
     }
 
     /**
@@ -350,17 +395,15 @@ class DistributionController extends GeneralController
      * 获取抽奖码列表
      *
      * @param integer $prizeId
-     * @param string  $channel
      *
      * @return array
      */
-    private function getCode($prizeId, $channel)
+    private function getCode($prizeId)
     {
         $code = $this->service(parent::$apiList, [
             'table' => 'activity_producer_code',
             'where' => [
                 ['activity_producer_prize_id' => $prizeId],
-                ['producer_id' => Helper::integerDecode($channel)],
                 ['user_id' => $this->user->id],
                 ['activity_producer_code.state' => 1]
             ],
