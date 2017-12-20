@@ -94,6 +94,8 @@ class SiteController extends GeneralController
      */
     public function actionDebug()
     {
+        $this->sourceJs = ['site/index'];
+
         $oil = Yii::$app->oil;
 
         // 获取图文 ID
@@ -112,6 +114,8 @@ class SiteController extends GeneralController
         $data = $cache->get($key);
         echo Fn::date() . ' end fetch cache.<br>';
 
-        $this->dump($data, 1, false);
+        $this->dump($data, false, false);
+
+        return $this->render('debug');
     }
 }
