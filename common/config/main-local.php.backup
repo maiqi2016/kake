@@ -1,6 +1,9 @@
 <?php
+
+$debug = (isset($_GET['debug']) && $_GET['debug'] === '[SECRET:debug_pass]');
+
 return [
-    'bootstrap' => isset($_GET['debug']) ? ['debug'] : [],
+    'bootstrap' => $debug ? ['debug'] : [],
     'modules' => [
         'debug' => [
             'class' => 'yii\debug\Module',

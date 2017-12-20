@@ -103,7 +103,7 @@ return [
                 'activity-producer-code.index' => '抽奖码管理',
             ]
         ],
-        'l' => [
+        'l'  => [
             'name' => '其他',
             'sub' => [
                 'ad.index' => '图片和广告',
