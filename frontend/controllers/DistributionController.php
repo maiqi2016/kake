@@ -315,6 +315,8 @@ class DistributionController extends GeneralController
     private function getActivityPrize($date = null)
     {
         $date = $date ?: date('Y-m-d');
+        $time = strtotime($date . '+1 day') - 1 - TIME;
+        $time = ($time <= 0) ? 0 : $time;
 
         return $this->cache([
             'get-today-producer-activity',
@@ -388,7 +390,7 @@ class DistributionController extends GeneralController
             ], $this->controller('product'));
 
             return $prize;
-        }, strtotime($date . '+1 day') - 1 - TIME, null, Yii::$app->params['use_cache']);
+        }, $time, null, Yii::$app->params['use_cache']);
     }
 
     /**
