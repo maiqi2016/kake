@@ -23,6 +23,7 @@ $shareTitle = empty($params['share_title']) ? $title : $params['share_title'];
 $keywords = empty($params['keywords']) ? $params['app_keywords'] : $params['keywords'];
 $description = empty($params['description']) ? $params['app_description'] : $params['description'];
 $shareDescription = empty($params['share_description']) ? $description : $params['share_description'];
+$shareUrl = empty($params['share_url']) ? null : $params['share_url'];
 
 $shareTitle = str_replace('"', '“', $shareTitle);
 $shareDescription = str_replace('"', '“', $shareDescription);
@@ -121,7 +122,7 @@ foreach ($items as $item) {
         'onMenuShareTimeline',
         'onMenuShareAppMessage',
         'scanQRCode'
-    ]) ?>, "<?= $shareTitle ?>", "<?= $shareDescription ?>", "<?= $shareCover ?>")'></span>
+    ]) ?>, "<?= $shareTitle ?>", "<?= $shareDescription ?>", "<?= $shareCover ?>", "<?= $shareUrl ?>")'></span>
 </div>
 
 <!-- Menu -->

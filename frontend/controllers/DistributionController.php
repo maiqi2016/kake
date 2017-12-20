@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use common\components\Fn;
 use Oil\src\Helper;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * Distribution controller
@@ -128,11 +129,12 @@ class DistributionController extends GeneralController
      *
      * @access public
      *
-     * @param string $channel
+     * @param string  $channel
+     * @param integer $from
      *
      * @return string
      */
-    public function actionActivityBoot($channel)
+    public function actionActivityBoot($channel, $from = null)
     {
         $this->sourceCss = ['distribution/activity'];
         $this->sourceJs = ['distribution/activity'];
@@ -144,7 +146,7 @@ class DistributionController extends GeneralController
 
         $this->seo(['title' => '分销商活动详情']);
 
-        return $this->render('activity-boot', compact('channel', 'prize'));
+        return $this->render('activity-boot', compact('channel', 'prize', 'from'));
     }
 
     /**
@@ -154,11 +156,10 @@ class DistributionController extends GeneralController
      *
      * @param string $channel
      * @param string $date
-     * @param integer $from
      *
      * @return string
      */
-    public function actionActivity($channel, $date = null, $from = null)
+    public function actionActivity($channel, $date = null)
     {
         $this->sourceCss = ['distribution/activity'];
         $this->sourceJs = ['distribution/activity'];
@@ -187,10 +188,15 @@ class DistributionController extends GeneralController
             'share_title' => '我要带你去开房~',
             'share_description' => $channelInfo['name'] . '邀你领取今日福利，活动天天有，惊喜无上限~',
             'share_cover' => current($channelInfo['logo_preview_url']),
-            'share_url' => $this->currentUrl() . '&from=' . $this->user->id
+            'share_url' => Yii::$app->params['frontend_url'] . Url::toRoute([
+                    'distribution/activity-boot',
+                    'channel' => $channel,
+                    'date' => $date,
+                    'from' => $this->user->id
+                ])
         ]);
 
-        return $this->render('activity', compact('channel', 'prize', 'code', 'channelInfo', 'from'));
+        return $this->render('activity', compact('channel', 'prize', 'code', 'channelInfo'));
     }
 
     /**
@@ -224,7 +230,12 @@ class DistributionController extends GeneralController
             $this->fail(Yii::t('common', $result));
         }
 
-        $this->success();
+        $this->success([
+            'href' => Url::toRoute([
+                'distribution/activity',
+                'channel' => $channel
+            ])
+        ]);
     }
 
     /**
