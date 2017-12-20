@@ -76,8 +76,7 @@ class ActivityProducerSignController extends GeneralController
         return [
             'user_id' => 'code',
             'user' => [
-                'title' => '用户',
-                'code'
+                'title' => '用户'
             ],
             'add_time' => [
                 'title' => '签到时间'

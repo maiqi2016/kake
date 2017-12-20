@@ -120,8 +120,11 @@ class ActivityProducerCodeController extends GeneralController
             'from_user' => [
                 'title' => '接受邀请用户'
             ],
-            'phone' => 'code',
-            'code' => 'code',
+            'phone',
+            'code' => [
+                'code',
+                'color' => 'default'
+            ],
             'add_time',
             'state' => [
                 'code',

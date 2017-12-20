@@ -117,7 +117,8 @@ class ActivityProducerPrizeController extends GeneralController
             'from' => 'code',
             'to' => 'code',
             'product_title' => [
-                'title' => '产品标题'
+                'title' => '产品标题',
+                'max-width' => '250px'
             ],
             'product_name' => [
                 'title' => '产品名称'
