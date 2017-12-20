@@ -1034,8 +1034,11 @@ class GeneralController extends MainController
      */
     public function render($view, $params = [], $static = false)
     {
+        Yii::info('开始渲染模板文件');
         $html = parent::render($view, $params);
+        Yii::info('完成渲染模板文件');
         if ($static && Yii::$app->params['html_static']) {
+            Yii::info('开始生成当前页面静态化文件');
             $this->createHtmlFile($html);
         }
 
