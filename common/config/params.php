@@ -16,18 +16,18 @@ return [
     'app_description' => 'KAKE旅行',
     'app_keywords' => 'KAKE旅行',
 
-    'frontend_url' => "http://{$secondSite}.{$domain}",
-    'frontend_source' => "http://{$secondSource}.{$domain}/kake/frontend",
+    'frontend_url' => "//{$secondSite}.{$domain}",
+    'frontend_source' => "//{$secondSource}.{$domain}/kake/frontend",
 
     'backend_url' => "http://{$secondBackend}.{$domain}",
-    'backend_source' => "http://{$secondSource}.{$domain}/kake/backend",
+    'backend_source' => "//{$secondSource}.{$domain}/kake/backend",
 
     'tmp_path' => '/tmp/kake',
-    'upload_url' => "http://{$secondPic}.{$domain}",
-    'passport_url' => "http://{$secondPassport}.{$domain}",
+    'upload_url' => "//{$secondPic}.{$domain}",
+    'passport_url' => "//{$secondPassport}.{$domain}",
 
-    'wechat_callback' => "http://{$secondSite}.${domain}/",
-    'alipay_callback' => "http://{$secondSite}.${domain}/",
+    'wechat_callback' => "//{$secondSite}.${domain}/",
+    'alipay_callback' => "//{$secondSite}.${domain}/",
 
     'thrift_ip' => '172.19.222.65',
     'thrift_port' => '8888',

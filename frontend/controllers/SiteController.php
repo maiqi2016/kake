@@ -90,7 +90,7 @@ class SiteController extends GeneralController
      * 测试代码片段
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function actionDebug()
     {
@@ -106,13 +106,13 @@ class SiteController extends GeneralController
         $key = 'test';
         $cache = Yii::$app->cache;
 
-        echo Fn::date() . ' begin set cache.<br>';
+        echo Helper::date() . ' begin set cache.<br>';
         $cache->set($key, 'the contents for test redis.');
-        echo Fn::date() . ' end set cache.<br>';
+        echo Helper::date() . ' end set cache.<br>';
 
-        echo Fn::date() . ' begin fetch cache.<br>';
+        echo Helper::date() . ' begin fetch cache.<br>';
         $data = $cache->get($key);
-        echo Fn::date() . ' end fetch cache.<br>';
+        echo Helper::date() . ' end fetch cache.<br>';
 
         $this->dump($data, false, false);
 

@@ -111,7 +111,7 @@ class ViewHelper extends Object
 
             $isPost = (!empty($value['method']) && strtolower($value['method']) === 'post');
 
-            if (strpos($value['value'], 'http') === 0) {
+            if (strpos($value['value'], 'http') === 0 || strpos($value['value'], '//') === 0) {
                 $url = $value['value'];
             } else {
                 $url = strpos($value['value'], '/') ? $value['value'] : ($controller . '/' . $value['value']);
