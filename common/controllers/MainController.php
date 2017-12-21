@@ -136,12 +136,13 @@ class MainController extends Controller
     {
         $oil = Yii::$app->oil;
 
+        $scheme = $_SERVER['REQUEST_SCHEME'] . ':';
         $extendParams = [
             'upload' => ['config' => ['root_path' => Yii::$app->params['tmp_path']]],
-            'wx' => ['config' => ['oauth' => ['callback' => Yii::$app->params['wechat_callback']]]],
-            'ali' => ['config' => ['options' => ['callback' => Yii::$app->params['alipay_callback']]]],
-            'oss' => ['config' => ['host' => Yii::$app->params['upload_url']]],
-            'sso' => ['config' => ['host' => Yii::$app->params['passport_url']]],
+            'wx' => ['config' => ['oauth' => ['callback' => $scheme . Yii::$app->params['wechat_callback']]]],
+            'ali' => ['config' => ['options' => ['callback' => $scheme . Yii::$app->params['alipay_callback']]]],
+            'oss' => ['config' => ['host' => $scheme . Yii::$app->params['upload_url']]],
+            'sso' => ['config' => ['host' => $scheme . Yii::$app->params['passport_url']]],
         ];
 
         $oil->oil = ArrayHelper::merge($oil->oil, $extendParams);
@@ -639,7 +640,7 @@ class MainController extends Controller
         $str = $item[0];
         $str = !empty($str) ? $str : 'javascript:void(null);';
 
-        if (strpos($str, 'http') === 0) {
+        if (strpos($str, 'http') === 0 || strpos($str, '//') === 0) {
             return $str;
         }
 
@@ -1115,7 +1116,7 @@ class MainController extends Controller
      */
     public static function getPathByUrl($url, $host = null, $name = null)
     {
-        if (strpos($url, 'http') !== 0 && !empty($host)) {
+        if (strpos($url, 'http') !== 0 && strpos($url, '//') !== 0 && !empty($host)) {
             $url = Yii::$app->params[$host] . '/' . $url;
         }
 
@@ -1618,7 +1619,7 @@ class MainController extends Controller
      */
     public function shortUrl($url)
     {
-        if (is_array($url) || strpos($url, 'http') !== 0) {
+        if (is_array($url) || strpos($url, 'http') !== 0 || strpos($url, '//') !== 0) {
             $url = urldecode(Url::toRoute((array) $url, true));
         }
 

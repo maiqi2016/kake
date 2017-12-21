@@ -154,7 +154,7 @@ class AdController extends GeneralController
             'url' => [
                 'label' => 4,
                 'tip' => [
-                    '格式1' => 'site/index 表示网站域名 + ' . Yii::$app->params['frontend_url'] . Url::toRoute(['site/index']),
+                    '格式1' => 'site/index http(s):' . Yii::$app->params['frontend_url'] . Url::toRoute(['site/index']),
                     '格式2' => '以 http(s):// 开头的完整地址串',
                     '格式3' => '脚本代码，如：javascript:void(null)'
                 ],

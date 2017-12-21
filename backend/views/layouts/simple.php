@@ -56,9 +56,9 @@ foreach ($items as $item) {
         $this->{$register}($sourceUrl . $source . "?version=" . $suffix);
     } elseif (is_array($this->context->{$variable})) {
         foreach ($this->context->{$variable} as $value) {
-            if (strpos($value, '/') === 0) {
+            if (strpos($value, '/') === 0 && strpos($value, '//') !== 0) {
                 $source = "${sourceUrl}{$value}.{$item}";
-            } else if (strpos($value, 'http:') === 0 || strpos($value, 'https:') === 0) {
+            } else if (strpos($value, 'http:') === 0 || strpos($value, 'https:') === 0 || strpos($value, '//') === 0) {
                 $source = $value;
             } else {
                 $source = "${sourceUrl}/{$item}{$minDirectory}/{$value}.{$item}";

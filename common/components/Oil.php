@@ -2,7 +2,7 @@
 
 namespace common\components;
 
-use Oil\basic\Dispatch;
+use Oil\dispatcher\Dispatch;
 use yii\base\Object;
 use Exception;
 use yii\helpers\ArrayHelper;

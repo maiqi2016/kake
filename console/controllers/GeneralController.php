@@ -91,10 +91,11 @@ class GeneralController extends Controller
             $result = $model::find()->select($select)->where($where)->offset(($page - 1) * $limit)->limit($limit)->asArray()->all();
 
             try {
-                call_user_func($logicFn, $result);
+                $recursion = call_user_func($logicFn, $result);
             } catch (\Exception $e) {
                 $msg = $this->color($e->getMessage(), Console::FG_RED);
                 $this->console($msg);
+                $recursion = false;
             }
 
             $progress = $page * $this->limit;
@@ -105,7 +106,7 @@ class GeneralController extends Controller
                 $this->color($progress, Console::FG_GREEN)
             ], null, null, $page == $totalPage ? PHP_EOL : null);
 
-            if (count($result) == $this->limit) {
+            if (count($result) == $this->limit && $recursion !== false) {
                 $handler(++$page);
             }
         };
