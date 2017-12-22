@@ -26,3 +26,5 @@ define('DAY', HOUR * 24);
 define('WEEK', DAY * 7);
 define('MONTH', DAY * 30);
 define('YEAR', MONTH * 12);
+
+define('SCHEME', $_SERVER['REQUEST_SCHEME'] . ':');

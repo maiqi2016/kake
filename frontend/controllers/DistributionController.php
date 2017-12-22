@@ -99,6 +99,7 @@ class DistributionController extends GeneralController
         }
 
         $days = $this->getSignAndPrizeData();
+        $this->dump($days);
 
         $this->seo([
             'title' => $producer['name'],
@@ -118,7 +119,7 @@ class DistributionController extends GeneralController
             'html_1',
             'html_2',
             'animate',
-            'day',
+            'days',
         ];
 
         return $this->render('items', compact(...$params));
@@ -274,7 +275,7 @@ class DistributionController extends GeneralController
                 'where' => [
                     [
                         '>=',
-                        'from',
+                        'to',
                         date('Y-m-d')
                     ],
                     [
@@ -306,7 +307,9 @@ class DistributionController extends GeneralController
                     $from = strtotime($item['from']);
                     $lastDay = strtotime($item['to']);
                     while ($from <= $lastDay) {
-                        $_prizes[date('Y-m-d', $from)] = $item['classify'];
+                        if ($from >= strtotime(date('Y-m-d 00:00:00'))) {
+                            $_prizes[date('Y-m-d', $from)] = $item['classify'];
+                        }
                         $from += 86400;
                     }
                 }
