@@ -1115,8 +1115,12 @@ class MainController extends Controller
      */
     public static function getPathByUrl($url, $host = null, $name = null)
     {
-        if (strpos($url, 'http') !== 0 && strpos($url, '//') !== 0 && !empty($host)) {
-            $url = Yii::$app->params[$host] . '/' . $url;
+        if (strpos($url, '//') === 0) {
+            $url = SCHEME . $url;
+        }
+
+        if (strpos($url, 'http') !== 0 && !empty($host)) {
+            $url = SCHEME . Yii::$app->params[$host] . '/' . $url;
         }
 
         $file = Yii::$app->params['tmp_path'] . DS . ($name ?: basename($url));
@@ -1618,7 +1622,7 @@ class MainController extends Controller
      */
     public function shortUrl($url)
     {
-        if (is_array($url) || strpos($url, 'http') !== 0 || strpos($url, '//') !== 0) {
+        if (is_array($url) || (strpos($url, 'http') !== 0 && strpos($url, '//' !== 0))) {
             $url = urldecode(Url::toRoute((array) $url, true));
         }
 
