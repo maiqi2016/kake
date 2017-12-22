@@ -28,7 +28,7 @@ $shareUrl = empty($params['share_url']) ? null : $params['share_url'];
 $shareTitle = str_replace('"', '“', $shareTitle);
 $shareDescription = str_replace('"', '“', $shareDescription);
 
-$shareCover = empty($params['share_cover']) ? $params['frontend_source'] . '/img/logo.png' : $params['share_cover'];
+$shareCover = SCHEME . (empty($params['share_cover']) ? $params['frontend_source'] . '/img/logo.png' : $params['share_cover']);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
