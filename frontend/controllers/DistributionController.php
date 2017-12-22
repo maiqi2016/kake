@@ -99,7 +99,6 @@ class DistributionController extends GeneralController
         }
 
         $days = $this->getSignAndPrizeData();
-        $this->dump($days);
 
         $this->seo([
             'title' => $producer['name'],
