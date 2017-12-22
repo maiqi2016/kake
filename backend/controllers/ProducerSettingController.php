@@ -507,7 +507,7 @@ class ProducerSettingController extends GeneralController
             ];
         }
 
-        $qr = $this->createQrCode($link, 400, $logoPath);
+        $qr = $this->createQrCode(SCHEME . $link, 400, $logoPath);
         $file = $qr->writeDataUri();
 
         if ($saveTmp) {
