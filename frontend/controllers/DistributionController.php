@@ -130,18 +130,38 @@ class DistributionController extends GeneralController
      * @access public
      *
      * @param string  $channel
+     * @param string  $date
      * @param integer $from
      *
      * @return string
      */
-    public function actionActivityBoot($channel, $from = null)
+    public function actionActivityBoot($channel, $date = null, $from = null)
     {
         $this->sourceCss = ['distribution/activity'];
         $this->sourceJs = ['distribution/activity'];
 
-        $prize = $this->getActivityPrize();
+        $date = $this->getDate($date);
+        $prize = $this->getActivityPrize($date);
         if (empty($prize)) {
-            $this->error('今日暂无活动');
+            $this->error('这一天暂无活动');
+        }
+
+        $hasCode = $this->service(parent::$apiDetail, [
+            'table' => 'activity_producer_code',
+            'where' => [
+                ['activity_producer_prize_id' => $prize['prize_id']],
+                ['user_id' => $this->user->id],
+                ['state' => 1],
+                ['from_user_id' => null]
+            ],
+            'select' => ['id','phone']
+        ]);
+
+        $ed = strtotime(date($prize['to'])) < strtotime(date('Y-m-d 00:00:00'));
+        $ing = strtotime(date($prize['from'])) > strtotime(date('Y-m-d 00:00:00'));
+
+        if (!empty($hasCode) && !($ed || $ing)) {
+            return $this->redirect(['distribution/activity', 'channel' => $channel]);
         }
 
         $this->seo(['title' => '分销商活动详情']);
@@ -164,12 +184,7 @@ class DistributionController extends GeneralController
         $this->sourceCss = ['distribution/activity'];
         $this->sourceJs = ['distribution/activity'];
 
-        $date = $date ?: date('Y-m-d');
-        if (!strtotime($date)) {
-            $this->error('日期参数不合法');
-        }
-
-        $date = date('Y-m-d', strtotime($date));
+        $date = $this->getDate($date);
 
         if (strtotime($date) - strtotime(date('Y-m-d')) > 0) {
             $this->error($date . ' 的活动还未开始，请改日再来');
@@ -236,6 +251,22 @@ class DistributionController extends GeneralController
                 'channel' => $channel
             ])
         ]);
+    }
+
+    /**
+     * 获取日期
+     *
+     * @param string $date
+     *
+     * @return string
+     */
+    private function getDate($date) {
+        $date = $date ?: date('Y-m-d');
+        if (!strtotime($date)) {
+            $this->error('日期参数不合法');
+        }
+
+        return date('Y-m-d', strtotime($date));
     }
 
     /**
@@ -386,6 +417,8 @@ class DistributionController extends GeneralController
                 'select' => [
                     'activity_producer_prize.id AS prize_id',
                     'activity_producer_prize.description',
+                    'activity_producer_prize.from',
+                    'activity_producer_prize.to',
                     'product.id',
                     'product.title',
                     'product.attachment_cover',

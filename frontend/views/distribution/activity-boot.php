@@ -12,15 +12,18 @@ $params = \Yii::$app->params;
         <h1><?= $prize['name'] ?></h1>
         <p><?= $prize['title'] ?></p>
         <span>价值￥<?= $prize['sale_price'] ?></span>
-        <div class="has-yes" kk-modal=".modal-one" data-width="90%" data-backdrop-close="static">立即抽奖</div>
+        <?php if (strtotime(date('Y-m-d 00:00:00')) < strtotime($prize['from'])): ?>
         <div class="has-no">活动未开始</div>
+        <?php else: ?>
+        <div class="has-yes" kk-modal=".modal-one" data-width="90%" data-backdrop-close="static">立即抽奖</div>
+        <?php endif; ?>
     </div>
 </div>
 <div class="blank-two"></div>
 <div class="description">
     <?= $prize['description'] ?>
-    <a href="#"> >>点击查看套餐详情<< </a>
 </div>
+<a class="detail" href="<?= $prize['link_url'] ?>"> >>点击查看套餐详情<< </a>
 <div class="blank"></div>
 <div class="hot-list">
     <a href="#"><img src="<?= $params['frontend_source'] ?>/img/distribution/bichizizhu.gif"></a>
