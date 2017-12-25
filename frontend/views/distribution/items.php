@@ -83,8 +83,17 @@ $params = \Yii::$app->params;
         </div>
     </div>
 
+    <img class="luck-draw-img" kk-tap="change()" src="<?= $params['frontend_source'] ?>/img/distribution/choujiang.png">
+    <div class="luck-draw" ng-init='days = <?= json_encode($days)?>;cal();showCal=false;'>
+        <span><?= date('m') ?>月</span>
+        <img src="<?= $params['frontend_source'] ?>/img/distribution/month-border.png">
+        <div class="date">
+            <ul class="clearfix list" ng-bind-html="li"></ul>
+        </div>
+    </div>
+
     <div class="body">
-        <div class="nav" kk-fixed="window.screen.height/8">
+        <div class="nav">
             <ul kk-anchor="active" data-element="li">
                 <?php foreach ($classify as $key => $name): ?>
                     <li data-anchor=".classify_anchor_<?= $key ?>"><a href="javascript:void(0)" class="classify_<?= $key ?>"><span><?= $name ?></span></a>

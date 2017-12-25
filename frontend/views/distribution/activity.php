@@ -7,10 +7,29 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'distribution';
 ?>
 
-<div style="text-align: center; margin-top: 18%">
-    <h1>麻瓜梦2</h1>
-    <p class="help-block">是不是依然很惊喜</p>
+<div class="header">
+    <img class="photo" src="<?= current($channelInfo['logo_preview_url']) ?>">
+    <div class="txt"><?= $channelInfo['name'] ?></div>
 </div>
+<div class="lottery-draw">
+    <div class="up">
+        <span class="txt">我的抽奖码为</span><span class="invite">邀请好友抽奖</span>
+    </div>
+    <div class="down">
+        <?php foreach ($code as $c => $user): ?>
+            <span class="lottery"><?= $c ?></span>
+            <span class="date"><?= $user ?: date('Y-m-d') ?></span><br>
+        <?php endforeach; ?>
+
+    </div>
+
+</div>
+<div class="blank"></div>
+<div>
+    <?= $prize['description'] ?>
+</div>
+
+<div></div>
 
 <!-- $channel 变量为分销商识别号 -->
 <!-- $prize 变量中包含了奖品相关数据 -->
