@@ -99,7 +99,7 @@ class DistributionController extends GeneralController
         }
 
         $days = $this->getSignAndPrizeData();
-
+        
         $this->seo([
             'title' => $producer['name'],
             'share_title' => $producer['name'],
@@ -129,8 +129,8 @@ class DistributionController extends GeneralController
      *
      * @access public
      *
-     * @param string  $channel
-     * @param string  $date
+     * @param string $channel
+     * @param string $date
      * @param integer $from
      *
      * @return string
@@ -154,14 +154,20 @@ class DistributionController extends GeneralController
                 ['state' => 1],
                 ['from_user_id' => null]
             ],
-            'select' => ['id','phone']
+            'select' => [
+                'id',
+                'phone'
+            ]
         ]);
 
         $ed = strtotime(date($prize['to'])) < strtotime(date('Y-m-d 00:00:00'));
         $ing = strtotime(date($prize['from'])) > strtotime(date('Y-m-d 00:00:00'));
 
         if (!empty($hasCode) && !($ed || $ing)) {
-            return $this->redirect(['distribution/activity', 'channel' => $channel]);
+            return $this->redirect([
+                'distribution/activity',
+                'channel' => $channel
+            ]);
         }
 
         $this->seo(['title' => '分销商活动详情']);
@@ -260,7 +266,8 @@ class DistributionController extends GeneralController
      *
      * @return string
      */
-    private function getDate($date) {
+    private function getDate($date)
+    {
         $date = $date ?: date('Y-m-d');
         if (!strtotime($date)) {
             $this->error('日期参数不合法');
@@ -345,7 +352,7 @@ class DistributionController extends GeneralController
                 }
             }
 
-            return array_merge($_signed, $_prizes, [date('Y-m-d') => 'today']);
+            return array_merge($_signed, $_prizes);
         }, strtotime(date('Y-m-t 23:59:59')) - TIME, null, Yii::$app->params['use_cache']);
     }
 
