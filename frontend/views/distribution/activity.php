@@ -13,7 +13,7 @@ $params = \Yii::$app->params;
 </div>
 <div class="lottery-draw">
     <div class="up">
-        <span class="txt">我的抽奖码为</span><span class="invite">邀请好友抽奖</span>
+        <span class="txt">我的抽奖码为</span><span class="invite">点击右上角邀请好友抽奖</span>
     </div>
     <div class="down">
         <?php foreach ($code as $c => $user): ?>
@@ -25,11 +25,9 @@ $params = \Yii::$app->params;
 
 </div>
 <div class="blank"></div>
-<div>
+<div class="description">
     <?= $prize['description'] ?>
 </div>
-
-<div></div>
 
 <!-- $channel 变量为分销商识别号 -->
 <!-- $prize 变量中包含了奖品相关数据 -->

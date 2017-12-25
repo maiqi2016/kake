@@ -982,7 +982,7 @@ class MainController extends Controller
         }
 
         $api = str_replace('.', '/', $api);
-        $url = Yii::$app->params[$appName . '_url'] . Url::toRoute([$api]);
+        $url = SCHEME . Yii::$app->params[$appName . '_url'] . Url::toRoute([$api]);
 
         $params = array_merge($params, [
             'api_token' => strrev(md5(Yii::$app->params['api_token_' . $appName])),
