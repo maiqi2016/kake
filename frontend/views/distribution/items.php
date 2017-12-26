@@ -28,52 +28,8 @@ $params = \Yii::$app->params;
 
 <div ng-show="showBody" class="shape-fixed">
     <div class="header" ng-init='upstream = <?= json_encode($upstream, JSON_UNESCAPED_UNICODE) ?>'>
-        <div class="inner">
-            <form class="search" id="box" action="/">
-                <input type="hidden" name="r" value="items/index">
-                <input id="search-info" type="search" name="keyword" ng-model="search" placeholder="酒店名称">
-                <ul ng-show="search">
-                    <a href="<?= Url::toRoute([
-                        'items/index',
-                        'upstream' => ''
-                    ]) ?>{{item.id}}" ng-repeat="item in upstream | filter:search">
-                        <li>{{item.name}}</li>
-                    </a>
-                </ul>
-            </form>
-            <div class="menu" kk-menu-lm><img src="<?= $params['frontend_source'] ?>/img/menu.svg"></div>
-        </div>
-        <div class="out kk-animate hidden" ng-show="showTab" ng-class="{'kk-show': showTab}">
-            <div class="select-area">
-                <ul class="left" kk-tab-card="active" data-element="li">
-                    <?php
-                    $index = 0;
-                    foreach ($region as $plate => $regions):
-                        $index++;
-                        ?>
-                        <li data-card=".region_<?= $index ?>"><?= $plate ?></li>
-                    <?php endforeach ?>
-                </ul>
-                <?php
-                $index = 0;
-                foreach ($region as $items):
-                    $index++;
-                    ?>
-                    <ul class="right region_<?= $index ?>">
-                        <?php foreach ($items as $id => $name): ?>
-                            <a href="<?= Url::toRoute([
-                                'items/index',
-                                'region' => $id
-                            ]) ?>">
-                                <li><?= $name ?></li>
-                            </a>
-                        <?php endforeach ?>
-                    </ul>
-                <?php endforeach ?>
-            </div>
-        </div>
 
-        <div id="focus-card" class="focus-card" kk-focus-card>
+        <div id="focus-card" class="focus-card" kk-focus-card data-small-tran-x="36" data-small-tran-y="3">
             <div></div>
             <ul class="card-carousel">
                 <?php foreach ($focusList as $item): ?>
@@ -81,10 +37,13 @@ $params = \Yii::$app->params;
                 <?php endforeach; ?>
             </ul>
         </div>
-    </div>
 
-    <img class="luck-draw-img" kk-tap="change()" src="<?= $params['frontend_source'] ?>/img/distribution/choujiang.png">
-    <div class="luck-draw" ng-init='days = <?= json_encode($days)?>;cal();showCal=false;'>
+
+    </div>
+    <div class="blank"></div>
+    <img class="luck-draw-img animated" ng-class="{'shake': shake}" kk-tap="showCal = !showCal" src="<?= $params['frontend_source'] ?>/img/distribution/choujiang.png">
+    <div class="blank"></div>
+    <div class="luck-draw animated" ng-show="showCal" ng-class="{'flipInY': showCal}" ng-init='days = <?= json_encode($days)?>;cal();cls();'>
         <span><?= date('m') ?>月</span>
         <img src="<?= $params['frontend_source'] ?>/img/distribution/month-border.png">
         <div class="date">
@@ -154,9 +113,7 @@ $params = \Yii::$app->params;
         <?php endif; ?>
 
         <footer>
-            <a href="<?= Url::toRoute(['order/index']) ?>">
-                <img src="<?= $params['frontend_source'] ?>/img/producer/order.png">
-            </a>
+            <div class="menu" kk-menu-lm><img src="<?= $params['frontend_source'] ?>/img/menu.svg"></div>
         </footer>
     </div>
 </div>
