@@ -7,7 +7,7 @@ $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'distribution';
 ?>
 <div class="header-two">
-    <img src="<?= $params['frontend_source'] ?>/img/banner1.png">
+    <img src="<?= current($prize['cover_preview_url']) ?>">
     <div class="detail">
         <h1><?= $prize['name'] ?></h1>
         <p><?= $prize['title'] ?></p>
