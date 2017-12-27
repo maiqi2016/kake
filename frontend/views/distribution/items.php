@@ -27,22 +27,22 @@ $params = \Yii::$app->params;
 
 
 <div ng-show="showBody" class="shape-fixed">
-    <div class="header" ng-init='upstream = <?= json_encode($upstream, JSON_UNESCAPED_UNICODE) ?>'>
-
-        <div id="focus-card" class="focus-card" kk-focus-card data-small-tran-x="36" data-small-tran-y="3">
-            <div></div>
-            <ul class="card-carousel">
+    <div class="header">
+        <div class="carousel kake-theme" id="carousel-scroller-luck" kk-focus-camel>
+            <div class="carousel-scroller scroll">
+                <div class="product_image"></div>
                 <?php foreach ($focusList as $item): ?>
-                    <li><a href="<?= $item['link_url'] ?>"><img src="<?= current($item['preview_url']) ?>"></a></li>
-                <?php endforeach; ?>
-            </ul>
+                    <div class="product_image">
+                        <a href="<?= $item['link_url'] ?>">
+                            <img class="img-responsive" src="<?= current($item['preview_url']) ?>"/>
+                        </a>
+                    </div>
+                <?php endforeach ?>
+                <div class="product_image"></div>
+            </div>
         </div>
-
-
     </div>
-    <div class="blank"></div>
-    <img class="luck-draw-img animated" ng-class="{'shake': shake}" kk-tap="showCal = !showCal" src="<?= $params['frontend_source'] ?>/img/distribution/choujiang.png">
-    <div class="blank"></div>
+    <img class="luck-draw-img animated" ng-class="{'zoomIn': shake}" kk-tap="showCal = !showCal" src="<?= $params['frontend_source'] ?>/img/distribution/choujiang.png">
     <div class="luck-draw animated" ng-show="showCal" ng-class="{'flipInY': showCal}" ng-init='days = <?= json_encode($days)?>;cal();cls();'>
         <span><?= date('m') ?>月</span>
         <img src="<?= $params['frontend_source'] ?>/img/distribution/month-border.png">
@@ -60,7 +60,6 @@ $params = \Yii::$app->params;
                 <?php endforeach; ?>
             </ul>
         </div>
-        <div class="blank"></div>
         <div class="product-one">
             <div class="product-detail">
             <ul class="clearfix">
@@ -78,7 +77,6 @@ $params = \Yii::$app->params;
                 </ul>
             </div>
         </div>
-        <div class="blank"></div>
         <ul class="product-two clearfix">
             <?= trim($html_0) ? $html_0 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
@@ -92,7 +90,6 @@ $params = \Yii::$app->params;
                 </a>
             <?php endif; ?>
         </div>
-        <div class="blank"></div>
         <ul class="product-two clearfix">
             <?= trim($html_1) ? $html_1 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
@@ -106,7 +103,6 @@ $params = \Yii::$app->params;
                 </a>
             <?php endif; ?>
         </div>
-        <div class="blank"></div>
         <ul class="product-two clearfix">
             <?= trim($html_2) ? $html_2 : '<div class="no-data">暂无相关产品</div>' ?>
         </ul>
