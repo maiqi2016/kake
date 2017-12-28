@@ -26,7 +26,7 @@ $params = \Yii::$app->params;
 <div class="description">
     <?= $prize['description'] ?>
 </div>
-<a class="detail" href="<?= $prize['link_url'] ?>"> >>点击查看套餐详情<< </a>
+<a class="detail" href="<?= $prize['link_url'] ?>"> >>点击查看奖品详情<< </a>
 <div class="blank"></div>
 <div class="hot-list">
     <a href="<?= Url::toRoute(['items/index']) ?>"><img src="<?= $params['frontend_source'] ?>/img/distribution/activity-boot/hot1.png"></a>

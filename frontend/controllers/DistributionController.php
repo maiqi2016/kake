@@ -58,7 +58,10 @@ class DistributionController extends GeneralController
     public function actionItems($channel)
     {
         $this->sourceCss = null;
-        $this->sourceJs = null;
+        $this->sourceJs = [
+            'distribution/items',
+            '/node_modules/moment/min/moment.min'
+        ];
 
         $params = Yii::$app->params;
 

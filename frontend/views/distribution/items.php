@@ -28,11 +28,12 @@ $params = \Yii::$app->params;
 
 <div ng-show="showBody" class="shape-fixed">
     <div class="header">
-        <div class="carousel kake-theme" id="carousel-scroller-luck" kk-focus-camel>
+        <div class="carousel kake-theme" id="carousel-scroller-luck" kk-focus-camel data-index="3">
             <div class="carousel-scroller scroll">
                 <div class="product_image"></div>
-                <?php foreach ($focusList as $item): ?>
-                    <div class="product_image">
+                <?php foreach ($focusList as $key => $item): ?>
+                    <?php $event = ($key == 2) ? 'kk-tap="showCalFn()" ' : null; ?>
+                    <div class="product_image" <?= $event ?>>
                         <a href="<?= $item['link_url'] ?>">
                             <img class="img-responsive" src="<?= current($item['preview_url']) ?>"/>
                         </a>
@@ -42,9 +43,10 @@ $params = \Yii::$app->params;
             </div>
         </div>
     </div>
-    <img class="luck-draw-img animated" ng-class="{'zoomIn': shake}" kk-tap="showCal = !showCal" src="<?= $params['frontend_source'] ?>/img/distribution/choujiang.png">
-    <div class="luck-draw animated" ng-show="showCal" ng-class="{'flipInY': showCal}" ng-init='days = <?= json_encode($days)?>;cal();cls();'>
-        <span><?= date('m') ?>月</span>
+    <div class="luck-draw animated" ng-show="showCal" ng-class="{'flipInY': showCal}" ng-init='buildCalHtml(<?= json_encode($days)?>);'>
+        <b class="prev-month" kk-tap="prev()"> < </b>
+        <span class="cls-m">{{ month }}</span><span>月</span>
+        <b class="next-month" kk-tap="next();"> > </b>
         <img src="<?= $params['frontend_source'] ?>/img/distribution/month-border.png">
         <div class="date">
             <ul class="clearfix list" ng-bind-html="li"></ul>
