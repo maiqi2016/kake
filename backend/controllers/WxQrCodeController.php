@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use Oil\src\Helper;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * 公众号二维码管理
@@ -17,8 +18,58 @@ class WxQrCodeController extends GeneralController
      */
     public static $type = [
         1 => '关注推广',
-        2 => '分销商推广'
+        2 => '分销商推广',
+        3 => '分销商活动推广',
     ];
+
+    /**
+     * @var array 功能描述
+     */
+    public static $typeDescription = [
+        1 => [
+            'A. 用户扫描后出现关注界面(如果用户未关注)；',
+            'B. 随后跳转到对话框。'
+        ],
+        2 => [
+            'A. 用户扫描后出现关注界面(如果用户未关注)；',
+            'B. 随后跳转到对话框，并弹出欢迎关注致辞和注册分销商的入口链接；',
+            'C. 微信后台创建同名的用户分组；',
+            'D. 并在微信后台将该分销商加入到该分组中。'
+        ],
+        3 => [
+            'A. 用户扫描后出现关注界面(如果用户未关注)；',
+            'B. 随后跳转到对话框，并弹出欢迎关注致辞和分销商活动的入口链接；'
+        ],
+    ];
+
+    /**
+     * @var array 是否需要分组
+     */
+    public static $needGroup = [
+        1 => false,
+        2 => true,
+        3 => true
+    ];
+
+    /**
+     * 是否需要回复
+     *
+     * @return array
+     */
+    public function needReply()
+    {
+        $url = SCHEME . Yii::$app->params['frontend_url'];
+
+        return [
+            1 => false,
+            2 => "欢迎加入喀客，<a href='" . $url . Url::toRoute(['producer/apply-distributor']) . "'>点击这里注册</a>分销商",
+            3 => "欢迎加入喀客，<a href='" . $url . Url::toRoute([
+                    'distribution/item',
+                    'channel' => 'nubXnej7',
+                    'tip' => 'yes'
+                ]) . "'>点击这里</a>参加抽奖活动"
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -33,21 +84,37 @@ class WxQrCodeController extends GeneralController
      */
     public static function indexAssist()
     {
-        return [
+        $assist = [
             'type' => [
                 'title' => '类型',
                 'elem' => 'select',
                 'value' => 1,
                 'list' => self::$type
-            ],
-            'name' => [
-                'title' => '分组名称',
-                'elem' => 'textarea',
-                'label' => 6,
-                'row' => 10,
-                'placeholder' => "自动使用该名称创建组名，多个请换行如：\n\n迈骐国际旅行社\n喀客酒店预订"
             ]
         ];
+
+        foreach (self::$typeDescription as $key => $info) {
+            $assist['description_' . $key] = [
+                'title' => '说明',
+                'elem' => 'text',
+                'class' => 'bg-default',
+                'value' => is_array($info) ? implode('<br>', $info) : $info,
+                'label' => 5,
+                'html' => true,
+                'tag' => 'pre',
+                'show' => ['type' => 'value == ' . $key]
+            ];
+        }
+
+        $assist['name'] = [
+            'title' => '分组名称',
+            'elem' => 'textarea',
+            'label' => 6,
+            'row' => 10,
+            'placeholder' => "自动使用该名称创建组名，多个请换行如：\n\n迈骐国际旅行社\n喀客酒店预订"
+        ];
+
+        return $assist;
     }
 
     /**
@@ -67,7 +134,6 @@ class WxQrCodeController extends GeneralController
 
     /**
      * 公众号二维码生成器
-     *
      * @auth-same {ctrl}/create
      */
     public function actionIndex()
