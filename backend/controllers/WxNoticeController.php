@@ -64,13 +64,13 @@ class WxNoticeController extends GeneralController
             ]
         ];
 
-        $split = PHP_EOL . PHP_EOL . str_repeat('-*-', 15) . PHP_EOL . PHP_EOL;
+        $split = PHP_EOL . PHP_EOL . str_repeat('- + ', 10) . PHP_EOL . PHP_EOL;
 
         foreach (self::$tpl as $item) {
             $assist[$item['template_id']] = [
                 'title' => '样例',
                 'elem' => 'text',
-                'class' => 'bg-primary',
+                'class' => 'bg-default',
                 'value' => $item['content'] . $split . $item['example'],
                 'label' => 5,
                 'html' => true,

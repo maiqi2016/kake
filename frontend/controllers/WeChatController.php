@@ -22,7 +22,7 @@ class WeChatController extends GeneralController
     /**
      * @var object
      */
-    public $api = null;
+    public $api;
 
     /**
      * @var string
@@ -49,17 +49,6 @@ class WeChatController extends GeneralController
     }
 
     /**
-     * 获取注册分销商的回复内容
-     */
-    private function getRegProducerMsg()
-    {
-        $url = Yii::$app->params['frontend_url'] . Url::toRoute(['producer/apply-distributor']);
-        $text = "欢迎加入喀客，<a href='{$url}'>点击这里注册</a>分销商";
-
-        return $text;
-    }
-
-    /**
      * 将当前聊天用户移动到分组
      *
      * @param string $group
@@ -80,6 +69,8 @@ class WeChatController extends GeneralController
             return null;
         }
 
+        $ctrl = $this->controller('wx-qr-code');
+
         $this->api->listen([
             'text' => function ($message) {
                 $message->Content = trim($message->Content);
@@ -94,7 +85,7 @@ class WeChatController extends GeneralController
                 return $this->replyCompanyAndProfile($message, $user);
             },
 
-            'event_subscribe' => function ($message) {
+            'event_subscribe' => function ($message) use ($ctrl) {
 
                 if (strpos($message->EventKey, self::SKS) === false) {
                     $message->EventKey = '.' . $message->EventKey;
@@ -103,27 +94,35 @@ class WeChatController extends GeneralController
                 list($type, $group) = explode(self::SKS, $message->EventKey);
 
                 $this->moveToGroup($group ?: '官方推广', $message);
-                if (!empty($type) && in_array($type, [2])) {
-                    return $this->getRegProducerMsg();
+                $types = $this->callMethod('needReply', [], null, $ctrl);
+                if (!empty($type) && in_array($type, $types)) {
+                    return $types[$type];
                 }
 
                 return '欢迎关注喀客酒店预订平台~';
             },
 
-            'event_scan' => function ($message) {
+            'event_scan' => function ($message) use ($ctrl) {
 
                 if (strpos($message->EventKey, self::SKS) === false) {
                     return null;
                 }
 
                 list($type, $group) = explode(self::SKS, $message->EventKey);
-                if (!empty($type) && in_array($type, [2])) {
-                    $this->moveToGroup($group, $message);
 
-                    return $this->getRegProducerMsg();
+                $types = $this->callMethod('needReply', [], null, $ctrl);
+                if (!empty($type)) {
+                    $needGroup = $ctrl::$needGroup;
+                    if ($needGroup[$type]) {
+                        $this->moveToGroup($group, $message);
+                    }
+
+                    if (in_array($type, $types)) {
+                        return $types[$type];
+                    }
                 }
 
-                return '🙄 扫码来源：' . $message->EventKey;
+                return null;
             }
         ]);
     }
