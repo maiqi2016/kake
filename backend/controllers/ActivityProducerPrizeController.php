@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use Oil\src\Helper;
+
 /**
  * 分销商活动奖品管理
  *
@@ -55,7 +57,8 @@ class ActivityProducerPrizeController extends GeneralController
                     return ['id' => $record['product_id']];
                 },
                 'level' => 'success',
-                'icon' => 'link'
+                'icon' => 'link',
+                'br' => true
             ],
             [
                 'text' => '查看抽奖码',
@@ -64,7 +67,22 @@ class ActivityProducerPrizeController extends GeneralController
                     return ['activity_producer_prize_id' => $record['id']];
                 },
                 'level' => 'success',
-                'icon' => 'link'
+                'icon' => 'link',
+                'br' => true
+            ],
+            [
+                'text' => '开奖',
+                'value' => 'lottery',
+                'level' => 'warning',
+                'icon' => 'education',
+                'show_condition' => function ($record) {
+                    $show = empty($record['win_code']);
+                    $show = $show && $record['state'];
+                    $show = $show && strtotime(date('Y-m-d H:i:s')) > strtotime($record['to'] . ' 23:59:59');
+
+                    return $show;
+                },
+                'br' => true
             ]
         ]);
     }
@@ -98,6 +116,7 @@ class ActivityProducerPrizeController extends GeneralController
             'id',
             'from',
             'to',
+            'standard_code_number',
             'state'
         ];
     }
@@ -114,14 +133,21 @@ class ActivityProducerPrizeController extends GeneralController
                 'code',
                 'color' => 'default'
             ],
-            'from' => 'code',
-            'to' => 'code',
+            'from',
+            'to',
             'product_title' => [
                 'title' => '产品标题',
                 'max-width' => '250px'
             ],
             'product_name' => [
-                'title' => '产品名称'
+                'title' => '产品名称',
+                'tip'
+            ],
+            'standard_code_number' => [
+                'code'
+            ],
+            'win_code' => [
+                'code'
             ],
             'state' => [
                 'code',
@@ -203,5 +229,81 @@ class ActivityProducerPrizeController extends GeneralController
         $this->sourceJs = ['ckeditor/ckeditor'];
 
         return parent::beforeAction($action);
+    }
+
+    /**
+     * 活动开奖
+     *
+     * @param integer $id
+     */
+    public function actionLottery($id)
+    {
+        $prize = $this->showFormWithRecord([
+            'state' => 1,
+            'id' => $id
+        ], null, true);
+
+        if (empty($prize)) {
+            $this->error('该期活动不存在或已关闭');
+        }
+
+        if (!empty($prize['win_code'])) {
+            $this->error('该期活动已操作过开奖');
+        }
+
+        $to = $prize['to'] . ' 23:59:59';
+        if (strtotime(date('Y-m-d H:i:s')) <= strtotime($to)) {
+            $this->error("该期活动还未结束，须于 {$to} 后开奖");
+        }
+
+        if (($total = $this->countCode($id)) < $prize['standard_code_number']) {
+            $this->error("不满足抽奖码数 {$total}/{$prize['standard_code_number']} 的开奖条件，无法开奖");
+        }
+
+        // 当前时间的前一期排列三 顺序 + 倒序 拼成 6 位数
+        $result = json_decode(Helper::cURL('http://f.apiplus.net/df6j1-1.json'), true);
+        $result = str_replace(',', null, current($result['data'])['opencode']);
+        $result .= strrev($result);
+
+        // 除以 1000000 在乘以 抽奖码总数，向上取整
+        $result = ceil($result / 1000000 * $total) + 100000;
+
+        $this->actionEditForm($this->getControllerName('index'), 'edit', [
+            'id' => $id,
+            'win_code' => $result
+        ]);
+    }
+
+    /**
+     * 统计抽奖码总数
+     *
+     * @param integer $prizeId
+     *
+     * @return int
+     */
+    public function countCode($prizeId)
+    {
+        $code = $this->service(parent::$apiList, [
+            'table' => 'activity_producer_code',
+            'where' => [
+                ['activity_producer_prize_id' => $prizeId],
+                ['activity_producer_code.state' => 1]
+            ],
+            'select' => ['code'],
+        ]);
+
+        return count($code);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function sufHandleField($record, $action = null, $callback = null)
+    {
+        if (empty($record['standard_code_number'])) {
+            $record['standard_code_number'] = 1;
+        }
+
+        return parent::sufHandleField($record, $action, $callback);
     }
 }

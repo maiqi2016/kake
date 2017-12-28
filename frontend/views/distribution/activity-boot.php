@@ -2,6 +2,7 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Url;
+use Oil\src\Helper;
 
 $params = \Yii::$app->params;
 \Yii::$app->params['ng_ctrl'] = 'distribution';
@@ -11,8 +12,10 @@ $params = \Yii::$app->params;
     <div class="detail">
         <h1><?= $prize['name'] ?></h1>
         <p><?= $prize['title'] ?></p>
-        <span>价值￥<?= $prize['sale_price'] ?></span>
-        <?php if (strtotime(date('Y-m-d 00:00:00')) < strtotime($prize['from'])): ?>
+        <span>价值<?= Helper::money($prize['sale_price']) ?></span>
+        <?php if (strtotime($prize['to'] . ' 23:59:59') < strtotime(date('Y-m-d 00:00:00'))): ?>
+        <div class="has-no">活动已结束</div>
+        <?php elseif (strtotime($prize['from']) > strtotime(date('Y-m-d 23:59:59'))): ?>
         <div class="has-no">活动未开始</div>
         <?php else: ?>
         <div class="has-yes" kk-modal=".modal-one" data-width="90%" data-backdrop-close="static">立即抽奖</div>

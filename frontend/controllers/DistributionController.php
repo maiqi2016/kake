@@ -13,7 +13,7 @@ use yii\helpers\Url;
 class DistributionController extends GeneralController
 {
     /**
-     * Displays index.
+     * 分销商首页 Old
      *
      * @access public
      *
@@ -98,8 +98,8 @@ class DistributionController extends GeneralController
             $animate = false;
         }
 
-        $days = $this->getSignAndPrizeData();
-        
+        $days = array_merge($this->getPrize(), $this->getSigned());
+
         $this->seo([
             'title' => $producer['name'],
             'share_title' => $producer['name'],
@@ -129,8 +129,8 @@ class DistributionController extends GeneralController
      *
      * @access public
      *
-     * @param string $channel
-     * @param string $date
+     * @param string  $channel
+     * @param string  $date
      * @param integer $from
      *
      * @return string
@@ -140,10 +140,10 @@ class DistributionController extends GeneralController
         $this->sourceCss = ['distribution/activity'];
         $this->sourceJs = ['distribution/activity'];
 
-        $date = $this->getDate($date);
-        $prize = $this->getActivityPrize($date);
+        $date = $this->validateDate($date);
+        $prize = $this->getPrizeData($date);
         if (empty($prize)) {
-            $this->error('这一天暂无活动');
+            $this->error($date . ' 这天暂无活动');
         }
 
         $hasCode = $this->service(parent::$apiDetail, [
@@ -190,18 +190,23 @@ class DistributionController extends GeneralController
         $this->sourceCss = ['distribution/activity'];
         $this->sourceJs = ['distribution/activity'];
 
-        $date = $this->getDate($date);
+        $date = $this->validateDate($date);
 
         if (strtotime($date) - strtotime(date('Y-m-d')) > 0) {
             $this->error($date . ' 的活动还未开始，请改日再来');
         }
 
-        $prize = $this->getActivityPrize($date);
+        $prize = $this->getPrizeData($date);
         if (empty($prize)) {
-            $this->error($date . ' 无相关活动');
+            $this->error($date . ' 这天暂无活动');
         }
 
-        $code = $this->getCode($prize['prize_id']);
+        $code = $this->getMyCode($prize['prize_id']);
+
+        $controller = $this->controller('activity-producer-prize');
+        $total = $this->callMethod('countCode', 0, [$prize['prize_id']], $controller);
+        $percent = $total / $prize['standard_code_number'] * 100;
+
         $channelInfo = $this->getProducerByChannel($channel)[0];
 
         $this->seo([
@@ -217,11 +222,11 @@ class DistributionController extends GeneralController
                 ])
         ]);
 
-        return $this->render('activity', compact('channel', 'prize', 'code', 'channelInfo'));
+        return $this->render('activity', compact('channel', 'prize', 'code', 'percent', 'channelInfo'));
     }
 
     /**
-     * 输入手机号码获取抽奖码
+     * Ajax 参与活动获取抽奖码
      */
     public function actionAjaxCode()
     {
@@ -233,7 +238,7 @@ class DistributionController extends GeneralController
             $this->fail('手机号码或验证码参数缺失');
         }
 
-        $prize = $this->getActivityPrize();
+        $prize = $this->getPrizeData();
         if (empty($prize)) {
             $this->fail('非法操作，无可参加的活动');
         }
@@ -260,32 +265,78 @@ class DistributionController extends GeneralController
     }
 
     /**
-     * 获取日期
+     * Ajax 获取签到和奖励数据
+     */
+    public function actionAjaxDays()
+    {
+        $date = $this->validateDate(Yii::$app->request->post('date'));
+        $days = array_merge($this->getPrize($date), $this->getSigned($date));
+
+        $this->success($days);
+    }
+
+    # --- Functions ---
+
+    /**
+     * 获取合法日期
      *
      * @param string $date
      *
      * @return string
      */
-    private function getDate($date)
+    private function validateDate($date)
     {
         $date = $date ?: date('Y-m-d');
-        if (!strtotime($date)) {
-            $this->error('日期参数不合法');
+        if (!($time = strtotime($date))) {
+            $message = '日期参数不合法';
+            Yii::$app->request->isAjax ? $this->fail($message) : $this->error($message);
         }
 
-        return date('Y-m-d', strtotime($date));
+        return date('Y-m-d', $time);
     }
 
     /**
-     * 获取签到过的数据及后续签到奖励
+     * 比较两个日期变量的大小
+     *
+     * @param mixed $future
+     * @param mixed $ago
+     *
+     * @return boolean
+     */
+    private function later($future, $ago)
+    {
+        $future = !is_numeric($future) ? strtotime($future) : $future;
+        $ago = !is_numeric($ago) ? strtotime($ago) : $ago;
+
+        return $future > $ago;
+    }
+
+    /**
+     * 获取签到过的数据
+     *
+     * @param string $date
      *
      * @return array
      */
-    private function getSignAndPrizeData()
+    private function getSigned($date = null)
     {
-        return $this->cache('get-signed-and-prize', function () {
+        $date = $this->validateDate($date);
+        if ($this->later($date, date('Y-m-t 23:59:59'))) {
+            return [];
+        }
 
-            // 已签到数据
+        $key = [
+            'get.signed',
+            func_get_args(),
+            $this->user->id
+        ];
+
+        $cacheTime = $this->later(date('Y-m-1 00:00:00'), $date) ? DAY : MINUTE;
+
+        return $this->cache($key, function () use ($date) {
+
+            list($year, $month) = explode('-', $date);
+
             $signed = $this->service(parent::$apiList, [
                 'table' => 'activity_producer_sign',
                 'where' => [
@@ -293,32 +344,56 @@ class DistributionController extends GeneralController
                     [
                         'between',
                         'add_time',
-                        date('Y-m-01 00:00:00'),
-                        date('Y-m-d H:i:s')
+                        date("{$year}-{$month}-1 00:00:00"),
+                        date("{$year}-{$month}-t 23:59:59")
                     ],
                     ['state' => 1]
                 ],
                 'select' => 'add_time'
             ]);
+
             $signed = array_column($signed, 'add_time');
             $_signed = [];
             foreach ($signed as $item) {
                 $_signed[explode(' ', $item)[0]] = 'signed';
             }
 
-            // 未签到奖励
+            return $_signed;
+        }, $cacheTime, null, Yii::$app->params['use_cache']);
+    }
+
+    /**
+     * 获取某天所在月的奖品数据
+     *
+     * @param string $date
+     *
+     * @return array
+     */
+    private function getPrize($date = null)
+    {
+        $date = $this->validateDate($date);
+
+        $key = [
+            'get.prize',
+            func_get_args()
+        ];
+
+        return $this->cache($key, function () use ($date) {
+
+            list($year, $month) = explode('-', $date);
+
             $prizes = $this->service(parent::$apiList, [
                 'table' => 'activity_producer_prize',
                 'where' => [
                     [
                         '>=',
                         'to',
-                        date('Y-m-d')
+                        date("{$year}-{$month}-1")
                     ],
                     [
                         '<=',
                         'to',
-                        date('Y-m-t')
+                        date("{$year}-{$month}-t")
                     ],
                     ['activity_producer_prize.state' => 1]
                 ],
@@ -344,16 +419,14 @@ class DistributionController extends GeneralController
                     $from = strtotime($item['from']);
                     $lastDay = strtotime($item['to']);
                     while ($from <= $lastDay) {
-                        if ($from >= strtotime(date('Y-m-d 00:00:00'))) {
-                            $_prizes[date('Y-m-d', $from)] = $item['classify'];
-                        }
+                        $_prizes[date('Y-m-d', $from)] = $item['classify'];
                         $from += 86400;
                     }
                 }
             }
 
-            return array_merge($_signed, $_prizes);
-        }, strtotime(date('Y-m-t 23:59:59')) - TIME, null, Yii::$app->params['use_cache']);
+            return $_prizes;
+        });
     }
 
     /**
@@ -363,7 +436,7 @@ class DistributionController extends GeneralController
      *
      * @return mixed
      */
-    private function getActivityPrize($date = null)
+    private function getPrizeData($date = null)
     {
         $date = $date ?: date('Y-m-d');
         $time = strtotime($date . '+1 day') - 1 - TIME;
@@ -426,6 +499,7 @@ class DistributionController extends GeneralController
                     'activity_producer_prize.description',
                     'activity_producer_prize.from',
                     'activity_producer_prize.to',
+                    'activity_producer_prize.standard_code_number',
                     'product.id',
                     'product.title',
                     'product.attachment_cover',
@@ -447,13 +521,13 @@ class DistributionController extends GeneralController
     }
 
     /**
-     * 获取抽奖码列表
+     * 获取我的抽奖码列表
      *
      * @param integer $prizeId
      *
      * @return array
      */
-    private function getCode($prizeId)
+    private function getMyCode($prizeId)
     {
         $code = $this->service(parent::$apiList, [
             'table' => 'activity_producer_code',
