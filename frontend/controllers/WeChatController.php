@@ -95,7 +95,7 @@ class WeChatController extends GeneralController
 
                 $this->moveToGroup($group ?: '官方推广', $message);
                 $types = $this->callMethod('needReply', [], null, $ctrl);
-                if (!empty($type) && in_array($type, $types)) {
+                if (!empty($type) && isset($types[$type])) {
                     return $types[$type];
                 }
 
@@ -110,14 +110,14 @@ class WeChatController extends GeneralController
 
                 list($type, $group) = explode(self::SKS, $message->EventKey);
 
-                $types = $this->callMethod('needReply', [], null, $ctrl);
                 if (!empty($type)) {
                     $needGroup = $ctrl::$needGroup;
                     if ($needGroup[$type]) {
                         $this->moveToGroup($group, $message);
                     }
 
-                    if (in_array($type, $types)) {
+                    $types = $this->callMethod('needReply', [], null, $ctrl);
+                    if (isset($types[$type])) {
                         return $types[$type];
                     }
                 }
