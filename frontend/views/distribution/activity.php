@@ -22,7 +22,7 @@ $params = \Yii::$app->params;
         <span class="percent">65%</span>
     </div>
     <div class="up">
-        <span class="txt">我的抽奖码为</span><span class="invite">点击邀请好友抽奖</span>
+        <span class="txt">我的抽奖码为</span><span class="invite" kk-tap="showShare=!showShare">邀请好友抽奖</span>
     </div>
     <div class="down">
         <?php foreach ($code as $c => $user): ?>
@@ -36,6 +36,11 @@ $params = \Yii::$app->params;
 <div class="blank"></div>
 <div class="description">
     <?= $prize['description'] ?>
+</div>
+<div class="rule"><img src="<?= $params['frontend_source'] ?>/img/distribution/rule.jpg"></div>
+
+<div class="share" ng-show="showShare" kk-tap="showShare=!showShare">
+    <img data-dismiss="modal" src="<?= $params['frontend_source'] ?>/img/distribution/share.png">
 </div>
 
 <!-- $channel 变量为分销商识别号 -->
