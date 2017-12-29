@@ -59,6 +59,3 @@ $params = \Yii::$app->params;
         <div kk-tap="code(phone, captcha)">确定</div>
     </div>
 </div>
-
-<!-- $prize 变量中包含了奖品相关数据 -->
-<!-- $channel 变量为分销商识别号 -->
