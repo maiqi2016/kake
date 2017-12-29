@@ -47,8 +47,9 @@ $shareCover = SCHEME . (empty($params['share_cover']) ? $params['frontend_source
     (function setRem() {
         document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + 'px';
     })();
-    var baseUrl = '<?= $params["frontend_url"];?>';
+    var baseUrl = '<?= $params["frontend_url"]; ?>';
     var requestUrl = '<?= $params["frontend_url"] . Url::toRoute(['/']); ?>';
+    var sourceUrl = '<?= $params['frontend_source']; ?>';
 </script>
 
 <body<?= $ngCtl ?>>

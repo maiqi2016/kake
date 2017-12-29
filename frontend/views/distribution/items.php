@@ -43,15 +43,7 @@ $params = \Yii::$app->params;
             </div>
         </div>
     </div>
-    <div class="luck-draw animated" ng-show="showCal" ng-class="{'flipInY': showCal}" ng-init='buildCalHtml(<?= json_encode($days)?>);'>
-        <b class="prev-month" kk-tap="prev()"> < </b>
-        <span class="cls-m">{{ month }}</span><span>月</span>
-        <b class="next-month" kk-tap="next();"> > </b>
-        <img src="<?= $params['frontend_source'] ?>/img/distribution/month-border.png">
-        <div class="date">
-            <ul class="clearfix list" ng-bind-html="li"></ul>
-        </div>
-    </div>
+    <p class="animated" ng-show="showCal" ng-class="{'flipInY': showCal}" kk-activity-cal></p>
 
     <div class="body">
         <div class="nav">

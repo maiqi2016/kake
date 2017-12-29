@@ -101,8 +101,6 @@ class DistributionController extends GeneralController
             $animate = false;
         }
 
-        $days = array_merge($this->getPrize(), $this->getSigned());
-
         $this->seo([
             'title' => $producer['name'],
             'share_title' => $producer['name'],
@@ -120,11 +118,33 @@ class DistributionController extends GeneralController
             'html_0',
             'html_1',
             'html_2',
-            'animate',
-            'days',
+            'animate'
         ];
 
         return $this->render('items', compact(...$params));
+    }
+
+    /**
+     * 设置分享信息
+     *
+     * @param string $title
+     * @param string $channel
+     * @param string $date
+     */
+    private function share($title, $channel, $date)
+    {
+        $this->seo([
+            'title' => $title,
+            'share_title' => '我要带你去开房~',
+            'share_description' => $this->user->username . '邀你领取今日福利，活动天天有，惊喜无上限~',
+            'share_cover' => $this->user->head_img_url,
+            'share_url' => Yii::$app->params['frontend_url'] . Url::toRoute([
+                    'distribution/activity-boot',
+                    'channel' => $channel,
+                    'date' => $date,
+                    'from' => $this->user->id
+                ])
+        ]);
     }
 
     /**
@@ -138,7 +158,7 @@ class DistributionController extends GeneralController
      *
      * @return string
      */
-    public function actionActivityBoot($channel, $date = null, $from = null)
+    public function actionActivityBoot($channel = null, $date = null, $from = null)
     {
         $this->sourceCss = ['distribution/activity'];
         $this->sourceJs = ['distribution/activity'];
@@ -173,7 +193,7 @@ class DistributionController extends GeneralController
             ]);
         }
 
-        $this->seo(['title' => '分销商活动详情']);
+        $this->share('活动详情', $channel, $date);
 
         return $this->render('activity-boot', compact('channel', 'prize', 'from'));
     }
@@ -188,7 +208,7 @@ class DistributionController extends GeneralController
      *
      * @return string
      */
-    public function actionActivity($channel, $date = null)
+    public function actionActivity($channel = null, $date = null)
     {
         $this->sourceCss = ['distribution/activity'];
         $this->sourceJs = ['distribution/activity'];
@@ -210,22 +230,10 @@ class DistributionController extends GeneralController
         $total = $this->callMethod('countCode', 0, [$prize['prize_id']], $controller);
         $percent = $total / $prize['standard_code_number'] * 100;
 
-        $channelInfo = $this->getProducerByChannel($channel)[0];
+        $user = $this->user;
+        $this->share('我的抽奖码', $channel, $date);
 
-        $this->seo([
-            'title' => '我的抽奖码',
-            'share_title' => '我要带你去开房~',
-            'share_description' => $channelInfo['name'] . '邀你领取今日福利，活动天天有，惊喜无上限~',
-            'share_cover' => current($channelInfo['logo_preview_url']),
-            'share_url' => Yii::$app->params['frontend_url'] . Url::toRoute([
-                    'distribution/activity-boot',
-                    'channel' => $channel,
-                    'date' => $date,
-                    'from' => $this->user->id
-                ])
-        ]);
-
-        return $this->render('activity', compact('channel', 'prize', 'code', 'percent', 'channelInfo'));
+        return $this->render('activity', compact('channel', 'prize', 'code', 'total', 'percent', 'user'));
     }
 
     /**
