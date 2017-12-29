@@ -12,8 +12,17 @@ $params = \Yii::$app->params;
     <div class="txt"><?= $channelInfo['name'] ?></div>
 </div>
 <div class="lottery-draw">
+    <div class="pro">
+        <p>开奖人数【 <span class="some">65</span>/<span class="all">100 </span>】</p>
+        <div class="progress">
+          <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+            <span class="sr-only">40% Complete (success)</span>
+          </div>
+        </div>
+        <span class="percent">65%</span>
+    </div>
     <div class="up">
-        <span class="txt">我的抽奖码为</span><span class="invite">点击右上角邀请好友抽奖</span>
+        <span class="txt">我的抽奖码为</span><span class="invite">点击邀请好友抽奖</span>
     </div>
     <div class="down">
         <?php foreach ($code as $c => $user): ?>
