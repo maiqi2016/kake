@@ -183,6 +183,9 @@ class ActivityProducerPrizeController extends GeneralController
                 'title' => '活动结束日期',
                 'type' => 'date'
             ],
+            'standard_code_number' => [
+                'placeholder' => '不小于1的正整数'
+            ],
             'description' => [
                 'elem' => 'ckeditor',
                 'title' => '奖品描述',
@@ -226,13 +229,23 @@ class ActivityProducerPrizeController extends GeneralController
      */
     public function beforeAction($action)
     {
-        $this->sourceJs = ['ckeditor/ckeditor'];
+        $this->sourceJs = [
+            'ckeditor/ckeditor',
+            'jquery.ajaxupload'
+        ];
 
         return parent::beforeAction($action);
     }
 
     /**
      * 活动开奖
+     * 体育彩票"排列3"上一期开奖顺序结果拼接倒序结果
+     * 组成的6位数除以 1000000
+     * 再乘以抽奖码总个数
+     * 最后向上取整
+     * 在加上 100000 即是本次开奖中奖的抽奖码。
+     * JS 计算公式
+     * (function(s,total){alert(Math.ceil(parseInt(s.join('')+s.reverse().join(''))/1000000*total)+100000);})([9,5,7],1000);
      *
      * @param integer $id
      */
@@ -260,7 +273,7 @@ class ActivityProducerPrizeController extends GeneralController
             $this->error("不满足抽奖码数 {$total}/{$prize['standard_code_number']} 的开奖条件，无法开奖");
         }
 
-        // 当前时间的前一期排列三 顺序 + 倒序 拼成 6 位数
+        // 当前时间的前一期排列三 顺序结果拼接倒序结果组成 6 位数
         $result = json_decode(Helper::cURL('http://f.apiplus.net/df6j1-1.json'), true);
         $result = str_replace(',', null, current($result['data'])['opencode']);
         $result .= strrev($result);
