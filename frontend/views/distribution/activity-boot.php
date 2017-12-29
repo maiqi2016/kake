@@ -26,6 +26,7 @@ $params = \Yii::$app->params;
 <div class="description">
     <?= $prize['description'] ?>
 </div>
+<div class="rule"><img src="<?= $params['frontend_source'] ?>/img/distribution/rule.jpg"></div>
 <a class="detail" href="<?= $prize['link_url'] ?>"> >>点击查看奖品详情<< </a>
 <div class="blank"></div>
 <div class="hot-list">

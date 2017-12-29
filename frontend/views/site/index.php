@@ -46,7 +46,6 @@ $params = \Yii::$app->params;
             </div>
         </div>
     <?php endif; ?>
-
     <!-- Hot-aim -->
     <div class="kake-box hot-aim" ng-init="initEffect()">
         <div class="kake-title">
