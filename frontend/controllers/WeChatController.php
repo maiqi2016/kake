@@ -112,7 +112,7 @@ class WeChatController extends GeneralController
 
                 if (!empty($type)) {
                     $needGroup = $ctrl::$needGroup;
-                    if ($needGroup[$type]) {
+                    if (!empty($needGroup[$type])) {
                         $this->moveToGroup($group, $message);
                     }
 
