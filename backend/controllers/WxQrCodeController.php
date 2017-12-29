@@ -46,7 +46,6 @@ class WxQrCodeController extends GeneralController
      * @var array 是否需要分组
      */
     public static $needGroup = [
-        1 => false,
         2 => true,
         3 => true
     ];
@@ -61,10 +60,9 @@ class WxQrCodeController extends GeneralController
         $url = SCHEME . Yii::$app->params['frontend_url'];
 
         return [
-            1 => false,
             2 => "欢迎加入喀客，<a href='" . $url . Url::toRoute(['producer/apply-distributor']) . "'>点击这里注册</a>分销商",
             3 => "欢迎加入喀客，<a href='" . $url . Url::toRoute([
-                    'distribution/item',
+                    'distribution/items',
                     'channel' => 'nubXnej7',
                     'tip' => 'yes'
                 ]) . "'>点击这里</a>参加抽奖活动"
