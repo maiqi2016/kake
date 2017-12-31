@@ -142,7 +142,7 @@ class DistributionController extends GeneralController
                     'distribution/activity-boot',
                     'channel' => $channel,
                     'date' => $date,
-                    'from' => $this->user->id
+                    'from_user' => $this->user->id
                 ])
         ]);
     }
@@ -154,11 +154,11 @@ class DistributionController extends GeneralController
      *
      * @param string  $channel
      * @param string  $date
-     * @param integer $from
+     * @param integer $from_user
      *
      * @return string
      */
-    public function actionActivityBoot($channel = null, $date = null, $from = null)
+    public function actionActivityBoot($channel = null, $date = null, $from_user = null)
     {
         $this->sourceCss = ['distribution/activity'];
         $this->sourceJs = ['distribution/activity'];
@@ -195,7 +195,7 @@ class DistributionController extends GeneralController
 
         $this->share('活动详情', $channel, $date);
 
-        return $this->render('activity-boot', compact('channel', 'prize', 'from'));
+        return $this->render('activity-boot', compact('channel', 'prize', 'from_user'));
     }
 
     /**
@@ -259,7 +259,7 @@ class DistributionController extends GeneralController
             'captcha' => $captcha,
             'prize' => $prize['prize_id'],
             'user' => $this->user->id,
-            'from_user' => Yii::$app->request->post('from'),
+            'from_user' => Yii::$app->request->post('from_user'),
             'channel' => $channel ? Helper::integerDecode($channel) : null,
         ]);
 
