@@ -668,7 +668,7 @@ class OrderController extends GeneralController
                 'body' => $body,
                 'out_trade_no' => $outTradeNo,
                 'total_fee' => $price,
-                'notify_url' => Yii::$app->params['frontend_url'] . '/order/wx-paid/',
+                'notify_url' => SCHEME . Yii::$app->params['frontend_url'] . '/order/wx-paid/',
                 'openid' => $this->user->openid,
             ]);
         } catch (\Exception $e) {
