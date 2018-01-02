@@ -20,6 +20,10 @@ $params = \Yii::$app->params;
         </div>
         <span class="percent"> <?= $percent ?>%</span>
     </div>
+
+    <!-- 麻瓜梦 -->
+    <p>本次活动中奖码：<?= !empty($prize['win_code']) ? $prize['win_code'] : '待开奖' ?></p>
+
     <div class="up">
         <span class="txt">我的抽奖码为</span><span class="invite" kk-tap="showShare=!showShare">邀请好友抽奖</span>
     </div>
