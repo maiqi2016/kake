@@ -9,14 +9,17 @@ $params = \Yii::$app->params;
 ?>
 <div class="header-two">
     <img src="<?= current($prize['cover_preview_url']) ?>">
-    <div class="detail">
+    <div class="detail"
+    <?php if (!empty($code_list_url)): ?>
+    style="padding-bottom: 40px"
+    <?php endif; ?>>
         <h1><?= $prize['name'] ?></h1>
         <p><?= $prize['title'] ?></p>
         <span>价值<?= Helper::money($prize['sale_price']) ?></span>
         <?php if (strtotime($prize['to'] . ' 23:59:59') < strtotime(date('Y-m-d 00:00:00'))): ?>
             <div class="has-no">活动已结束</div>
             <?php if (!empty($code_list_url)): ?>
-                <a href="<?= $code_list_url ?>">查看开奖结果</a>
+                <a class="result" href="<?= $code_list_url ?>">查看开奖结果</a>
             <?php endif; ?>
         <?php elseif (strtotime($prize['from']) > strtotime(date('Y-m-d 23:59:59'))): ?>
             <div class="has-no">活动未开始</div>
@@ -29,8 +32,9 @@ $params = \Yii::$app->params;
 <div class="description">
     <?= $prize['description'] ?>
 </div>
-<div class="rule"><img src="<?= $params['frontend_source'] ?>/img/distribution/rule.jpg"></div>
 <a class="detail" href="<?= $prize['link_url'] ?>"> >>点击查看奖品详情<< </a>
+<div class="rule"><img src="<?= $params['frontend_source'] ?>/img/distribution/rule.jpg"></div>
+
 <div class="blank"></div>
 <div class="hot-list">
     <a href="<?= Url::toRoute(['items/index']) ?>"><img

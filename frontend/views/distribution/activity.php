@@ -19,13 +19,20 @@ $params = \Yii::$app->params;
           </div>
         </div>
         <span class="percent"> <?= $percent ?>%</span>
+        <?php if ($percent <= 60): ?>
+            <img class="call" src="<?= $params['frontend_source'] ?>/img/distribution/activity-boot/call.png">
+        <?php elseif ($percent <= 90): ?>
+            <img class="little" src="<?= $params['frontend_source'] ?>/img/distribution/activity-boot/little.png">
+        <?php else: ?>
+            <img class="goon" src="<?= $params['frontend_source'] ?>/img/distribution/activity-boot/goon.png">
+        <?php endif; ?>
     </div>
 
     <!-- 麻瓜梦 -->
     <p>本次活动中奖码：<?= !empty($prize['win_code']) ? $prize['win_code'] : '待开奖' ?></p>
 
     <div class="up">
-        <span class="txt">我的抽奖码为</span><span class="invite" kk-tap="showShare=!showShare">邀请好友抽奖</span>
+        <span class="txt">我的抽奖码为</span><span class="invite" kk-tap="share();">邀请好友抽奖</span>
     </div>
     <div class="down">
         <?php foreach ($code as $c => $user): ?>
@@ -40,6 +47,7 @@ $params = \Yii::$app->params;
 <div class="description">
     <?= $prize['description'] ?>
 </div>
+<a class="detail" href="<?= $prize['link_url'] ?>"> >>点击查看奖品详情<< </a>
 <div class="rule"><img src="<?= $params['frontend_source'] ?>/img/distribution/rule.jpg"></div>
 
 <div class="share" ng-show="showShare" kk-tap="showShare=!showShare">
