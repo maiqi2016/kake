@@ -133,8 +133,9 @@ class ActivityProducerPrizeController extends GeneralController
                 'code',
                 'color' => 'default'
             ],
-            'from',
-            'to',
+            'date' => [
+                'title' => '活动日期'
+            ],
             'product_title' => [
                 'title' => '产品标题',
                 'max-width' => '250px'
@@ -243,7 +244,7 @@ class ActivityProducerPrizeController extends GeneralController
      * 组成的6位数除以 1000000
      * 再乘以抽奖码总个数
      * 最后向上取整
-     * 在加上 100000 即是本次开奖中奖的抽奖码。
+     * 再加上 100000 即是本次开奖中奖的抽奖码。
      * JS 计算公式
      * (function(s,total){alert(Math.ceil(parseInt(s.join('')+s.reverse().join(''))/1000000*total)+100000);})([9,5,7],1000);
      *
@@ -280,6 +281,7 @@ class ActivityProducerPrizeController extends GeneralController
 
         // 除以 1000000 在乘以 抽奖码总数，向上取整
         $result = ceil($result / 1000000 * $total) + 100000;
+        $result = ($result < 100001) ? 100001 : $result;
 
         $this->actionEditForm($this->getControllerName('index'), 'edit', [
             'id' => $id,
@@ -313,8 +315,16 @@ class ActivityProducerPrizeController extends GeneralController
      */
     public function sufHandleField($record, $action = null, $callback = null)
     {
-        if (empty($record['standard_code_number'])) {
+        if (!empty($record['id']) && empty($record['standard_code_number'])) {
             $record['standard_code_number'] = 1;
+        }
+
+        if (!empty($record['from']) && !empty($record['to'])) {
+            if ($record['from'] == $record['to']) {
+                $record['date'] = $record['from'];
+            } else {
+                $record['date'] = $record['from'] . ' ~ ' . $record['to'];
+            }
         }
 
         return parent::sufHandleField($record, $action, $callback);

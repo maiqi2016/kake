@@ -133,11 +133,15 @@ class DistributionController extends GeneralController
      */
     private function share($title, $channel, $date)
     {
+        $replace = function ($tpl) {
+            return str_replace('{user}', $this->user->username, Yii::$app->params[$tpl]);
+        };
+
         $this->seo([
             'title' => $title,
-            'share_title' => '我要带你去开房~',
-            'share_description' => $this->user->username . '邀你领取今日福利，活动天天有，惊喜无上限~',
-            'share_cover' => $this->user->head_img_url,
+            'share_title' => $replace('activity_producer_share_title'),
+            'share_description' => $replace('activity_producer_share_description'),
+            'share_cover' => Yii::$app->params['frontend_source'] . '/img/distribution/activity-boot/share.png',
             'share_url' => Yii::$app->params['frontend_url'] . Url::toRoute([
                     'distribution/activity-boot',
                     'channel' => $channel,
@@ -183,19 +187,24 @@ class DistributionController extends GeneralController
             ]
         ]);
 
-        $ed = strtotime(date($prize['to'])) < strtotime(date('Y-m-d 00:00:00'));
-        $ing = strtotime(date($prize['from'])) > strtotime(date('Y-m-d 00:00:00'));
+        $did = strtotime(date($prize['to'])) < strtotime(date('Y-m-d 00:00:00'));
+        $will = strtotime(date($prize['from'])) > strtotime(date('Y-m-d 00:00:00'));
 
-        if (!empty($hasCode) && !($ed || $ing)) {
+        if (!empty($hasCode) && !($did || $will)) {
             return $this->redirect([
                 'distribution/activity',
                 'channel' => $channel
             ]);
         }
 
+        $code_list_url = (!empty($hasCode) && $did) ? Url::toRoute([
+            'distribution/activity',
+            'date' => $date
+        ]) : null;
+
         $this->share('活动详情', $channel, $date);
 
-        return $this->render('activity-boot', compact('channel', 'prize', 'from_user'));
+        return $this->render('activity-boot', compact('channel', 'prize', 'from_user', 'code_list_url'));
     }
 
     /**
@@ -228,12 +237,17 @@ class DistributionController extends GeneralController
 
         $controller = $this->controller('activity-producer-prize');
         $total = $this->callMethod('countCode', 0, [$prize['prize_id']], $controller);
-        $percent = $total / $prize['standard_code_number'] * 100;
+
+        $percent = floor($total / $prize['standard_code_number'] * 100);
+        // $percent = $percent > 100 ? 100 : $percent;
+
+        // history winner
+        $history_winner = $this->listHistoryWinner();
 
         $user = $this->user;
         $this->share('我的抽奖码', $channel, $date);
 
-        return $this->render('activity', compact('channel', 'prize', 'code', 'total', 'percent', 'user'));
+        return $this->render('activity', compact('channel', 'prize', 'code', 'total', 'percent', 'user', 'history_winner'));
     }
 
     /**
@@ -454,7 +468,7 @@ class DistributionController extends GeneralController
         $time = ($time <= 0) ? 0 : $time;
 
         return $this->cache([
-            'get-today-producer-activity',
+            'get.today.producer.activity',
             func_get_args()
         ], function () use ($date) {
             $prize = $this->service(parent::$apiDetail, [
@@ -511,6 +525,7 @@ class DistributionController extends GeneralController
                     'activity_producer_prize.from',
                     'activity_producer_prize.to',
                     'activity_producer_prize.standard_code_number',
+                    'activity_producer_prize.win_code',
                     'product.id',
                     'product.title',
                     'product.attachment_cover',
@@ -526,6 +541,62 @@ class DistributionController extends GeneralController
                 $prize,
                 'index'
             ], $this->controller('product'));
+
+            return $prize;
+        }, $time, null, Yii::$app->params['use_cache']);
+    }
+
+    /**
+     * 获取活动历史中奖用户
+     *
+     * @return mixed
+     */
+    private function listHistoryWinner()
+    {
+        $date = date('Y-m-d');
+        $time = strtotime($date . '+1 day') - 1 - TIME;
+
+        return $this->cache('list.history.winner', function () use ($date) {
+            $prize = $this->service(parent::$apiList, [
+                'table' => 'activity_producer_prize',
+                'where' => [
+                    [
+                        '<=',
+                        'to',
+                        $date
+                    ],
+                    [
+                        'not',
+                        ['win_code' => null]
+                    ],
+                    ['activity_producer_prize.state' => 1],
+                ],
+                'join' => [
+                    [
+                        'table' => 'activity_producer_code',
+                        'left_on_field' => 'win_code',
+                        'right_on_field' => 'code',
+                        'as' => 'code'
+                    ],
+                    [
+                        'left_table' => 'code',
+                        'table' => 'user'
+                    ]
+                ],
+                'select' => [
+                    'activity_producer_prize.from',
+                    'activity_producer_prize.to',
+                    'activity_producer_prize.win_code',
+                    'code.phone',
+                    'user.username',
+                    'user.head_img_url'
+                ],
+                'order' => 'activity_producer_prize.to DESC'
+            ]);
+
+            array_walk($prize, function (&$item) {
+                $item = $this->callMethod('sufHandleField', $item, [$item], $this->controller('activity-producer-prize'));
+            }, $prize);
 
             return $prize;
         }, $time, null, Yii::$app->params['use_cache']);
