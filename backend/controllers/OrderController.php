@@ -340,7 +340,7 @@ class OrderController extends GeneralController
                 'SUCCESS' => '订单已完成支付',
                 'NOTPAY' => '订单暂未支付',
                 'REFUND' => '订单已经申请退款',
-                'CLOSE' => '订单已经关闭',
+                'CLOSED' => '订单已经关闭',
                 'USERPAYING' => '订单等待支付中',
                 'PAYERROR' => '订单支付失败',
             ];

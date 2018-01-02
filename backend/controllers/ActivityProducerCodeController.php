@@ -30,7 +30,9 @@ class ActivityProducerCodeController extends GeneralController
             [
                 'text' => '查看奖品',
                 'value' => 'activity-producer-prize/index',
-                'params' => ['id'],
+                'params' => function ($record) {
+                    return ['id' => $record['activity_producer_prize_id']];
+                },
                 'level' => 'success',
                 'icon' => 'link'
             ]
