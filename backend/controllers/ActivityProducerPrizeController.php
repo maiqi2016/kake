@@ -246,7 +246,7 @@ class ActivityProducerPrizeController extends GeneralController
      * 最后向上取整
      * 再加上 100000 即是本次开奖中奖的抽奖码。
      * JS 计算公式
-     * (function(s,total){alert(Math.ceil(parseInt(s.join('')+s.reverse().join(''))/1000000*total)+100000);})([9,5,7],1000);
+     * (function(s,total){alert(Math.floor(parseInt(s.join('')+s.reverse().join(''))/1000000*total)+100000);})([9,5,7],1000);
      *
      * @param integer $id
      */
@@ -275,12 +275,12 @@ class ActivityProducerPrizeController extends GeneralController
         }
 
         // 当前时间的前一期排列三 顺序结果拼接倒序结果组成 6 位数
-        $result = json_decode(Helper::cURL('http://f.apiplus.net/df6j1-1.json'), true);
+        $result = json_decode(Helper::cURL('http://f.apiplus.net/pl3-1.json'), true);
         $result = str_replace(',', null, current($result['data'])['opencode']);
         $result .= strrev($result);
 
         // 除以 1000000 在乘以 抽奖码总数，向上取整
-        $result = ceil($result / 1000000 * $total) + 100000;
+        $result = floor($result / 1000000 * $total) + 100000;
         $result = ($result < 100001) ? 100001 : $result;
 
         $this->actionEditForm($this->getControllerName('index'), 'edit', [
