@@ -113,8 +113,8 @@ return [
                     'payment' => [
                         'merchant_id' => '[SECRET:wx_pay_id]',
                         'key' => '[SECRET:wx_pay_key]',
-                        'cert_path' => '@wechat/cert/apiclient_cert.pem',
-                        'key_path' => '@wechat/cert/apiclient_key.pem',
+                        'cert_path' => Yii::getAlias('@wechat/cert/apiclient_cert.pem'),
+                        'key_path' => Yii::getAlias('@wechat/cert/apiclient_key.pem'),
                     ],
                     // Guzzle
                     'guzzle' => [
