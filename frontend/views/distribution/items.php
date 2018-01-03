@@ -47,7 +47,7 @@ $params = \Yii::$app->params;
 
     <div class="body">
         <div class="nav">
-            <ul kk-anchor="active" data-element="li">
+            <ul kk-anchor="active" data-element="li" data-smooth="false">
                 <?php foreach ($classify as $key => $name): ?>
                     <li data-anchor=".classify_anchor_<?= $key ?>"><a href="javascript:void(0)" class="classify_<?= $key ?>"><span><?= $name ?></span></a>
                     </li>

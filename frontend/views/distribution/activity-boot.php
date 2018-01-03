@@ -24,7 +24,7 @@ $params = \Yii::$app->params;
         <?php elseif (strtotime($prize['from']) > strtotime(date('Y-m-d 23:59:59'))): ?>
             <div class="has-no">活动未开始</div>
         <?php else: ?>
-            <div class="has-yes" kk-modal=".modal-one" data-width="90%" data-backdrop-close="static">立即抽奖</div>
+            <div class="has-yes" kk-tap="showDraw=!showDraw">立即抽奖</div>
         <?php endif; ?>
     </div>
 </div>
@@ -81,12 +81,10 @@ $params = \Yii::$app->params;
     <a href="#"><img src="<?= $params['frontend_source'] ?>/img/distribution/activity-boot/qr.png"></a>
 </div>
 
-<div class="kk-modal">
-    <div class="modal-one">
-        <img data-dismiss="modal" src="<?= $params['frontend_source'] ?>/img/distribution/close-modal.png">
-        <input type="text" ng-model="phone" placeholder="请输入手机号码"/>
-        <input type="text" ng-model="captcha" placeholder="请输入验证码"/>
-        <span kk-sms="{{phone}}" data-type=4>获取验证码</span>
-        <div kk-tap="code(phone, captcha)">确定</div>
-    </div>
+<div class="draw" ng-show="showDraw">
+    <img kk-tap="showDraw=!showDraw" src="<?= $params['frontend_source'] ?>/img/distribution/close-modal.svg">
+    <input type="text" ng-model="phone" placeholder="请输入手机号码"/>
+    <input type="text" ng-model="captcha" placeholder="请输入验证码"/>
+    <span kk-sms="{{phone}}" data-type=4>获取验证码</span>
+    <div kk-tap="code(phone, captcha)">确定</div>
 </div>
