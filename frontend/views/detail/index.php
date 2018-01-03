@@ -36,12 +36,12 @@ $params = \Yii::$app->params;
         </div>
     </div>
     <div class="classify">
-        <div class="classify-1" kk-anchor="cur-1" data-element="div" data-smooth="false">
-            <div class="classify-1-1 cur-1" data-anchor-tab=".card_first">
+        <div class="classify-1" kk-anchor="cur-1" data-element="div">
+            <div class="classify-1-1 cur-1" data-anchor=".card_first">
                 <span>详情介绍</span>
             </div>
             <div class="thinner-border"></div>
-            <div class="classify-1-2" data-anchor-tab=".card_second">
+            <div class="classify-1-2" data-anchor=".card_second">
                 <span>预订须知</span>
             </div>
         </div>
