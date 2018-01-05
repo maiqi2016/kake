@@ -8,7 +8,7 @@ $params = \Yii::$app->params;
 ?>
 <?php if ($animate): ?>
     <i ng-init="showBody=false; ">
-    <div class="opening" ng-show="showAnimate" ng-init="autoHide(7000)" kk-tap="hidden()">
+    <div class="opening" ng-show="showAnimate" ng-init="autoHide(7000);" kk-tap="hidden()">
         <div class="opening_bj"></div>
         <div class="small_bj">
             <img src="<?= $params['frontend_source'] ?>/img/opening/small_bj.png" class="small_bg">
@@ -26,7 +26,7 @@ $params = \Yii::$app->params;
 <?php endif; ?>
 
 
-<div ng-show="showBody" class="shape-fixed">
+<div class="show-body" ng-show="showBody" class="shape-fixed">
     <div class="header">
         <div class="carousel kake-theme" id="carousel-scroller-luck" kk-focus-camel data-index="3">
             <div class="carousel-scroller scroll">
@@ -105,5 +105,7 @@ $params = \Yii::$app->params;
         <footer>
             <div class="menu" kk-menu-lm><img src="<?= $params['frontend_source'] ?>/img/menu.svg"></div>
         </footer>
+
     </div>
+
 </div>
