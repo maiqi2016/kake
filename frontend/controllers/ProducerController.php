@@ -126,8 +126,8 @@ class ProducerController extends GeneralController
         $channel = Helper::integerEncode($this->user->id);
 
         $links = [
-            $this->shortUrl(['distribution/index', 'channel' => $channel]),
-            $this->shortUrl(['distribution/items', 'channel' => $channel]),
+            Url::toRoute(['distribution/index', 'channel' => $channel], true),
+            Url::toRoute(['distribution/items', 'channel' => $channel], true),
         ];
         $this->seo(['title' => '分销商管理']);
 
@@ -150,7 +150,7 @@ class ProducerController extends GeneralController
             'size' => 0
         ])[0];
         foreach ($list as &$item) {
-            $item['link_url_short'] = $this->shortUrl($item['link_url'] . '&channel=' . $item['channel']);
+            $item['link_url_short'] = $item['link_url'] . '&channel=' . $item['channel'];
         }
 
         $this->seo(['title' => '分销商管理']);

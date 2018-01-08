@@ -258,11 +258,11 @@ class WeChatController extends GeneralController
         }
 
         $msg = base64_encode("您的抽奖码是：${result['code']}，请妥善保管");
-        $url = Yii::$app->params['frontend_url'] . Url::toRoute([
-                'site/index',
-                'popup' => 'lottery-code',
-                'msg' => $msg
-            ]);
+        $url = Url::toRoute([
+            'site/index',
+            'popup' => 'lottery-code',
+            'msg' => $msg
+        ], true);
 
         return "抽奖码生成成功，<a href='{$url}'>点击这里查看</a>";
     }
