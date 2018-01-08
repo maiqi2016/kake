@@ -142,12 +142,12 @@ class DistributionController extends GeneralController
             'share_title' => $replace('activity_producer_share_title'),
             'share_description' => $replace('activity_producer_share_description'),
             'share_cover' => Yii::$app->params['frontend_source'] . '/img/distribution/activity-boot/share.png',
-            'share_url' => Yii::$app->params['frontend_url'] . Url::toRoute([
-                    'distribution/activity-boot',
-                    'channel' => $channel,
-                    'date' => $date,
-                    'from_user' => $this->user->id
-                ])
+            'share_url' => Url::toRoute([
+                'distribution/activity-boot',
+                'channel' => $channel,
+                'date' => $date,
+                'from_user' => $this->user->id
+            ], true)
         ]);
     }
 

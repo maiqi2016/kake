@@ -212,14 +212,9 @@ class ProducerSettingController extends GeneralController
     {
         return [
             'url_long' => [
-                'title' => '原链接',
+                'title' => '推广链接',
                 'label' => 6,
                 'value' => self::$spread['url']
-            ],
-            'url_short' => [
-                'title' => '短连接',
-                'label' => 6,
-                'value' => self::$spread['url_short']
             ],
             'qr_code' => [
                 'title' => '二维码',
@@ -577,7 +572,7 @@ class ProducerSettingController extends GeneralController
         }
 
         list(self::$spread['url'], self::$spread['img']) = $spread;
-        self::$spread['url_short'] = $this->shortUrl(self::$spread['url']);
+        self::$spread['url'] = SCHEME . self::$spread['url'];
 
         return $this->showForm();
     }

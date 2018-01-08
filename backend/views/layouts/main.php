@@ -26,7 +26,7 @@ $params = \Yii::$app->params;
 
 <script type="text/javascript">
     var baseUrl = '<?= $params["backend_url"];?>';
-    var requestUrl = '<?= $params["backend_url"] . Url::toRoute(['/']); ?>';
+    var requestUrl = '<?= Url::toRoute(['/'], true); ?>';
 </script>
 
 <body>

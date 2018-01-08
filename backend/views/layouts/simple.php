@@ -22,7 +22,7 @@ AppAsset::register($this);
 
 <script type="text/javascript">
     var baseUrl = '<?= \Yii::$app->params["backend_url"];?>';
-    var requestUrl = '<?= \Yii::$app->params["backend_url"] . Url::toRoute(['/']); ?>';
+    var requestUrl = '<?= Url::toRoute(['/'], true); ?>';
 </script>
 
 <body>

@@ -49,7 +49,7 @@ strpos($shareCover, 'http') !== 0 && $shareCover = SCHEME . $shareCover;
         document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + 'px';
     })();
     var baseUrl = '<?= $params["frontend_url"]; ?>';
-    var requestUrl = '<?= $params["frontend_url"] . Url::toRoute(['/']); ?>';
+    var requestUrl = '<?= Url::toRoute(['/'], true); ?>';
     var sourceUrl = '<?= $params['frontend_source']; ?>';
 </script>
 
