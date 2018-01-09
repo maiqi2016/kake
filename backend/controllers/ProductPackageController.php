@@ -332,7 +332,7 @@ EOF
                 'script' => '$.showPage("product.list", {state: 1})'
             ],
             'name' => [
-                'placeholder' => '32个字以内'
+                'placeholder' => '64个字以内'
             ],
             'base_price' => [
                 'placeholder' => '保留到小数点后两位'
@@ -380,7 +380,7 @@ EOF
         return [
             'name' => [
                 'label' => 5,
-                'placeholder' => '32个字以内'
+                'placeholder' => '64个字以内'
             ],
             'base_price' => [
                 'label' => 5,
