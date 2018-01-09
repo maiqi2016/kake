@@ -802,7 +802,7 @@ class OrderController extends GeneralController
             Yii::$app->oil->ali->alipayTradeClose($order['order_number']);
         }
 
-        $notifyUrl = Yii::$app->params['frontend_url'] . '/order/ali-paid/';
+        $notifyUrl = SCHEME . Yii::$app->params['frontend_url'] . '/order/ali-paid/';
         Yii::$app->oil->ali->alipayTradeWapPay([
             'subject' => $order['title'],
             'out_trade_no' => isset($orderNumber) ? $orderNumber : $order['order_number'],
