@@ -102,10 +102,15 @@ $params = \Yii::$app->params;
         </ul>
         <?php endif; ?>
 
+        <div class="share" ng-show="showBanner" kk-tap="showBanner=!showBanner">
+            <div class="bg">
+                <img class="banner" src="<?= $params['frontend_source'] ?>/img/distribution/activity-boot/a.png">
+            </div>
+        </div>
+
         <footer>
             <div class="menu" kk-menu-lm><img src="<?= $params['frontend_source'] ?>/img/menu.svg"></div>
         </footer>
-
     </div>
 
 </div>

@@ -25,7 +25,7 @@ $params = \Yii::$app->params;
 
     <?php if (!empty($focusList)): ?>
         <div class="carousel index-banner-height" id="focus-hot" kk-focus=".focus-point" data-point-current="on"
-             style="overflow:hidden">
+             data-stayTime="10000" style="overflow:hidden">
 
             <div class="carousel-scroller product-focus">
                 <?php $key = 0;foreach ($focusList as $focus): ?>
