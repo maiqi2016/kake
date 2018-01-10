@@ -80,12 +80,33 @@ $params = \Yii::$app->params;
         </div>
     </div>
 
+    <div class="qr-code">
+        <a href="#"><img src="<?= $params['frontend_source'] ?>/img/distribution/activity-boot/qr.png"></a>
+    </div>
+
+    <div class="hot-list">
+        <ul>
+            <li><a href="<?= Url::toRoute([
+                    'items/index',
+                    'classify' => 0
+                ]) ?>"><img src="<?= $params['frontend_source'] ?>/img/distribution/activity-boot/hotel.png"></a></li>
+            <li><a href="<?= Url::toRoute([
+                    'items/index',
+                    'classify' => 1
+                ]) ?>"><img src="<?= $params['frontend_source'] ?>/img/distribution/activity-boot/eat.png"></a></li>
+            <li><a href="<?= Url::toRoute([
+                    'items/index',
+                    'classify' => 2
+                ]) ?>"><img src="<?= $params['frontend_source'] ?>/img/distribution/activity-boot/play.png"></a></li>
+        </ul>
+    </div>
+
     <footer> 
         <?php
         $night = empty($detail['night_times']) ? '' : " / {$detail['night_times']}晚";
         ?>
         <div class="buy">
-        		<a href="<?= Url::toRoute([
+        	<a href="<?= Url::toRoute([
                 'detail/choose-package',
                 'id' => $detail['id']
             ]) ?>">
