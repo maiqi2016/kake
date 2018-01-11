@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\components\ViewHelper;
 use Oil\src\Helper;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * 分销产品管理
@@ -341,6 +342,32 @@ class ProducerProductController extends GeneralController
             'elem' => 'button',
             'value' => '选择分销商',
             'script' => '$.showPage("producer-setting.list", {state: 1})'
+        ];
+
+        return $assist;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function addAssist()
+    {
+        $assist = self::editAssist();
+        $assist['producer_id_multiple'] = [
+            'title' => '分销商ID(多个)',
+            'same_row' => true,
+            'label' => 4,
+            'placeholder' => '同上二选其一并从上到下生效优先填写项',
+            'tip' => [
+                '自动获取' => '点击右侧按钮获取',
+                '手动填写' => '通过用户列表获取UID'
+            ]
+        ];
+        $assist['select_producer_multiple'] = [
+            'title' => false,
+            'elem' => 'button',
+            'value' => '选择分销商',
+            'script' => '$.showPage("producer-setting.multiple", {state: 1})'
         ];
 
         return $assist;
@@ -706,6 +733,20 @@ class ProducerProductController extends GeneralController
                     'warning' => '该产品没有设置该分佣类型',
                     'list' => $record
                 ]);
+            }
+
+            if ($action == 'add') {
+                if (!empty($record['producer_id'])) {
+                    unset($record['producer_id_multiple']);
+                } else if (empty($record['producer_id_multiple'])) {
+                    $this->goReference($this->getControllerName($action), [
+                        'warning' => '分销商ID二者必选其一',
+                        'list' => $record
+                    ]);
+                } else {
+                    // 批量新增
+                    static::$apiGeneralAdd = 'producer.add-product';
+                }
             }
         }
 

@@ -20,11 +20,16 @@ class ProducerSettingController extends GeneralController
     // 模型描述
     public static $modelInfo = '分销商';
 
+    // 多选
+    public static $ajaxModalMultipleRecordFilter = 'checkbox';
+
     // 分销商列表弹窗标题
     public static $ajaxModalListTitle = '选择分销商';
+    public static $ajaxModalMultipleTitle = '选择分销商';
 
-    // 分销商列表弹窗 radio 的 key
+    // 分销商列表弹窗 radio/checkbox 的 key
     public static $ajaxModalListRecordFilterValueName = 'producer_id';
+    public static $ajaxModalMultipleRecordFilterValueName = 'producer_id';
 
     // 当前用户ID
     public static $uid;
@@ -78,6 +83,17 @@ class ProducerSettingController extends GeneralController
                 'icon' => 'flag'
             ]
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function ajaxModalMultipleOperations()
+    {
+        $operations = self::ajaxModalListOperations();
+        $operations[0]['value'] = '$.modalCheckboxValueToInput("checkbox", "producer_id")';
+
+        return $operations;
     }
 
     /**
@@ -149,6 +165,14 @@ class ProducerSettingController extends GeneralController
                 'value' => parent::SELECT_KEY_ALL
             ]
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function ajaxModalMultipleFilter()
+    {
+        return self::ajaxModalListFilter();
     }
 
     /**
@@ -258,6 +282,14 @@ class ProducerSettingController extends GeneralController
                 ]
             ]
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function ajaxModalMultipleAssist()
+    {
+        return self::ajaxModalListAssist();
     }
 
     /**
@@ -383,6 +415,16 @@ class ProducerSettingController extends GeneralController
     }
 
     /**
+     * 分销商列表(可多选) - 弹出
+     *
+     * @auth-same {ctrl}/index
+     */
+    public function actionAjaxModalMultiple()
+    {
+        return $this->showList();
+    }
+
+    /**
      * 我的分销商设置
      *
      * @auth-pass-role 1,10
@@ -449,6 +491,14 @@ class ProducerSettingController extends GeneralController
     public function ajaxModalListCondition()
     {
         return $this->indexCondition();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function ajaxModalMultipleCondition()
+    {
+        return self::ajaxModalListCondition();
     }
 
     /**
