@@ -2114,15 +2114,16 @@ class GeneralController extends MainController
             $result = $this->service(static::$apiGeneralAdd, $params);
         }
 
+        $appendMessage = $this->callMethod('messageHandle', null, [$result]);
         if (is_string($result)) {
             $this->goReference($reference ? $reference['fail'] : $this->getControllerName($action), [
-                'danger' => Yii::t('common', $result),
+                'danger' => Yii::t('common', $result) . $appendMessage,
                 'list' => $post
             ]);
         }
 
         $this->goReference($reference ? $reference['success'] : $this->getControllerName('index'), [
-            'success' => '新增' . $modelInfo . '成功'
+            'success' => '新增' . $modelInfo . '成功' . $appendMessage
         ]);
     }
 
@@ -2247,15 +2248,16 @@ class GeneralController extends MainController
             $result = $this->service(static::$apiGeneralUpdate, $params);
         }
 
+        $appendMessage = $this->callMethod('messageHandle', null, [$result]);
         if (is_string($result)) {
             $this->goReference($reference ? $reference['fail'] : $this->getControllerName($action), [
-                'danger' => Yii::t('common', $result),
+                'danger' => Yii::t('common', $result) . $appendMessage,
                 'list' => $post
             ]);
         }
 
         $this->goReference($reference ? $reference['success'] : $this->getControllerName('index'), [
-            'success' => '更新' . $modelInfo . '成功'
+            'success' => '更新' . $modelInfo . '成功' . $appendMessage
         ]);
     }
 
