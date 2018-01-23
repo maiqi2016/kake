@@ -1626,7 +1626,7 @@ class MainController extends Controller
             $url = urldecode(Url::toRoute((array) $url, true));
         }
 
-        return $this->service('general.short-url', ['url' => $url]);
+        return $this->service('general.short-url', ['original_url' => $url]);
     }
 
     /**
