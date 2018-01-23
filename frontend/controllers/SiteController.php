@@ -106,19 +106,6 @@ class SiteController extends GeneralController
         $this->dump($oil->wx->material->lists('news'));
         //*/
 
-        $key = 'test';
-        $cache = Yii::$app->cache;
-
-        echo Helper::date() . ' begin set cache.<br>';
-        $cache->set($key, 'the contents for test redis.');
-        echo Helper::date() . ' end set cache.<br>';
-
-        echo Helper::date() . ' begin fetch cache.<br>';
-        $data = $cache->get($key);
-        echo Helper::date() . ' end fetch cache.<br>';
-
-        $this->dump($data, false, false);
-
         return $this->render('debug');
     }
 }

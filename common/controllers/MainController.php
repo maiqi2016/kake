@@ -1626,7 +1626,7 @@ class MainController extends Controller
             $url = urldecode(Url::toRoute((array) $url, true));
         }
 
-        return Yii::$app->oil->wx->url->shorten($url)['short_url'];
+        return $this->service('general.short-url', ['url' => $url]);
     }
 
     /**
