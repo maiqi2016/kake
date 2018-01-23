@@ -30,7 +30,7 @@ $params = \Yii::$app->params;
                         <a class="l hover" href="javascript:void(0)">微信推文</a>
                     <?php endif; ?>
                     <p></p>
-                    <a data-clipboard-text="<?= SCHEME . $url ?>" class="r copy" href="javascript:void(0)">复制链接</a>
+                    <a data-clipboard-text="<?= $url ?>" class="r copy" href="javascript:void(0)">复制链接</a>
                 </div>
             </div>
             <div class="txt">
