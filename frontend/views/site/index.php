@@ -30,7 +30,6 @@ $params = \Yii::$app->params;
             <div class="carousel-scroller product-focus">
                 <?php $key = 0;foreach ($focusList as $focus): ?>
                     <?php
-                    $event = ($key == 0) ? 'kk-tap="showCalFn()" ' : null;
                     $key++;
                     $ad = !empty($focus['preview_url']);
                     $url = $ad ? $focus['link_url'] : Url::toRoute([
@@ -41,14 +40,13 @@ $params = \Yii::$app->params;
                     $img = $ad ? current($focus['preview_url']) : current($focus['cover_preview_url']);
                     ?>
 
-                    <a href="<?= $url ?>" _target="<?= $target ?>" <?= $event ?>>
+                    <a href="<?= $url ?>" _target="<?= $target ?>">
                         <img src="<?= $img ?>"/>
                     </a>
                 <?php endforeach ?>
             </div>
         </div>
     <?php endif; ?>
-    <p class="animated" ng-show="showCal" ng-class="{'flipInY': showCal}" kk-activity-cal></p>
     <!-- Hot-aim -->
     <div class="kake-box hot-aim" ng-init="initEffect()">
         <div class="kake-title">
