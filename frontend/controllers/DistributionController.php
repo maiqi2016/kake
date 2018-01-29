@@ -133,14 +133,10 @@ class DistributionController extends GeneralController
      */
     private function share($title, $channel, $date)
     {
-        $replace = function ($tpl) {
-            return str_replace('{user}', $this->user->username, Yii::$app->params[$tpl]);
-        };
-
         $this->seo([
             'title' => $title,
-            'share_title' => $replace('activity_producer_share_title'),
-            'share_description' => $replace('activity_producer_share_description'),
+            'share_title' => Yii::$app->params['activity_producer_share_title'],
+            'share_description' => Yii::$app->params['activity_producer_share_description'],
             'share_cover' => Yii::$app->params['frontend_source'] . '/img/distribution/activity-boot/share.png',
             'share_url' => Url::toRoute([
                 'distribution/activity-boot',

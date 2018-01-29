@@ -61,5 +61,5 @@ return [
     'withdraw_min' => 100,
 
     'activity_producer_share_title' => '我要带你去开房~',
-    'activity_producer_share_description' => '{user}邀你领取今日福利，活动天天有，惊喜无上限~~',
+    'activity_producer_share_description' => '快来领取今日福利，活动天天有，惊喜无上限~~',
 ];

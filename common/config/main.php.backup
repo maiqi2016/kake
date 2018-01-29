@@ -106,7 +106,8 @@ return [
                     'aes_key' => '[SECRET:wx_aes]',
                     // 授权
                     'oauth' => [
-                        'scopes' => ['snsapi_userinfo'],
+                        //'scopes' => ['snsapi_userinfo'],
+                        'scopes' => ['snsapi_base'],
                         'callback' => null,
                     ],
                     // 支付

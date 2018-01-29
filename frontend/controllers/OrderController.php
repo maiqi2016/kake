@@ -556,6 +556,8 @@ class OrderController extends GeneralController
                 continue;
             }
 
+
+
             Yii::$app->oil->wx->sendTplMsg([
                 'to' => $openid,
                 'tpl' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
@@ -563,7 +565,7 @@ class OrderController extends GeneralController
                 'footer' => '订单管理与追踪请登录后台系统'
             ], [
                 date('Y-m-d H:i:s'),
-                (empty($channel) ? '平台流量' : '分销渠道') . ' (' . $this->user->username . ')',
+                (empty($channel) ? '平台流量' : '分销渠道') . ' (UID: ' . $this->user->id . ')',
                 $orderNumber,
                 Helper::money($price / 100),
             ]);
