@@ -44,6 +44,14 @@ class GeneralController extends MainController
         }
 
         if (!in_array($this->module->requestedRoute, [
+            // 首页
+            '',
+            'site/index',
+            'site/ajax-list',
+            // 列表页
+            'items/index',
+            'items/ajax-list',
+            'items/region',
             // 阿里支付后处理
             'order/ali-paid',
             // 阿里支付
@@ -164,28 +172,9 @@ class GeneralController extends MainController
             ]);
         };
 
-        // normal
-        if (Helper::weChatBrowser()) {
-
-            // 授权请求
-            if (Yii::$app->request->get('code')) {
-                $result = Yii::$app->oil->wx->user();
-                $result['nickname'] = Helper::filterEmjoy($result['nickname']);
-                $result = $this->service('user.get-with-we-chat', $result);
-                if (is_string($result)) {
-                    $this->redirect([
-                        '/general/error',
-                        'message' => urlencode(Yii::t('common', $result))
-                    ]);
-                } else {
-                    $loginUser($result, isset($result['state']) ? 'we-chat-login' : 'we-chat-bind');
-                }
-            } else {
-                Yii::$app->oil->wx->config('oauth.callback', $this->currentUrl());
-                Yii::$app->oil->wx->auth();
-            }
-        } else {
-            $result = Yii::$app->oil->sso->auth($this->currentUrl());
+        $ssoLogin = function ($uid = null) use ($loginUser) {
+            $extra = $uid ? ['id' => $uid] : [];
+            $result = Yii::$app->oil->sso->auth($this->currentUrl(), $extra);
             if (is_string($result)) {
                 $this->redirect([
                     '/general/error',
@@ -194,6 +183,36 @@ class GeneralController extends MainController
             } else {
                 $loginUser($result, 'sso-login');
             }
+        };
+
+        // normal
+        if (Helper::weChatBrowser()) {
+
+            // 授权请求
+            if (Yii::$app->request->get('code')) {
+                $result = Yii::$app->oil->wx->user();
+                if (!empty($result['nickname'])) {
+                    $result['nickname'] = Helper::filterEmjoy($result['nickname']);
+                }
+                $result = $this->service('user.get-with-we-chat', $result);
+                if (is_string($result)) {
+                    $this->redirect([
+                        '/general/error',
+                        'message' => urlencode(Yii::t('common', $result))
+                    ]);
+                } else {
+                    if (empty($result['phone'])) {
+                        $ssoLogin($result['id']);
+                    } else {
+                        $loginUser($result, isset($result['state']) ? 'we-chat-login' : 'we-chat-bind');
+                    }
+                }
+            } else {
+                Yii::$app->oil->wx->config('oauth.callback', $this->currentUrl());
+                Yii::$app->oil->wx->auth();
+            }
+        } else {
+            $ssoLogin();
         }
     }
 
