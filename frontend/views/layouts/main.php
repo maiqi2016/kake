@@ -115,7 +115,7 @@ foreach ($items as $item) {
     }
 }
 ?>
-
+<a class="record" href="http://www.miitbeian.gov.cn/">沪ICP备17001729号-1</a >
 <!-- Footer -->
 <div class="hidden">
     <span ng-init="common({message: '<?= $app->session->getFlash("message") ?>'})"></span>
