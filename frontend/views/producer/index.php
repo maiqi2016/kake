@@ -49,7 +49,7 @@ $params = \Yii::$app->params;
             分销产品列表
         </a>
 
-        <a class="record common" href="<?= Url::toRoute(['producer/order-list']) ?>">
+        <a class="record-pro common" href="<?= Url::toRoute(['producer/order-list']) ?>">
             <img class="img-style" src="<?= $params['frontend_source'] ?>/img/producer/icon/record.svg">
             分销记录
         </a>
