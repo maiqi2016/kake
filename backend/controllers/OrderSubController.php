@@ -830,7 +830,7 @@ class OrderSubController extends GeneralController
             }
         } else {
             try {
-                $result = Yii::$app->oil->wx->payment->refund($orderNo, $refundNo, $order['total_price'], $order['price']);
+                $result = Yii::$app->oil->wx->payment->refund($orderNo, $refundNo, $order['total_price'], $order['price'], 1024, 'out_trade_no', 'REFUND_SOURCE_RECHARGE_FUNDS');
             } catch (\Exception $e) {
                 $this->goReference($this->getControllerName('index'), [
                     'danger' => $e->getMessage()
