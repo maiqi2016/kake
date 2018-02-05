@@ -31,11 +31,14 @@ class ProducerController extends GeneralController
     {
         $this->sourceCss = null;
         $this->sourceJs = false;
+
         $producer = $this->getProducer($this->user->id);
         if (empty($producer)) {
+            /*
             Yii::$app->session->setFlash('message', '请先完善个人资料');
-
             return $this->redirect(['producer/setting']);
+            */
+            return $this->redirect(['producer/apply-distributor']);
         }
         $this->seo(['title' => '分销商管理']);
 
@@ -54,9 +57,12 @@ class ProducerController extends GeneralController
         ];
         $producer = $this->getProducer($this->user->id);
         if (empty($producer)) {
+            /*
             $producer['logo_preview_url'] = [
                 Yii::$app->params['frontend_source'] . '/img/logo.png'
             ];
+            */
+            return $this->redirect(['producer/apply-distributor']);
         }
         $angular = Helper::pullSome($producer, [
             'id',
@@ -105,9 +111,11 @@ class ProducerController extends GeneralController
 
         $data = $this->controller('producer-setting')->spreadInfo($this->user->id);
         if (empty($data)) {
+            /*
             Yii::$app->session->setFlash('message', '请先完善个人资料');
-
             return $this->redirect(['producer/setting']);
+            */
+            return $this->redirect(['producer/apply-distributor']);
         }
         $this->seo(['title' => '分销商管理']);
 
@@ -295,7 +303,7 @@ class ProducerController extends GeneralController
 
         $url = Yii::$app->params['tmp_path'];
         $img = $url . '/' . $result['deep_path'] . '-' . $result['filename'];
-        
+
         $this->thumbCrop($img, 256, 256, true);
 
         $this->success($result);
