@@ -34,12 +34,15 @@ class ProducerController extends GeneralController
 
         $producer = $this->getProducer($this->user->id);
         if (empty($producer)) {
-            /*
-            Yii::$app->session->setFlash('message', '请先完善个人资料');
-            return $this->redirect(['producer/setting']);
-            */
             return $this->redirect(['producer/apply-distributor']);
         }
+
+        if (empty($producer['logo_preview_url'])) {
+            Yii::$app->session->setFlash('message', '请先完善个人资料');
+
+            return $this->redirect(['producer/setting']);
+        }
+
         $this->seo(['title' => '分销商管理']);
 
         return $this->render('index', compact('producer'));
