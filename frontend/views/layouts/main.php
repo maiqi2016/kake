@@ -116,14 +116,6 @@ foreach ($items as $item) {
 }
 ?>
 
-<?php if (!in_array("{$controller}/{$action}", [
-    'producer/apply-distributor',
-    'order/index'
-])
-): ?>
-    <a class="record" href="http://www.miitbeian.gov.cn/">沪ICP备17001729号-1</a>
-<?php endif; ?>
-
 <!-- Footer -->
 <div class="hidden">
     <span ng-init="common({message: '<?= $app->session->getFlash("message") ?>'})"></span>
