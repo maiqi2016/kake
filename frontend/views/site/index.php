@@ -131,4 +131,5 @@ $params = \Yii::$app->params;
             <a href="<?= Url::toRoute(['items/index']) ?>" class="more" kk-pull-up="100">查看更多</a>
         </div>
     </div>
+    <a class="record" href="http://www.miitbeian.gov.cn/">沪ICP备17001729号-1</a>
 </div>
