@@ -255,9 +255,10 @@ class OrderController extends GeneralController
                 ['table' => 'producer_log'],
                 [
                     'left_table' => 'producer_log',
-                    'table' => 'user',
+                    'table' => 'producer_setting',
                     'as' => 'producer_user',
-                    'left_on_field' => 'producer_id'
+                    'left_on_field' => 'producer_id',
+                    'right_on_field' => 'producer_id'
                 ]
             ],
             'select' => [
@@ -266,7 +267,7 @@ class OrderController extends GeneralController
                 'product_upstream.name AS product_upstream_name',
                 'order_contacts.real_name',
                 'order_contacts.phone',
-                'producer_user.username AS producer_username',
+                'producer_user.name AS producer_username',
                 'order.*'
             ]
         ]);

@@ -494,7 +494,7 @@ class OrderController extends GeneralController
 
         $price = 0;
         $_package = [];
-        foreach ((array) $params['package'] as $id => $number) {
+        foreach ((array)$params['package'] as $id => $number) {
             if (!isset($packageData[$id])) {
                 $this->error(Yii::t('common', 'product package illegal'));
             }
@@ -556,19 +556,21 @@ class OrderController extends GeneralController
                 continue;
             }
 
-
-
-            Yii::$app->oil->wx->sendTplMsg([
-                'to' => $openid,
-                'tpl' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
-                'header' => '平台有新的订单产生',
-                'footer' => '订单管理与追踪请登录后台系统'
-            ], [
-                date('Y-m-d H:i:s'),
-                (empty($channel) ? '平台流量' : '分销渠道') . ' (UID: ' . $this->user->id . ')',
-                $orderNumber,
-                Helper::money($price / 100),
-            ]);
+            try {
+                Yii::$app->oil->wx->sendTplMsg([
+                    'to' => $openid,
+                    'tpl' => 'wUH-x5gnE6O8n9O8wAaFcHVDWhpf7DctTRqQDS-8BeA',
+                    'header' => '平台有新的订单产生',
+                    'footer' => '订单管理与追踪请登录后台系统'
+                ], [
+                    date('Y-m-d H:i:s'),
+                    (empty($channel) ? '平台流量' : '分销渠道') . ' (UID: ' . $this->user->id . ')',
+                    $orderNumber,
+                    Helper::money($price / 100),
+                ]);
+            } catch (\Exception $e) {
+                Yii::error('[' . $openid . '] ' . $e->getMessage());
+            }
         }
 
         return [
