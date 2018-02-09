@@ -25,6 +25,24 @@ class ProducerController extends GeneralController
     ];
 
     /**
+     * 设置默认头像
+     *
+     * @param $producer
+     *
+     * @return mixed
+     */
+    private function defaultAvatar($producer)
+    {
+        if (empty($producer['logo_preview_url'])) {
+            $producer['logo_preview_url'] = [
+                Yii::$app->params['frontend_source'] . '/img/logo.png'
+            ];
+        }
+
+        return $producer;
+    }
+
+    /**
      * 菜单
      */
     public function actionIndex()
@@ -37,12 +55,7 @@ class ProducerController extends GeneralController
             return $this->redirect(['producer/apply-distributor']);
         }
 
-        if (empty($producer['logo_preview_url'])) {
-            Yii::$app->session->setFlash('message', '请先完善个人资料');
-
-            return $this->redirect(['producer/setting']);
-        }
-
+        $producer = $this->defaultAvatar($producer);
         $this->seo(['title' => '分销商管理']);
 
         return $this->render('index', compact('producer'));
@@ -60,13 +73,10 @@ class ProducerController extends GeneralController
         ];
         $producer = $this->getProducer($this->user->id);
         if (empty($producer)) {
-            /*
-            $producer['logo_preview_url'] = [
-                Yii::$app->params['frontend_source'] . '/img/logo.png'
-            ];
-            */
             return $this->redirect(['producer/apply-distributor']);
         }
+
+        $producer = $this->defaultAvatar($producer);
         $angular = Helper::pullSome($producer, [
             'id',
             'name',
