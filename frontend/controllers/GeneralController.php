@@ -174,7 +174,8 @@ class GeneralController extends MainController
 
         $ssoLogin = function ($uid = null) use ($loginUser) {
             $extra = $uid ? ['id' => $uid] : [];
-            $result = Yii::$app->oil->sso->auth($this->currentUrl(), $extra);
+            $url = Helper::unsetParamsForUrl('code', $this->currentUrl());
+            $result = Yii::$app->oil->sso->auth($url, $extra);
             if (is_string($result)) {
                 $this->redirect([
                     '/general/error',
