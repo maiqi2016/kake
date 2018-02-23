@@ -120,7 +120,7 @@ class OrderInstructionsLogController extends GeneralController
             ],
             'remark' => [
                 'elem' => 'textarea',
-                'placeholder' => '不少于10个字的备注',
+                'placeholder' => '备注',
                 'label' => 8
             ],
             'type' => [
