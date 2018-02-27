@@ -360,7 +360,8 @@ class ProducerSettingController extends GeneralController
             'spread_url' => [
                 'title' => '推广链接',
                 'label' => 6,
-                'elem' => 'text'
+                'elem' => 'text',
+                'class' => 'bg-info'
             ],
             'spread_img' => [
                 'title' => '推广二维码',
@@ -406,7 +407,6 @@ class ProducerSettingController extends GeneralController
 
     /**
      * 分销商列表 - 弹出
-     *
      * @auth-same {ctrl}/index
      */
     public function actionAjaxModalList()
@@ -416,7 +416,6 @@ class ProducerSettingController extends GeneralController
 
     /**
      * 分销商列表(可多选) - 弹出
-     *
      * @auth-same {ctrl}/index
      */
     public function actionAjaxModalMultiple()
@@ -542,6 +541,12 @@ class ProducerSettingController extends GeneralController
                 'distribution/items',
                 'channel' => $channel
             ]);
+
+        if (empty($producer['logo_preview_url'])) {
+            $producer['logo_preview_url'] = [
+                Yii::$app->params['frontend_source'] . '/img/logo.png'
+            ];
+        }
 
         $logoPath = parent::getPathByUrl(current($producer['logo_preview_url']));
         if (!$logoPath) {

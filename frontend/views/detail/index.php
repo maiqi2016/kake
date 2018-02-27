@@ -9,12 +9,13 @@ $params = \Yii::$app->params;
 
 <div class="body" ng-init="service.goToTop('.back-top');run()">
     <div class="banner">
-	    <div class="menu-box"  kk-menu-lm data-pos-x="-15" data-pos-y="-15">
-	    		<div class="menu">
-	            <img src="<?= $params['frontend_source'] ?>/img/menu.svg"/>
-	        </div>
-	    </div>
-        <div class="carousel" id="focus-hot" kk-focus=".focus-number" data-number-tpl="< {NOW} / {TOTAL} > Sold: <?= $detail['max_sales'] ?>"
+        <div class="menu-box" kk-menu-lm data-pos-x="-15" data-pos-y="-15">
+            <div class="menu">
+                <img src="<?= $params['frontend_source'] ?>/img/menu.svg"/>
+            </div>
+        </div>
+        <div class="carousel" id="focus-hot" kk-focus=".focus-number"
+             data-number-tpl="< {NOW} / {TOTAL} > Sold: <?= $detail['max_sales'] ?>"
              style="overflow: hidden">
             <div class="carousel-scroller product-focus">
                 <?php if (!empty($detail['slave_preview_url'])): ?>
@@ -31,8 +32,8 @@ $params = \Yii::$app->params;
             <?= $detail['product_upstream_name'] ?>
         </div>
         <div class="hotel-detail-2">
-         <span class="hotel-detail-2-1"><?= $detail['title'] ?></span>
-         <span class="hotel-detail-2-1 hidden">已售 <span><?= $detail['max_sales'] ?></span> 份</span>
+            <span class="hotel-detail-2-1"><?= $detail['title'] ?></span>
+            <span class="hotel-detail-2-1 hidden">已售 <span><?= $detail['max_sales'] ?></span> 份</span>
         </div>
     </div>
     <div class="classify">
@@ -101,21 +102,25 @@ $params = \Yii::$app->params;
         </ul>
     </div>
 
-    <footer> 
+    <footer>
         <?php
         $night = empty($detail['night_times']) ? '' : " / {$detail['night_times']}晚";
         ?>
         <div class="buy">
-        	<a href="<?= Url::toRoute([
+            <?php $url = empty($detail['sell_out']) ? Url::toRoute([
                 'detail/choose-package',
                 'id' => $detail['id']
-            ]) ?>">
-            		<p>￥<span><?= $detail['min_price'] ?></span>
-            		</p>
-            		预订
+            ]) : 'javascript:void(null)' ?>
+            <a href="<?= $url ?>">
+                <p>￥<span><?= $detail['min_price'] ?></span></p>
+                <?php if (empty($detail['sell_out'])): ?>
+                    预订
+                <?php else: ?>
+                    已售罄
+                <?php endif; ?>
             </a>
         </div>
-        
+
         <div class=" service">
             <a href="tel:<?= Yii::$app->params['company_tel'] ?>">
                 <img class="img-responsive" src="<?= $params['frontend_source'] ?>/img/custom.svg"/>
