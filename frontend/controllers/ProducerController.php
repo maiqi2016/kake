@@ -131,6 +131,7 @@ class ProducerController extends GeneralController
             return $this->redirect(['producer/apply-distributor']);
         }
         $this->seo(['title' => '分销商管理']);
+        $data[2] = $this->defaultAvatar($data[2]);
 
         return $this->render('qr-code', compact('data'));
     }

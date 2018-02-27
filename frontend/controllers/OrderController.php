@@ -479,8 +479,17 @@ class OrderController extends GeneralController
         $params = $this->validateSafeLink($checkUser);
 
         $product = $this->getProduct($params['product_id']);
+
+        if (is_string($product)) {
+            $this->error(Yii::t('common', $product));
+        }
+
         if (empty($product)) {
-            $this->error(Yii::t('common', 'product does not exist'));
+            $this->error(Yii::t('common', 'product data error'));
+        }
+
+        if (!empty($product['sell_out'])) {
+            $this->error(Yii::t('common', 'product sell out'));
         }
 
         $packageData = $this->listProductPackage($params['product_id']);

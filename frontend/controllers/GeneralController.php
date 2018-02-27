@@ -40,7 +40,7 @@ class GeneralController extends MainController
 
         Yii::info('获取用户信息');
         if (!$this->user && Yii::$app->session->has(self::USER)) {
-            $this->user = (object) Yii::$app->session->get(self::USER);
+            $this->user = (object)Yii::$app->session->get(self::USER);
         }
 
         if (!in_array($this->module->requestedRoute, [
@@ -163,7 +163,7 @@ class GeneralController extends MainController
             Yii::info("将用户信息设置到 Session 中 - 来自 <{$system}> 系统的 <{$type}> 类型登录");
 
             Yii::$app->session->set(self::USER, $user);
-            $this->user = (object) array_merge((array) $this->user, $user);
+            $this->user = (object)array_merge((array)$this->user, $user);
 
             $this->service('user.login-log', [
                 'id' => $user['id'],
@@ -231,7 +231,7 @@ class GeneralController extends MainController
         $p = array_merge(Yii::$app->request->post(), Yii::$app->request->get());
         $params = [];
 
-        foreach ((array) $keys as $item) {
+        foreach ((array)$keys as $item) {
             $params[$item] = isset($p[$item]) ? $p[$item] : null;
         }
 
@@ -326,10 +326,10 @@ class GeneralController extends MainController
      */
     public function getProduct($id)
     {
-        $id = (int) $id;
+        $id = (int)$id;
 
         if (empty($id)) {
-            $this->error(Yii::t('common', 'product id required'));
+            return 'product id required';
         }
 
         return $this->cache([
@@ -349,7 +349,7 @@ class GeneralController extends MainController
 
             $detail = $this->service('product.detail', $condition);
             if (empty($detail)) {
-                return false;
+                return 'product does not exist';
             }
 
             $detail = $this->callMethod('sufHandleField', $detail, [
@@ -357,7 +357,7 @@ class GeneralController extends MainController
                 'detail'
             ], $controller);
             if (empty($detail['package'])) {
-                return false;
+                return 'product package illegal';
             }
 
             if (!empty($detail)) {
@@ -375,10 +375,14 @@ class GeneralController extends MainController
                 }
 
                 if (empty($detail['package'])) {
-                    $this->error(Yii::t('common', 'product package illegal'));
+                    return 'product package illegal';
                 }
 
                 $detail['min_price'] = min(array_column($detail['package'], $field));
+            }
+
+            if (empty($detail['min_price']) || $detail['min_price'] <= 0) {
+                return 'product price error';
             }
 
             return $detail;
@@ -498,7 +502,7 @@ class GeneralController extends MainController
 
             $where = [['product_region.state' => 1]];
             if (!empty($plate)) {
-                $where[] = ['product_region.product_plate_id' => (array) $plate];
+                $where[] = ['product_region.product_plate_id' => (array)$plate];
             }
 
             $list = $this->service(parent::$apiList, [
@@ -840,7 +844,7 @@ class GeneralController extends MainController
      */
     public function listProductPackage($product_id)
     {
-        $product_id = (int) $product_id;
+        $product_id = (int)$product_id;
         if (empty($product_id)) {
             $this->error(Yii::t('common', 'product package id required'));
         }
@@ -957,7 +961,8 @@ class GeneralController extends MainController
         }
         $condition['where'] = $where;
 
-        list($condition['offset'], $condition['limit']) = Helper::page($page, $page_size ?: Yii::$app->params['order_page_size']);
+        list($condition['offset'], $condition['limit']) = Helper::page($page,
+            $page_size ?: Yii::$app->params['order_page_size']);
         $list = $this->service('order.list', $condition);
 
         $controller = $this->controller('order');

@@ -81,14 +81,16 @@ class DetailController extends GeneralController
         $this->sourceJs = null;
 
         $detail = $this->getProduct(Yii::$app->request->get('id'));
+
+        if (is_string($detail)) {
+            $this->error(Yii::t('common', $detail));
+        }
+
         if (empty($detail)) {
             $this->error(Yii::t('common', 'product data error'));
         }
 
         $detail['slave_preview_url'] = array_merge($detail['cover_preview_url'], $detail['slave_preview_url']);
-        if ($detail['min_price'] <= 0) {
-            $this->error(Yii::t('common', 'product price error'));
-        }
 
         $this->seo([
             'title' => '商品详情',
@@ -110,6 +112,20 @@ class DetailController extends GeneralController
         $this->sourceJs = ['detail/index'];
 
         $productId = Yii::$app->request->get('id');
+        $product = $this->getProduct($productId);
+
+        if (is_string($product)) {
+            $this->error(Yii::t('common', $product));
+        }
+
+        if (empty($product)) {
+            $this->error(Yii::t('common', 'product data error'));
+        }
+
+        if (!empty($product['sell_out'])) {
+            $this->error(Yii::t('common', 'product sell out'));
+        }
+
         $packageList = $this->listProductPackage($productId);
         $packageBind = $this->listProductPackageBind($productId);
 

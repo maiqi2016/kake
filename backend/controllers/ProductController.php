@@ -461,6 +461,14 @@ class ProductController extends GeneralController
                 'url_info' => 'Article',
             ],
             'sort' => 'code',
+            'sell_out' => [
+                'code',
+                'color' => [
+                    0 => 'success',
+                    1 => 'warning'
+                ],
+                'info'
+            ],
             'state' => [
                 'code',
                 'color' => 'auto',
@@ -781,6 +789,10 @@ class ProductController extends GeneralController
             'referral_link' => [
                 'placeholder' => '如：微信发文链接, 可留空',
                 'label' => 6
+            ],
+            'sell_out' => [
+                'elem' => 'select',
+                'value' => 0
             ],
             'state' => [
                 'elem' => 'select',
