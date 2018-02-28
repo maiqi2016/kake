@@ -124,6 +124,14 @@ class DistributionController extends GeneralController
         return $this->render('items', compact(...$params));
     }
 
+    public function actionDigitalTv()
+    {
+        $this->sourceCss = null;
+        $this->sourceJs = null;
+
+        return $this->render('digital-tv');
+    }
+
     /**
      * 设置分享信息
      *
