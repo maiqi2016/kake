@@ -129,7 +129,7 @@ foreach ($items as $item) {
 
 <!-- Menu -->
 <div class="menu-lm animated hidden">
-    <p class="menuclose">KAKE</p>
+    <p class="menuclose">Menu</p>
     <form class="search" id="box1" action="/">
         <input type="hidden" name="r" value="items/index">
         <input type="search" name="keyword" placeholder="目的地">
