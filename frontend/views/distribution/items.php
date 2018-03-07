@@ -29,11 +29,11 @@ $params = \Yii::$app->params;
     <div class="show-body" ng-show="showBody" class="shape-fixed">
         <div class="header">
             <?php $index = floor(count($focusList) / 2) ?>
-            <div class="carousel kake-theme" id="carousel-scroller-luck" kk-focus-camel data-index="<?= $index ?>">
+            <div class="carousel kake-theme" id="carousel-scroller-luck" kk-focus-camel data-index="<?= $index + 1 ?>">
                 <div class="carousel-scroller scroll">
                     <div class="product_image"></div>
                     <?php foreach ($focusList as $key => $item): ?>
-                        <?php $event = ($key == $index - 1) ? 'kk-tap="showCalFn()" ' : null; ?>
+                        <?php $event = ($key == $index) ? 'kk-tap="showCalFn()" ' : null; ?>
                         <div class="product_image" <?= $event ?>>
                             <a href="<?= $item['link_url'] ?>">
                                 <img class="img-responsive" src="<?= current($item['preview_url']) ?>"/>
