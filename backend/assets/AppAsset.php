@@ -30,13 +30,11 @@ class AppAsset extends AssetBundle
         $this->css = [
             "node_modules/bootstrap/dist/css/bootstrap.css?version=" . $suffix,
             "node_modules/bootstrap/dist/css/bootstrap-theme.css?version=" . $suffix,
-            "node_modules/perfect-scrollbar/css/perfect-scrollbar.css?version=" . $suffix,
             "css{$minDirectory}/main.css?version=" . $suffix,
         ];
         $this->js = [
             "node_modules/jquery/dist/jquery.min.js?version=" . $suffix,
             "node_modules/bootstrap/dist/js/bootstrap.js?version=" . $suffix,
-            "node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js?version=" . $suffix,
             "js{$minDirectory}/main.js?version=" . $suffix,
         ];
     }
