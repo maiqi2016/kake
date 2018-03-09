@@ -466,4 +466,12 @@ class UserController extends GeneralController
             'success' => implode(',', $user)
         ]);
     }
+
+    /**
+     * @return bool|string
+     */
+    public function actionLogicDocument()
+    {
+        return $this->display('logic-document');
+    }
 }
