@@ -111,6 +111,7 @@ return [
                 'wx-menu.index' => '微信菜单',
                 'wx-notice.index' => '微信模板消息',
                 'wx-qr-code.index' => '微信二维码',
+                'user.logic-document' => '后台及业务文档',
             ]
         ],
     ]
