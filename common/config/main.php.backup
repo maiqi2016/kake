@@ -1,0 +1,151 @@
+<?php
+
+$debug = (isset($_GET['debug']) && $_GET['debug'] === '[SECRET:debug_pass]');
+
+return [
+    'id' => 'common',
+    'basePath' => dirname(__DIR__),
+    'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+    'controllerNamespace' => 'common\controllers',
+    'bootstrap' => $debug ? ['debug'] : [],
+    'modules' => [
+        'debug' => [
+            'class' => 'yii\debug\Module',
+            'allowedIPs' => ['*.*.*.*']
+        ],
+    ],
+    'components' => [
+        'request' => [
+            'cookieValidationKey' => '[SECRET:cookie]',
+        ],
+        'cache' => [
+            'class' => 'yii\redis\Cache',
+        ],
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => '[SECRET:redis_host]',
+            'password' => '[SECRET:redis_pwd]',
+            'port' => [SECRET:redis_port],
+            'database' => 0,
+        ],
+        'log' => [
+            'traceLevel' => (YII_DEBUG || $debug) ? 3 : 0,
+            'flushInterval' => (YII_DEBUG || $debug) ? 1 : 1000,
+            'targets' => [
+                [
+                    'class' => 'common\inherit\FileTargetLogger',
+                    'exportInterval' => (YII_DEBUG || $debug) ? 1 : 1000,
+                    'levels' => (YII_DEBUG || $debug) ? [
+                        'trace',
+                        'warning',
+                        'info',
+                        'error'
+                    ] : [
+                        'trace',
+                        'warning',
+                        'info',
+                        'error'
+                    ],
+                    'logFile' => '@app/runtime/logs/debug.log',
+                    'logVars' => [],
+                    'maxLogFiles' => 20
+                ]
+            ],
+        ],
+        'user' => [
+            'identityClass' => [],
+        ],
+        'i18n' => [
+            'translations' => [
+                'common' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/messages',
+                ]
+            ],
+        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@common/mail',
+            'useFileTransport' => true,
+        ],
+
+        'oil' => [
+            'class' => 'common\components\Oil',
+            'reflection' => 'Oil\src\Reflection',
+            'rsa' => [
+                'class' => 'Oil\src\Rsa',
+                'config' => [
+                    'public_key' => Yii::getAlias('@rsa/rsa_public.pem'),
+                    'private_key' => Yii::getAlias('@rsa/rsa_private.pem'),
+                ]
+            ],
+            'api' => 'Oil\src\Service',
+            'ubb' => 'Oil\src\Ubb',
+            'download' => 'Oil\src\Download',
+            'sso' => [
+                'class' => 'Oil\src\SsoClient',
+                'config' => [
+                    'host' => null,
+                    'code_key' => 'ticket',
+                    'url_tpl' => '{HOST}?r={API}&{PARAMS}'
+                ]
+            ],
+            'upload' => [
+                'class' => 'Oil\src\Upload',
+                'config' => ['root_path' => null]
+            ],
+            // https://easywechat.org/zh-cn/docs/configuration.html
+            'wx' => [
+                'class' => 'Oil\src\WeChat',
+                'config' => [
+                    // 基本
+                    'debug' => false,
+                    'app_id' => '[SECRET:wx_id]',
+                    'secret' => '[SECRET:wx_secret]',
+                    'token' => '[SECRET:wx_token]',
+                    'aes_key' => '[SECRET:wx_aes]',
+                    // 授权
+                    'oauth' => [
+                        //'scopes' => ['snsapi_userinfo'],
+                        'scopes' => ['snsapi_base'],
+                        'callback' => null,
+                    ],
+                    // 支付
+                    'payment' => [
+                        'merchant_id' => '[SECRET:wx_pay_id]',
+                        'key' => '[SECRET:wx_pay_key]',
+                        'cert_path' => Yii::getAlias('@wechat/cert/apiclient_cert.pem'),
+                        'key_path' => Yii::getAlias('@wechat/cert/apiclient_key.pem'),
+                    ],
+                    // Guzzle
+                    'guzzle' => [
+                        'timeout' => 6.0,
+                    ],
+                ]
+            ],
+            'ali' => [
+                'class' => 'Oil\src\AliPay',
+                'config' => [
+                    'options' => [
+                        'rsa_private_key' => Yii::getAlias('@alipay/key/rsa_app.private'),
+                        'pay_public_key' => Yii::getAlias('@alipay/key/rsa_alipay.public'),
+                        'callback' => null
+                    ],
+                    'config' => [
+                        'app_id' => '[SECRET:ali_id]'
+                    ],
+                ]
+            ],
+            'oss' => [
+                'class' => 'Oil\src\AliOSS',
+                'config' => [
+                    'id' => '[SECRET:oss_id]',
+                    'secret' => '[SECRET:oss_secret]',
+                    'endpoint' => '[SECRET:oss_point]',
+                    'default_bucket' => '[SECRET:oss_bucket]',
+                    'host' => null,
+                ]
+            ],
+        ],
+    ],
+];

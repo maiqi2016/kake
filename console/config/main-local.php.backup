@@ -1,0 +1,51 @@
+<?php
+return [
+    'params' => array_merge(
+        require(__DIR__ . '/../../common/config/params.php'),
+        require(__DIR__ . '/../../common/config/params-local.php'),
+        require(__DIR__ . '/params.php'),
+        require(__DIR__ . '/params-local.php')
+    ),
+    'components' => [
+        'kake' => [
+            'class' => 'yii\db\Connection',
+            'charset' => 'utf8',
+            // Master
+            'masterConfig' => [
+                'username' => 'mq_kake_dev_w',
+                'password' => '[SECRET:kake_pwd]',
+            ],
+            'masters' => [
+                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_kake'],
+            ],
+            // Slave
+            'slaveConfig' => [
+                'username' => 'mq_kake_dev_r',
+                'password' => '[SECRET:kake_pwd]',
+            ],
+            'slaves' => [
+                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_kake'],
+            ],
+        ],
+        'service' => [
+            'class' => 'yii\db\Connection',
+            'charset' => 'utf8',
+            // Master
+            'masterConfig' => [
+                'username' => 'mq_service_dev_w',
+                'password' => '[SECRET:service_pwd]',
+            ],
+            'masters' => [
+                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_service'],
+            ],
+            // Slave
+            'slaveConfig' => [
+                'username' => 'mq_service_dev_r',
+                'password' => '[SECRET:service_pwd]',
+            ],
+            'slaves' => [
+                'a' => ['dsn' => 'mysql:host=[SECRET:host];dbname=maiqi_service'],
+            ],
+        ],
+    ],
+];

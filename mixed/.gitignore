@@ -1,0 +1,7 @@
+/alipay/key/*.public
+/alipay/key/*.private
+/rsa/*.public
+/rsa/*.private
+/rsa/*.pem
+/wechat/cert/*.pem
+/script/*.py

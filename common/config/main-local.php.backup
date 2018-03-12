@@ -1,0 +1,18 @@
+<?php
+
+$debug = (isset($_GET['debug']) && $_GET['debug'] === '[SECRET:debug_pass]');
+
+return [
+    'bootstrap' => $debug ? ['debug'] : [],
+    'modules' => [
+        'debug' => [
+            'class' => 'yii\debug\Module',
+            'allowedIPs' => ['*.*.*.*']
+        ],
+    ],
+    'components' => [
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
+    ],
+];

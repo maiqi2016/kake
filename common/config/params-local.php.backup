@@ -1,0 +1,23 @@
+<?php
+$secondSite = 'www';
+$secondBackend = 'backend';
+$secondSource = 'source';
+$secondPic = 'pic';
+$domain = DOMAIN;
+
+return [
+    'use_cache' => false,
+
+    'frontend_url' => "//{$secondSite}.{$domain}",
+    'frontend_source' => "//{$secondSource}.{$domain}/kake/frontend",
+
+    'backend_url' => "http://{$secondBackend}.{$domain}",
+    'backend_source' => "//{$secondSource}.{$domain}/kake/backend",
+
+    'upload_url' => "//{$secondPic}.{$domain}",
+
+    'wechat_callback' => "//{$secondSite}.${domain}/",
+    'alipay_callback' => "//{$secondSite}.${domain}/",
+
+    'thrift_ip' => '192.168.0.222',
+];
