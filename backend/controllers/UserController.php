@@ -296,6 +296,7 @@ class UserController extends GeneralController
 
     /**
      * 用户列表弹窗 - 分销商编辑、分销商申请、编辑供应商用户
+     *
      * @auth-same {ctrl}/index
      */
     public function actionAjaxModalList()
@@ -479,21 +480,6 @@ class UserController extends GeneralController
         $file = Yii::$app->getViewPath() . DS . 'markdown/' . $name . '.md';
 
         return Markdown::process(file_get_contents($file), 'extra');
-    }
-
-    /**
-     * 密码文档
-     *
-     * @auth-pass-all
-     * @return bool|string
-     */
-    public function actionSecret()
-    {
-        if ($this->user->id > 2) {
-            $this->error('查看密码文档权限不足');
-        }
-
-        return $this->display('markdown', ['markdown' => $this->markdown('secret')]);
     }
 
     /**
