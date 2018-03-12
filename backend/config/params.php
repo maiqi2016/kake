@@ -112,6 +112,10 @@ return [
                 'wx-notice.index' => '微信模板消息',
                 'wx-qr-code.index' => '微信二维码',
                 'user.logic-document' => '后台及业务文档',
+<<<<<<< HEAD
+=======
+                'user.secret' => '项目密码',
+>>>>>>> fbb0f7c8d34d0d9c343927cf4da31b93f976a1d8
             ]
         ],
     ]
