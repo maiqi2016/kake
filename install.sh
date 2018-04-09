@@ -29,9 +29,9 @@ chmod -R a+w ${path}/console/config/
 chmod -R a+w ${path}/mixed/
 chmod -R a+w ${path}/backend/runtime/
 chmod -R a+w ${path}/frontend/runtime/
-mkdir ${path}/backend/web/assets/ 2> /dev/null
+mkdir ${path}/backend/web/assets/ 2>/dev/null
 chmod -R a+w ${path}/backend/web/assets/
-mkdir ${path}/frontend/web/assets/ 2> /dev/null
+mkdir ${path}/frontend/web/assets/ 2>/dev/null
 chmod -R a+w ${path}/frontend/web/assets/
 
 echo

@@ -29,7 +29,7 @@ return [
     'wechat_callback' => "//{$secondSite}.${domain}/",
     'alipay_callback' => "//{$secondSite}.${domain}/",
 
-    'thrift_ip' => '172.19.222.65',
+    'thrift_ip' => 'localhost',
     'thrift_port' => '8888',
 
     'site_search_ad_keyword' => null,
