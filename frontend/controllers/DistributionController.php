@@ -337,7 +337,7 @@ class DistributionController extends GeneralController
         $future = !is_numeric($future) ? strtotime($future) : $future;
         $ago = !is_numeric($ago) ? strtotime($ago) : $ago;
 
-        return $future > $ago;
+        return $future >= $ago;
     }
 
     /**
@@ -366,6 +366,9 @@ class DistributionController extends GeneralController
 
             list($year, $month) = explode('-', $date);
 
+            $first = date('Y-m-01 00:00:00', strtotime("${year}-${month}-01"));
+            $last = date('Y-m-d 23:59:59', strtotime("${first} +1 month -1 day"));
+
             $signed = $this->service(parent::$apiList, [
                 'table' => 'activity_producer_sign',
                 'where' => [
@@ -373,8 +376,8 @@ class DistributionController extends GeneralController
                     [
                         'between',
                         'add_time',
-                        date("{$year}-{$month}-1 00:00:00"),
-                        date("{$year}-{$month}-t 23:59:59")
+                        $first,
+                        $last
                     ],
                     ['state' => 1]
                 ],
@@ -388,7 +391,7 @@ class DistributionController extends GeneralController
             }
 
             return $_signed;
-        }, $cacheTime, null, Yii::$app->params['use_cache']);
+        }, $cacheTime, null, !Yii::$app->params['use_cache']);
     }
 
     /**
