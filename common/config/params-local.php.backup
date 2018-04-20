@@ -19,5 +19,6 @@ return [
     'wechat_callback' => "//{$secondSite}.${domain}/",
     'alipay_callback' => "//{$secondSite}.${domain}/",
 
-    'thrift_ip' => 'localhost',
+    'thrift_ip' => '[SECRET:thrift_ip]',
+    'thrift_port' => '[SECRET:thrift_port]',
 ];
