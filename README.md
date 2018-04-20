@@ -19,7 +19,7 @@ $ ./install.sh
 ### `Docker` 环境
 
 ```
-$ sudo docker-compose up -d     # 并确保已经安装(执行)了 `/web/docker/script/` 目录下的所有脚本
+$ sudo docker-compose up -d     # 并确保已经安装 `/web/docker` 并执行了 `/web/docker/script/` 目录下的所有脚本
 $ mq-composer install --ignore-platform-reqs
 $ mq-bash kake/install.sh
 ```
