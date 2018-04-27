@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "32df84541d71401ecbfd52bfa48f141b",
+    "content-hash": "8b50a818ba203e0367884e75641ecd34",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -279,16 +279,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.3",
+            "version": "2.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "1bec00a10039b823cc94eef4eddd47dcd3b2ca04"
+                "reference": "8790f594151ca6a2010c6218e09d96df67173ad3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/egulias/EmailValidator/1bec00a10039b823cc94eef4eddd47dcd3b2ca04.zip",
-                "reference": "1bec00a10039b823cc94eef4eddd47dcd3b2ca04",
+                "url": "https://files.phpcomposer.com/files/egulias/EmailValidator/8790f594151ca6a2010c6218e09d96df67173ad3.zip",
+                "reference": "8790f594151ca6a2010c6218e09d96df67173ad3",
                 "shasum": ""
             },
             "require": {
@@ -297,7 +297,7 @@
             },
             "require-dev": {
                 "dominicsayers/isemail": "dev-master",
-                "phpunit/phpunit": "^4.8.35",
+                "phpunit/phpunit": "^4.8.35||^5.7||^6.0",
                 "satooshi/php-coveralls": "^1.0.1"
             },
             "suggest": {
@@ -332,20 +332,20 @@
                 "validation",
                 "validator"
             ],
-            "time": "2017-11-15T23:40:40+00:00"
+            "time": "2018-04-10T10:11:19+00:00"
         },
         {
             "name": "endroid/qrcode",
-            "version": "3.2.8",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/qr-code.git",
-                "reference": "844f9ea95bd6b012097890c6106c909cd802add2"
+                "reference": "a9a57ab57ac75928fcdcfb2a71179963ff6fe573"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/endroid/qr-code/844f9ea95bd6b012097890c6106c909cd802add2.zip",
-                "reference": "844f9ea95bd6b012097890c6106c909cd802add2",
+                "url": "https://files.phpcomposer.com/files/endroid/qr-code/a9a57ab57ac75928fcdcfb2a71179963ff6fe573.zip",
+                "reference": "a9a57ab57ac75928fcdcfb2a71179963ff6fe573",
                 "shasum": ""
             },
             "require": {
@@ -353,17 +353,25 @@
                 "ext-gd": "*",
                 "khanamiryan/qrcode-detector-decoder": "^1.0",
                 "myclabs/php-enum": "^1.5",
-                "php": ">=7.1",
-                "symfony/options-resolver": "^2.7|^3.0|^4.0",
-                "symfony/property-access": "^2.7|^3.0|^4.0"
+                "php": ">=5.6",
+                "symfony/options-resolver": ">=2.7",
+                "symfony/property-access": ">=2.7"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7|^6.0"
+                "phpunit/phpunit": ">=5.7",
+                "symfony/asset": ">=2.7",
+                "symfony/browser-kit": ">=2.7",
+                "symfony/finder": ">=2.7",
+                "symfony/framework-bundle": ">=2.7",
+                "symfony/http-kernel": ">=2.7",
+                "symfony/templating": ">=2.7",
+                "symfony/twig-bundle": ">=2.7",
+                "symfony/yaml": ">=2.7"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.x-dev"
+                    "dev-master": "2.x-dev"
                 }
             },
             "autoload": {
@@ -379,21 +387,22 @@
                 {
                     "name": "Jeroen van den Enden",
                     "email": "info@endroid.nl",
-                    "homepage": "https://endroid.nl/"
+                    "homepage": "http://endroid.nl/"
                 }
             ],
             "description": "Endroid QR Code",
-            "homepage": "https://github.com/endroid/qr-code",
+            "homepage": "https://github.com/endroid/QrCode",
             "keywords": [
                 "bundle",
                 "code",
                 "endroid",
-                "php",
+                "flex",
                 "qr",
-                "qrcode"
+                "qrcode",
+                "symfony"
             ],
             "abandoned": "endroid/qr-code",
-            "time": "2018-02-27T21:35:30+00:00"
+            "time": "2017-10-22T18:56:00+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -444,16 +453,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.3.2",
+            "version": "6.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "68d0ea14d5a3f42a20e87632a5f84931e2709c90"
+                "reference": "407b0cb880ace85c9b63c5f9551db498cb2d50ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/guzzle/guzzle/68d0ea14d5a3f42a20e87632a5f84931e2709c90.zip",
-                "reference": "68d0ea14d5a3f42a20e87632a5f84931e2709c90",
+                "url": "https://files.phpcomposer.com/files/guzzle/guzzle/407b0cb880ace85c9b63c5f9551db498cb2d50ba.zip",
+                "reference": "407b0cb880ace85c9b63c5f9551db498cb2d50ba",
                 "shasum": ""
             },
             "require": {
@@ -463,7 +472,7 @@
             },
             "require-dev": {
                 "ext-curl": "*",
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4",
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4 || ^7.0",
                 "psr/log": "^1.0"
             },
             "suggest": {
@@ -505,7 +514,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2018-03-26T16:33:04+00:00"
+            "time": "2018-04-22T15:46:56+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -1104,16 +1113,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "8380fb3ad28242093c18d0baa9b7e67fb429ea84"
+                "reference": "36acc372875c4d894dc093825ce4f62209db5a76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/PHPOffice/PhpSpreadsheet/8380fb3ad28242093c18d0baa9b7e67fb429ea84.zip",
-                "reference": "8380fb3ad28242093c18d0baa9b7e67fb429ea84",
+                "url": "https://files.phpcomposer.com/files/PHPOffice/PhpSpreadsheet/36acc372875c4d894dc093825ce4f62209db5a76.zip",
+                "reference": "36acc372875c4d894dc093825ce4f62209db5a76",
                 "shasum": ""
             },
             "require": {
@@ -1186,7 +1195,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2018-03-04T20:41:15+00:00"
+            "time": "2018-04-10T03:53:16+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -2247,16 +2256,16 @@
         },
         {
             "name": "yiisoft/yii2-swiftmailer",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-swiftmailer.git",
-                "reference": "563570c9aa19ca47c1b22e3032983229378e9274"
+                "reference": "fd917fbe63b7ea796c52902143b83b98e65bfb73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/yiisoft/yii2-swiftmailer/563570c9aa19ca47c1b22e3032983229378e9274.zip",
-                "reference": "563570c9aa19ca47c1b22e3032983229378e9274",
+                "url": "https://files.phpcomposer.com/files/yiisoft/yii2-swiftmailer/fd917fbe63b7ea796c52902143b83b98e65bfb73.zip",
+                "reference": "fd917fbe63b7ea796c52902143b83b98e65bfb73",
                 "shasum": ""
             },
             "require": {
@@ -2266,12 +2275,12 @@
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "2.1.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "yii\\swiftmailer\\": ""
+                    "yii\\swiftmailer\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2293,7 +2302,7 @@
                 "swiftmailer",
                 "yii2"
             ],
-            "time": "2017-08-04T10:48:17+00:00"
+            "time": "2018-04-24T23:17:42+00:00"
         }
     ],
     "packages-dev": [
