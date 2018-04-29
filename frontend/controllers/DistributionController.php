@@ -86,14 +86,18 @@ class DistributionController extends GeneralController
         }
 
         $list = $this->listProducerProduct($uid, 0, 1, $params['distribution_items_limit']);
-        $top = $this->renderPartial('top-list', ['list' => array_slice($list, 0, 4)]);
-        $html_0 = $this->renderPartial('items-list', ['list' => array_slice($list, 4)]);
 
-        $list = $this->listProducerProduct($uid, 1, 1, $params['distribution_items_limit']);
-        $html_1 = $this->renderPartial('items-list', compact('list'));
+        $list_top = array_slice($list, 0, 4);
+        $top = $this->renderPartial('top-list', ['list' => $list_top]);
 
-        $list = $this->listProducerProduct($uid, 2, 1, $params['distribution_items_limit']);
-        $html_2 = $this->renderPartial('items-list', compact('list'));
+        $list_0 = array_slice($list, 4);
+        $html_0 = $this->renderPartial('items-list', ['list' => $list_0]);
+
+        $list_1 = $this->listProducerProduct($uid, 1, 1, $params['distribution_items_limit']);
+        $html_1 = $this->renderPartial('items-list', ['list' => $list_1]);
+
+        $list_2 = $this->listProducerProduct($uid, 2, 1, $params['distribution_items_limit']);
+        $html_2 = $this->renderPartial('items-list', ['list' => $list_2]);
 
         $ref = $this->reference();
         $animate = true;
@@ -114,9 +118,13 @@ class DistributionController extends GeneralController
             'region',
             'upstream',
             'producer',
+            'list_top',
             'top',
+            'list_0',
             'html_0',
+            'list_1',
             'html_1',
+            'list_2',
             'html_2',
             'animate'
         ];

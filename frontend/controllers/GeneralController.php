@@ -67,7 +67,11 @@ class GeneralController extends MainController
             // 微信自动回复
             'we-chat/reply',
             // 商品详情
-            'detail/index'
+            'detail/index',
+            // 小程序
+            'mini/init-session',
+            'mini/login',
+            'mini/bind-phone',
         ])
         ) {
             $this->mustLogin();
@@ -110,7 +114,7 @@ class GeneralController extends MainController
      * @access public
      *
      * @param string $content
-     * @param array  $file
+     * @param array $file
      *
      * @return bool
      */
@@ -142,6 +146,27 @@ class GeneralController extends MainController
     }
 
     /**
+     * 登录用户
+     *
+     * @param array $user
+     * @param string $type
+     * @param string $system
+     */
+    protected function loginUser($user, $type, $system = 'kake')
+    {
+        Yii::info("将用户信息设置到 Session 中 - 来自 <{$system}> 系统的 <{$type}> 类型登录");
+
+        Yii::$app->session->set(self::USER, $user);
+        $this->user = (object)array_merge((array)$this->user, $user);
+
+        $this->service('user.login-log', [
+            'id' => $user['id'],
+            'ip' => Yii::$app->request->userIP,
+            'type' => $type
+        ]);
+    }
+
+    /**
      * 需要登录
      *
      * @access public
@@ -159,20 +184,7 @@ class GeneralController extends MainController
             $this->fail('login first');
         }
 
-        $loginUser = function ($user, $type, $system = 'kake') {
-            Yii::info("将用户信息设置到 Session 中 - 来自 <{$system}> 系统的 <{$type}> 类型登录");
-
-            Yii::$app->session->set(self::USER, $user);
-            $this->user = (object)array_merge((array)$this->user, $user);
-
-            $this->service('user.login-log', [
-                'id' => $user['id'],
-                'ip' => Yii::$app->request->userIP,
-                'type' => $type
-            ]);
-        };
-
-        $ssoLogin = function ($uid = null) use ($loginUser) {
+        $ssoLogin = function ($uid = null) {
             $extra = $uid ? ['id' => $uid] : [];
             $url = Helper::unsetParamsForUrl('code', $this->currentUrl());
             $result = Yii::$app->oil->sso->auth($url, $extra);
@@ -182,7 +194,7 @@ class GeneralController extends MainController
                     'message' => urlencode(Yii::t('common', $result))
                 ]);
             } else {
-                $loginUser($result, 'sso-login');
+                $this->loginUser($result, 'sso-login');
             }
         };
 
@@ -205,7 +217,7 @@ class GeneralController extends MainController
                     if (empty($result['phone'])) {
                         $ssoLogin($result['id']);
                     } else {
-                        $loginUser($result, isset($result['state']) ? 'we-chat-login' : 'we-chat-bind');
+                        $this->loginUser($result, isset($result['state']) ? 'we-chat-login' : 'we-chat-bind');
                     }
                 }
             } else {
@@ -247,8 +259,8 @@ class GeneralController extends MainController
      *
      * @access protected
      *
-     * @param mixed   $params
-     * @param string  $router
+     * @param mixed $params
+     * @param string $router
      * @param boolean $checkUser
      *
      * @return string
@@ -489,7 +501,7 @@ class GeneralController extends MainController
      * @access public
      *
      * @param mixed $plate
-     * @param int   $limit
+     * @param int $limit
      *
      * @return array
      */
@@ -587,7 +599,7 @@ class GeneralController extends MainController
      * @param integer $page
      * @param integer $pageSize
      * @param integer $time
-     * @param array   $options
+     * @param array $options
      *
      * @return array
      */
@@ -799,7 +811,7 @@ class GeneralController extends MainController
      * @access public
      *
      * @param  integer $plate
-     * @param boolean  $nameModel Default id
+     * @param boolean $nameModel Default id
      *
      * @return array
      */
@@ -933,7 +945,7 @@ class GeneralController extends MainController
      * @access public
      *
      * @param integer $page
-     * @param mixed   $state
+     * @param mixed $state
      * @param integer $page_size
      *
      * @return array
@@ -1027,7 +1039,7 @@ class GeneralController extends MainController
      * @access public
      *
      * @param string $view
-     * @param array  $params
+     * @param array $params
      * @param string $title
      *
      * @return bool
@@ -1059,6 +1071,10 @@ class GeneralController extends MainController
      */
     public function render($view, $params = [], $static = false)
     {
+        if (SCHEME === 'https:' && Yii::$app->request->get('mini-program')) {
+            $this->success($params);
+        }
+
         Yii::info('开始渲染模板文件');
         $html = parent::render($view, $params);
         Yii::info('完成渲染模板文件');

@@ -117,6 +117,13 @@ return [
                         'cert_path' => Yii::getAlias('@wechat/cert/apiclient_cert.pem'),
                         'key_path' => Yii::getAlias('@wechat/cert/apiclient_key.pem'),
                     ],
+                    // 小程序
+                    'mini_program' => [
+                        'app_id'   => '[SECRET:wx_mini_id]',
+                        'secret'   => '[SECRET:wx_mini_secret]',
+                        'token'    => '[SECRET:wx_mini_token]',
+                        'aes_key'  => '[SECRET:wx_mini_aes]'
+                    ],
                     // Guzzle
                     'guzzle' => [
                         'timeout' => 6.0,
