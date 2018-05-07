@@ -183,6 +183,10 @@ class DetailController extends GeneralController
             'order_contacts_id' => $contacts
         ], 'order/' . $paymentMethod, $paymentMethod == 'ali' ? false : true);
 
+        if (Yii::$app->request->isAjax) {
+            $this->success($url);
+        }
+
         return $this->redirect($url);
     }
 }
