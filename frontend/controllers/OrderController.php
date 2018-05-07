@@ -696,6 +696,7 @@ class OrderController extends GeneralController
         }
 
         $json = Yii::$app->oil->wx->payment->configForPayment($prepayId);
+        $jsonArr = json_decode($json);
         $this->sourceJs = [
             'order/index'
         ];
@@ -703,6 +704,7 @@ class OrderController extends GeneralController
 
         return $this->render('wx-pay', [
             'json' => $json,
+            'json_arr' => $jsonArr,
             'order_number' => $outTradeNo
         ]);
     }
