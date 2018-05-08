@@ -146,14 +146,15 @@ class DistributionController extends GeneralController
      * @param string $title
      * @param string $channel
      * @param string $date
+     * @param string $pic
      */
-    private function share($title, $channel, $date)
+    private function share($title, $channel, $date, $pic)
     {
         $this->seo([
             'title' => $title,
             'share_title' => Yii::$app->params['activity_producer_share_title'],
             'share_description' => Yii::$app->params['activity_producer_share_description'],
-            'share_cover' => Yii::$app->params['frontend_source'] . '/img/distribution/activity-boot/share.png',
+            'share_cover' => $pic ?: Yii::$app->params['frontend_source'] . '/img/distribution/activity-boot/share.png',
             'share_url' => Url::toRoute([
                 'distribution/activity-boot',
                 'channel' => $channel,
@@ -214,7 +215,7 @@ class DistributionController extends GeneralController
             'date' => $date
         ]) : null;
 
-        $this->share('活动详情', $channel, $date);
+        $this->share('活动详情', $channel, $date, current($prize['cover_preview_url']));
 
         return $this->render('activity-boot', compact('channel', 'prize', 'from_user', 'code_list_url'));
     }
@@ -257,7 +258,7 @@ class DistributionController extends GeneralController
         $history_winner = $this->listHistoryWinner();
 
         $user = $this->user;
-        $this->share('我的抽奖码', $channel, $date);
+        $this->share('我的抽奖码', $channel, $date, current($prize['cover_preview_url']));
 
         return $this->render('activity', compact('channel', 'prize', 'code', 'total', 'percent', 'user', 'history_winner'));
     }
