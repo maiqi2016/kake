@@ -172,15 +172,19 @@ class ProducerController extends GeneralController
             '/node_modules/clipboard/dist/clipboard.min'
         ];
 
-        $controller = $this->controller('producer-product');
-        $controller::$uid = $this->user->id;
-        $list = $controller->showList('my', true, false, [
-            'size' => 0
-        ])[0];
-        foreach ($list as &$item) {
-            $url = SCHEME . $item['link_url'] . '&channel=' . $item['channel'];
-            $item['link_url_short'] = $this->shortUrl($url);
-        }
+        $list = $this->cache('producer.product.list', function () {
+            $controller = $this->controller('producer-product');
+            $controller::$uid = $this->user->id;
+            $list = $controller->showList('my', true, false, [
+                'size' => 0
+            ])[0];
+            foreach ($list as &$item) {
+                $url = SCHEME . $item['link_url'] . '&channel=' . $item['channel'];
+                $item['link_url_short'] = $this->shortUrl($url);
+            }
+
+            return $list;
+        }, DAY, null, Yii::$app->params['use_cache']);
 
         $this->seo(['title' => '分销商管理']);
 
