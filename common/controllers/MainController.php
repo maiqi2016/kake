@@ -1442,6 +1442,10 @@ class MainController extends Controller
                 break;
         }
 
+        if (Yii::$app->request->isAjax) {
+            $this->fail($message);
+        }
+
         if (isset(Response::$statusTexts[$code])) {
             header("HTTP/1.1 {$code} " . Response::$statusTexts[$code]);
         }

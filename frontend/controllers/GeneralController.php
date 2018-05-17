@@ -83,6 +83,20 @@ class GeneralController extends MainController
     }
 
     /**
+     * @inheritdoc
+     */
+    public function beforeAction($action)
+    {
+        if (in_array($action->id, [
+            'ajax-sms'
+        ])) {
+            $action->controller->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
+    }
+
+    /**
      * 静态化文件
      *
      * @access public
@@ -1071,7 +1085,7 @@ class GeneralController extends MainController
      */
     public function render($view, $params = [], $static = false)
     {
-        if (SCHEME === 'https:' && Yii::$app->request->get('mini-program')) {
+        if (Yii::$app->request->isAjax) {
             $this->success($params);
         }
 
