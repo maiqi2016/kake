@@ -75,18 +75,26 @@ class MainController extends Controller
      */
     public function init()
     {
-        Helper::executeOnce(function () {
-            parent::init();
+        Helper::executeOnce(
+            function () {
+                parent::init();
 
-            Yii::info('开始读取配置表中的配置');
-            $config = $this->cache('list.app.config.kvp', function () {
-                return $this->service('general.config-kvp');
-            }, DAY, null, Yii::$app->params['use_cache']);
+                Yii::info('开始读取配置表中的配置');
+                $config = $this->cache(
+                    'list.app.config.kvp',
+                    function () {
+                        return $this->service('general.config-kvp');
+                    },
+                    DAY,
+                    null,
+                    Yii::$app->params['use_cache']
+                );
 
-            Yii::$app->params = array_merge($config['file'], Yii::$app->params, $config['db']);
+                Yii::$app->params = array_merge($config['file'], Yii::$app->params, $config['db']);
 
-            $this->oilExtendParams();
-        });
+                $this->oilExtendParams();
+            }
+        );
     }
 
     /**
@@ -107,7 +115,7 @@ class MainController extends Controller
     {
         $except = [
             'general/ajax-upload',
-            'general/ajax-ck-editor-upload'
+            'general/ajax-ck-editor-upload',
         ];
         if (!in_array($action->controller->id . '/' . $action->id, $except)) {
             if (strpos($action->id, 'ajax-') === 0) {
@@ -138,10 +146,10 @@ class MainController extends Controller
 
         $extendParams = [
             'upload' => ['config' => ['root_path' => Yii::$app->params['tmp_path']]],
-            'wx' => ['config' => ['oauth' => ['callback' => SCHEME . Yii::$app->params['wechat_callback']]]],
-            'ali' => ['config' => ['options' => ['callback' => SCHEME . Yii::$app->params['alipay_callback']]]],
-            'oss' => ['config' => ['host' => SCHEME . Yii::$app->params['upload_url']]],
-            'sso' => ['config' => ['host' => SCHEME . Yii::$app->params['passport_url']]],
+            'wx'     => ['config' => ['oauth' => ['callback' => SCHEME . Yii::$app->params['wechat_callback']]]],
+            'ali'    => ['config' => ['options' => ['callback' => SCHEME . Yii::$app->params['alipay_callback']]]],
+            'oss'    => ['config' => ['host' => SCHEME . Yii::$app->params['upload_url']]],
+            'sso'    => ['config' => ['host' => SCHEME . Yii::$app->params['passport_url']]],
         ];
 
         $oil->oil = ArrayHelper::merge($oil->oil, $extendParams);
@@ -172,9 +180,12 @@ class MainController extends Controller
             if (!$new) {
                 $pool[$key] = $class;
             } else {
-                $pool[$key] = Helper::singleton($class, function () use ($class) {
-                    return new $class($this->id, $this->module);
-                });
+                $pool[$key] = Helper::singleton(
+                    $class,
+                    function () use ($class) {
+                        return new $class($this->id, $this->module);
+                    }
+                );
             }
         }
 
@@ -197,9 +208,12 @@ class MainController extends Controller
 
         $key = md5($model);
         if (!isset($pool[$key])) {
-            $pool[$key] = Helper::singleton($model, function () use ($model, $config) {
-                return new Main($model, Yii::$app->params['use_cache'], $config);
-            });
+            $pool[$key] = Helper::singleton(
+                $model,
+                function () use ($model, $config) {
+                    return new Main($model, Yii::$app->params['use_cache'], $config);
+                }
+            );
         }
 
         return $pool[$key];
@@ -233,7 +247,7 @@ class MainController extends Controller
     public function message($message, $title = null, $extraHtml = null)
     {
         $this->sourceCss = [
-            'message/index'
+            'message/index',
         ];
 
         if (is_array($message)) {
@@ -241,10 +255,10 @@ class MainController extends Controller
         }
 
         $params = [
-            'type' => 'message',
+            'type'    => 'message',
             'message' => $message,
-            'title' => $title,
-            'extra' => $extraHtml
+            'title'   => $title,
+            'extra'   => $extraHtml,
         ];
 
         $this->seo(['title' => $title]);
@@ -329,8 +343,8 @@ class MainController extends Controller
     {
         $result = [
             'state' => $state,
-            'info' => $info,
-            'data' => $data
+            'info'  => $info,
+            'data'  => $data,
         ];
 
         switch (strtoupper($type)) {
@@ -466,11 +480,14 @@ class MainController extends Controller
         $file = current($result);
 
         // 记录上传日志
-        $result = $this->service('general.add-for-backend', [
-            'table' => 'attachment',
-            'deep_path' => $file['save_path'],
-            'filename' => $file['save_name']
-        ]);
+        $result = $this->service(
+            'general.add-for-backend',
+            [
+                'table'     => 'attachment',
+                'deep_path' => $file['save_path'],
+                'filename'  => $file['save_name'],
+            ]
+        );
 
         $attachmentId = $result['id'];
 
@@ -494,11 +511,11 @@ class MainController extends Controller
         // 返回数据
         $url = Yii::$app->params['upload_url'];
         $result = [
-            'name' => $file['name'],
-            'id' => $attachmentId,
-            'width' => $file['width'],
+            'name'   => $file['name'],
+            'id'     => $attachmentId,
+            'width'  => $file['width'],
             'height' => $file['height'],
-            'url' => $url . '/' . $file['save_path'] . '-' . $file['save_name']
+            'url'    => $url . '/' . $file['save_path'] . '-' . $file['save_name'],
         ];
 
         if ($cropData && !empty($cropData['width']) && !empty($cropData['height'])) {
@@ -531,10 +548,13 @@ class MainController extends Controller
      */
     public function getControllerName($action = null, $split = '/')
     {
-        $controller = Helper::cutString(static::className(), [
-            '\^0^desc',
-            'Controller^0'
-        ]);
+        $controller = Helper::cutString(
+            static::className(),
+            [
+                '\^0^desc',
+                'Controller^0',
+            ]
+        );
 
         $controller = Helper::camelToUnder($controller, '-');
         if (empty($action)) {
@@ -560,7 +580,7 @@ class MainController extends Controller
      */
     public function createAttachmentUrl($record, $items, $suffix = 'preview_url', $separator = '-')
     {
-        $items = (array) $items;
+        $items = (array)$items;
         foreach ($items as $attachmentIdKey => $preKey) {
 
             if (is_numeric($attachmentIdKey)) {
@@ -578,12 +598,36 @@ class MainController extends Controller
 
             $url = Yii::$app->params['upload_url'];
             $id = $record[$attachmentIdKey];
+
+            $_value = $url . DS . $record[$deepPath] . $separator . $record[$filename];
+            $_value = $this->getCompressPicUrl($_value);
+
             $record[$prefixTag . $suffix] = [
-                $id => $url . DS . $record[$deepPath] . $separator . $record[$filename]
+                $id => $_value,
             ];
         }
 
         return $record;
+    }
+
+    /**
+     * @param $url
+     *
+     * @return string
+     */
+    public function getCompressPicUrl($url)
+    {
+        $suffix = '?x-oss-process=style/compress';
+        if (strpos($url, $suffix) !== false) {
+            return $url;
+        }
+
+        $ext = Helper::getSuffix($url);
+        if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
+            $url .= '?x-oss-process=style/compress';
+        }
+
+        return $url;
     }
 
     /**
@@ -604,9 +648,12 @@ class MainController extends Controller
                 continue;
             }
 
-            $attachment = $this->service('general.list-attachment-by-ids', [
-                'ids' => $record[$attachmentIdsKey]
-            ]);
+            $attachment = $this->service(
+                'general.list-attachment-by-ids',
+                [
+                    'ids' => $record[$attachmentIdsKey],
+                ]
+            );
             $attachment = Helper::arraySortAppointIndex($attachment, 'id', $record[$attachmentIdsKey]);
 
             foreach ($attachment as &$item) {
@@ -616,7 +663,9 @@ class MainController extends Controller
             $tagKey = empty($tagKey) ? null : $tagKey . '_';
 
             foreach (array_column($attachment, $suffix) as $value) {
-                $record[$tagKey . $suffix][key($value)] = current($value);
+                $_value = current($value);
+                $_value = $this->getCompressPicUrl($_value);
+                $record[$tagKey . $suffix][key($value)] = $_value;
             }
         }
 
@@ -635,7 +684,7 @@ class MainController extends Controller
      */
     public function compatibleUrl($item, $param = 'frontend_url')
     {
-        $item = (array) $item;
+        $item = (array)$item;
         $str = $item[0];
         $str = !empty($str) ? $str : 'javascript:void(null);';
 
@@ -677,7 +726,7 @@ class MainController extends Controller
      */
     public function createLinkUrl($record, $items, $preHandler = null, $suffix = 'link_url', $param = 'frontend_url')
     {
-        $items = (array) $items;
+        $items = (array)$items;
         foreach ($items as $oldKey => $newKey) {
             if (is_numeric($oldKey)) {
                 $oldKey = $newKey;
@@ -712,7 +761,7 @@ class MainController extends Controller
      */
     public function listForeignData($record, $items, $extraHandler = null, $action = null)
     {
-        $items = (array) $items;
+        $items = (array)$items;
         $action = $action ?: 'edit';
 
         $assists = $this->callStatic($action . 'Assist', null, [$action]);
@@ -767,7 +816,7 @@ class MainController extends Controller
      */
     public function getFieldInfo($record, $field, $forceEmpty = false)
     {
-        $field = (array) $field;
+        $field = (array)$field;
         foreach ($field as $item) {
             $key = '_' . $item;
             if (!isset($record[$item])) {
@@ -776,7 +825,7 @@ class MainController extends Controller
 
             $keys = [
                 $key,
-                $key . '_except'
+                $key . '_except',
             ];
             foreach ($keys as $attr) {
                 if (!isset(static::${$attr})) {
@@ -861,14 +910,14 @@ class MainController extends Controller
         } else {
             $url = $reference[$key];
             if (!empty($params)) {
-                $url .= (strpos($url, '?') === false ? '?' : '&') . http_build_query((array) $params);
+                $url .= (strpos($url, '?') === false ? '?' : '&') . http_build_query((array)$params);
             }
 
             unset($reference[$key]);
             Yii::$app->session->set(static::REFERENCE, $reference);
         }
 
-        foreach ((array) $flash as $key => $msg) {
+        foreach ((array)$flash as $key => $msg) {
             Yii::$app->session->setFlash($key, $msg);
         }
 
@@ -926,7 +975,7 @@ class MainController extends Controller
             return $default;
         }
 
-        $params = (array) $params;
+        $params = (array)$params;
 
         return $class::$method(...$params);
     }
@@ -954,7 +1003,7 @@ class MainController extends Controller
         if (!method_exists($class, $method)) {
             return $default;
         }
-        $params = (array) $params;
+        $params = (array)$params;
 
         return $class->$method(...$params);
     }
@@ -970,24 +1019,30 @@ class MainController extends Controller
      */
     public function api($appName, $api, $params = [])
     {
-        if (!in_array($appName, [
-            'backend',
-            'frontend'
-        ])
+        if (!in_array(
+            $appName,
+            [
+                'backend',
+                'frontend',
+            ]
+        )
         ) {
             return [
                 'state' => 0,
-                'info' => 'Unknown application name.'
+                'info'  => 'Unknown application name.',
             ];
         }
 
         $api = str_replace('.', '/', $api);
         $url = SCHEME . Yii::$app->params[$appName . '_url'] . Url::toRoute([$api]);
 
-        $params = array_merge($params, [
-            'api_token' => strrev(md5(Yii::$app->params['api_token_' . $appName])),
-            'api_app' => $appName
-        ]);
+        $params = array_merge(
+            $params,
+            [
+                'api_token' => strrev(md5(Yii::$app->params['api_token_' . $appName])),
+                'api_app'   => $appName,
+            ]
+        );
 
         $result = Helper::cURL($url, 'GET', $params);
         $result = Helper::handleCurlResult($result);
@@ -1012,10 +1067,12 @@ class MainController extends Controller
         $_token = strrev(md5($_token));
 
         if (!$token || $token != $_token) {
-            $this->fail([
-                'param illegal',
-                'param' => 'api token'
-            ]);
+            $this->fail(
+                [
+                    'param illegal',
+                    'param' => 'api token',
+                ]
+            );
         }
         unset($params['api_token'], $params['api_app']);
 
@@ -1040,23 +1097,31 @@ class MainController extends Controller
     {
         $controller = $this->controller('producer-setting');
         $condition = $this->callMethod('indexCondition', [], null, $controller);
-        $condition = array_merge($condition, [
-            'table' => 'producer_setting',
-            'where' => [
-                ['producer_setting.producer_id' => $userId],
-                ['producer_setting.state' => 1]
+        $condition = array_merge(
+            $condition,
+            [
+                'table' => 'producer_setting',
+                'where' => [
+                    ['producer_setting.producer_id' => $userId],
+                    ['producer_setting.state' => 1],
+                ],
             ]
-        ]);
+        );
 
         $producer = $this->service(self::$apiDetail, $condition);
         if (empty($producer)) {
             return [];
         }
 
-        $producer = $this->callMethod('sufHandleField', $producer, [
+        $producer = $this->callMethod(
+            'sufHandleField',
             $producer,
-            'list'
-        ], $controller);
+            [
+                $producer,
+                'list',
+            ],
+            $controller
+        );
 
         return $producer;
     }
@@ -1080,16 +1145,20 @@ class MainController extends Controller
         $qrCode->setMargin($qrWidth / 25);
         $qrCode->setEncoding('utf-8');
         $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::QUARTILE);
-        $qrCode->setForegroundColor([
-            'r' => 0,
-            'g' => 0,
-            'b' => 0
-        ]);
-        $qrCode->setBackgroundColor([
-            'r' => 255,
-            'g' => 255,
-            'b' => 255
-        ]);
+        $qrCode->setForegroundColor(
+            [
+                'r' => 0,
+                'g' => 0,
+                'b' => 0,
+            ]
+        );
+        $qrCode->setBackgroundColor(
+            [
+                'r' => 255,
+                'g' => 255,
+                'b' => 255,
+            ]
+        );
 
         if ($logo) {
             $this->handleQrLogo($logo);
@@ -1229,7 +1298,12 @@ class MainController extends Controller
         }
 
         $suffix = Helper::getSuffix($imgFile);
-        $path = Helper::createFilePath(Yii::$app->params['tmp_path'], $bgColor ? $suffix : 'png', $separator, 'thumb_original_');
+        $path = Helper::createFilePath(
+            Yii::$app->params['tmp_path'],
+            $bgColor ? $suffix : 'png',
+            $separator,
+            'thumb_original_'
+        );
         $bg->save($path['file']);
 
         return $path;
@@ -1249,9 +1323,13 @@ class MainController extends Controller
     public function thumbCrop($imgFile, $width, $height, $cover = false, $separator = '-')
     {
         $img = Image::make($imgFile);
-        $img->fit($width, $height, function ($constraint) {
-            $constraint->upsize();
-        });
+        $img->fit(
+            $width,
+            $height,
+            function ($constraint) {
+                $constraint->upsize();
+            }
+        );
 
         if ($cover) {
             $img->save($imgFile);
@@ -1309,34 +1387,47 @@ class MainController extends Controller
      */
     public function listUser($where = [], $get_field = 'username', $user_ids = null)
     {
-        $user = $this->cache([
-            'list.user',
-            func_get_args()
-        ], function () use ($where, $user_ids, $get_field) {
+        $user = $this->cache(
+            [
+                'list.user',
+                func_get_args(),
+            ],
+            function () use ($where, $user_ids, $get_field) {
 
-            $where = array_merge((array) $where, [
-                ['state' => 1]
-            ]);
+                $where = array_merge(
+                    (array)$where,
+                    [
+                        ['state' => 1],
+                    ]
+                );
 
-            if ($user_ids) {
-                if (is_string($user_ids)) {
-                    $user_ids = Helper::handleString($user_ids);
+                if ($user_ids) {
+                    if (is_string($user_ids)) {
+                        $user_ids = Helper::handleString($user_ids);
+                    }
+                    $where[] = ['id' => $user_ids];
                 }
-                $where[] = ['id' => $user_ids];
-            }
 
-            $user = $this->service(static::$apiList, [
-                'table' => 'user',
-                'select' => [
-                    'id',
-                    $get_field
-                ],
-                'size' => 0,
-                'where' => $where
-            ], 'yes');
+                $user = $this->service(
+                    static::$apiList,
+                    [
+                        'table'  => 'user',
+                        'select' => [
+                            'id',
+                            $get_field,
+                        ],
+                        'size'   => 0,
+                        'where'  => $where,
+                    ],
+                    'yes'
+                );
 
-            return array_column($user, $get_field, 'id');
-        }, WEEK, null, Yii::$app->params['use_cache']);
+                return array_column($user, $get_field, 'id');
+            },
+            WEEK,
+            null,
+            Yii::$app->params['use_cache']
+        );
 
         return $user;
     }
@@ -1352,14 +1443,17 @@ class MainController extends Controller
      */
     public function listSupplier($user_id)
     {
-        $result = $this->service(self::$apiList, [
-            'table' => 'product_supplier_user',
-            'where' => [
-                ['state' => 1],
-                ['user_id' => $user_id]
-            ],
-            'select' => ['product_supplier_id']
-        ]);
+        $result = $this->service(
+            self::$apiList,
+            [
+                'table'  => 'product_supplier_user',
+                'where'  => [
+                    ['state' => 1],
+                    ['user_id' => $user_id],
+                ],
+                'select' => ['product_supplier_id'],
+            ]
+        );
 
         return array_column($result, 'product_supplier_id');
     }
@@ -1408,7 +1502,7 @@ class MainController extends Controller
     public function error($message, $code = null, $trace = null)
     {
         $this->sourceCss = [
-            'message/index'
+            'message/index',
         ];
 
         if (is_array($message)) {
@@ -1419,25 +1513,25 @@ class MainController extends Controller
 
             case 403 :
                 $params = [
-                    'type' => $code,
+                    'type'    => $code,
                     'message' => $message,
-                    'title' => '403 Forbidden'
+                    'title'   => '403 Forbidden',
                 ];
                 break;
 
             case 404 :
                 $params = [
-                    'type' => $code,
+                    'type'    => $code,
                     'message' => $message,
-                    'title' => '404 Not Found'
+                    'title'   => '404 Not Found',
                 ];
                 break;
 
             default :
                 $params = [
-                    'type' => 'error',
+                    'type'    => 'error',
                     'message' => $message,
-                    'title' => 'Notice'
+                    'title'   => 'Notice',
                 ];
                 break;
         }
@@ -1469,14 +1563,15 @@ class MainController extends Controller
         $base64 = Yii::$app->request->post('base64');
         $file = Helper::base64ToImage($base64, Yii::$app->params['tmp_path'], 'png');
 
-        $this->success([
-            'url' => Yii::$app->params['upload_url'] . '/' . $file
-        ]);
+        $this->success(
+            [
+                'url' => Yii::$app->params['upload_url'] . '/' . $file,
+            ]
+        );
     }
 
     /**
      * CkEditor-上传功能
-     *
      * @access public
      * @auth-pass-all
      * @return void
@@ -1522,19 +1617,23 @@ class MainController extends Controller
         $class = '\backend\controllers\\' . Helper::underToCamel($params['controller'], false, '-') . 'Controller';
         $method = Helper::underToCamel($params['action'], true, '-') . 'Assist';
         if (!class_exists($class) || !method_exists($class, $method)) {
-            $this->fail([
-                'param illegal',
-                'param' => 'controller or action'
-            ]);
+            $this->fail(
+                [
+                    'param illegal',
+                    'param' => 'controller or action',
+                ]
+            );
         }
 
         $assist = $this->callMethod($method, [], null, $class);
         $rules = array_column($assist, 'rules', 'tag');
         if (!isset($rules[$params['tag']])) {
-            $this->fail([
-                'param illegal',
-                'param' => 'tag'
-            ]);
+            $this->fail(
+                [
+                    'param illegal',
+                    'param' => 'tag',
+                ]
+            );
         }
 
         $rule = $rules[$params['tag']];
@@ -1564,10 +1663,13 @@ class MainController extends Controller
             $this->fail('phone number illegal');
         }
 
-        $result = $this->service('phone-captcha.send', [
-            'phone' => $phone,
-            'type' => Yii::$app->request->post('type')
-        ]);
+        $result = $this->service(
+            'phone-captcha.send',
+            [
+                'phone' => $phone,
+                'type'  => Yii::$app->request->post('type'),
+            ]
+        );
 
         if (is_string($result)) {
             $this->fail($result);
@@ -1627,7 +1729,7 @@ class MainController extends Controller
     public function shortUrl($url)
     {
         if (is_array($url) || (strpos($url, 'http') !== 0 && strpos($url, '//' !== 0))) {
-            $url = urldecode(Url::toRoute((array) $url, true));
+            $url = urldecode(Url::toRoute((array)$url, true));
         }
 
         return $this->service('general.short-url', ['original_url' => $url]);
@@ -1641,12 +1743,15 @@ class MainController extends Controller
         $methods = [
             'service',
             'dump',
-            'cache'
+            'cache',
         ];
         if (in_array($name, $methods)) {
-            $model = Helper::singleton('model.main', function () {
-                return self::model();
-            });
+            $model = Helper::singleton(
+                'model.main',
+                function () {
+                    return self::model();
+                }
+            );
 
             return $model->{$name}(...$params);
         }
