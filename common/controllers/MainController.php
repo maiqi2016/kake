@@ -617,14 +617,14 @@ class MainController extends Controller
      */
     public function getCompressPicUrl($url)
     {
-        $suffix = '?x-oss-process=style/compress';
+        $suffix = '?x-oss-process=style/compress_product';
         if (strpos($url, $suffix) !== false) {
             return $url;
         }
 
         $ext = Helper::getSuffix($url);
         if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
-            $url .= '?x-oss-process=style/compress';
+            $url .= '?x-oss-process=style/compress_product';
         }
 
         return $url;
