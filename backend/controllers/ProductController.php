@@ -1058,6 +1058,20 @@ class ProductController extends GeneralController
             }
         }
 
+        $reg = '/\/\/pic\.kakehotels\.com\/[\w\-]+\.(jpg|jpeg|png|gif)/iU';
+
+        foreach (['cost', 'recommend', 'use', 'back'] as $key) {
+            if (empty($record[$key])) {
+                break;
+            }
+            preg_match_all($reg, $record[$key], $match);
+            if (!empty($match)) {
+                foreach ($match[0] as $pic) {
+                    $record[$key] = str_replace($pic, $this->getCompressPicUrl($pic), $record[$key]);
+                }
+            }
+        }
+        
         // TODO
         // 防止附件数据混乱, 匹配 img 标签中的 attachment-id="\d+" 属性
 
