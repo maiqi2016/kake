@@ -49,7 +49,7 @@ class ProductController extends GeneralController
      */
     public static $type = [
         0 => 'fixed',
-        1 => 'percent'
+        1 => 'percent',
     ];
 
     /**
@@ -59,7 +59,7 @@ class ProductController extends GeneralController
         'cost',
         'recommend',
         'use',
-        'back'
+        'back',
     ];
 
     /**
@@ -67,7 +67,7 @@ class ProductController extends GeneralController
      */
     public static $hookPriceNumber = [
         'sale_rate',
-        'sale_price'
+        'sale_price',
     ];
 
     /**
@@ -85,7 +85,7 @@ class ProductController extends GeneralController
      */
     public static $_sale = [
         0 => '否',
-        1 => '是'
+        1 => '是',
     ];
 
     /**
@@ -125,32 +125,32 @@ class ProductController extends GeneralController
                     [
                         '>',
                         'product.sale_from',
-                        $now
+                        $now,
                     ],
                     [
                         '<',
                         'product.sale_to',
-                        $now
-                    ]
-                ]
+                        $now,
+                    ],
+                ],
             ],
             1 => [
                 [
                     '>',
                     'product.sale_rate',
-                    0
+                    0,
                 ],
                 [
                     '<',
                     'product.sale_from',
-                    $now
+                    $now,
                 ],
                 [
                     '>',
                     'product.sale_to',
-                    $now
-                ]
-            ]
+                    $now,
+                ],
+            ],
         ];
 
         return isset($indexes[$index]) ? $indexes[$index] : [];
@@ -165,10 +165,10 @@ class ProductController extends GeneralController
     {
         return [
             [
-                'text' => '新增产品',
+                'text'  => '新增产品',
                 'value' => 'product/add',
-                'icon' => 'plus'
-            ]
+                'icon'  => 'plus',
+            ],
         ];
     }
 
@@ -181,11 +181,11 @@ class ProductController extends GeneralController
     {
         return [
             [
-                'text' => '提交选择',
-                'type' => 'script',
+                'text'  => '提交选择',
+                'type'  => 'script',
                 'value' => '$.modalRadioValueToInput("radio", "product_id")',
-                'icon' => 'flag'
-            ]
+                'icon'  => 'flag',
+            ],
         ];
     }
 
@@ -206,58 +206,61 @@ class ProductController extends GeneralController
      */
     public static function indexOperation()
     {
-        return array_merge(parent::indexOperation(), [
+        return array_merge(
+            parent::indexOperation(),
             [
-                'text' => '套餐',
-                'value' => 'product-package/index',
-                'level' => 'info',
-                'icon' => 'link',
-                'params' => function ($record) {
-                    return ['product_id' => $record['id']];
-                },
-            ],
-            [
-                'text' => '分销',
-                'value' => 'product-producer/index',
-                'level' => 'info',
-                'icon' => 'link',
-                'params' => function ($record) {
-                    return ['product_id' => $record['id']];
-                }
-            ],
-            [
-                'br' => true,
-                'text' => '二维码',
-                'type' => 'script',
-                'value' => '$.showQrCode',
-                'params' => ['link_url'],
-                'level' => 'success',
-                'icon' => 'qrcode'
-            ],
-            [
-                'alt' => '复制产品链接',
-                'level' => 'default copy',
-                'icon' => 'copy',
-                'type' => 'attr',
-                'params' => function ($record) {
-                    return ['data-clipboard-text' => $record['link_url']];
-                }
-            ],
-            [
-                'alt' => '排序',
-                'level' => 'default',
-                'icon' => 'sort-by-attributes',
-                'type' => 'script',
-                'value' => '$.sortField',
-                'params' => function ($record) {
-                    return [
-                        'product.sort',
-                        $record['id'],
-                        $record['sort']
-                    ];
-                },
+                [
+                    'text'   => '套餐',
+                    'value'  => 'product-package/index',
+                    'level'  => 'info',
+                    'icon'   => 'link',
+                    'params' => function ($record) {
+                        return ['product_id' => $record['id']];
+                    },
+                ],
+                [
+                    'text'   => '分销',
+                    'value'  => 'product-producer/index',
+                    'level'  => 'info',
+                    'icon'   => 'link',
+                    'params' => function ($record) {
+                        return ['product_id' => $record['id']];
+                    },
+                ],
+                [
+                    'br'     => true,
+                    'text'   => '二维码',
+                    'type'   => 'script',
+                    'value'  => '$.showQrCode',
+                    'params' => ['link_url'],
+                    'level'  => 'success',
+                    'icon'   => 'qrcode',
+                ],
+                [
+                    'alt'    => '复制产品链接',
+                    'level'  => 'default copy',
+                    'icon'   => 'copy',
+                    'type'   => 'attr',
+                    'params' => function ($record) {
+                        return ['data-clipboard-text' => $record['link_url']];
+                    },
+                ],
+                [
+                    'alt'    => '排序',
+                    'level'  => 'default',
+                    'icon'   => 'sort-by-attributes',
+                    'type'   => 'script',
+                    'value'  => '$.sortField',
+                    'params' => function ($record) {
+                        return [
+                            'product.sort',
+                            $record['id'],
+                            $record['sort'],
+                        ];
+                    },
+                ],
             ]
-        ]);
+        );
     }
 
     /**
@@ -269,21 +272,23 @@ class ProductController extends GeneralController
     {
         return [
             [
-                'text' => '二维码',
-                'type' => 'script',
-                'value' => '$.showQrCode',
+                'text'   => '二维码',
+                'type'   => 'script',
+                'value'  => '$.showQrCode',
                 'params' => function ($record) {
-                    $url = Url::toRoute([
-                        'detail/index',
-                        'id' => $record['id']
-                    ]);
+                    $url = Url::toRoute(
+                        [
+                            'detail/index',
+                            'id' => $record['id'],
+                        ]
+                    );
                     $url = Yii::$app->params['frontend_url'] . $url;
 
                     return [$url];
                 },
-                'level' => 'success',
-                'icon' => 'qrcode'
-            ]
+                'level'  => 'success',
+                'icon'   => 'qrcode',
+            ],
         ];
     }
 
@@ -295,48 +300,48 @@ class ProductController extends GeneralController
     public static function indexFilter()
     {
         return [
-            'id' => [
-                'elem' => 'input',
-                'equal' => true
+            'id'                    => [
+                'elem'  => 'input',
+                'equal' => true,
             ],
-            'title' => 'input',
+            'title'                 => 'input',
             'product_upstream_name' => [
-                'elem' => 'input',
+                'elem'  => 'input',
                 'table' => 'product_upstream',
                 'field' => 'name',
-                'title' => '上游名称'
+                'title' => '上游名称',
             ],
-            'product_region_id' => [
-                'table' => 'product_upstream',
+            'product_region_id'     => [
+                'table'      => 'product_upstream',
                 'list_table' => 'product_region',
                 'list_value' => 'name',
-                'value' => parent::SELECT_KEY_ALL
+                'value'      => parent::SELECT_KEY_ALL,
             ],
-            'classify' => [
+            'classify'              => [
                 'table' => 'product_upstream',
-                'value' => parent::SELECT_KEY_ALL
+                'value' => parent::SELECT_KEY_ALL,
             ],
-            'sale_type' => [
-                'value' => parent::SELECT_KEY_ALL
+            'sale_type'             => [
+                'value' => parent::SELECT_KEY_ALL,
             ],
-            'sale' => [
+            'sale'                  => [
                 'title' => '打折中',
-                'value' => parent::SELECT_KEY_ALL
+                'value' => parent::SELECT_KEY_ALL,
             ],
-            'stock' => [
-                'elem' => 'input',
-                'equal' => true
+            'stock'                 => [
+                'elem'  => 'input',
+                'equal' => true,
             ],
-            'night_times' => [
-                'elem' => 'input',
-                'equal' => true
+            'night_times'           => [
+                'elem'  => 'input',
+                'equal' => true,
             ],
-            'manifestation' => [
-                'value' => parent::SELECT_KEY_ALL
+            'manifestation'         => [
+                'value' => parent::SELECT_KEY_ALL,
             ],
-            'state' => [
-                'value' => 1
-            ]
+            'state'                 => [
+                'value' => 1,
+            ],
         ];
     }
 
@@ -348,20 +353,20 @@ class ProductController extends GeneralController
     public static function ajaxModalListFilter()
     {
         return [
-            'title' => 'input',
+            'title'                 => 'input',
             'product_upstream_name' => [
-                'elem' => 'input',
+                'elem'  => 'input',
                 'table' => 'product_upstream',
                 'field' => 'name',
-                'title' => '上游名称'
+                'title' => '上游名称',
             ],
-            'classify' => [
+            'classify'              => [
                 'table' => 'product_upstream',
-                'value' => parent::SELECT_KEY_ALL
+                'value' => parent::SELECT_KEY_ALL,
             ],
-            'state' => [
-                'value' => parent::SELECT_KEY_ALL
-            ]
+            'state'                 => [
+                'value' => parent::SELECT_KEY_ALL,
+            ],
         ];
     }
 
@@ -386,8 +391,8 @@ class ProductController extends GeneralController
             'id',
             'sort',
             'classify' => [
-                'table' => 'product_upstream'
-            ]
+                'table' => 'product_upstream',
+            ],
         ];
     }
 
@@ -409,27 +414,27 @@ class ProductController extends GeneralController
     public static function indexAssist()
     {
         return [
-            'id' => [
+            'id'                    => [
                 'code',
-                'color' => 'default'
+                'color' => 'default',
             ],
-            'title' => [
-                'max-width' => '250px'
+            'title'                 => [
+                'max-width' => '250px',
             ],
             'product_upstream_name' => [
                 'table' => 'product_upstream',
                 'field' => 'name',
                 'title' => '上游名称',
-                'tip'
+                'tip',
             ],
-            'product_region_id' => [
-                'table' => 'product_upstream',
+            'product_region_id'     => [
+                'table'      => 'product_upstream',
                 'list_table' => 'product_region',
                 'list_value' => 'name',
                 'info',
-                'code'
+                'code',
             ],
-            'classify' => [
+            'classify'              => [
                 'table' => 'product_upstream',
                 'code',
                 'info',
@@ -437,43 +442,43 @@ class ProductController extends GeneralController
                     0 => 'primary',
                     1 => 'success',
                     2 => 'info',
-                    3 => 'default'
-                ]
+                    3 => 'default',
+                ],
             ],
-            'sale' => [
+            'sale'                  => [
                 'title' => '打折中',
                 'info',
                 'empty',
                 'code',
-                'color' => 'success'
+                'color' => 'success',
             ],
-            'stock' => 'tip',
+            'stock'                 => 'tip',
             'night_times',
-            'manifestation' => [
+            'manifestation'         => [
                 'code',
-                'info'
+                'info',
             ],
-            'virtual_sales' => 'tip',
-            'real_sales' => 'tip',
-            'share_times' => 'tip',
-            'referral_link' => [
+            'virtual_sales'         => 'tip',
+            'real_sales'            => 'tip',
+            'share_times'           => 'tip',
+            'referral_link'         => [
                 'link',
                 'url_info' => 'Article',
             ],
-            'sort' => 'code',
-            'sell_out' => [
+            'sort'                  => 'code',
+            'sell_out'              => [
                 'code',
                 'color' => [
                     0 => 'success',
-                    1 => 'warning'
+                    1 => 'warning',
                 ],
-                'info'
+                'info',
             ],
-            'state' => [
+            'state'                 => [
                 'code',
                 'color' => 'auto',
-                'info'
-            ]
+                'info',
+            ],
         ];
     }
 
@@ -485,7 +490,7 @@ class ProductController extends GeneralController
     public static function ajaxModalListAssist()
     {
         return [
-            'id' => 'code',
+            'id'       => 'code',
             'title',
             'classify' => [
                 'table' => 'product_upstream',
@@ -495,14 +500,14 @@ class ProductController extends GeneralController
                     0 => 'primary',
                     1 => 'success',
                     2 => 'info',
-                    3 => 'default'
-                ]
+                    3 => 'default',
+                ],
             ],
-            'state' => [
+            'state'    => [
                 'code',
                 'color' => 'auto',
-                'info'
-            ]
+                'info',
+            ],
         ];
     }
 
@@ -514,33 +519,33 @@ class ProductController extends GeneralController
     public static function ajaxModalListProductAssist()
     {
         return [
-            'id' => 'code',
-            'product_upstream_name' => [
-                'title' => '上游名称',
-                'max-width' => '250px'
+            'id'                       => 'code',
+            'product_upstream_name'    => [
+                'title'     => '上游名称',
+                'max-width' => '250px',
             ],
-            'title' => [
-                'max-width' => '300px'
+            'title'                    => [
+                'max-width' => '300px',
             ],
-            'producer' => [
+            'producer'                 => [
                 'hidden',
-                'table' => 'product_producer',
+                'table'       => 'product_producer',
                 'foreign_key' => 'product_id',
-                'service_api' => 'product.producer-list'
+                'service_api' => 'product.producer-list',
             ],
-            'commission_table_fixed' => [
+            'commission_table_fixed'   => [
                 'html',
-                'title' => '固定额分佣'
+                'title' => '固定额分佣',
             ],
             'commission_table_percent' => [
                 'html',
-                'title' => '百分比分佣'
+                'title' => '百分比分佣',
             ],
-            'state' => [
+            'state'                    => [
                 'code',
                 'color' => 'auto',
-                'info'
-            ]
+                'info',
+            ],
         ];
     }
 
@@ -552,11 +557,11 @@ class ProductController extends GeneralController
     public static function sortProductAssist()
     {
         return [
-            'id' => 'code',
+            'id'                    => 'code',
             'product_upstream_name' => [
-                'title' => '上游名称'
+                'title' => '上游名称',
             ],
-            'title'
+            'title',
         ];
     }
 
@@ -570,11 +575,11 @@ class ProductController extends GeneralController
         return [
             'producer' => [
                 'hidden',
-                'table' => 'product_producer',
-                'foreign_key' => 'product_id',
-                'service_api' => 'product.producer-list',
-                'service_params' => ['where' => []]
-            ]
+                'table'          => 'product_producer',
+                'foreign_key'    => 'product_id',
+                'service_api'    => 'product.producer-list',
+                'service_params' => ['where' => []],
+            ],
         ];
     }
 
@@ -589,150 +594,150 @@ class ProductController extends GeneralController
         $description = $model->attributeLabels();
 
         return [
-            'title' => [
+            'title'               => [
                 'placeholder' => '64个字以内',
-                'label' => 4
+                'label'       => 4,
             ],
             'product_upstream_id' => [
                 'readonly' => true,
                 'same_row' => true,
-                'table' => 'product_upstream'
+                'table'    => 'product_upstream',
             ],
-            'select_hotel' => [
-                'title' => false,
-                'elem' => 'button',
-                'value' => '选择上游',
-                'script' => '$.showPage("product-upstream.list", {state: 1})'
+            'select_hotel'        => [
+                'title'  => false,
+                'elem'   => 'button',
+                'value'  => '选择上游',
+                'script' => '$.showPage("product-upstream.list", {state: 1})',
             ],
-            'sale_type' => [
-                'elem' => 'select',
-                'same_row' => true
+            'sale_type'           => [
+                'elem'     => 'select',
+                'same_row' => true,
             ],
-            'sale_rate' => [
-                'title' => false,
+            'sale_rate'           => [
+                'title'       => false,
                 'placeholder' => '填写后将以折后价格售卖',
-                'tip' => [
+                'tip'         => [
                     '此处填写的是折扣掉的值',
                     '',
                     '<span class=text-danger>打折效果对所有套餐生效，保留到小数点后两位</span>',
                     '固定折扣价' => '按实际需要折扣的金额额度直接填写',
                     '百分比折扣' => '如需打 85 折则填写 15 (100-85)',
-                ]
+                ],
             ],
-            'sale_from' => [
-                'type' => 'datetime-local',
+            'sale_from'           => [
+                'type'  => 'datetime-local',
                 'label' => 3,
-                'tip' => [
+                'tip'   => [
                     '`折扣值` 字段填写后有效',
                     '',
                     'AM' => '上午',
-                    'PM' => '下午'
-                ]
+                    'PM' => '下午',
+                ],
             ],
-            'sale_to' => [
-                'type' => 'datetime-local',
+            'sale_to'             => [
+                'type'  => 'datetime-local',
                 'label' => 3,
-                'tip' => [
+                'tip'   => [
                     '必须晚于开始时间',
                     '',
                     'AM' => '上午',
-                    'PM' => '下午'
-                ]
+                    'PM' => '下午',
+                ],
             ],
 
-            'package_ids' => [
-                'hidden' => true
+            'package_ids'     => [
+                'hidden' => true,
             ],
             'old_package_ids' => [
                 'value_key' => 'package_ids',
-                'hidden' => true
+                'hidden'    => true,
             ],
             // format               完成标签表单后将值格式化成该模板返回给 JS 处理
             // table                列表数据和写入数据的目标表
             // foreign_key          列表数据和写入数据对应当前表的外键字段
             // handler_controller   列表数据后处理或写入数据的前处理对应方法所在的控制器
             // service_api          列表数据的接口
-            'package' => [
-                'title' => '套餐',
-                'elem' => 'tag',
-                'label' => 10,
-                'format' => '{name} (¥{price})',
-                'field_name' => 'package_ids',
-                'table' => 'product_package',
+            'package'         => [
+                'title'       => '套餐',
+                'elem'        => 'tag',
+                'label'       => 10,
+                'format'      => '{name} (¥{price})',
+                'field_name'  => 'package_ids',
+                'table'       => 'product_package',
                 'foreign_key' => 'product_id',
-                'service_api' => 'product.package-list'
+                'service_api' => 'product.package-list',
             ],
-            'add_package' => [
-                'title' => '',
-                'elem' => 'button',
-                'value' => '添加套餐',
-                'script' => '$.showPage("product-package.package")'
+            'add_package'     => [
+                'title'  => '',
+                'elem'   => 'button',
+                'value'  => '添加套餐',
+                'script' => '$.showPage("product-package.package")',
             ],
 
-            'stock' => [
-                'value' => 0,
-                'placeholder' => '抢购商品硬性库存'
+            'stock'         => [
+                'value'       => 0,
+                'placeholder' => '抢购商品硬性库存',
             ],
             'virtual_sales' => [
                 'value' => rand(99, 999),
-                'tip' => [
+                'tip'   => [
                     '前台显示销量规则',
                     '',
                     '虚拟销量 > 真实销量' => '虚拟销量 + 真实销量',
-                    '虚拟销量 ≤ 真实销量' => '真实销量'
-                ]
+                    '虚拟销量 ≤ 真实销量' => '真实销量',
+                ],
             ],
-            'night_times' => [
-                'tip' => '留空时在详情页将不显示该数据',
-                'placeholder' => '套餐跨晚次'
+            'night_times'   => [
+                'tip'         => '留空时在详情页将不显示该数据',
+                'placeholder' => '套餐跨晚次',
             ],
             'manifestation' => [
-                'elem' => 'select',
+                'elem'  => 'select',
                 'value' => 0,
-                'tip' => '针对首页显示的位置'
+                'tip'   => '针对首页显示的位置',
             ],
 
-            'attachment_cover' => [
-                'hidden' => true
+            'attachment_cover'     => [
+                'hidden' => true,
             ],
             'old_attachment_cover' => [
                 'value_key' => 'attachment_cover',
-                'hidden' => true
+                'hidden'    => true,
             ],
-            'cover_preview_url' => [
-                'title' => '封面图预览',
-                'elem' => 'img',
-                'upload_name' => 'upload_cover'
+            'cover_preview_url'    => [
+                'title'       => '封面图预览',
+                'elem'        => 'img',
+                'upload_name' => 'upload_cover',
             ],
-            'upload_cover' => [
-                'title' => '',
-                'type' => 'file',
-                'tag' => 1,
-                'rules' => [
-                    'suffix' => 'jpg,jpeg,png',
+            'upload_cover'         => [
+                'title'        => '',
+                'type'         => 'file',
+                'tag'          => 1,
+                'rules'        => [
+                    'suffix'    => 'jpg,jpeg,png',
                     'pic_sizes' => '750*500',
-                    'max_size' => 512
+                    'max_size'  => 512,
                 ],
                 'preview_name' => 'cover_preview_url',
-                'field_name' => 'attachment_cover'
+                'field_name'   => 'attachment_cover',
             ],
 
             // < 存储当前附件 item >
-            'attachment_ids' => [
-                'hidden' => true
+            'attachment_ids'       => [
+                'hidden' => true,
             ],
             // < 存储旧时附件 item >
             // value_key    标示该值和指定 key 的值保持一致
-            'old_attachment_ids' => [
+            'old_attachment_ids'   => [
                 'value_key' => 'attachment_ids',
-                'hidden' => true
+                'hidden'    => true,
             ],
             // < 附件预览 item >
             // upload_name  < 上传附件 item > 的 name 值
-            'slave_preview_url' => [
-                'title' => '次要图预览',
-                'elem' => 'img',
-                'upload_name' => 'upload_slave'
+            'slave_preview_url'    => [
+                'title'       => '次要图预览',
+                'elem'        => 'img',
+                'upload_name' => 'upload_slave',
             ],
             // < 上传附件 item >
             // tag              标记 (用于在控制器中寻找 rules 在后), 单控制器不重复出现
@@ -740,64 +745,64 @@ class ProductController extends GeneralController
             // preview_name     < 附件预览 item > 的 name 值
             // field_name       < 存储当前附件 item > 的 name 值
             // multiple         是否支持多附件
-            'upload_slave' => [
-                'title' => '',
-                'type' => 'file',
-                'tag' => 1,
-                'rules' => [
-                    'suffix' => 'jpg,jpeg,png',
+            'upload_slave'         => [
+                'title'        => '',
+                'type'         => 'file',
+                'tag'          => 1,
+                'rules'        => [
+                    'suffix'    => 'jpg,jpeg,png',
                     'pic_sizes' => '750*500',
-                    'max_size' => 512
+                    'max_size'  => 512,
                 ],
                 'preview_name' => 'slave_preview_url',
-                'field_name' => 'attachment_ids',
-                'multiple' => true
+                'field_name'   => 'attachment_ids',
+                'multiple'     => true,
             ],
 
-            'cost' => [
-                'elem' => 'ckeditor',
+            'cost'      => [
+                'elem'  => 'ckeditor',
                 'title' => $description['cost'],
-                'tip' => '必须填写',
-                'pos' => 'left',
-                'width' => 414
+                'tip'   => '必须填写',
+                'pos'   => 'left',
+                'width' => 414,
             ],
             'recommend' => [
-                'elem' => 'ckeditor',
+                'elem'  => 'ckeditor',
                 'title' => $description['recommend'],
-                'tip' => '必须填写',
-                'pos' => 'left',
-                'width' => 414
+                'tip'   => '必须填写',
+                'pos'   => 'left',
+                'width' => 414,
             ],
-            'use' => [
-                'elem' => 'ckeditor',
+            'use'       => [
+                'elem'  => 'ckeditor',
                 'title' => $description['use'],
-                'tip' => '必须填写',
-                'pos' => 'left',
-                'width' => 414
+                'tip'   => '必须填写',
+                'pos'   => 'left',
+                'width' => 414,
             ],
-            'back' => [
-                'elem' => 'ckeditor',
+            'back'      => [
+                'elem'  => 'ckeditor',
                 'title' => $description['back'],
-                'tip' => '必须填写',
-                'pos' => 'left',
-                'width' => 414
+                'tip'   => '必须填写',
+                'pos'   => 'left',
+                'width' => 414,
             ],
 
-            'sort' => [
-                'placeholder' => '大于零的整数，越小越靠前'
+            'sort'          => [
+                'placeholder' => '大于零的整数，越小越靠前',
             ],
             'referral_link' => [
                 'placeholder' => '如：微信发文链接, 可留空',
-                'label' => 6
+                'label'       => 6,
             ],
-            'sell_out' => [
-                'elem' => 'select',
-                'value' => 0
+            'sell_out'      => [
+                'elem'  => 'select',
+                'value' => 0,
             ],
-            'state' => [
-                'elem' => 'select',
-                'value' => 1
-            ]
+            'state'         => [
+                'elem'  => 'select',
+                'value' => 1,
+            ],
         ];
     }
 
@@ -809,13 +814,13 @@ class ProductController extends GeneralController
     public function indexCondition($as = null)
     {
         return [
-            'join' => [
+            'join'   => [
                 [
-                    'table' => 'attachment',
-                    'as' => 'master',
-                    'left_on_field' => 'attachment_cover'
+                    'table'         => 'attachment',
+                    'as'            => 'master',
+                    'left_on_field' => 'attachment_cover',
                 ],
-                ['table' => 'product_upstream']
+                ['table' => 'product_upstream'],
             ],
             'select' => [
                 'master.deep_path AS master_deep_path',
@@ -823,13 +828,13 @@ class ProductController extends GeneralController
                 'product_upstream.name AS product_upstream_name',
                 'product_upstream.product_region_id',
                 'product_upstream.classify',
-                'product.*'
+                'product.*',
             ],
-            'order' => [
+            'order'  => [
                 'product.state DESC',
                 'ISNULL(product.sort), product.sort ASC',
-                'product.update_time DESC'
-            ]
+                'product.update_time DESC',
+            ],
         ];
     }
 
@@ -852,26 +857,26 @@ class ProductController extends GeneralController
     {
         $condition = $this->indexCondition();
         $condition['join'][] = [
-            'table' => 'product_producer',
-            'sub' => [
+            'table'          => 'product_producer',
+            'sub'            => [
                 'select' => [
                     'id',
                     'product_id',
                     'sort',
                     'update_time',
-                    'state'
+                    'state',
                 ],
-                'group' => 'product_id'
+                'group'  => 'product_id',
             ],
-            'as' => 'producer',
-            'left_on_field' => 'id',
-            'right_on_field' => 'product_id'
+            'as'             => 'producer',
+            'left_on_field'  => 'id',
+            'right_on_field' => 'product_id',
         ];
         $condition['where'] = [
             [
                 'not',
-                ['producer.id' => null]
-            ]
+                ['producer.id' => null],
+            ],
         ];
 
         return $condition;
@@ -889,7 +894,7 @@ class ProductController extends GeneralController
         $condition['select'] = [
             'product_upstream.name AS product_upstream_name',
             'product.id',
-            'product.title'
+            'product.title',
         ];
         $condition['where'][] = ['product.state' => 1];
 
@@ -904,24 +909,24 @@ class ProductController extends GeneralController
     public function editCondition()
     {
         return [
-            'join' => [
+            'join'   => [
                 [
-                    'table' => 'attachment',
-                    'as' => 'cover',
+                    'table'         => 'attachment',
+                    'as'            => 'cover',
                     'left_on_field' => 'attachment_cover',
                 ],
                 ['table' => 'product_description'],
                 [
                     'table' => 'product_upstream',
-                    'field' => 'name'
-                ]
+                    'field' => 'name',
+                ],
             ],
             'select' => [
                 'cover.deep_path AS cover_deep_path',
                 'cover.filename AS cover_filename',
                 'product_upstream.name AS product_upstream_name',
                 'product_description.*',
-                'product.*'
+                'product.*',
             ],
         ];
     }
@@ -955,24 +960,33 @@ class ProductController extends GeneralController
     {
         if (!empty($record['sale_rate'])) {
             if ($record['sale_type'] == 2 && ($record['sale_rate'] < 1 || $record['sale_rate'] > 99)) {
-                $this->goReference($this->getControllerName($action), [
-                    'warning' => '百分比折扣时折扣率请填写 1 ~ 99 之间的数',
-                    'list' => $record
-                ]);
+                $this->goReference(
+                    $this->getControllerName($action),
+                    [
+                        'warning' => '百分比折扣时折扣率请填写 1 ~ 99 之间的数',
+                        'list'    => $record,
+                    ]
+                );
             }
         } else {
             $record['sale_rate'] = 0;
         }
 
-        if (in_array($action, [
-                'add',
-                'edit'
-            ]) && empty($record['package_ids']) && empty($record['new_package_ids'])
+        if (in_array(
+                $action,
+                [
+                    'add',
+                    'edit',
+                ]
+            ) && empty($record['package_ids']) && empty($record['new_package_ids'])
         ) {
-            $this->goReference($this->getControllerName($action), [
-                'warning' => '产品至少设定一个套餐',
-                'list' => $record
-            ]);
+            $this->goReference(
+                $this->getControllerName($action),
+                [
+                    'warning' => '产品至少设定一个套餐',
+                    'list'    => $record,
+                ]
+            );
         }
 
         // TODO
@@ -992,37 +1006,54 @@ class ProductController extends GeneralController
         $record = $this->createAttachmentUrl($record, ['attachment_cover' => 'cover']);
 
         if ($action == 'index') {
-            $record = $this->createLinkUrl($record, 'id', function ($id) {
-                return [
-                    'detail/index',
-                    'id' => $id
-                ];
-            });
+            $record = $this->createLinkUrl(
+                $record,
+                'id',
+                function ($id) {
+                    return [
+                        'detail/index',
+                        'id' => $id,
+                    ];
+                }
+            );
         }
 
-        if (in_array($action, [
-            'edit',
-            'detail'
-        ])) {
+        if (in_array(
+            $action,
+            [
+                'edit',
+                'detail',
+            ]
+        )) {
             // 生成其他图附件地址
             $record = $this->createAttachmentUrls($record, ['attachment_ids' => 'slave']);
             // 获取套餐数据
-            $record = $this->listForeignData($record, 'package', function ($item) {
-                return Helper::pullSome($item, [
-                    'bidding',
-                    'sale_type',
-                    'sale_rate',
-                    'sale_from',
-                    'sale_to'
-                ]);
-            });
+            $record = $this->listForeignData(
+                $record,
+                'package',
+                function ($item) {
+                    return Helper::pullSome(
+                        $item,
+                        [
+                            'bidding',
+                            'sale_type',
+                            'sale_rate',
+                            'sale_from',
+                            'sale_to',
+                        ]
+                    );
+                }
+            );
         }
 
         // 生成产品分销数据
-        if (in_array($action, [
-            'ajaxModalListProduct',
-            'listProduct'
-        ])) {
+        if (in_array(
+            $action,
+            [
+                'ajaxModalListProduct',
+                'listProduct',
+            ]
+        )) {
             $record = $this->listForeignData($record, 'producer', null, $action);
 
             foreach ($record['producer'] as $item) {
@@ -1045,7 +1076,7 @@ class ProductController extends GeneralController
                 $record['commission_data_' . $key][] = $item;
                 $record['commission_table_' . $key][] = [
                     sprintf($tpl, "${item['from_sales']}, {$to}"),
-                    $commission
+                    $commission,
                 ];
             }
 
@@ -1058,20 +1089,21 @@ class ProductController extends GeneralController
             }
         }
 
-        $reg = '/\/\/pic\.kakehotels\.com\/[\w\-]+\.(jpg|jpeg|png|gif)/iU';
-
-        foreach (['cost', 'recommend', 'use', 'back'] as $key) {
-            if (empty($record[$key])) {
-                break;
-            }
-            preg_match_all($reg, $record[$key], $match);
-            if (!empty($match)) {
-                foreach ($match[0] as $pic) {
-                    $record[$key] = str_replace($pic, $this->getCompressPicUrl($pic), $record[$key]);
+        if ($action != 'edit') {
+            $reg = '/\/\/pic\.kakehotels\.com\/[\w\-]+\.(jpg|jpeg|png|gif)/iU';
+            foreach (['cost', 'recommend', 'use', 'back'] as $key) {
+                if (empty($record[$key])) {
+                    break;
+                }
+                preg_match_all($reg, $record[$key], $match);
+                if (!empty($match)) {
+                    foreach ($match[0] as $pic) {
+                        $record[$key] = str_replace($pic, $this->getCompressPicUrl($pic), $record[$key]);
+                    }
                 }
             }
         }
-        
+
         // TODO
         // 防止附件数据混乱, 匹配 img 标签中的 attachment-id="\d+" 属性
 
@@ -1088,7 +1120,7 @@ class ProductController extends GeneralController
             'ckeditor/ckeditor',
             '/node_modules/sortablejs/Sortable.min',
             '/node_modules/cropper/dist/cropper.min',
-            '/node_modules/clipboard/dist/clipboard.min'
+            '/node_modules/clipboard/dist/clipboard.min',
         ];
         $this->sourceCss = ['/node_modules/cropper/dist/cropper.min'];
 
