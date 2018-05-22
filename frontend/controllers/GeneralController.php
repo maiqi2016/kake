@@ -43,7 +43,7 @@ class GeneralController extends MainController
             $this->user = (object)Yii::$app->session->get(self::USER);
         }
 
-        if (!in_array($this->module->requestedRoute, [
+        if (Helper::weChatBrowser() || !in_array($this->module->requestedRoute, [
             // 首页
             '',
             'site/index',

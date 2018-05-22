@@ -150,13 +150,6 @@ foreach ($items as $item) {
         <img src="<?= $params['frontend_source'] ?>/img/phone.svg"/>
         咨询客服
     </a>
-    <a href="<?= rtrim($params['passport_url'], '/') ?><?= Url::toRoute([
-        'auth/logout',
-        'callback' => $params['frontend_url']
-    ]) ?>" class="hr">
-        <img src="<?= $params['frontend_source'] ?>/img/exit.svg"/>
-        退出登录
-    </a>
 </div>
 
 </body>
