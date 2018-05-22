@@ -623,7 +623,7 @@ class MainController extends Controller
         }
 
         $ext = Helper::getSuffix($url);
-        if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
+        if (in_array($ext, ['jpg', 'jpeg', 'png'])) {
             $url .= '?x-oss-process=style/compress_product';
         }
 
