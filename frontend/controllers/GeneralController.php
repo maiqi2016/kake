@@ -209,21 +209,18 @@ class GeneralController extends MainController
         }
 
         $ssoLogin = function ($uid = null) {
-            try {
-                $extra = $uid ? ['id' => $uid] : [];
-                $url = Helper::unsetParamsForUrl('code', $this->currentUrl());
-                $result = Yii::$app->oil->sso->auth($url, $extra);
-                if (is_string($result)) {
-                    $this->redirect(
-                        [
-                            '/general/error',
-                            'message' => urlencode(Yii::t('common', $result)),
-                        ]
-                    );
-                } else {
-                    $this->loginUser($result, 'sso-login');
-                }
-            } catch (\Exception $e) {
+            $extra = $uid ? ['id' => $uid] : [];
+            $url = Helper::unsetParamsForUrl('code', $this->currentUrl());
+            $result = Yii::$app->oil->sso->auth($url, $extra);
+            if (is_string($result)) {
+                $this->redirect(
+                    [
+                        '/general/error',
+                        'message' => urlencode(Yii::t('common', $result)),
+                    ]
+                );
+            } else {
+                $this->loginUser($result, 'sso-login');
             }
         };
 
@@ -245,11 +242,11 @@ class GeneralController extends MainController
                         ]
                     );
                 } else {
-                    if (empty($result['phone'])) {
-                        $ssoLogin($result['id']);
-                    } else {
+                    //if (empty($result['phone'])) {
+                    //    $ssoLogin($result['id']);
+                    //} else {
                         $this->loginUser($result, isset($result['state']) ? 'we-chat-login' : 'we-chat-bind');
-                    }
+                    //}
                 }
             } else {
                 Yii::$app->oil->wx->config('oauth.callback', $this->currentUrl());
