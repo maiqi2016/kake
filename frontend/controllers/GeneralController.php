@@ -43,37 +43,40 @@ class GeneralController extends MainController
             $this->user = (object)Yii::$app->session->get(self::USER);
         }
 
-        if (Helper::weChatBrowser() || !in_array($this->module->requestedRoute, [
-            // 首页
-            '',
-            'site/index',
-            'site/ajax-list',
-            // 列表页
-            'items/index',
-            'items/ajax-list',
-            'items/region',
-            // 阿里支付后处理
-            'order/ali-paid',
-            // 阿里支付
-            'order/ali-pay',
-            // 微信支付后处理
-            'order/wx-paid',
-            // 清除前台缓存
-            'general/clear-cache',
-            'general/boom',
-            // 退出
-            'user/logout',
-            // 分销商小车引导页
-            'distribution/index',
-            // 微信自动回复
-            'we-chat/reply',
-            // 商品详情
-            'detail/index',
-            // 小程序
-            'mini/init-session',
-            'mini/login',
-            'mini/bind-phone',
-        ])
+        if (Helper::weChatBrowser() || !in_array(
+                $this->module->requestedRoute,
+                [
+                    // 首页
+                    '',
+                    'site/index',
+                    'site/ajax-list',
+                    // 列表页
+                    'items/index',
+                    'items/ajax-list',
+                    'items/region',
+                    // 阿里支付后处理
+                    'order/ali-paid',
+                    // 阿里支付
+                    'order/ali-pay',
+                    // 微信支付后处理
+                    'order/wx-paid',
+                    // 清除前台缓存
+                    'general/clear-cache',
+                    'general/boom',
+                    // 退出
+                    'user/logout',
+                    // 分销商小车引导页
+                    'distribution/index',
+                    // 微信自动回复
+                    'we-chat/reply',
+                    // 商品详情
+                    'detail/index',
+                    // 小程序
+                    'mini/init-session',
+                    'mini/login',
+                    'mini/bind-phone',
+                ]
+            )
         ) {
             $this->mustLogin();
         }
@@ -88,9 +91,12 @@ class GeneralController extends MainController
      */
     public function beforeAction($action)
     {
-        if (in_array($action->id, [
-            'ajax-sms'
-        ])) {
+        if (in_array(
+            $action->id,
+            [
+                'ajax-sms',
+            ]
+        )) {
             $action->controller->enableCsrfValidation = false;
         }
 
@@ -119,7 +125,7 @@ class GeneralController extends MainController
             Yii::getAlias("@runtime/static/{$controller}.{$action}{$key}.html"),
             $controller,
             $action,
-            $key
+            $key,
         ];
     }
 
@@ -129,7 +135,7 @@ class GeneralController extends MainController
      * @access public
      *
      * @param string $content
-     * @param array $file
+     * @param array  $file
      *
      * @return bool
      */
@@ -163,7 +169,7 @@ class GeneralController extends MainController
     /**
      * 登录用户
      *
-     * @param array $user
+     * @param array  $user
      * @param string $type
      * @param string $system
      */
@@ -174,11 +180,14 @@ class GeneralController extends MainController
         Yii::$app->session->set(self::USER, $user);
         $this->user = (object)array_merge((array)$this->user, $user);
 
-        $this->service('user.login-log', [
-            'id' => $user['id'],
-            'ip' => Yii::$app->request->userIP,
-            'type' => $type
-        ]);
+        $this->service(
+            'user.login-log',
+            [
+                'id'   => $user['id'],
+                'ip'   => Yii::$app->request->userIP,
+                'type' => $type,
+            ]
+        );
     }
 
     /**
@@ -200,16 +209,21 @@ class GeneralController extends MainController
         }
 
         $ssoLogin = function ($uid = null) {
-            $extra = $uid ? ['id' => $uid] : [];
-            $url = Helper::unsetParamsForUrl('code', $this->currentUrl());
-            $result = Yii::$app->oil->sso->auth($url, $extra);
-            if (is_string($result)) {
-                $this->redirect([
-                    '/general/error',
-                    'message' => urlencode(Yii::t('common', $result))
-                ]);
-            } else {
-                $this->loginUser($result, 'sso-login');
+            try {
+                $extra = $uid ? ['id' => $uid] : [];
+                $url = Helper::unsetParamsForUrl('code', $this->currentUrl());
+                $result = Yii::$app->oil->sso->auth($url, $extra);
+                if (is_string($result)) {
+                    $this->redirect(
+                        [
+                            '/general/error',
+                            'message' => urlencode(Yii::t('common', $result)),
+                        ]
+                    );
+                } else {
+                    $this->loginUser($result, 'sso-login');
+                }
+            } catch (\Exception $e) {
             }
         };
 
@@ -224,10 +238,12 @@ class GeneralController extends MainController
                 }
                 $result = $this->service('user.get-with-we-chat', $result);
                 if (is_string($result)) {
-                    $this->redirect([
-                        '/general/error',
-                        'message' => urlencode(Yii::t('common', $result))
-                    ]);
+                    $this->redirect(
+                        [
+                            '/general/error',
+                            'message' => urlencode(Yii::t('common', $result)),
+                        ]
+                    );
                 } else {
                     if (empty($result['phone'])) {
                         $ssoLogin($result['id']);
@@ -274,8 +290,8 @@ class GeneralController extends MainController
      *
      * @access protected
      *
-     * @param mixed $params
-     * @param string $router
+     * @param mixed   $params
+     * @param string  $router
      * @param boolean $checkUser
      *
      * @return string
@@ -284,7 +300,7 @@ class GeneralController extends MainController
     {
         $item = [
             'item' => $params,
-            'time' => TIME
+            'time' => TIME,
         ];
 
         if ($checkUser) {
@@ -359,61 +375,75 @@ class GeneralController extends MainController
             return 'product id required';
         }
 
-        return $this->cache([
-            'get.product',
-            func_get_args()
-        ], function () use ($id) {
+        return $this->cache(
+            [
+                'get.product',
+                func_get_args(),
+            ],
+            function () use ($id) {
 
-            $controller = $this->controller('product');
-            $condition = $this->callMethod('editCondition', [], null, $controller);
+                $controller = $this->controller('product');
+                $condition = $this->callMethod('editCondition', [], null, $controller);
 
-            $condition = ArrayHelper::merge($condition, [
-                'where' => [
-                    ['product.id' => $id],
-                    ['product.state' => 1],
-                ]
-            ]);
+                $condition = ArrayHelper::merge(
+                    $condition,
+                    [
+                        'where' => [
+                            ['product.id' => $id],
+                            ['product.state' => 1],
+                        ],
+                    ]
+                );
 
-            $detail = $this->service('product.detail', $condition);
-            if (empty($detail)) {
-                return 'product does not exist';
-            }
-
-            $detail = $this->callMethod('sufHandleField', $detail, [
-                $detail,
-                'detail'
-            ], $controller);
-            if (empty($detail['package'])) {
-                return 'product package illegal';
-            }
-
-            if (!empty($detail)) {
-                $field = $detail['sale'] ? 'sale_price' : 'price';
-                if ($detail['real_sales'] > $detail['virtual_sales']) {
-                    $detail['max_sales'] = $detail['real_sales'];
-                } else {
-                    $detail['max_sales'] = $detail['virtual_sales'] + $detail['real_sales'];
+                $detail = $this->service('product.detail', $condition);
+                if (empty($detail)) {
+                    return 'product does not exist';
                 }
 
-                foreach ($detail['package'] as $key => $item) {
-                    if (empty($item['bidding'])) {
-                        unset ($detail['package'][$key]);
-                    }
-                }
-
+                $detail = $this->callMethod(
+                    'sufHandleField',
+                    $detail,
+                    [
+                        $detail,
+                        'detail',
+                    ],
+                    $controller
+                );
                 if (empty($detail['package'])) {
                     return 'product package illegal';
                 }
 
-                $detail['min_price'] = min(array_column($detail['package'], $field));
-            }
+                if (!empty($detail)) {
+                    $field = $detail['sale'] ? 'sale_price' : 'price';
+                    if ($detail['real_sales'] > $detail['virtual_sales']) {
+                        $detail['max_sales'] = $detail['real_sales'];
+                    } else {
+                        $detail['max_sales'] = $detail['virtual_sales'] + $detail['real_sales'];
+                    }
 
-            if (empty($detail['min_price']) || $detail['min_price'] <= 0) {
-                return 'product price error';
-            }
+                    foreach ($detail['package'] as $key => $item) {
+                        if (empty($item['bidding'])) {
+                            unset ($detail['package'][$key]);
+                        }
+                    }
 
-            return $detail;
-        }, DAY, null, Yii::$app->params['use_cache']);
+                    if (empty($detail['package'])) {
+                        return 'product package illegal';
+                    }
+
+                    $detail['min_price'] = min(array_column($detail['package'], $field));
+                }
+
+                if (empty($detail['min_price']) || $detail['min_price'] <= 0) {
+                    return 'product price error';
+                }
+
+                return $detail;
+            },
+            DAY,
+            null,
+            Yii::$app->params['use_cache']
+        );
     }
 
     /**
@@ -427,44 +457,53 @@ class GeneralController extends MainController
      */
     public function listProductFocus($limit)
     {
-        return $this->cache([
-            'list.focus',
-            func_get_args()
-        ], function () use ($limit) {
-            $controller = $this->controller('product');
-            $condition = [
-                'join' => [
-                    [
-                        'table' => 'attachment',
-                        'as' => 'cover',
-                        'left_on_field' => 'attachment_cover',
+        return $this->cache(
+            [
+                'list.focus',
+                func_get_args(),
+            ],
+            function () use ($limit) {
+                $controller = $this->controller('product');
+                $condition = [
+                    'join'   => [
+                        [
+                            'table'         => 'attachment',
+                            'as'            => 'cover',
+                            'left_on_field' => 'attachment_cover',
+                        ],
                     ],
-                ],
-                'select' => [
-                    'cover.deep_path AS cover_deep_path',
-                    'cover.filename AS cover_filename',
-                    'product.id',
-                    'product.sort',
-                    'product.attachment_cover',
-                    'product.update_time'
-                ],
-                'order' => [
-                    'ISNULL(product.sort), product.sort ASC',
-                    'product.update_time DESC'
-                ],
-                'where' => [
-                    ['product.manifestation' => 1],
-                    ['product.state' => 1]
-                ],
-                'limit' => $limit,
-            ];
-            $list = $this->service('product.list', $condition);
-            array_walk($list, function (&$item) use ($controller) {
-                $item = $this->createAttachmentUrl($item, ['attachment_cover' => 'cover']);
-            });
+                    'select' => [
+                        'cover.deep_path AS cover_deep_path',
+                        'cover.filename AS cover_filename',
+                        'product.id',
+                        'product.sort',
+                        'product.attachment_cover',
+                        'product.update_time',
+                    ],
+                    'order'  => [
+                        'ISNULL(product.sort), product.sort ASC',
+                        'product.update_time DESC',
+                    ],
+                    'where'  => [
+                        ['product.manifestation' => 1],
+                        ['product.state' => 1],
+                    ],
+                    'limit'  => $limit,
+                ];
+                $list = $this->service('product.list', $condition);
+                array_walk(
+                    $list,
+                    function (&$item) use ($controller) {
+                        $item = $this->createAttachmentUrl($item, ['attachment_cover' => 'cover']);
+                    }
+                );
 
-            return $list;
-        }, DAY, null, Yii::$app->params['use_cache']);
+                return $list;
+            },
+            DAY,
+            null,
+            Yii::$app->params['use_cache']
+        );
     }
 
     /**
@@ -478,36 +517,48 @@ class GeneralController extends MainController
      */
     public function listPlate($limit = 0)
     {
-        return $this->cache('list.plate.' . $limit, function () use ($limit) {
-            $list = $this->service(parent::$apiList, [
-                'table' => 'product_plate',
-                'where' => [
-                    ['product_plate.state' => 1]
-                ],
-                'join' => [
-                    ['table' => 'attachment']
-                ],
-                'select' => [
-                    'product_plate.id',
-                    'product_plate.name',
-                    'product_plate.attachment_id',
-                    'attachment.deep_path',
-                    'attachment.filename',
-                ],
-                'order' => [
-                    'ISNULL(product_plate.sort), product_plate.sort ASC',
-                    'product_plate.update_time DESC'
-                ],
-                'limit' => $limit
-            ]);
+        return $this->cache(
+            'list.plate.' . $limit,
+            function () use ($limit) {
+                $list = $this->service(
+                    parent::$apiList,
+                    [
+                        'table'  => 'product_plate',
+                        'where'  => [
+                            ['product_plate.state' => 1],
+                        ],
+                        'join'   => [
+                            ['table' => 'attachment'],
+                        ],
+                        'select' => [
+                            'product_plate.id',
+                            'product_plate.name',
+                            'product_plate.attachment_id',
+                            'attachment.deep_path',
+                            'attachment.filename',
+                        ],
+                        'order'  => [
+                            'ISNULL(product_plate.sort), product_plate.sort ASC',
+                            'product_plate.update_time DESC',
+                        ],
+                        'limit'  => $limit,
+                    ]
+                );
 
-            $controller = $this->controller('product-plate');
-            array_walk($list, function (&$item) use ($controller) {
-                $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
-            });
+                $controller = $this->controller('product-plate');
+                array_walk(
+                    $list,
+                    function (&$item) use ($controller) {
+                        $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
+                    }
+                );
 
-            return $list;
-        }, MONTH, null, Yii::$app->params['use_cache']);
+                return $list;
+            },
+            MONTH,
+            null,
+            Yii::$app->params['use_cache']
+        );
     }
 
     /**
@@ -516,49 +567,61 @@ class GeneralController extends MainController
      * @access public
      *
      * @param mixed $plate
-     * @param int $limit
+     * @param int   $limit
      *
      * @return array
      */
     public function listRegion($plate = [], $limit = 0)
     {
-        return $this->cache([
-            'list.region',
-            func_get_args()
-        ], function () use ($plate, $limit) {
+        return $this->cache(
+            [
+                'list.region',
+                func_get_args(),
+            ],
+            function () use ($plate, $limit) {
 
-            $where = [['product_region.state' => 1]];
-            if (!empty($plate)) {
-                $where[] = ['product_region.product_plate_id' => (array)$plate];
-            }
+                $where = [['product_region.state' => 1]];
+                if (!empty($plate)) {
+                    $where[] = ['product_region.product_plate_id' => (array)$plate];
+                }
 
-            $list = $this->service(parent::$apiList, [
-                'table' => 'product_region',
-                'where' => $where,
-                'join' => [
-                    ['table' => 'attachment']
-                ],
-                'select' => [
-                    'product_region.id',
-                    'product_region.name',
-                    'product_region.attachment_id',
-                    'attachment.deep_path',
-                    'attachment.filename',
-                ],
-                'order' => [
-                    'ISNULL(product_region.sort), product_region.sort ASC',
-                    'product_region.update_time DESC'
-                ],
-                'limit' => $limit
-            ]);
+                $list = $this->service(
+                    parent::$apiList,
+                    [
+                        'table'  => 'product_region',
+                        'where'  => $where,
+                        'join'   => [
+                            ['table' => 'attachment'],
+                        ],
+                        'select' => [
+                            'product_region.id',
+                            'product_region.name',
+                            'product_region.attachment_id',
+                            'attachment.deep_path',
+                            'attachment.filename',
+                        ],
+                        'order'  => [
+                            'ISNULL(product_region.sort), product_region.sort ASC',
+                            'product_region.update_time DESC',
+                        ],
+                        'limit'  => $limit,
+                    ]
+                );
 
-            $controller = $this->controller('product-region');
-            array_walk($list, function (&$item) use ($controller) {
-                $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
-            });
+                $controller = $this->controller('product-region');
+                array_walk(
+                    $list,
+                    function (&$item) use ($controller) {
+                        $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
+                    }
+                );
 
-            return $list;
-        }, MONTH, null, Yii::$app->params['use_cache']);
+                return $list;
+            },
+            MONTH,
+            null,
+            Yii::$app->params['use_cache']
+        );
     }
 
     /**
@@ -569,41 +632,50 @@ class GeneralController extends MainController
      */
     public function listPlateAndRegion()
     {
-        return $this->cache('list.plate.and.region', function () {
+        return $this->cache(
+            'list.plate.and.region',
+            function () {
 
-            $list = $this->service(parent::$apiList, [
-                'table' => 'product_region',
-                'where' => [
-                    ['product_region.state' => 1]
-                ],
-                'join' => [
-                    ['table' => 'product_plate']
-                ],
-                'select' => [
-                    'product_plate.name AS product_plate_name',
-                    'product_region.id',
-                    'product_region.name',
-                ],
-                'order' => [
-                    'ISNULL(product_region.sort), product_region.sort ASC',
-                    'product_region.update_time DESC'
-                ]
-            ]);
+                $list = $this->service(
+                    parent::$apiList,
+                    [
+                        'table'  => 'product_region',
+                        'where'  => [
+                            ['product_region.state' => 1],
+                        ],
+                        'join'   => [
+                            ['table' => 'product_plate'],
+                        ],
+                        'select' => [
+                            'product_plate.name AS product_plate_name',
+                            'product_region.id',
+                            'product_region.name',
+                        ],
+                        'order'  => [
+                            'ISNULL(product_region.sort), product_region.sort ASC',
+                            'product_region.update_time DESC',
+                        ],
+                    ]
+                );
 
-            $_list = [];
-            foreach ($list as $item) {
-                $_list[$item['product_plate_name']][$item['id']] = $item['name'];
-            }
+                $_list = [];
+                foreach ($list as $item) {
+                    $_list[$item['product_plate_name']][$item['id']] = $item['name'];
+                }
 
-            $key = '其他';
-            if (isset($_list[$key])) {
-                $val = $_list[$key];
-                unset($_list[$key]);
-                $_list[$key] = $val;
-            }
+                $key = '其他';
+                if (isset($_list[$key])) {
+                    $val = $_list[$key];
+                    unset($_list[$key]);
+                    $_list[$key] = $val;
+                }
 
-            return $_list;
-        }, MONTH, null, Yii::$app->params['use_cache']);
+                return $_list;
+            },
+            MONTH,
+            null,
+            Yii::$app->params['use_cache']
+        );
     }
 
     /**
@@ -614,116 +686,122 @@ class GeneralController extends MainController
      * @param integer $page
      * @param integer $pageSize
      * @param integer $time
-     * @param array $options
+     * @param array   $options
      *
      * @return array
      */
     public function listProduct($page = 1, $pageSize = null, $time = DAY, $options = [])
     {
-        return $this->cache([
-            'list.product',
-            func_get_args()
-        ], function () use ($page, $pageSize, $time, $options) {
-            $where = [];
+        return $this->cache(
+            [
+                'list.product',
+                func_get_args(),
+            ],
+            function () use ($page, $pageSize, $time, $options) {
+                $where = [];
 
-            $condition = DetailController::$productListCondition;
+                $condition = DetailController::$productListCondition;
 
-            // 具体 id 列表
-            if (!empty($options['ids'])) {
-                $ids = is_array($options['ids']) ? $options['ids'] : explode(',', $options['ids']);
-                $where[] = ['product.id' => $ids];
-                $condition['order'] = 'field(product.id, ' . implode(',', $ids) . ')';
-            }
-
-            // 表现方式
-            if (isset($options['manifestation']) && is_numeric($options['manifestation'])) {
-                $where[] = ['product.manifestation' => $options['manifestation']];
-            }
-
-            // 分类
-            if (isset($options['classify']) && is_numeric($options['classify'])) {
-                $where[] = ['product_upstream.classify' => $options['classify']];
-            }
-
-            // 折扣中
-            if (isset($options['sale'])) {
-                $controller = $this->controller('product');
-                $_where = $this->callStatic('saleReverseWhereLogic', [], [$options['sale'] ? 1 : 0], $controller);
-                $where = array_merge($where, $_where);
-            }
-
-            // 板块
-            $plate = [];
-            if (isset($options['plate']) && is_numeric($options['plate'])) {
-                $plate = $this->getRegionByPlate($options['plate']) ?: [0];
-            }
-
-            // 地区
-            if (empty($options['region'])) {
-                $options['region'] = $plate;
-            } else {
-                $options['region'] = array_merge(explode(',', $options['region']), $plate);
-            }
-
-            if (!empty($options['region'])) {
-                $where[] = ['product_region.id' => $options['region']];
-            }
-
-            // 产品上游 id
-            if (!empty($options['upstream'])) {
-                $ids = is_array($options['upstream']) ? $options['upstream'] : explode(',', $options['upstream']);
-                $where[] = ['product_upstream.id' => $ids];
-            }
-
-            // 关键字
-            if (!empty($options['keyword'])) {
-                $where[] = [
-                    'or',
-                    [
-                        'like',
-                        'product.title',
-                        $options['keyword']
-                    ],
-                    [
-                        'like',
-                        'product_region.name',
-                        $options['keyword']
-                    ],
-                    [
-                        'like',
-                        'product_upstream.name',
-                        $options['keyword']
-                    ]
-                ];
-            }
-
-            $condition['where'] = array_merge($condition['where'], $where);
-
-            if (!empty($options['hot'])) {
-                $condition['order'] = '(product.virtual_sales + product.real_sales) DESC';
-            }
-
-            $pageParams = Helper::page($page, $pageSize ?: Yii::$app->params['product_page_size']);
-            list($condition['offset'], $condition['limit']) = $pageParams;
-
-            $controller = $this->controller('product-package');
-            $list = $this->service('product.list', $condition);
-            foreach ($list as $key => &$item) {
-                if (empty($item['price'])) {
-                    // unset($list[$key]);
-                    // continue;
+                // 具体 id 列表
+                if (!empty($options['ids'])) {
+                    $ids = is_array($options['ids']) ? $options['ids'] : explode(',', $options['ids']);
+                    $where[] = ['product.id' => $ids];
+                    $condition['order'] = 'field(product.id, ' . implode(',', $ids) . ')';
                 }
-                $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
-                $item = $this->createAttachmentUrl($item, ['attachment_cover' => 'cover']);
-                $item['max_sales'] = max($item['virtual_sales'], $item['real_sales']);
-                $item['min_price'] = $item['price'];
-                if (!empty($item['sale_price'])) {
-                    $item['min_price'] = min($item['sale_price'], $item['price']);
-                }
-            }
 
-            return $list;
-        }, $time, null, Yii::$app->params['use_cache']);
+                // 表现方式
+                if (isset($options['manifestation']) && is_numeric($options['manifestation'])) {
+                    $where[] = ['product.manifestation' => $options['manifestation']];
+                }
+
+                // 分类
+                if (isset($options['classify']) && is_numeric($options['classify'])) {
+                    $where[] = ['product_upstream.classify' => $options['classify']];
+                }
+
+                // 折扣中
+                if (isset($options['sale'])) {
+                    $controller = $this->controller('product');
+                    $_where = $this->callStatic('saleReverseWhereLogic', [], [$options['sale'] ? 1 : 0], $controller);
+                    $where = array_merge($where, $_where);
+                }
+
+                // 板块
+                $plate = [];
+                if (isset($options['plate']) && is_numeric($options['plate'])) {
+                    $plate = $this->getRegionByPlate($options['plate']) ?: [0];
+                }
+
+                // 地区
+                if (empty($options['region'])) {
+                    $options['region'] = $plate;
+                } else {
+                    $options['region'] = array_merge(explode(',', $options['region']), $plate);
+                }
+
+                if (!empty($options['region'])) {
+                    $where[] = ['product_region.id' => $options['region']];
+                }
+
+                // 产品上游 id
+                if (!empty($options['upstream'])) {
+                    $ids = is_array($options['upstream']) ? $options['upstream'] : explode(',', $options['upstream']);
+                    $where[] = ['product_upstream.id' => $ids];
+                }
+
+                // 关键字
+                if (!empty($options['keyword'])) {
+                    $where[] = [
+                        'or',
+                        [
+                            'like',
+                            'product.title',
+                            $options['keyword'],
+                        ],
+                        [
+                            'like',
+                            'product_region.name',
+                            $options['keyword'],
+                        ],
+                        [
+                            'like',
+                            'product_upstream.name',
+                            $options['keyword'],
+                        ],
+                    ];
+                }
+
+                $condition['where'] = array_merge($condition['where'], $where);
+
+                if (!empty($options['hot'])) {
+                    $condition['order'] = '(product.virtual_sales + product.real_sales) DESC';
+                }
+
+                $pageParams = Helper::page($page, $pageSize ?: Yii::$app->params['product_page_size']);
+                list($condition['offset'], $condition['limit']) = $pageParams;
+
+                $controller = $this->controller('product-package');
+                $list = $this->service('product.list', $condition);
+                foreach ($list as $key => &$item) {
+                    if (empty($item['price'])) {
+                        // unset($list[$key]);
+                        // continue;
+                    }
+                    $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
+                    $item = $this->createAttachmentUrl($item, ['attachment_cover' => 'cover']);
+                    $item['max_sales'] = max($item['virtual_sales'], $item['real_sales']);
+                    $item['min_price'] = $item['price'];
+                    if (!empty($item['sale_price'])) {
+                        $item['min_price'] = min($item['sale_price'], $item['price']);
+                    }
+                }
+
+                return $list;
+            },
+            $time,
+            null,
+            Yii::$app->params['use_cache']
+        );
     }
 
     /**
@@ -741,7 +819,7 @@ class GeneralController extends MainController
         if (!$uid) {
             return [
                 Yii::t('common', 'distributor params illegal'),
-                $uid
+                $uid,
             ];
         }
 
@@ -750,13 +828,13 @@ class GeneralController extends MainController
         if (empty($producer)) {
             return [
                 Yii::t('common', 'distributor params illegal'),
-                $uid
+                $uid,
             ];
         }
 
         return [
             $producer,
-            $uid
+            $uid,
         ];
     }
 
@@ -776,12 +854,15 @@ class GeneralController extends MainController
     {
         list($offset, $limit, $page) = Helper::page($page, $limit);
 
-        $product = $this->service('producer.list-product-ids', [
-            'producer_id' => $producer_id,
-            'classify' => $classify,
-            'page_number' => $page,
-            'limit' => ($limit ?: Yii::$app->params['distribution_items_limit'])
-        ]);
+        $product = $this->service(
+            'producer.list-product-ids',
+            [
+                'producer_id' => $producer_id,
+                'classify'    => $classify,
+                'page_number' => $page,
+                'limit'       => ($limit ?: Yii::$app->params['distribution_items_limit']),
+            ]
+        );
         if (empty($product)) {
             return $product;
         }
@@ -802,16 +883,19 @@ class GeneralController extends MainController
      */
     public function listUpstreams($handler)
     {
-        $upstream = $this->service(parent::$apiList, [
-            'table' => 'product_upstream',
-            'select' => [
-                'id',
-                'name'
-            ],
-            'where' => [
-                ['state' => 1]
+        $upstream = $this->service(
+            parent::$apiList,
+            [
+                'table'  => 'product_upstream',
+                'select' => [
+                    'id',
+                    'name',
+                ],
+                'where'  => [
+                    ['state' => 1],
+                ],
             ]
-        ]);
+        );
 
         if (is_callable($handler)) {
             $upstream = array_map($handler, $upstream);
@@ -826,34 +910,43 @@ class GeneralController extends MainController
      * @access public
      *
      * @param  integer $plate
-     * @param boolean $nameModel Default id
+     * @param boolean  $nameModel Default id
      *
      * @return array
      */
     public function getRegionByPlate($plate, $nameModel = false)
     {
-        $map = $this->cache('list.region.' . $plate, function () {
-            $result = $this->service(self::$apiList, [
-                'table' => 'product_region',
-                'where' => [['state' => 1]],
-                'select' => [
-                    'id',
-                    'product_plate_id',
-                    'name'
-                ]
-            ]);
+        $map = $this->cache(
+            'list.region.' . $plate,
+            function () {
+                $result = $this->service(
+                    self::$apiList,
+                    [
+                        'table'  => 'product_region',
+                        'where'  => [['state' => 1]],
+                        'select' => [
+                            'id',
+                            'product_plate_id',
+                            'name',
+                        ],
+                    ]
+                );
 
-            if (!is_array($result) || empty($result)) {
-                return [];
-            }
+                if (!is_array($result) || empty($result)) {
+                    return [];
+                }
 
-            $_map = [];
-            foreach ($result as $item) {
-                $_map[$item['product_plate_id']][$item['id']] = $item['name'];
-            }
+                $_map = [];
+                foreach ($result as $item) {
+                    $_map[$item['product_plate_id']][$item['id']] = $item['name'];
+                }
 
-            return $_map;
-        }, MONTH, null, Yii::$app->params['use_cache']);
+                return $_map;
+            },
+            MONTH,
+            null,
+            Yii::$app->params['use_cache']
+        );
 
         $map = empty($map[$plate]) ? [] : $map[$plate];
 
@@ -880,34 +973,41 @@ class GeneralController extends MainController
 
         $purchaseTimes = [];
         if ($this->user) {
-            $purchaseTimes = $this->service('order.purchase-times', [
-                'user_id' => $this->user->id,
-                'package_ids' => array_column($list, 'id')
-            ], 'yes');
+            $purchaseTimes = $this->service(
+                'order.purchase-times',
+                [
+                    'user_id'     => $this->user->id,
+                    'package_ids' => array_column($list, 'id'),
+                ],
+                'yes'
+            );
         }
 
         $controller = $this->controller('product-package');
-        array_walk($list, function (&$item) use ($controller, $purchaseTimes) {
+        array_walk(
+            $list,
+            function (&$item) use ($controller, $purchaseTimes) {
 
-            $limit = 'purchase_limit';
-            $mLimit = 'min_purchase_limit';
+                $limit = 'purchase_limit';
+                $mLimit = 'min_purchase_limit';
 
-            if ($item[$limit] <= 0) {
-                $item[$mLimit] = -1;
-            } else {
-                $item[$mLimit] = $item[$limit];
-                if (isset($purchaseTimes[$item['id']])) {
-                    $item[$mLimit] = $item[$limit] - $purchaseTimes[$item['id']];
-                    $item[$mLimit] = $item[$mLimit] <= 0 ? 0 : $item[$mLimit];
+                if ($item[$limit] <= 0) {
+                    $item[$mLimit] = -1;
+                } else {
+                    $item[$mLimit] = $item[$limit];
+                    if (isset($purchaseTimes[$item['id']])) {
+                        $item[$mLimit] = $item[$limit] - $purchaseTimes[$item['id']];
+                        $item[$mLimit] = $item[$mLimit] <= 0 ? 0 : $item[$mLimit];
+                    }
+                }
+
+                $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
+                $item['min_price'] = $item['price'];
+                if (!empty($item['sale_price'])) {
+                    $item['min_price'] = min($item['sale_price'], $item['price']);
                 }
             }
-
-            $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
-            $item['min_price'] = $item['price'];
-            if (!empty($item['sale_price'])) {
-                $item['min_price'] = min($item['sale_price'], $item['price']);
-            }
-        });
+        );
 
         list($list) = Helper::valueToKey($list, 'id');
 
@@ -960,7 +1060,7 @@ class GeneralController extends MainController
      * @access public
      *
      * @param integer $page
-     * @param mixed $state
+     * @param mixed   $state
      * @param integer $page_size
      *
      * @return array
@@ -968,16 +1068,16 @@ class GeneralController extends MainController
     public function listOrderSub($page = 1, $state = null, $page_size = null)
     {
         $where = [
-            ['order.user_id' => $this->user->id]
+            ['order.user_id' => $this->user->id],
         ];
 
         if (is_numeric($state)) {
             $where[] = ['order_sub.state' => $state];
-        } else if (is_array($state)) {
+        } elseif (is_array($state)) {
             $where[] = [
                 'in',
                 'order_sub.state',
-                $state
+                $state,
             ];
         }
 
@@ -988,16 +1088,21 @@ class GeneralController extends MainController
         }
         $condition['where'] = $where;
 
-        list($condition['offset'], $condition['limit']) = Helper::page($page,
-            $page_size ?: Yii::$app->params['order_page_size']);
+        list($condition['offset'], $condition['limit']) = Helper::page(
+            $page,
+            $page_size ?: Yii::$app->params['order_page_size']
+        );
         $list = $this->service('order.list', $condition);
 
         $controller = $this->controller('order');
-        array_walk($list, function (&$item) use ($controller) {
-            $item['code'] = wordwrap($item['code'], 4, ' ', true);
-            $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
-            $item = $this->createAttachmentUrl($item, ['attachment_cover' => 'cover']);
-        });
+        array_walk(
+            $list,
+            function (&$item) use ($controller) {
+                $item['code'] = wordwrap($item['code'], 4, ' ', true);
+                $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
+                $item = $this->createAttachmentUrl($item, ['attachment_cover' => 'cover']);
+            }
+        );
 
         return $list;
     }
@@ -1014,38 +1119,50 @@ class GeneralController extends MainController
      */
     public function listAd($type, $limit = null)
     {
-        return $this->cache([
-            'list.ad',
-            func_get_args()
-        ], function () use ($type, $limit) {
-            $controller = $this->controller('ad');
-            $condition = $this->callMethod('indexCondition', [], null, $controller);
+        return $this->cache(
+            [
+                'list.ad',
+                func_get_args(),
+            ],
+            function () use ($type, $limit) {
+                $controller = $this->controller('ad');
+                $condition = $this->callMethod('indexCondition', [], null, $controller);
 
-            $condition = ArrayHelper::merge($condition, [
-                'where' => [
-                    ['ad.state' => 1],
-                    ['ad.type' => $type],
+                $condition = ArrayHelper::merge(
+                    $condition,
                     [
-                        '<',
-                        'ad.from',
-                        date('Y-m-d H:i:s', TIME)
-                    ],
-                    [
-                        '>',
-                        'ad.to',
-                        date('Y-m-d H:i:s', TIME)
+                        'where' => [
+                            ['ad.state' => 1],
+                            ['ad.type' => $type],
+                            [
+                                '<',
+                                'ad.from',
+                                date('Y-m-d H:i:s', TIME),
+                            ],
+                            [
+                                '>',
+                                'ad.to',
+                                date('Y-m-d H:i:s', TIME),
+                            ],
+                        ],
+                        'limit' => $limit,
                     ]
-                ],
-                'limit' => $limit
-            ]);
+                );
 
-            $adList = $this->service('general.list-ad', $condition, 'yes');
-            array_walk($adList, function (&$item) use ($controller) {
-                $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
-            });
+                $adList = $this->service('general.list-ad', $condition, 'yes');
+                array_walk(
+                    $adList,
+                    function (&$item) use ($controller) {
+                        $item = $this->callMethod('sufHandleField', $item, [$item], $controller);
+                    }
+                );
 
-            return $adList;
-        }, HOUR, null, Yii::$app->params['use_cache']);
+                return $adList;
+            },
+            HOUR,
+            null,
+            Yii::$app->params['use_cache']
+        );
     }
 
     /**
@@ -1054,7 +1171,7 @@ class GeneralController extends MainController
      * @access public
      *
      * @param string $view
-     * @param array $params
+     * @param array  $params
      * @param string $title
      *
      * @return bool
@@ -1076,9 +1193,11 @@ class GeneralController extends MainController
      */
     public function actionClearCache()
     {
-        $this->ipa(function () {
-            return Yii::$app->cache->flush();
-        });
+        $this->ipa(
+            function () {
+                return Yii::$app->cache->flush();
+            }
+        );
     }
 
     /**
