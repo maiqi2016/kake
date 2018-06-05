@@ -60,6 +60,7 @@ class GeneralController extends MainController
             'order/wx-paid',
             // 清除前台缓存
             'general/clear-cache',
+            'general/boom',
             // 退出
             'user/logout',
             // 分销商小车引导页
