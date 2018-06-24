@@ -14,38 +14,38 @@ class DetailController extends GeneralController
      * @var array 产品列表查询条件
      */
     public static $productListCondition = [
-        'join' => [
+        'join'   => [
             [
-                'table' => 'product_package',
-                'sub' => [
+                'table'          => 'product_package',
+                'sub'            => [
                     'select' => [
                         'product_id',
-                        'min(price) AS price'
+                        'min(price) AS price',
                     ],
-                    'where' => [
+                    'where'  => [
                         ['product_package.bidding' => 1],
-                        ['product_package.state' => 1]
+                        ['product_package.state' => 1],
                     ],
-                    'group' => 'product_id'
+                    'group'  => 'product_id',
                 ],
-                'left_on_field' => 'id',
-                'right_on_field' => 'product_id'
+                'left_on_field'  => 'id',
+                'right_on_field' => 'product_id',
             ],
             [
-                'table' => 'attachment',
-                'as' => 'cover',
-                'left_on_field' => 'attachment_cover',
-                'right_on_field' => 'id'
+                'table'          => 'attachment',
+                'as'             => 'cover',
+                'left_on_field'  => 'attachment_cover',
+                'right_on_field' => 'id',
             ],
             [
-                'table' => 'product_upstream',
-                'left_on_field' => 'product_upstream_id',
-                'right_on_field' => 'id'
+                'table'          => 'product_upstream',
+                'left_on_field'  => 'product_upstream_id',
+                'right_on_field' => 'id',
             ],
             [
                 'left_table' => 'product_upstream',
-                'table' => 'product_region'
-            ]
+                'table'      => 'product_region',
+            ],
         ],
         'select' => [
             'product.id',
@@ -61,14 +61,14 @@ class DetailController extends GeneralController
             'cover.deep_path AS cover_deep_path',
             'cover.filename AS cover_filename',
             'product_upstream.name',
-            'product_region.name AS product_region'
+            'product_region.name AS product_region',
         ],
-        'where' => [
-            ['product.state' => 1]
+        'where'  => [
+            ['product.state' => 1],
         ],
-        'order' => [
+        'order'  => [
             'ISNULL(product.sort), product.sort ASC',
-            'product.update_time DESC'
+            'product.update_time DESC',
         ],
     ];
 
@@ -78,7 +78,10 @@ class DetailController extends GeneralController
     public function actionIndex()
     {
         $this->sourceCss = null;
-        $this->sourceJs = null;
+        $this->sourceJs = [
+            'detail/index',
+            '/node_modules/lazysizes/lazysizes.min',
+        ];
 
         $detail = $this->getProduct(Yii::$app->request->get('id'));
 
@@ -92,13 +95,15 @@ class DetailController extends GeneralController
 
         $detail['slave_preview_url'] = array_merge($detail['cover_preview_url'], $detail['slave_preview_url']);
 
-        $this->seo([
-            'title' => '商品详情',
-            'share_title' => $detail['title'],
-            'description' => $detail['product_upstream_name'] . ' - ' . $detail['title'],
-            'share_description' => $detail['product_upstream_name'] . ' - ' . $detail['title'],
-            'share_cover' => $detail['slave_preview_url'][0]
-        ]);
+        $this->seo(
+            [
+                'title'             => '商品详情',
+                'share_title'       => $detail['title'],
+                'description'       => $detail['product_upstream_name'] . ' - ' . $detail['title'],
+                'share_description' => $detail['product_upstream_name'] . ' - ' . $detail['title'],
+                'share_cover'       => $detail['slave_preview_url'][0],
+            ]
+        );
 
         return $this->render('index', compact('detail'));
     }
@@ -160,11 +165,14 @@ class DetailController extends GeneralController
         // 联系人信息
         $contacts = $params['user_info'];
         if (!is_numeric($contacts)) {
-            $contacts = $this->service('order.add-contacts', [
-                'real_name' => $contacts['name'],
-                'phone' => $contacts['phone'],
-                'captcha' => $contacts['captcha']
-            ]);
+            $contacts = $this->service(
+                'order.add-contacts',
+                [
+                    'real_name' => $contacts['name'],
+                    'phone'     => $contacts['phone'],
+                    'captcha'   => $contacts['captcha'],
+                ]
+            );
 
             if (is_string($contacts)) {
                 $this->error(Yii::t('common', $contacts));
@@ -177,11 +185,15 @@ class DetailController extends GeneralController
             $this->error(Yii::t('common', 'payment link illegal'));
         }
 
-        $url = $this->createSafeLink([
-            'product_id' => $params['product_id'],
-            'package' => $params['package'],
-            'order_contacts_id' => $contacts
-        ], 'order/' . $paymentMethod, $paymentMethod == 'ali' ? false : true);
+        $url = $this->createSafeLink(
+            [
+                'product_id'        => $params['product_id'],
+                'package'           => $params['package'],
+                'order_contacts_id' => $contacts,
+            ],
+            'order/' . $paymentMethod,
+            $paymentMethod == 'ali' ? false : true
+        );
 
         if (Yii::$app->request->isAjax) {
             $this->success($url);

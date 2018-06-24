@@ -20,7 +20,7 @@ $params = \Yii::$app->params;
             <div class="carousel-scroller product-focus">
                 <?php if (!empty($detail['slave_preview_url'])): ?>
                     <?php foreach ($detail['slave_preview_url'] as $photo): ?>
-                        <img src="<?= $photo ?>"/>
+                        <img data-src="<?= $photo ?>" class="lazyload"/>
                     <?php endforeach ?>
                 <?php endif; ?>
             </div>
