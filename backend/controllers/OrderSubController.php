@@ -280,6 +280,15 @@ class OrderSubController extends GeneralController
                 'elem' => 'input',
                 'table' => 'order_sold_code'
             ],
+            'type' => [
+                'title' => '类型',
+                'table' => 'order_sold_code',
+                'value' => parent::SELECT_KEY_ALL
+            ],
+            'remark' => [
+                'elem' => 'input',
+                'table' => 'order_sold_code'
+            ],
             'sold_state' => [
                 'title' => '核销状态',
                 'table' => 'order_sold_code',
@@ -452,6 +461,15 @@ class OrderSubController extends GeneralController
                 'tpl' => '<p class="bg-info text-center">%s</p>',
                 'color' => 'default'
             ],
+            'type' => [
+                'title' => '类型',
+                'code',
+                'info',
+            ],
+            'remark' => [
+                'table' => 'order_sold_code',
+                'tip'
+            ],
             'producer_username' => [
                 'title' => '分销商'
             ],
@@ -481,6 +499,7 @@ class OrderSubController extends GeneralController
             'price',
             'product_supplier_name' => '供应商',
             'code' => '核销码',
+            'remark' => '备注',
             'producer_username' => '分销商',
             'sold_state_info' => '核销状态',
         ];
@@ -620,6 +639,8 @@ class OrderSubController extends GeneralController
         ]);
         $condition['select'] = array_merge($condition['select'], [
             'order_sold_code.code',
+            'order_sold_code.type',
+            'order_sold_code.remark',
             'order_sold_code.id AS sold_id',
             'order_sold_code.state AS sold_state',
             'producer_user.username AS producer_username',

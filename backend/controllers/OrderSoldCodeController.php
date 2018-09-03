@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use Oil\src\Helper;
 use Yii;
 
 /**
@@ -35,6 +36,18 @@ class OrderSoldCodeController extends GeneralController
                 'button_info' => '确认核销',
                 'action' => 'verify-sold-code',
                 'info_perfect' => true
+            ],
+            'build' => [
+                'title_icon' => 'plus',
+                'title_info' => '生成',
+                'button_info' => '生成',
+                'action' => 'build-form'
+            ],
+            'import' => [
+                'title_icon' => 'import',
+                'title_info' => '导入',
+                'button_info' => '导入',
+                'action' => 'import-form'
             ]
         ]);
     }
@@ -142,5 +155,147 @@ class OrderSoldCodeController extends GeneralController
         }
 
         $this->goReference($this->getControllerName('sold-code'), $flash);
+    }
+
+    // ---
+
+    /**
+     * @inheritdoc
+     */
+    public static function buildAssist()
+    {
+        return [
+            'total' => [
+                'title' => '生成条数',
+            ],
+            'product_supplier_id' => [
+                'elem' => 'select',
+                'list_table' => 'product_supplier',
+                'list_value' => 'name',
+            ],
+            'package_id' => [
+                'title' => '产品套餐',
+                'readonly' => true,
+                'same_row' => true
+            ],
+            'select_package_id' => [
+                'title' => false,
+                'elem' => 'button',
+                'value' => '选择套餐',
+                'script' => '$.showPage("product-package.list", {modal_size: "md", field_name: "package_id", only: "yes"})'
+            ],
+            'remark' => 'textarea',
+        ];
+    }
+
+    /**
+     * 生成核销码
+     */
+    public function actionBuild()
+    {
+        return $this->showForm();
+    }
+
+    /**
+     * @auth-same {ctrl}/build
+     */
+    public function actionBuildForm()
+    {
+        $p = Yii::$app->request->post();
+
+        if (empty($p['total']) || empty($p['product_supplier_id']) || empty($p['package_id']) || empty($p['remark'])) {
+            $this->goReference($this->getControllerName('build'), [
+                'danger' => '所有字段都不能为空',
+                'list' => $p
+            ]);
+        }
+
+        $result = $this->service('order.build', $p);
+        if (is_string($result)) {
+            $this->goReference($this->getControllerName('build'), [
+                'danger' => $result,
+                'list' => $p
+            ]);
+        }
+
+        $this->goReference('order-sub/sold', ['success' => '生成成功']);
+    }
+
+    // ---
+
+    /**
+     * @inheritdoc
+     */
+    public static function importAssist()
+    {
+        return [
+            'product_supplier_id' => [
+                'elem' => 'select',
+                'list_table' => 'product_supplier',
+                'list_value' => 'name',
+            ],
+            'package_id' => [
+                'title' => '产品套餐',
+                'readonly' => true,
+                'same_row' => true
+            ],
+            'select_package_id' => [
+                'title' => false,
+                'elem' => 'button',
+                'value' => '选择套餐',
+                'script' => '$.showPage("product-package.list", {modal_size: "md", field_name: "package_id", only: "yes"})'
+            ],
+
+            'excel_id' => [
+                'title' => 'Excel',
+                'readonly' => true
+            ],
+            'upload' => [
+                'type' => 'file',
+                'tag' => 1,
+                'rules' => [
+                    'suffix' => 'xls,xlsx',
+                    'max_size' => 1024 * 5
+                ],
+                'field_name' => 'excel_id'
+            ],
+
+            'remark' => 'textarea',
+        ];
+    }
+
+    /**
+     * 导入核销码
+     */
+    public function actionImport()
+    {
+        $this->sourceJs = ['jquery.ajaxupload'];
+
+        return $this->showForm();
+    }
+
+    /**
+     * @auth-same {ctrl}/import
+     */
+    public function actionImportForm()
+    {
+        $p = Yii::$app->request->post();
+
+        if (empty($p['excel_id']) || empty($p['product_supplier_id']) || empty($p['package_id']) || empty($p['remark'])) {
+            $this->goReference($this->getControllerName('import'), [
+                'danger' => '所有字段都不能为空',
+                'list' => $p
+            ]);
+        }
+
+        $result = $this->service('order.import', $p);
+        if (is_string($result)) {
+            $this->goReference($this->getControllerName('import'), [
+                'danger' => $result,
+                'list' => $p
+            ]);
+        }
+
+        $this->goReference('order-sub/sold', ['success' => '导入成功']);
     }
 }

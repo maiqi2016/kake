@@ -469,7 +469,16 @@ class MainController extends Controller
         $uploader = Yii::$app->oil->upload;
 
         // 上传到本地服务器
-        $result = $uploader->upload($_FILES);
+        try {
+            $result = $uploader->upload($_FILES);
+        } catch (\Exception $e) {
+            $error = strtolower(explode("\n", $e->getMessage())[1]);
+            if (!$ajaxMode) {
+                return $error;
+            }
+            $this->fail($error);
+        }
+
         if (is_string($result)) {
             if (!$ajaxMode) {
                 return $result;
@@ -513,8 +522,8 @@ class MainController extends Controller
         $result = [
             'name'   => $file['name'],
             'id'     => $attachmentId,
-            'width'  => $file['width'],
-            'height' => $file['height'],
+            'width'  => isset($file['width']) ? $file['width'] : null,
+            'height' => isset($file['height']) ? $file['height'] : null,
             'url'    => $url . '/' . $file['save_path'] . '-' . $file['save_name'],
         ];
 

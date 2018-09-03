@@ -85,7 +85,9 @@ return [
             'sub' => [
                 'product-supplier.index' => '供应商',
                 'product-supplier-user.index' => '核销用户',
-                'order-sub.sold' => '子订单'
+                'order-sub.sold' => '子订单',
+                'order-sold-code.build' => '生成核销码',
+                'order-sold-code.import' => '导入核销码',
             ]
         ],
         'j' => [

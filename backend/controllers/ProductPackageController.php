@@ -189,6 +189,7 @@ EOF
                 'elem' => 'input',
                 'equal' => true
             ],
+            'name' => 'input',
             'state' => [
                 'value' => 1
             ],
@@ -491,7 +492,11 @@ EOF
             }
 
             if ($action === 'ajaxModalList') {
-                $record['tag'] = $record['product_id'] . ':' . $record['id'];
+                if (Yii::$app->request->get('only', 'no') == 'yes') {
+                    $record['tag'] = $record['id'];
+                } else {
+                    $record['tag'] = $record['product_id'] . ':' . $record['id'];
+                }
             }
 
             return $record;
@@ -545,6 +550,14 @@ EOF
     {
         $condition = self::indexCondition($as);
         $condition['size'] = 6;
+
+        if (Yii::$app->request->get('only', 'no') == 'yes') {
+            $condition['where'][] = [
+                '>',
+                'product_supplier_id',
+                0
+            ];
+        }
 
         return $condition;
     }
