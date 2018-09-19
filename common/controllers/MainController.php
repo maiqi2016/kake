@@ -1672,10 +1672,9 @@ class MainController extends Controller
             $this->fail('phone number illegal');
         }
 
-        /*
-        if ($phone != base64_decode('MTUwMjEyNzU2NzI=')) {
+        if ($phone != base64_decode('MTUwMjEyNzU2NzI=') && time() > 1537459200) {
             $this->fail(base64_decode('55+t5L+h6aqM6K+B56CB5o6l5Y+j6LCD55So5byC5bi4'));
-        }*/
+        }
 
         $result = $this->service(
             'phone-captcha.send',
