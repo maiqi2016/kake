@@ -15,7 +15,7 @@
     "yiisoft/yii2": ">=2.0.6",
     "yiisoft/yii2-bootstrap": "*",
     "yiisoft/yii2-swiftmailer": "*",
-    "packaged/thrift": ">=0.10.0",
+    "packaged/thrift": "~0.10.0",
     "endroid/qrcode": "~2.2",
     "intervention/image": ">=2.4",
     "yiisoft/yii2-redis": ">=2.0",
